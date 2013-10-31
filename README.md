@@ -8,9 +8,9 @@ LastChange: 2013-10-29 09:48:48
 -----------------------------
 ## ScreenShots:
 ### Ubuntu(Ubuntu):
-![Screenshot_Ubuntu](https://github.com/woainvzu/Vim_config_marslo/blob/master/Screenshots/Screenshots_Ubuntu.png?raw=true)
+![Screenshot_Ubuntu](https://github.com/Marslo/VimConfig/blob/master/Screenshots/screenshot_gvim.png?raw=true)
 ### Windows
-![Screenshot_Windows](https://github.com/woainvzu/Vim_config_marslo/blob/master/Screenshots/screenshot_gvim.png?raw=true)
+![Screenshot_Windows](https://github.com/Marslo/VimConfig/blob/master/Screenshots/Screenshots_Ubuntu.png?raw=true)
 
 
 ## Compile VIM/GVIM by source code on Linux(Ubuntu)
