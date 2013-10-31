@@ -1,0 +1,19 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=1532
+
+This is an universal syntax script for all text documents, logs, changelogs, readmes and all other strange and undetected filetypes. The goal is to keep it very simple.It colors numbers, operators, signs, cites, brackets, delimiters, comments, TODOs, errors, debug, changelog tags and basic smileys ;]
+
+Visit project site:
+http://www.haze.ehost.pl/spoonman/index.php5?p=9
+
+or take a look at 4 comparision screenshots (version 1.2, colors used: dusk and moria):
+http://www.haze.ehost.pl/spoonman/images/vim-txt-dusk-1-1.2.png
+http://www.haze.ehost.pl/spoonman/images/vim-txt-moria-1-1.2.png
+
+http://www.haze.ehost.pl/spoonman/images/vim-txt-dusk-2-1.2.png
+http://www.haze.ehost.pl/spoonman/images/vim-txt-moria-2-1.2.png
+
+I'd also suggest to add a file into your $HOME/ftdetect called txt.vim that contains a line:
+ au BufRead,BufNewFile *  setfiletype txt
+This way if Vim cannot detect a filetype of a file you've just opened - it sets this universal syntax.
+
+Your suggestions are very welcome.

@@ -1,0 +1,21 @@
+#!/bin/bash
+
+VIM_SRC=$(dirname $(readlink -f $0))/vimsrc
+echo $VIM_SRC
+# VIM_SRC=/home/marslo/Tools/Git/vim
+
+if [ ! -d "$VIM_SRC" ]; then
+  echo "Bad VIM source path. Exit."
+  exit 1
+fi
+
+pushd $VIM_SRC
+
+git pull
+./configure --enable-gui=gnome2 --enable-cscope --enable-multibyte --enable-xim --enable-fontset --with-features=huge --enable-pythoninterp=yes --enable-python3interp=yes --enable-rubyinterp=yes --enable-python3interp=yes --prefix=/home/marslo/.vim/tools/vim74 --with-compiledby=Marslo@mppdev > vim-build.log
+# ./configure --prefix=/home/marslo/Tools/Software/vim74 --with-features=huge --enable-gui=gnome --with-compiledby=Marslo > vim-build.log
+# ./configure --prefix=/home/marslo/Tools/Software/vim74 --enable-gui=gnome2 --enable-pythoninterp=dynamic  --enable-rubyinterp=dynamic  --enable-cscope --with-x --with-features=huge > vim-build.log
+make -j3 >> vim-build.log
+make install >> vim-build.log
+
+popd

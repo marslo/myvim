@@ -1,0 +1,668 @@
+" =============================================================================
+"      FileName: _vimrc
+"          Desc:
+"        Author: Marslo
+"       Created: 2010-10
+"       Version: 0.0.12
+"    LastChange: 2013-10-21 18:48:24
+"       History:
+"                0.0.3  | Marslo | Add the Autoload and Fast Edit difference between win32 and non-win32
+"                0.0.4  | Marslo | Add CheckRubySyntax() function for checking and run ruby script
+"                0.0.5  | Marslo | Add the function of highlight txt file
+"                                  Add the function of Automatic paire signs (), [], {}, '', etc
+"                0.0.6  | Marslo | Add bundle plugin for manager plugins automatic
+"                0.0.7  | Marslo | Add pyflakes plugin for python syntax checking
+"                0.0.8  | Marslo | Remap the shortcut key: Ctrl-A/Ctrl-E/F1
+"                0.0.9  | Marslo | Add the function about remove a paird parentheses, brackets, braces
+"                0.0.10 | Marslo | Add the configuration about rainbow_parentheses
+"                0.0.11 | Marslo | Add three bundles: woainvzu/EnhCommentify.vim && woainvzu/Marslo.vim && tpope/vim-rails
+"                0.0.12 | Marslo | Add function GetVundle() to get vundle automaticly
+"                0.0.13 | Marslo | Add Alpha setting for vim tweak
+" =============================================================================
+
+source $VIMRUNTIME/vimrc_example.vim
+source $VIMRUNTIME/mswin.vim
+" runtime macros/matchit.vim
+behave mswin
+
+let g:ruby_path=$RUBY_BIN
+let g:solarized_termcolors=256
+
+" Remove the Welcome interface
+" set shortmess=atI
+
+" ====================================== For Property =====================================
+" Set mapleader
+let mapleader=","
+let g:mapleader=","
+
+set iskeyword+=.
+set autochdir
+
+" Tags
+set tags=tags
+set tags+=c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\.tags
+set tags+=C:\Marslo\Job\Summa\TEX\SVN\.tags
+autocmd BufEnter c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\* :setlocal tags+=c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\.tags
+
+" Code format
+set fileencodings=utf8,ucs-bom,gbk,cp936,gb2312,gb18030
+set termencoding=utf-8
+set encoding=utf8
+set fileencoding=utf8
+let &termencoding=&encoding
+
+" Mouse Settings
+" set mouse=a
+set selection=exclusive
+set selectmode=mouse,key
+set scrolloff=3
+
+set diffexpr=MyDiff()
+func! MyDiff()
+    let opt = '-a --binary '
+    if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
+    if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
+    let arg1 = v:fname_in
+    if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
+    let arg2 = v:fname_new
+    if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
+    let mp = &makeprg
+    let mp = &makeprg
+    let arg3 = v:fname_out
+    if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
+    let eq = ''
+    if $VIMRUNTIME =~ ' '
+        if &sh =~ '\<cmd'
+            let cmd = '""' . $VIMRUNTIME . '\diff"'
+            let eq = '"'
+        else
+            let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+        endif
+    else
+        let cmd = $VIMRUNTIME . '\diff'
+    endif
+    silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
+endfunc
+
+" Vim Bundle
+" Get Vundle by: git clone https://github.com/gmarik/vundle.git "C:\Program Files (x86)\vim\vimfiles"
+set nocompatible
+filetype off
+
+" Inspired from http://pastebin.com/embed_iframe.php?i=C9fUE0M3
+func! GetVundle()
+    " execute 'silent !git clone https://github.com/woainvzu/snipmate.vim.git "' . expand('$VIM') . '"'
+
+    let vundleAlreadyExists=1
+    if has('win32') || has('win64')
+        let vundle_readme=expand('$VIM\bundle\vundle\README.md')
+        let vbundle='$VIM\bundle'
+        let vvundle=vbundle . '\vundle'
+    else
+        let vundle_readme=expand('~/.vim/bunle/vundle/README.md')
+        let vbundle='$VIM/bundle'
+        let vvundle=vbundle . '/vundle'
+    endif
+
+    if !filereadable(vundle_readme)
+        echo "Installing Vundle..."
+        echo ""
+        if isdirectory(expand(vbundle)) == 0
+            call mkdir(expand(vbundle), 'p')
+        endif
+        execute 'silent !git clone https://github.com/gmarik/vundle.git "' . expand(vvundle) . '"'
+        let vundleAlreadyExists=0
+    endif
+endfunc
+
+" Setting runtimepath for Vundle use
+if has('win32') || has('win64')
+    set rtp+=$VIM/bundle/vundle
+    call vundle#rc('$VIM/bundle')
+else
+    set rtp+=~/.vim/bunle/vundle
+    call vundle#rc()
+endif
+
+" Plugins
+Bundle 'gmarik/vundle'
+Bundle 'Yggdroot/indentLine'
+Bundle 'kien/ctrlp.vim.git'
+Bundle 'sjl/gundo.vim.git'
+Bundle 'majutsushi/tagbar'
+Bundle 'dantezhu/authorinfo'
+Bundle 'kien/rainbow_parentheses.vim'
+Bundle 'hdima/python-syntax.git'
+Bundle 'plasticboy/vim-markdown.git'
+Bundle 'woainvzu/EnhCommentify.vim'
+Bundle 'tpope/vim-rails'
+Bundle 'tpope/vim-pathogen'
+Bundle 'gregsexton/MatchTag'
+" if has('unix')
+Bundle 'woainvzu/snipmate.vim.git'
+" endif
+
+" Get from vim-scripts
+Bundle 'Conque-Shell'
+Bundle 'mru.vim'
+Bundle 'python_fold'
+Bundle 'taglist.vim'
+Bundle 'TeTrIs.vim'
+Bundle 'winmanager'
+Bundle 'matrix.vim--Yang'
+Bundle 'pyflakes.vim'
+Bundle 'ruby-matchit'
+
+" Others
+" Bundle 'Tagbar'
+" Bundle 'mattn/emmet-vim'
+" Bundle 'dirkwallenstein/vim-excess-lines'
+" Bundle 'xolox/vim-shell'
+" Bundle 'xolox/vim-misc'
+" Bundle 'xolox/vim-easytags'
+" Bundle 'dbarsam/vim-vimtweak'
+
+" Colors
+Bundle 'txt.vim'
+Bundle 'css.vim'
+Bundle 'gorodinskiy/vim-coloresque'
+Bundle 'hail2u/vim-css3-syntax'
+Bundle 'woainvzu/Marslo.vim'
+" Bundle 'ap/vim-css-color'
+
+filetype plugin indent on
+
+nmap <leader>bi :BundleInstall<CR>
+nmap <leader>bu :BundleUpdate<CR>
+
+" ====================================== For Programming =====================================
+" Open the current file path by cmd
+func! OpenCMD()
+    if has('win32') || has('win95') || has('win64')
+        " let com = '!cmd /c start C:\Marslo\Tools\Softwares\Data\System\CMD\Console2\Console.exe -d "'. expand('%:p:h') . '"'
+        " let com = '!cmd /c start cd '. expand('%:p:h')
+        " let com = '!cmd /c start C:\WINDOWS\system32\WindowsPowerShell\v1.0\powershell.exe -NoExit -Command "Set-Location ' . expand ('%:p:h') . '"'
+        if 'java' == &ft
+            let com = '!cmd /c start "C:\Program Files\JPSoft\TCCLE13x64\tcc.exe" /d "' . expand('%:p:h') .'"'
+        else
+            let com1 = '!cmd /c start C:\WINDOWS\system32\WindowsPowerShell\v1.0\powershell.exe -NoExit -Command '
+            let com2 = '"Set-Location ' . "'" . expand ('%:p:h') ."'" . '"'
+            let com = com1 . com2
+        endif
+    else
+        let com = '!/usr/bin/gnome-terminal --working-directory=' . expand('%:p:h')
+    endif
+    silent execute com
+endfunc
+nmap cmd :call OpenCMD()<CR>
+
+func! OpenFoler()
+    if has('win32') || has('win95') || has('win64')
+        let folderpath = expand('%:p:h')
+    endif
+    silent execute '!C:\Windows\explorer.exe "' . folderpath . '"'
+endfunc
+map <M-o> :call OpenFoler()<CR>
+
+" Run pylint
+func! PylintCheck()
+    let mp = &makeprg
+    let ef = &errorformat
+    let exeFile = '"' . expand("%:t") . '"'
+    setlocal makeprg=pylint\ --reports=n\ --output-format=parseable
+    set efm=%A%f:%l:\ [%t%.%#]\ %m,%Z%p^^,%-C%.%#
+    silent make "%:p"
+    copen
+    let &makeprg     = mp
+    let &errorformat = ef
+endfunc
+nmap <leader>li :call PylintCheck()<CR>
+
+" map rc :call CompileRunGpp()<CR>
+func! CompileRunGpp()
+    exec "w"
+    exec "!gcc % -o %<"
+    exec "! %<"
+endfunc
+
+func! RunResult()
+    let mp = &makeprg
+    let ef = &errorformat
+    " let exeFile = expand("%:t")
+    let exeFile = expand("%:t")
+    exec "w"
+    if &ft == "Python"
+        setlocal makeprg=python\ -u
+    elseif &ft == "perl"
+        setlocal makeprg=perl
+    elseif &ft == "ruby"
+        setlocal makeprg=ruby
+    elseif &ft == "autohotkey"
+        setlocal makeprg=AutoHotkey
+    endif
+    " let com = make . ' "' . expand("%") . '"'
+    " silent execute com
+    silent make %
+    " silent make expand("%")
+    if &ft != "autohotkey"
+        set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
+        copen
+    endif
+    let &makeprg     = mp
+    let &errorformat = ef
+endfunc
+map <F5> :call RunResult()<CR>
+
+" Automatic Pair
+" inoremap ( ()<ESC>i
+" inoremap { {<CR>}<ESC>ko
+inoremap <buffer> ( <c-r>=AutoPair('(')<CR>
+inoremap <buffer> ) <c-r>=ClosePair(')')<CR>
+inoremap <buffer> [ <c-r>=AutoPair('[')<CR>
+inoremap <buffer> ] <c-r>=ClosePair(']')<CR>
+inoremap <buffer> { <c-r>=AutoPair('{')<CR>
+inoremap <buffer> } <c-r>=ClosePair('}')<CR>
+inoremap <buffer> % <c-r>=AutoPair('%')<CR>
+
+func! AutoPair(char)
+    if "(" == a:char
+        if &ft =~ '^\(sql\)$'
+            return "(\<Enter>);\<Up>\<Enter>"
+        elseif '' == getline('.')[col('.')]
+            return "()\<Left>"
+        else
+            return a:char
+        endif
+    elseif "[" == a:char
+        if '' == getline('.')[col('.')]
+            return "[]\<Left>"
+        else
+            return a:char
+        endif
+    elseif "{" == a:char
+        if &ft =~ '^\(ruby\|java\|perl\)$'
+            return "{\<Enter>}\<ESC>ko"
+            " return "{}\<ESC>i\<Enter>"
+        elseif '' == getline('.')[col('.')] && &ft =~ '^\(python\|autohotkey\|vim\|snippet\)$'
+            return "{}\<Left>"
+        else
+            return a:char
+        endif
+    elseif "%" == a:char
+        if '' == getline('.')[col('.')] && &ft =~ '^\(autohotkey\)$'
+            return "%%\<left>"
+        else
+            return a:char
+        endif
+    endif
+endfunc
+
+func! ClosePair(char)
+    if getline('.')[col('.') - 1] == a:char
+        return "\<Right>"
+    else
+        return a:char
+    endif
+endfunc
+
+inoremap <buffer> <BS> <c-r>=DeletePairs()<CR>
+inoremap <buffer> <C-h> <c-r>=DeletePairs()<CR>
+
+" Delete the pair of parentheses, brackets and braces
+function! DeletePairs()
+    let AutoPaires = {')': '(',']': '[','}': '{'}
+    if has_key(AutoPaires, getline('.')[col('.') - 1]) && getline('.')[col('.') - 2 ] == AutoPaires[getline('.')[col('.') - 1]]
+        return "\<BS>\<DEL>"
+    else
+        return "\<BS>"
+    endif
+endfunction
+
+function! GotoFile()
+    if 'python' == &ft
+        let com = expand('%:p:h') . '\' . expand('<cfile>') . '.py'
+    " elseif 'ruby' == &ft
+        " let com = expand('%:p:h') . '\' . expand('<cfile>')
+        " let com = 'C:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\' . expand('<cfile>')
+    else
+        let com = expand('<cfile>')
+    endif
+    silent execute ':e ' . com
+    echo 'Open file "' . com . '" under the cursor'
+endfunction
+nmap gf :call GotoFile()<CR>
+
+" Update tags file automatic
+function! UpdateTags()
+    silent !ctags -R --fields=+ianS --extra=+q
+endfunction
+nmap <F12> :call UpdateTags()<CR>
+
+" Reduce the font
+function! FontSize_Reduce()
+    if has('unix')
+        let pattern = '\<\d\+$'
+    elseif has('win32') || has('win95') || has('win64')
+        let pattern = ':h\zs\d\+\ze'
+        " let pattern = '\([1-9][0-9]*\)$'
+    endif
+    let fontsize = matchstr(&gfn, pattern)
+    let cmd = substitute(&gfn, pattern, string(fontsize - 1), 'g')
+    let &gfn=cmd
+endfunction
+nnoremap <A--> :call FontSize_Reduce()<CR>
+
+" Enlarge the font
+function! FontSize_Enlarge()
+    if has('unix')
+        let pattern = '\<\d\+$'
+    elseif has('win32') || has('win95') || has('win64')
+        let pattern = ':h\zs\d\+\ze'
+        " let pattern = '\([1-9][0-9]*\)$'
+    endif
+    let fontsize = matchstr(&gfn, pattern)
+    let cmd = substitute(&gfn, pattern, string(fontsize + 1), 'g')
+    let &gfn=cmd
+endfunction
+nnoremap <A-+> :call FontSize_Enlarge()<CR>
+
+iabbrev <leader>/* /*********************************
+iabbrev <leader>*/ *********************************/
+iabbrev <leader>#- #------------------
+inoremap <leader>tt <c-r>=strftime("%d/%m/%y %H:%M:%S")<cr>
+inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
+inoremap <leader>fe <C-R>=expand("%:t")<CR>
+
+" Moveing shortcut under the Insert mode
+inoremap <M-b> <Esc>Bi
+inoremap <M-f> <Esc>f<Space>a
+inoremap <M-d> <Esc>cf<Space>
+
+" Disable <F1> to open help file
+nmap <F1> <ESC>
+imap <F1> <ESC>
+
+" Set Ctrl-A/Ctrl-E jump to the Begin-of-line/End-of-line
+map <C-a> <ESC>^
+imap <C-a> <ESC>I
+map <C-e> <ESC>$
+imap <C-e> <ESC>A
+
+" Set the Ctrl-K/Ctrl-J switch the Top/Bottom window
+map <C-k> <C-w>k
+map <C-j> <C-w>j
+
+" map ecq :echo system("ruby -e 'print $:.join(%q{,})'")<CR>
+
+" CtrlP
+" let g:ctrlp_map = '<s-w>'
+" let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'
+" let g:ctrlp_working_path_mode = '.ctrlp'
+let g:ctrlp_max_height = 8
+let g:ctrlp_max_depth = 100
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrl_root_makers = ['ctrlp']
+let g:ctrlp_clear_cache_on_exit = 0
+let g:ctrlp_use_caching = 1
+let g:ctrlp_custom_ignore = {
+\ 'dir':  '\v[\/]\.(git|hg|svn)$',
+\ 'file': '\v\.(exe|so|dll|rpm|tar|gz|bz2|zip|ctags|tags)|tags|ctags$',
+\ 'link': 'some_bad_symbolic_links',
+\ }
+
+" GundoToggle
+nnoremap <leader>g :GundoToggle<CR>
+let g:gundo_width = 35
+let g:gundo_preview_height = 20
+let g:gundo_right = 0
+let g:gundo_preview_bottom = 0
+
+" VIM Excess Lines
+" let s:expl_permanent_matches = [
+    " \ ["LineNr", '\%81v.\+', -70]
+    " \ ]
+
+" ====================================== For Inteface =====================================
+" Make vim maximize while it startup
+func! MaximizeWindow()
+    silent !wmctrl -r :ACTIVE: -b add,maximized_vert,maximized_horz
+endfunc
+
+" The initialize size
+if has('gui_running')
+    set lines=40
+    set columns=122
+endif
+
+if has('win32') || has('win95') || has('win64')
+    " au GUIEnter * simalt ~x                       " Max after start vim
+    autocmd! bufwritepost $VIM/_vimrc source %      " autoload _vimrc
+    nmap <leader>v :e $VIM/_vimrc<CR>               " Fast Edit vim configuration
+    set guifont=Monaco:h12                          " Fonts
+    " Copy the content to system clipboard by using y/p
+    set clipboard+=unnamed
+    set clipboard+=unnamedplus
+else
+    " au GUIEnter * call MaximizeWindow()
+    autocmd! bufwritepost ~/.vimrc source %
+    nmap <leader>v :e ~/.vimrc<CR>
+    set guifont=Monaco\ 12
+    set clipboard=unnamedplus
+endif
+
+set nobackup noswapfile nowritebackup
+
+" ruler: Show Line and colum number; number: line number
+set ruler number
+set report=0
+
+colorscheme marslo
+" colorscheme desert_Marslo_ForLinux_v4
+" colorscheme neverness
+set t_Co=256
+let psc_style='cool'
+
+syntax enable
+syntax on
+filetype plugin on
+
+if !filereadable("$VIM\vim74\vimtweak.dll")
+    au GUIENTER * call libcallnr("vimtweak.dll","SetAlpha",245)
+endif
+
+" set go=                                   " Hide everything
+" set guioptions+=b                         " Add the bottom scroll bar
+set guioptions-=T                           " Hide the tool bar
+set guioptions-=r                           " Hide the side scroll bar
+set guioptions-=m                           " Hide the Menu
+set cpoptions+=n
+
+set autoread                                " Set auto read when a file is changed by outside
+set showmatch                               " Show matching bracets
+
+set nowrap                                  " Wrap lines
+" set textwidth=150
+set autoindent smartindent
+set smarttab expandtab                      " smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
+set tabstop=4                               " Tab width
+set softtabstop=4                           " the width while trigger <Tab> key
+set shiftwidth=4                            " the tab width by using >> & <<
+autocmd FileType ruby,eruby,yaml,html set ai sw=2 sts=2 et
+set lbr
+set tw=0
+
+" Set status bar
+set laststatus=2
+set statusline=%m%r
+set statusline=%f\ \ %y,%{&fileformat}\                 " file path\file name & filetype
+set statusline+=%=                                      " right align
+set statusline+=\ \ %-{strftime(\"%H:%M\ %d/%m/%Y\")}   " Current Time
+set statusline+=\ \ %b[A],0x%B                          " ASCII code, Hex mode
+set statusline+=\ \ %c%V,%l/%L                          " current Column, current Line/All Line
+set statusline+=\ \ %p%%\
+
+" At Menu
+source $VIMRUNTIME/delmenu.vim
+source $VIMRUNTIME/menu.vim
+
+" At Console
+language messages utf-8
+set showcmd                                 " Show (partial) command in status line
+
+" Fold
+set foldenable                              " Enable Fold
+set foldmethod=manual
+set foldcolumn=1
+set foldexpr=1                              " Shown line number after fold
+set foldlevel=100                           " Not fold while VIM set up
+" au BufWinLeave * silent mkview
+autocmd BufWinLeave * silent! mkview
+autocmd BufWinEnter * silent! loadview
+set viewoptions=folds
+
+au BufRead,BufNewFile * setfiletype txt     " Highlight the txt file
+au BufRead,BufNewFile *.t set ft=perl       " Perl test file as Perl code
+
+" MiniBufExpl Colors
+hi MBEVisibleActive guifg=#5DC2D6 guibg=#333333
+hi MBEVisibleNormal guifg=#A6DB29 guibg=#333333
+
+" ====================================== For Function =====================================
+set backspace=indent,eol,start                  " make backspace h, l, etc wrap to
+" set whichwrap+=<,>,h,l
+
+" nmap <leader>s :ConqueTermSplit
+if has('win32') || has('win95') || has('win64')
+    nmap tv :ConqueTermSplit cmd <CR>
+else
+    nmap tv :ConqueTermSplit bash <CR>
+endif
+
+" Delete the black space in the end of each line
+nmap zdb :%s/\s\+$//<CR>
+nmap zhh :%s/^\s\+//<CR>
+nmap zmm :g/^/ s//\=line('.').' '/<CR>
+nmap zws :g/^\s*$/d<CR>                         " Delete white space
+
+set incsearch hlsearch ignorecase smartcase     " Search
+set magic                                       " Regular Expression
+
+" WinManager
+" let g:AutoOpenWinManager=1
+let g:winManagerWidth = 20
+let g:winManagerWindowLayout='FileExplorer|TagList'
+nmap mm :WMToggle<cr>
+
+" Tlist
+let Tlist_Show_One_File=1
+let Tlist_Exit_OnlyWindow=1
+let Tlist_Use_SingleClick=1
+let Tlist_File_Fold_Auto_Close=1
+let Tlist_GainFocus_On_ToggleOpen=1
+let Tlist_show_Menu=1
+let Tlist_sql_settings = 'sql;P:package;t:table'
+let Tlist_Process_File_Always=0
+" let Tlist_Close_On_Select=1
+" let Tlist_Auto_Open=1
+" let Tlist_Ctags_Cmd=$VIM . 'vimfiles\ctags58\ctags.exe'
+" let updatetime=1000
+nmap tl :TlistToggle<CR>
+
+" Tagbar
+map <F3> :TagbarToggle<CR>
+let g:tagbar_left=1
+let g:tagbar_width=20
+let g:tagbar_autofocus=1
+let g:tagbar_expand=1
+let g:tagbar_singleclick=1
+let g:tagbar_iconchars=['+', '-']
+let g:tagbar_autoshowtag=1
+
+" MiniBufExplorer
+let g:miniBufExplMapCTabSwitchBufs=1
+let g:miniBufExplMapWindowNavArrows=1
+let g:miniBufExplorerMoreThanOne=0              " Mult-files openning at one minibufexplorer
+let g:miniBufExplMapWindowNavVim=1              " Using <HJKL> to change the buffer
+let g:miniBufExplTabWra=1
+let g:miniBufExplModSelTarget=1                 " Use other explorers like TagList set it at 1
+let g:miniBufExplUseSingleClick=1               " Single Click could switch the buffers
+
+" Comments
+let g:EnhCommentifyAlignRight='yes'
+let g:EnhCommentifyRespectIndent='yes'
+let g:EnhCommentifyPretty='Yes'
+let g:EnhCommentifyMultiPartBlocks='yes'
+let g:EnhCommentifyUseSyntax='Yes'
+function! EnhCommentifyCallback(ft)
+    if a:ft == 'autohotkey'
+        let b:ECcommentOpen = ';'
+        let b:ECcommentClose = ''
+    endif
+endfunction
+let g:EnhCommentifyCallbackExists = 'Yes'
+let g:EnhCommentifyAlignRight='Yes'
+
+
+" AutoInfo
+map <F4> :AuthorInfoDetect<cr>
+let g:vimrc_author='Marslo'
+let g:vimrc_email='marslo.vida@gmail.com'
+
+" MRU
+" let MRU_File=$VIM . 'vimfiles\Data\mru_files.txt'
+let MRU_Auto_Close = 1
+let MRU_Max_Entries = 10
+map <C-g> :MRU<CR>
+
+set linespace=0
+set wildmenu
+set wildignore+=*.swp,*.zip,*.exe
+
+" set mat=2                                     " The blinding frequency
+
+" turn off error beep/flash
+set noerrorbells novisualbell
+set t_vb=
+
+set completeopt=longest,menuone
+set list listchars=tab:\ \ ,trail:·,extends:»,precedes:«,nbsp:·
+
+" Cursor format
+set guicursor=a:hor6
+set guicursor+=i-r-ci-cr-o:hor6-blinkon0
+
+" Highlight Line Number
+set cursorline
+
+" IndentLine
+let g:indentLine_color_gui = '#282828'
+let g:indentLine_color_term = 8
+let g:indentLine_indentLevel = 20
+let g:indentLine_showFirstIndentLevel = 1
+let g:indentLine_char = '¦'
+" let g:indentLine_loaded = 1
+
+let g:rbpt_loadcmd_toggle = 1
+au VimEnter * RainbowParenthesesToggle
+au Syntax * RainbowParenthesesLoadRound
+au Syntax * RainbowParenthesesLoadSquare
+au Syntax * RainbowParenthesesLoadBraces
+let g:rbpt_colorpairs = [
+    \ ['brown',       'RoyalBlue3'],
+    \ ['Darkblue',    'SeaGreen3'],
+    \ ['darkgray',    'DarkOrchid3'],
+    \ ['darkgreen',   'firebrick3'],
+    \ ['darkcyan',    'RoyalBlue3'],
+    \ ['darkred',     'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['brown',       'firebrick3'],
+    \ ['gray',        'RoyalBlue3'],
+    \ ['black',       'SeaGreen3'],
+    \ ['darkmagenta', 'DarkOrchid3'],
+    \ ['Darkblue',    'firebrick3'],
+    \ ['darkgreen',   'RoyalBlue3'],
+    \ ['darkcyan',    'SeaGreen3'],
+    \ ['darkred',     'DarkOrchid3'],
+    \ ['red',         'firebrick3'],
+    \ ]
