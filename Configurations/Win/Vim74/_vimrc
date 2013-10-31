@@ -3,8 +3,8 @@
 "          Desc:
 "        Author: Marslo
 "       Created: 2010-10
-"       Version: 0.0.13
-"    LastChange: 2013-10-25 19:03:40
+"       Version: 0.0.14
+"    LastChange: 2013-10-31 19:40:52
 "       History:
 "                0.0.3  | Marslo | Add the Autoload and Fast Edit difference between win32 and non-win32
 "                0.0.4  | Marslo | Add CheckRubySyntax() function for checking and run ruby script
@@ -16,8 +16,9 @@
 "                0.0.9  | Marslo | Add the function about remove a paird parentheses, brackets, braces
 "                0.0.10 | Marslo | Add the configuration about rainbow_parentheses
 "                0.0.11 | Marslo | Add three bundles: woainvzu/EnhCommentify.vim && woainvzu/Marslo.vim && tpope/vim-rails
-"                0.0.12 | Marslo | Add GetVundle() and GetVim()
+"                0.0.12 | Marslo | Add function GetVundle() to get vundle automaticly
 "                0.0.13 | Marslo | Add Alpha setting for vim tweak
+"                0.0.14 | Marslo | Change woainvu repos to Marslo
 " =============================================================================
 
 source $VIMRUNTIME/vimrc_example.vim
@@ -92,7 +93,7 @@ filetype off
 
 " Inspired from http://pastebin.com/embed_iframe.php?i=C9fUE0M3
 func! GetVundle()
-    " execute 'silent !git clone https://github.com/woainvzu/snipmate.vim.git "' . expand('$VIM') . '"'
+    " execute 'silent !git clone https://github.com/Marslo/snipmate.vim.git "' . expand('$VIM') . '"'
 
     let vundleAlreadyExists=1
     if has('win32') || has('win64')
@@ -135,12 +136,13 @@ Bundle 'dantezhu/authorinfo'
 Bundle 'kien/rainbow_parentheses.vim'
 Bundle 'hdima/python-syntax.git'
 Bundle 'plasticboy/vim-markdown.git'
-Bundle 'woainvzu/EnhCommentify.vim'
+Bundle 'Marslo/EnhCommentify.vim'
 Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-pathogen'
 Bundle 'gregsexton/MatchTag'
+
 " if has('unix')
-Bundle 'woainvzu/snipmate.vim.git'
+Bundle 'Marslo/snipmate.vim.git'
 " endif
 
 " Get from vim-scripts
@@ -168,7 +170,7 @@ Bundle 'txt.vim'
 Bundle 'css.vim'
 Bundle 'gorodinskiy/vim-coloresque'
 Bundle 'hail2u/vim-css3-syntax'
-Bundle 'woainvzu/Marslo.vim'
+Bundle 'Marslo/Marslo.vim'
 " Bundle 'ap/vim-css-color'
 
 filetype plugin indent on

@@ -1,7 +1,6 @@
 " Vim color file
 " Maintainer:	Hans Fugal <hans@fugal.net>
 " Last Change:	$Date: 2004/06/13 19:30:30 $
-" Last Change:	$Date: 2004/06/13 19:30:30 $
 " URL:		http://hans.fugal.net/vim/colors/desert.vim
 " Version:	$Id: desert.vim,v 1.1 2004/06/13 19:30:30 vimboss Exp $
 
@@ -26,7 +25,7 @@
 "                 StatusLineNC  guibg
 "                 Folded        guibg
 "                 FoldColumn    guibg
-" v1.3: Modified at 17/12/12 19:36:21 
+" v1.3: Modified at 17/12/12 19:36:21
 "       Author: Marslo
 "       Email: marslo.vida@gmail.com
 "       File Name: desert_Marslo_ForLinux_v3
@@ -35,6 +34,15 @@
 "                PmenuSel     guifg guibg ctermbg
 "                PmenuSbar    guifg guibg
 "
+" v1.4: Modified at 31/10/13 15:47:08
+"       Author: Marslo
+"       Email:  marslo.jiao@gmail.com
+"       File Name: marslo.vim
+"       Added:
+"               MatchParen      guibg ctermbg gui cterm term
+"               LineNr          guifg guibg ctermfg ctermbg
+"               CursorLineNr    guifg guibg gui ctermbg ctermfg
+
 
 " cool help screens
 " :he group-name
@@ -48,7 +56,7 @@ if version > 580
     " complaining
     hi clear
     if exists("syntax_on")
-	syntax reset
+        syntax reset
     endif
 endif
 let g:colors_name="marslo"
@@ -73,9 +81,6 @@ hi VertSplit	guibg=#c2bfa5 guifg=grey50 gui=none
 hi Folded	guibg=grey15 guifg=grey60
 hi FoldColumn	guibg=grey15 guifg=tan
 hi IncSearch	guifg=slategrey guibg=khaki
-hi LineNr guifg=#666666 guibg=background
-hi CursorLineNr guifg=#A6E22E guibg=background gui=NONE ctermbg=black ctermfg=lightgreen
-" hi CursorLineNr   term=bold ctermfg=Yellow gui=bold guifg=Yellow
 hi ModeMsg	guifg=goldenrod
 hi MoreMsg	guifg=SeaGreen
 " hi NonText	guifg=LightBlue guibg=gray30
@@ -106,6 +111,21 @@ hi PmenuSbar    guifg=black guibg=gray14
 "hi Scrollbar
 "hi Tooltip
 
+" Inspired from http://stackoverflow.com/questions/10746750/set-vim-bracket-highlighting-colors
+" Color for :set showmatch
+" hi MatchParen guibg=GreenYellow gui=underline
+" hi MatchParen ctermbg=Green
+hi MatchParen gui=inverse
+hi MatchParen cterm=inverse term=inverse
+
+" Color for :set cursorline (Highlight the line number only)
+hi LineNr guifg=#555555 guibg=background
+hi LineNr ctermfg=darkgrey ctermbg=none
+hi CursorLineNr guifg=#A6E22E guibg=background gui=NONE
+hi CursorLineNr ctermbg=black ctermfg=lightgreen
+" hi LineNr guifg=#666666 guibg=background
+" hi CursorLine   cterm=NONE ctermbg=darkgrey ctermfg=white guibg=darkgrey guifg=white
+" hi CursorLineNr   term=bold ctermfg=Yellow gui=bold guifg=Yellow
 
 " syntax highlighting groups
 " ===========================================================
@@ -173,6 +193,25 @@ hi Ignore	guifg=grey40
 hi Todo		guifg=orangered guibg=yellow2
 
 " color terminal definitions
+"                       *cterm-colors*
+"    NR-16   NR-8    COLOR NAME ~
+"    0	    0	    Black
+"    1	    4	    DarkBlue
+"    2	    2	    DarkGreen
+"    3	    6	    DarkCyan
+"    4	    1	    DarkRed
+"    5	    5	    DarkMagenta
+"    6	    3	    Brown, DarkYellow
+"    7	    7	    LightGray, LightGrey, Gray, Grey
+"    8	    0*	    DarkGray, DarkGrey
+"    9	    4*	    Blue, LightBlue
+"    10	    2*	    Green, LightGreen
+"    11	    6*	    Cyan, LightCyan
+"    12	    1*	    Red, LightRed
+"    13	    5*	    Magenta, LightMagenta
+"    14	    3*	    Yellow, LightYellow
+"    15	    7*	    White
+
 hi SpecialKey	ctermfg=darkgreen
 hi NonText	cterm=NONE ctermfg=darkblue
 hi Directory	ctermfg=red
