@@ -3,7 +3,7 @@
 "           Desc:
 "         Author: Marslo
 "        Created: 2010-10
-"        Version: 0.1.0
+"        Version: 0.1.11
 "     LastChange: 2013-10-25 12:29:19
 "        History: 0.0.3 | Marslo | Add the Autoload and Fast Edit difference between win32 and non-win32
 "                 0.0.4 | Marslo | Add CheckRubySyntax() function for checking and run ruby script
@@ -14,6 +14,7 @@
 "                 0.0.8 | Marslo | Add the function of OpenCMD(), GotoFile(), FontSize_Enlarge(), FontSize_Reduce() and UpdateTagsFile()
 "                 0.0.9 | Marslo | Add three bundles: woainvzu/EnhCommentify.vim && woainvzu/Marslo.vim && tpope/vim-rails
 "                 0.0.10 | Marslo | Add function of GetVundle() and GetVim() for git clone automaticlly"
+"                 0.0.11 | Marslo | Change repository woainvzu to Marslo
 " =============================================================================
 
 " Remove the Welcome interface
@@ -45,7 +46,7 @@ filetype off
 
 " Inspired from http://pastebin.com/embed_iframe.php?i=C9fUE0M3
 func! GetVundle()
-    " execute 'silent !git clone https://github.com/woainvzu/snipmate.vim.git "' . expand('$VIM') . '"'
+    " execute 'silent !git clone https://github.com/Marslo/snipmate.vim.git "' . expand('$VIM') . '"'
 
     let vundleAlreadyExists=1
     if has('win32') || has('win64')
@@ -86,11 +87,11 @@ Bundle 'dantezhu/authorinfo'
 Bundle 'kien/rainbow_parentheses.vim'
 Bundle 'hdima/python-syntax.git'
 Bundle 'plasticboy/vim-markdown.git'
-Bundle 'woainvzu/EnhCommentify.vim'
+Bundle 'Marslo/EnhCommentify.vim'
 Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-pathogen'
 Bundle 'gregsexton/MatchTag'
-Bundle 'woainvzu/snipmate.vim.git'
+Bundle 'Marslo/snipmate.vim.git'
 
 " Get from vim-scripts
 Bundle 'Conque-Shell'
@@ -115,7 +116,7 @@ Bundle 'txt.vim'
 Bundle 'css.vim'
 Bundle 'gorodinskiy/vim-coloresque'
 Bundle 'hail2u/vim-css3-syntax'
-Bundle 'woainvzu/Marslo.vim'
+Bundle 'Marslo/Marslo.vim'
 " Bundle 'ap/vim-css-color'
 
 filetype plugin indent on
