@@ -4,12 +4,13 @@
 "         Author: Marslo
 "          Email: li.jiao@tieto.com
 "        Created: 2013-10-16 07:19:00
-"        Version: 0.0.5
+"        Version: 0.0.6
 "     LastChange: 2013-10-16 07:19:00
 "        History:
 "                 0.0.1 | Marslo | init
 "                 0.0.4 | Marslo | Add Vim Bundle
 "                 0.0.5 | Marslo | Add GetVundle() and GetVim() and the configuration of WinManager
+"                 0.0.6 | Marslo | Change repositoy woainvzu to Marslo
 " =============================================================================
 
 let &runtimepath=printf('%s/vimfiles,%s,%s/vimfiles/after', $VIM, $VIMRUNTIME, $VIM)
@@ -21,12 +22,12 @@ set nocompatible
 
 " Vim Bundle
 " Get Vundle from: git clone https://github.com/gmarik/vundle.git ~/.vim
-" The idea of GetGits() Got from: http://pastebin.com/embed_iframe.php?i=C9fUE0M3
 set nocompatible
 filetype off
 
+" GetVundle() inspired by: http://pastebin.com/embed_iframe.php?i=C9fUE0M3
 func! GetVundle()
-    " execute 'silent !git clone https://github.com/woainvzu/snipmate.vim.git "' . expand('$VIM') . '"'
+    " execute 'silent !git clone https://github.com/Marslo/snipmate.vim.git "' . expand('$VIM') . '"'
 
     let vundleAlreadyExists=1
     if has('win32') || has('win64')
@@ -69,10 +70,12 @@ Bundle 'dantezhu/authorinfo'
 Bundle 'kien/rainbow_parentheses.vim'
 " Bundle 'hdima/python-syntax.git'
 Bundle 'plasticboy/vim-markdown.git'
-Bundle 'woainvzu/EnhCommentify.vim'
-Bundle 'woainvzu/snipmate.vim.git'
+Bundle 'Marslo/EnhCommentify.vim'
+Bundle 'Marslo/snipmate.vim.git'
 Bundle 'tpope/vim-rails'
+Bundle 'vim-ruby/vim-ruby'
 Bundle 'tpope/vim-pathogen'
+Bundle 'gregsexton/MatchTag'
 
 " Get from vim-scripts
 Bundle 'Conque-Shell'
@@ -85,12 +88,14 @@ Bundle 'winmanager'
 Bundle 'matrix.vim--Yang'
 Bundle 'pyflakes.vim'
 Bundle 'Conque-Shell'
+Bundle 'ruby-matchit'
 
 " Colors
 Bundle 'txt.vim'
 Bundle 'css.vim'
+Bundle 'gorodinskiy/vim-coloresque'
 Bundle 'hail2u/vim-css3-syntax'
-Bundle 'woainvzu/Marslo.vim'
+Bundle 'Marslo/Marslo.vim'
 
 filetype plugin indent on
 
@@ -288,7 +293,7 @@ inoremap [ <c-r>=AutoPair('[')<CR>
 inoremap ] <c-r>=ClosePair(']')<CR>
 inoremap { <c-r>=AutoPair('{')<CR>
 inoremap } <c-r>=ClosePair('}')<CR>
-inoremap % <c-r>=AutoPair('%')<CR>
+" inoremap % <c-r>=AutoPair('%')<CR>
 
 func! AutoPair(char)
     if "(" == a:char
