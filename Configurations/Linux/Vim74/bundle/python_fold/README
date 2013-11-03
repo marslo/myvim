@@ -1,0 +1,19 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=515
+
+This script uses the expr fold-method to create folds for python source code.
+
+Folds are created for:
+ - Class definitions
+ - def function definitions
+ - Blocks between {{{, }}} markers (but not yet {{{n, etc.)
+
+The fold level for each fold is equal to the indentation divided by the value of the 'shiftwidth' option, so make sure that 'shiftwidth' is set to the right value for your code.
+
+Class and function folds show a count of the number of lines in the fold and the documentation string when closed (contributed by Max Ischenko).
+
+Caveats:
+- The docstring is not shown when it is enclosed in single quotes (like '''comment'''); use double quotes instead (like """comment""")
+- Newest version relies on a blank line following class or function definition if the next bit of code is not a new class or function definition.  If this doesn't suit your programming style, use the _nonblank version 2.2 (nb).  That version is buggier, however.  Do not install both files.
+
+Bugs:
+- It occasionally inserts a bogus fold at complicated structures like conditionals that are followed by a blank line.  A work-around is to remove the blank line or to replace it with a line containing a comment (a single '#' will do)
