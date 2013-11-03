@@ -1,10 +1,10 @@
 " =============================================================================
-"       FileName: .vimrc_ubuntu_13.04
+"       FileName: .vimrc
 "           Desc:
 "         Author: Marslo
 "        Created: 2010-10
-"        Version: 0.0.9
-"     LastChange: 2013-10-17 19:54:40
+"        Version: 0.1.11
+"     LastChange: 2013-10-25 12:29:19
 "        History: 0.0.3 | Marslo | Add the Autoload and Fast Edit difference between win32 and non-win32
 "                 0.0.4 | Marslo | Add CheckRubySyntax() function for checking and run ruby script
 "                 0.0.5 | Marslo | Add the function of highlight txt file
@@ -13,6 +13,8 @@
 "                 0.0.7 | Marslo | Modification about autoPair(): if there are char behind the ( or [ or { it wont pair
 "                 0.0.8 | Marslo | Add the function of OpenCMD(), GotoFile(), FontSize_Enlarge(), FontSize_Reduce() and UpdateTagsFile()
 "                 0.0.9 | Marslo | Add three bundles: woainvzu/EnhCommentify.vim && woainvzu/Marslo.vim && tpope/vim-rails
+"                 0.0.10 | Marslo | Add function of GetVundle() and GetVim() for git clone automaticlly"
+"                 0.0.11 | Marslo | Change repository woainvzu to Marslo
 " =============================================================================
 
 " Remove the Welcome interface
@@ -41,30 +43,55 @@ let &termencoding=&encoding
 " Get Vundle by: git clone https://github.com/gmarik/vundle.git ~/.vim
 set nocompatible
 filetype off
+
+" Inspired from http://pastebin.com/embed_iframe.php?i=C9fUE0M3
+func! GetVundle()
+    " execute 'silent !git clone https://github.com/Marslo/snipmate.vim.git "' . expand('$VIM') . '"'
+
+    let vundleAlreadyExists=1
+    if has('win32') || has('win64')
+        let vundle_readme=expand('$VIM\bundle\vundle\README.md')
+        let vbundle='$VIM\bundle'
+        let vvundle=vbundle . '\vundle'
+    else
+        let vundle_readme=expand('~/.vim/bunle/vundle/README.md')
+        let vbundle='~/.vim/bundle'
+        let vvundle=vbundle . '/vundle'
+    endif
+
+    if !filereadable(vundle_readme)
+        echo "Installing Vundle..."
+        echo ""
+        if isdirectory(expand(vbundle)) == 0
+            call mkdir(expand(vbundle), 'p')
+        endif
+        execute 'silent !git clone https://github.com/gmarik/vundle.git "' . expand(vvundle) . '"'
+        let vundleAlreadyExists=0
+    endif
+endfunc
+
 if has('win32') || has('win64')
     set rtp+=$VIM/vimfiles/bundle/vundle
     call vundle#rc('$VIM/vimfiles/bundle/')
 else
-    set rtp+=~/.vim/bunle/vundle
+    set rtp+=~/.vim/bundle/vundle
     call vundle#rc()
 endif
 " Plugins
 Bundle 'gmarik/vundle'
 Bundle 'Yggdroot/indentLine'
 Bundle 'kien/ctrlp.vim.git'
-
+Bundle 'sjl/gundo.vim.git'
+Bundle 'majutsushi/tagbar'
 Bundle 'dantezhu/authorinfo'
 Bundle 'kien/rainbow_parentheses.vim'
+Bundle 'hdima/python-syntax.git'
 Bundle 'plasticboy/vim-markdown.git'
-Bundle 'majutsushi/tagbar'
-Bundle 'woainvzu/EnhCommentify.vim'
+Bundle 'Marslo/EnhCommentify.vim'
 Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-pathogen'
 Bundle 'gregsexton/MatchTag'
-
-if has('unix')
-   Bundle 'woainvzu/snipmate.vim.git'
-endif
+Bundle 'Marslo/snipmate.vim.git'
 
 " Get from vim-scripts
 Bundle 'Conque-Shell'
@@ -75,22 +102,36 @@ Bundle 'TeTrIs.vim'
 Bundle 'winmanager'
 Bundle 'matrix.vim--Yang'
 Bundle 'pyflakes.vim'
+Bundle 'Conque-Shell'
 Bundle 'ruby-matchit'
 
+" Others
 " Bundle 'snipMate'
+" Bundle 'mattn/emmet-vim'
 " Bundle 'Tagbar'
 " Bundle 'AuthorInfo'
 
 " Colors
 Bundle 'txt.vim'
 Bundle 'css.vim'
+Bundle 'gorodinskiy/vim-coloresque'
 Bundle 'hail2u/vim-css3-syntax'
-Bundle 'woainvzu/Marslo.vim'
+Bundle 'Marslo/Marslo.vim'
+" Bundle 'ap/vim-css-color'
 
 filetype plugin indent on
-
 nmap <leader>bi :BundleInstall<CR>
 nmap <leader>bu :BundleUpdate<CR>
+
+" Get vim by: git clone git@github.com:b4winckler/vim.git
+func! GetVim()
+if has('unix')
+    let vimgitcfg=expand('~/.vim/src/vim/.git/config')
+    if !filereadable(vimgitcfg)
+        execute 'silent !git clone git@github.com:b4winckler/vim.git "' . expand('~/.vim/vimsrc') . '"'
+    end
+endif
+endfunc
 
 " ====================================== For Programming =====================================
 func! RunResult()
@@ -345,10 +386,9 @@ set smartindent
 set smarttab                                " the width of <Tab> in first line would refer to 'Shiftwidth' parameter
 set softtabstop=4                           " the width while trigger <Tab> key
 set shiftwidth=4                            " the tab width by using >> & <<
-autocmd FileType ruby,eruby,yaml,html set ai sw=2 sts=2 et
-
 set lbr
 set tw=0
+autocmd FileType ruby,eruby,yaml set ai sw=2 sts=2 et
 
 set ruler                                   " Show Line and colum number
 
@@ -388,9 +428,9 @@ set backspace=indent,eol,start              " make backspace h, l, etc wrap to
 
 " nmap <leader>s :ConqueTermSplit
 if has('win32') || has('win95') || has('win64')
-    nmap tv :ConqueTermSplit cmd <CR>
+    nmap <leader>tv :ConqueTermSplit cmd <CR>
 else
-    nmap tv :ConqueTermSplit bash <CR>
+    nmap <leader>tv :ConqueTermSplit bash <CR>
 endif
 
 nmap zdb :%s/\s\+$//<CR>                        " Delete the black space in the end of each line
@@ -531,7 +571,7 @@ hi CursorLineNr guifg=#A6E22E guibg=background gui=NONE ctermbg=black ctermfg=li
 
 " IndentLine
 let g:indentLine_color_gui = '#282828'
-let g:indentLine_color_term = 10
+let g:indentLine_color_term = 8
 let g:indentLine_indentLevel = 20
 let g:indentLine_showFirstIndentLevel = 1
 let g:indentLine_char = '¦'
