@@ -116,7 +116,6 @@ func! RunResult()
 endfunc
 map <F5> :call RunResult()<CR>
 
-map rc :call CompileRunGpp()<CR>
 func! CompileRunGpp()
     exec "w"
     exec "!gcc % -o %<"
