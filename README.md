@@ -1,4 +1,3 @@
-test
 MyVimConfig
 ===========
 Author: Marslo    
