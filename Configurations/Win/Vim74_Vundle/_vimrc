@@ -140,10 +140,10 @@ Bundle 'Marslo/EnhCommentify.vim'
 Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-pathogen'
 Bundle 'gregsexton/MatchTag'
+Bundle 'vantares/ruby-syntaxchecker.vim'
 
-" if has('unix')
+" snipmate works on windows by using pathogen
 Bundle 'Marslo/snipmate.vim.git'
-" endif
 
 " Get from vim-scripts
 Bundle 'Conque-Shell'
@@ -526,9 +526,6 @@ set viewoptions=folds
 au BufRead,BufNewFile * setfiletype txt     " Highlight the txt file
 au BufRead,BufNewFile *.t set ft=perl       " Perl test file as Perl code
 
-" MiniBufExpl Colors
-hi MBEVisibleActive guifg=#5DC2D6 guibg=#333333
-hi MBEVisibleNormal guifg=#A6DB29 guibg=#333333
 
 " ====================================== For Function =====================================
 set backspace=indent,eol,start                  " make backspace h, l, etc wrap to
