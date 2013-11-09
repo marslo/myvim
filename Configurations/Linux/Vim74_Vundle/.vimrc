@@ -20,6 +20,11 @@
 " Remove the Welcome interface
 " set shortmess=atI
 
+" Set color is 256
+if $COLORTERM == 'gnome-terminal'
+  set t_Co=256
+endif
+
 " ====================================== For Property =====================================
 " Set mapleader
 let mapleader=","
@@ -101,7 +106,7 @@ Bundle 'taglist.vim'
 Bundle 'TeTrIs.vim'
 Bundle 'winmanager'
 Bundle 'matrix.vim--Yang'
-Bundle 'pyflakes.vim'
+" Bundle 'pyflakes.vim'
 Bundle 'Conque-Shell'
 Bundle 'ruby-matchit'
 
@@ -468,7 +473,7 @@ let g:EnhCommentifyCallbackExists = 'Yes'
 let g:EnhCommentifyAlignRight='Yes'
 
 " AutoInfo
-map <leader>aid :AuthorInfoDetect<CR>
+map <F4> :AuthorInfoDetect<CR>
 let g:vimrc_author='Marslo'
 let g:vimrc_email='marslo.vida@gmail.com'
 
@@ -549,8 +554,8 @@ imap <A-f> <ESC><Space>Wi
 imap <A-b> <ESC>Bi
 imap <A-d> <ESC>dW
 
-map <C-c> "+y
-map <C-v> "+p
+" map <C-c> "+y
+" map <C-v> "+p
 map gl <CR>
 
 " Cursor format
