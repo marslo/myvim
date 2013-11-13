@@ -23,6 +23,11 @@
 
 source $VIMRUNTIME/vimrc_example.vim
 source $VIMRUNTIME/mswin.vim
+
+" At Menu
+source $VIMRUNTIME/delmenu.vim
+source $VIMRUNTIME/menu.vim
+
 " runtime macros/matchit.vim
 behave mswin
 
@@ -31,6 +36,11 @@ let g:solarized_termcolors=256
 
 " Remove the Welcome interface
 " set shortmess=atI
+
+" Set color is 256
+if 'xterm-256color' == $TERM
+  set t_Co=256
+endif
 
 " ====================================== For Property =====================================
 " Set mapleader
@@ -41,7 +51,8 @@ set iskeyword+=.
 set autochdir
 
 " Tags
-set tags=tags
+" set tags=tags
+set tags=./tags
 set tags+=c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\.tags
 set tags+=C:\Marslo\Job\Summa\TEX\SVN\.tags
 autocmd BufEnter c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\* :setlocal tags+=c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\.tags
@@ -141,9 +152,11 @@ Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-pathogen'
 Bundle 'gregsexton/MatchTag'
 Bundle 'vantares/ruby-syntaxchecker.vim'
+Bundle 'vim-ruby/vim-ruby'
 
 " snipmate works on windows by using pathogen
 Bundle 'Marslo/snipmate.vim.git'
+Bundle 'vantares/ruby-syntaxchecker.vim'
 
 " Get from vim-scripts
 Bundle 'Conque-Shell'
@@ -153,8 +166,9 @@ Bundle 'taglist.vim'
 Bundle 'TeTrIs.vim'
 Bundle 'winmanager'
 Bundle 'matrix.vim--Yang'
-Bundle 'pyflakes.vim'
-Bundle 'ruby-matchit'
+" Bundle 'pyflakes.vim'
+" Bundle 'colorsupport.vim'
+" Bundle 'ruby-matchit'
 
 " Others
 " Bundle 'Tagbar'
@@ -321,6 +335,14 @@ function! DeletePairs()
     endif
 endfunction
 
+iabbrev <leader>/* /*********************************
+iabbrev <leader>*/ *********************************/
+iabbrev <leader>#- #------------------
+inoremap <leader>tt <c-r>=strftime("%d/%m/%y %H:%M:%S")<cr>
+inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
+inoremap <leader>fe <C-R>=expand("%:t")<CR>
+
+" Add suffix '.py' if the filetype is python
 function! GotoFile()
     if 'python' == &ft
         let com = expand('%:p:h') . '\' . expand('<cfile>') . '.py'
@@ -369,61 +391,7 @@ function! FontSize_Enlarge()
 endfunction
 nnoremap <A-+> :call FontSize_Enlarge()<CR>
 
-iabbrev <leader>/* /*********************************
-iabbrev <leader>*/ *********************************/
-iabbrev <leader>#- #------------------
-inoremap <leader>tt <c-r>=strftime("%d/%m/%y %H:%M:%S")<cr>
-inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
-inoremap <leader>fe <C-R>=expand("%:t")<CR>
 
-" Moveing shortcut under the Insert mode
-inoremap <M-b> <Esc>Bi
-inoremap <M-f> <Esc>f<Space>a
-inoremap <M-d> <Esc>cf<Space>
-
-" Disable <F1> to open help file
-nmap <F1> <ESC>
-imap <F1> <ESC>
-
-" Set Ctrl-A/Ctrl-E jump to the Begin-of-line/End-of-line
-map <C-a> <ESC>^
-imap <C-a> <ESC>I
-map <C-e> <ESC>$
-imap <C-e> <ESC>A
-
-" Set the Ctrl-K/Ctrl-J switch the Top/Bottom window
-map <C-k> <C-w>k
-map <C-j> <C-w>j
-
-" map ecq :echo system("ruby -e 'print $:.join(%q{,})'")<CR>
-
-" CtrlP
-" let g:ctrlp_map = '<s-w>'
-" let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'
-" let g:ctrlp_working_path_mode = '.ctrlp'
-let g:ctrlp_max_height = 8
-let g:ctrlp_max_depth = 100
-let g:ctrlp_working_path_mode = 'ra'
-let g:ctrl_root_makers = ['ctrlp']
-let g:ctrlp_clear_cache_on_exit = 0
-let g:ctrlp_use_caching = 1
-let g:ctrlp_custom_ignore = {
-\ 'dir':  '\v[\/]\.(git|hg|svn)$',
-\ 'file': '\v\.(exe|so|dll|rpm|tar|gz|bz2|zip|ctags|tags)|tags|ctags$',
-\ 'link': 'some_bad_symbolic_links',
-\ }
-
-" GundoToggle
-nnoremap <leader>g :GundoToggle<CR>
-let g:gundo_width = 35
-let g:gundo_preview_height = 20
-let g:gundo_right = 0
-let g:gundo_preview_bottom = 0
-
-" VIM Excess Lines
-" let s:expl_permanent_matches = [
-    " \ ["LineNr", '\%81v.\+', -70]
-    " \ ]
 
 " ====================================== For Inteface =====================================
 " Make vim maximize while it startup
@@ -459,11 +427,12 @@ set nobackup noswapfile nowritebackup
 set ruler number
 set report=0
 
-colorscheme marslo
-" colorscheme desert_Marslo_ForLinux_v4
-" colorscheme neverness
-set t_Co=256
-let psc_style='cool'
+if has('gui_running') || 'xterm-256color' == $TERM
+    colorscheme marslo256
+    let psc_style='cool'
+else
+    colorscheme marslo16
+endif
 
 syntax enable
 syntax on
@@ -497,16 +466,12 @@ set tw=0
 " Set status bar
 set laststatus=2
 set statusline=%m%r
-set statusline=%f\ \ %y,%{&fileformat}\                 " file path\file name & filetype
+set statusline+=%f\ \ %y,%{&fileformat}\                 " file path\file name & filetype
 set statusline+=%=                                      " right align
 set statusline+=\ \ %-{strftime(\"%H:%M\ %d/%m/%Y\")}   " Current Time
 set statusline+=\ \ %b[A],0x%B                          " ASCII code, Hex mode
 set statusline+=\ \ %c%V,%l/%L                          " current Column, current Line/All Line
 set statusline+=\ \ %p%%\
-
-" At Menu
-source $VIMRUNTIME/delmenu.vim
-source $VIMRUNTIME/menu.vim
 
 " At Console
 language messages utf-8
@@ -525,7 +490,56 @@ set viewoptions=folds
 
 au BufRead,BufNewFile * setfiletype txt     " Highlight the txt file
 au BufRead,BufNewFile *.t set ft=perl       " Perl test file as Perl code
+set modifiable
+set write
 
+" Disable <F1> to open help file
+nmap <F1> <ESC>
+imap <F1> <ESC>
+
+" Set the Ctrl-K/Ctrl-J switch the Top/Bottom window
+map <C-k> <C-w>k
+map <C-j> <C-w>j
+
+" Emacs Style shortcuts
+map <C-a> <ESC>^
+imap <C-a> <ESC>I
+map <C-e> <ESC>$
+imap <C-e> <ESC>A
+" Moveing shortcut under the Insert mode
+inoremap <M-b> <Esc>Bi
+inoremap <M-f> <Esc>f<Space>a
+inoremap <M-d> <Esc>cf<Space>
+
+" map ecq :echo system("ruby -e 'print $:.join(%q{,})'")<CR>
+
+" CtrlP
+" let g:ctrlp_map = '<s-w>'
+" let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'
+" let g:ctrlp_working_path_mode = '.ctrlp'
+let g:ctrlp_max_height = 8
+let g:ctrlp_max_depth = 100
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrl_root_makers = ['ctrlp']
+let g:ctrlp_clear_cache_on_exit = 0
+let g:ctrlp_use_caching = 1
+let g:ctrlp_custom_ignore = {
+\ 'dir':  '\v[\/]\.(git|hg|svn)$',
+\ 'file': '\v\.(exe|so|dll|rpm|tar|gz|bz2|zip|ctags|tags)|tags|ctags$',
+\ 'link': 'some_bad_symbolic_links',
+\ }
+
+" GundoToggle
+nnoremap <leader>g :GundoToggle<CR>
+let g:gundo_width = 35
+let g:gundo_preview_height = 20
+let g:gundo_right = 0
+let g:gundo_preview_bottom = 0
+
+" VIM Excess Lines
+" let s:expl_permanent_matches = [
+    " \ ["LineNr", '\%81v.\+', -70]
+    " \ ]
 
 " ====================================== For Function =====================================
 set backspace=indent,eol,start                  " make backspace h, l, etc wrap to
@@ -538,8 +552,7 @@ else
     nmap tv :ConqueTermSplit bash <CR>
 endif
 
-" Delete the black space in the end of each line
-nmap zdb :%s/\s\+$//<CR>
+nmap zdb :%s/\s\+$//<CR>                        " Delete the black space in the end of each line
 nmap zhh :%s/^\s\+//<CR>
 nmap zmm :g/^/ s//\=line('.').' '/<CR>
 nmap zws :g/^\s*$/d<CR>                         " Delete white space
@@ -588,10 +601,10 @@ let g:miniBufExplModSelTarget=1                 " Use other explorers like TagLi
 let g:miniBufExplUseSingleClick=1               " Single Click could switch the buffers
 
 " Comments
-let g:EnhCommentifyAlignRight='yes'
+let g:EnhCommentifyAlignRight='Yes'
 let g:EnhCommentifyRespectIndent='yes'
 let g:EnhCommentifyPretty='Yes'
-let g:EnhCommentifyMultiPartBlocks='yes'
+let g:EnhCommentifyMultiPartBlocks='Yes'
 let g:EnhCommentifyUseSyntax='Yes'
 function! EnhCommentifyCallback(ft)
     if a:ft == 'autohotkey'
@@ -604,18 +617,24 @@ let g:EnhCommentifyAlignRight='Yes'
 
 
 " AutoInfo
-map <F4> :AuthorInfoDetect<cr>
+map <F4> :AuthorInfoDetect<CR>
 let g:vimrc_author='Marslo'
 let g:vimrc_email='marslo.vida@gmail.com'
 
-" MRU
+" Most Recently Used(MRU)
 " let MRU_File=$VIM . 'vimfiles\Data\mru_files.txt'
 let MRU_Auto_Close = 1
 let MRU_Max_Entries = 10
+let MRU_Exclude_Files='^/tmp/.*'
+let MRU_Exclude_Files='^/temp/.*'
+let MRU_Exclude_Files='^/media/.*'
+let MRU_Exclude_Files='^/mnt/.*'
 map <C-g> :MRU<CR>
 
 set linespace=0
 set wildmenu
+" Completion mode that is used for the character
+set wildmode=longest,list,full
 set wildignore+=*.swp,*.zip,*.exe
 
 " set mat=2                                     " The blinding frequency
@@ -625,22 +644,15 @@ set noerrorbells novisualbell
 set t_vb=
 
 set completeopt=longest,menuone
+let g:SuperTabDefaultCompletionType = "context"
+
 set list listchars=tab:\ \ ,trail:·,extends:»,precedes:«,nbsp:·
 
 " Cursor format
 set guicursor=a:hor6
 set guicursor+=i-r-ci-cr-o:hor6-blinkon0
 
-" Highlight Line Number
-set cursorline
-
-" IndentLine
-let g:indentLine_color_gui = '#282828'
-let g:indentLine_color_term = 8
-let g:indentLine_indentLevel = 20
-let g:indentLine_showFirstIndentLevel = 1
-let g:indentLine_char = '¦'
-" let g:indentLine_loaded = 1
+set cursorline                        " Highlight the current line
 
 let g:rbpt_loadcmd_toggle = 1
 au VimEnter * RainbowParenthesesToggle
@@ -665,3 +677,20 @@ let g:rbpt_colorpairs = [
     \ ['darkred',     'DarkOrchid3'],
     \ ['red',         'firebrick3'],
     \ ]
+
+" IndentLine
+let g:indentLine_color_gui = '#282828'
+let g:indentLine_color_term = 8
+let g:indentLine_indentLevel = 20
+let g:indentLine_showFirstIndentLevel = 1
+if has('gui_running') || 'xterm-256color' == $TERM
+    let g:indentLine_char = '¦'
+else
+    let g:indentLine_char = '|'
+endif
+" let g:indentLine_loaded = 1
+" vim-ruby
+autocmd FileType ruby compiler ruby
+let g:rubycomplete_buffer_loading = 1
+let g:rubycomplete_classes_in_global = 1
+let g:rubycomplete_rails = 1

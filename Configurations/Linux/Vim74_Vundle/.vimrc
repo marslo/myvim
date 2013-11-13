@@ -17,6 +17,16 @@
 "                 0.0.11 | Marslo | Change repository woainvzu to Marslo
 " =============================================================================
 
+" At Menu
+source $VIMRUNTIME/delmenu.vim
+source $VIMRUNTIME/menu.vim
+
+" runtime macros/matchit.vim
+behave mswin
+
+let g:ruby_path=$RUBY_BIN
+let g:solarized_termcolors=256
+
 " Remove the Welcome interface
 " set shortmess=atI
 
@@ -43,6 +53,8 @@ set termencoding=utf8
 set encoding=utf8
 set fileencoding=utf8
 let &termencoding=&encoding
+
+set scrolloff=3
 
 " Vim Bundle
 " Get Vundle by: git clone https://github.com/gmarik/vundle.git ~/.vim
@@ -90,14 +102,17 @@ Bundle 'sjl/gundo.vim.git'
 Bundle 'majutsushi/tagbar'
 Bundle 'dantezhu/authorinfo'
 Bundle 'kien/rainbow_parentheses.vim'
-Bundle 'hdima/python-syntax.git'
+" Bundle 'hdima/python-syntax.git'
 Bundle 'plasticboy/vim-markdown.git'
 Bundle 'Marslo/EnhCommentify.vim'
 Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-pathogen'
 Bundle 'gregsexton/MatchTag'
+Bundle 'vantares/ruby-syntaxchecker.vim'
+Bundle 'vim-ruby/vim-ruby'
 Bundle 'Marslo/snipmate.vim.git'
 Bundle 'vantares/ruby-syntaxchecker.vim'
+" Bundle 'semmons99/vim-ruby-matchit'
 
 " Get from vim-scripts
 Bundle 'Conque-Shell'
@@ -129,6 +144,36 @@ filetype plugin indent on
 nmap <leader>bi :BundleInstall<CR>
 nmap <leader>bu :BundleUpdate<CR>
 
+" Open the current file path by cmd
+function! OpenCMD()
+    if has('win32')
+        " let com = '!cmd /c start C:\Marslo\Tools\Softwares\Data\System\CMD\Console2\Console.exe -d "'. expand('%:p:h') . '"'
+        " let com = '!cmd /c start cd '. expand('%:p:h')
+        " let com = '!cmd /c start "C:\Program Files\JPSoft\TCCLE13\tcc.exe" /c "' . expand('%:p:h') .'"'
+        " let com = '!cmd /c start C:\WINDOWS\system32\WindowsPowerShell\v1.0\powershell.exe -NoExit -Command "Set-Location ' . expand ('%:p:h') . '"'
+        if 'java' == &ft
+            let com = '!cmd /c start "C:\Program Files\JPSoft\TCCLE13x64\tcc.exe" /d "' . expand('%:p:h') .'"'
+        else
+            let com1 = '!cmd /c start C:\WINDOWS\system32\WindowsPowerShell\v1.0\powershell.exe -NoExit -Command '
+            let com2 = '"Set-Location ' . "'" . expand ('%:p:h') ."'" . '"'
+            let com = com1 . com2
+        endif
+    else
+        let com = '!/usr/bin/gnome-terminal --working-directory=' . expand('%:p:h')
+    endif
+    echo 'Goto "' . expand('%:p:h') . '" in command line'
+    silent execute com
+endfunction
+nmap cmd :call OpenCMD()<CR>
+
+func! OpenFoler()
+    if has('win32') || has('win95') || has('win64')
+        let folderpath = expand('%:p:h')
+    endif
+    silent execute '!C:\Windows\explorer.exe "' . folderpath . '"'
+endfunc
+map <M-o> :call OpenFoler()<CR>
+
 " Get vim by: git clone git@github.com:b4winckler/vim.git
 func! GetVim()
 if has('unix')
@@ -139,7 +184,27 @@ if has('unix')
 endif
 endfunc
 
+" Run pylint
+func! PylintCheck()
+    let mp = &makeprg
+    let ef = &errorformat
+    let exeFile = '"' . expand("%:t") . '"'
+    setlocal makeprg=pylint\ --reports=n\ --output-format=parseable
+    set efm=%A%f:%l:\ [%t%.%#]\ %m,%Z%p^^,%-C%.%#
+    silent make "%:p"
+    copen
+    let &makeprg     = mp
+    let &errorformat = ef
+endfunc
+nmap <leader>li :call PylintCheck()<CR>
+
 " ====================================== For Programming =====================================
+func! CompileRunGpp()
+    exec "w"
+    exec "!gcc % -o %<"
+    exec "! %<"
+endfunc
+
 func! RunResult()
     let mp = &makeprg
     let ef = &errorformat
@@ -163,11 +228,7 @@ func! RunResult()
 endfunc
 map <F5> :call RunResult()<CR>
 
-func! CompileRunGpp()
-    exec "w"
-    exec "!gcc % -o %<"
-    exec "! %<"
-endfunc
+
 
 " Automatic Pair
 " inoremap ( ()<ESC>i
@@ -179,7 +240,7 @@ inoremap <buffer> ] <c-r>=ClosePair(']')<CR>
 " inoremap { {<CR>}<ESC>ka<CR>
 inoremap <buffer> { <c-r>=AutoPair('{')<CR>
 inoremap <buffer> } <c-r>=ClosePair('}')<CR>
-
+inoremap <buffer> % <c-r>=AutoPair('%')<CR>
 
 func! AutoPair(char)
     " let curchar = getline('.')[col('.') - 1]
@@ -224,7 +285,6 @@ function! ClosePair(char)
     endif
 endfunction
 
-
 inoremap <buffer> <BS> <c-r>=DeletePairs()<CR>
 inoremap <buffer> <C-h> <c-r>=DeletePairs()<CR>
 
@@ -248,40 +308,15 @@ inoremap <leader>tt <c-r>=strftime("%d/%m/%y %H:%M:%S")<cr>
 inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
 inoremap <leader>fe <C-R>=expand("%:t")<CR>
 
-" Open the current file path by cmd
-function! OpenCMD()
-    if has('win32')
-        " let com = '!cmd /c start C:\Marslo\Tools\Softwares\Data\System\CMD\Console2\Console.exe -d "'. expand('%:p:h') . '"'
-        " let com = '!cmd /c start cd '. expand('%:p:h')
-        " let com = '!cmd /c start "C:\Program Files\JPSoft\TCCLE13\tcc.exe" /c "' . expand('%:p:h') .'"'
-        " let com = '!cmd /c start C:\WINDOWS\system32\WindowsPowerShell\v1.0\powershell.exe -NoExit -Command "Set-Location ' . expand ('%:p:h') . '"'
-        if 'java' == &ft
-            let com = '!cmd /c start "C:\Program Files\JPSoft\TCCLE13x64\tcc.exe" /d "' . expand('%:p:h') .'"'
-        else
-            let com1 = '!cmd /c start C:\WINDOWS\system32\WindowsPowerShell\v1.0\powershell.exe -NoExit -Command '
-            let com2 = '"Set-Location ' . "'" . expand ('%:p:h') ."'" . '"'
-            let com = com1 . com2
-        endif
-    else
-        let com = '!/usr/bin/gnome-terminal --working-directory=' . expand('%:p:h')
-    endif
-    echo 'Goto "' . expand('%:p:h') . '" in command line'
-    silent execute com
-endfunction
-nmap cmd :call OpenCMD()<CR>
 
-func! OpenFoler()
-    if has('win32') || has('win95') || has('win64')
-        let folderpath = expand('%:p:h')
-    endif
-    silent execute '!C:\Windows\explorer.exe "' . folderpath . '"'
-endfunc
-map <M-o> :call OpenFoler()<CR>
 
 " Add suffix '.py' if the filetype is python
 func! GotoFile()
     if 'python' == &ft
-        let com = expand('<cfile>') . '.py'
+        let com = expand('%:p:h') . '\' . expand('<cfile>') . '.py'
+    " elseif 'ruby' == &ft
+        " let com = expand('%:p:h') . '\' . expand('<cfile>')
+        " let com = 'C:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\' . expand('<cfile>')
     else
         let com = expand('<cfile>')
     endif
@@ -293,10 +328,10 @@ nmap gf :call GotoFile()<CR>
 " Update tags file automatic
 set tags=tags;
 set autochdir
-function! UpdateTagsFile()
+function! UpdateTags()
     silent !ctags -R --fields=+ianS --extra=+q
 endfunction
-nmap <F12> :call UpdateTagsFile()<CR>
+nmap <F12> :call UpdateTags()<CR>
 
 " Reduce the font
 function! <SID>FontSize_Reduce()
@@ -348,15 +383,12 @@ if has('gui_running')
     set columns=108
 endif
 
-if has('win32')
-    " Max after start vim
-    " au GUIEnter * simalt ~x
-    " autoload —vimrc
-    autocmd! bufwritepost $VIM/_vimrc source %
-    " Fast Edit vim configuration
-    nmap <leader>v :e $VIM/_vimrc<CR>
-    " Fonts
-    set guifont=Monaco:h12
+if has('win32') || has('win95') || has('win64')
+    " au GUIEnter * simalt ~x                       " Max after start vim
+    autocmd! bufwritepost $VIM/_vimrc source %      " autoload _vimrc
+    nmap <leader>v :e $VIM/_vimrc<CR>               " Fast Edit vim configuration
+    set guifont=Monaco:h12                          " Fonts
+    " Copy the content to system clipboard by using y/p
     set clipboard+=unnamed
     set clipboard+=unnamedplus
 else
@@ -369,7 +401,9 @@ endif
 
 set nobackup noswapfile nowritebackup
 
-set number
+" ruler: Show Line and colum number; number: line number
+set ruler number
+set report=0
 if has('gui_running') || 'xterm-256color' == $TERM
     colorscheme marslo256
     let psc_style='cool'
@@ -394,19 +428,15 @@ set showmatch                               " Show matching bracets
 set nowrap                                  " Wrap lines
 
 " Tab width
-set tabstop=4
-set expandtab
 " set textwidth=150
-set autoindent
-set smartindent
-set smarttab                                " the width of <Tab> in first line would refer to 'Shiftwidth' parameter
+set autoindent smartindent
+set smarttab expandtab                      " smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
+set tabstop=4                               " Tab width
 set softtabstop=4                           " the width while trigger <Tab> key
 set shiftwidth=4                            " the tab width by using >> & <<
+autocmd FileType ruby,eruby,yaml,html set ai sw=2 sts=2 et
 set lbr
 set tw=0
-autocmd FileType ruby,eruby,yaml,html set ai sw=2 sts=2 et
-
-set ruler                                   " Show Line and colum number
 
 " Set status bar
 set laststatus=2
@@ -418,9 +448,6 @@ set statusline+=\ \ %b[A],0x%B              " ASCII code, Hex mode
 set statusline+=\ \ %c%V,%l/%L              " current Column, current Line/All Line
 set statusline+=\ \ %p%%\
 
-" At Menu
-source $VIMRUNTIME/delmenu.vim
-source $VIMRUNTIME/menu.vim
 " At Console
 " language messages utf8
 set showcmd                                 " Show (partial) command in status line
@@ -439,8 +466,56 @@ set viewoptions=folds
 au BufRead,BufNewFile * setfiletype txt     " Highlight the txt file
 au BufRead,BufNewFile *.t set ft=perl       " Perl test file as Perl code
 
+set modifiable
+set write
+
+" Disable <F1> to open help file
+noremap <F1> <ESC>
+imap <F1> <ESC>a
+
+map <C-k> <C-w>k
+map <C-j> <C-w>j
+
+" Emacs Style shortcuts
+map <C-a> <ESC>^
+imap <C-a> <ESC>I
+map <C-e> <ESC>$
+imap <C-e> <ESC>A
+imap <A-f> <ESC><Space>Wi
+imap <A-b> <ESC>Bi
+imap <A-d> <ESC>dW
+
+" map <C-c> "+y
+" map <C-v> "+p
+map gl <CR>
+
+set path+=/home/marslo/Study
+
+" CtrlP
+" let g:ctrlp_map = '<s-w>'
+" let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'
+" let g:ctrlp_working_path_mode = '.ctrlp'
+let g:ctrlp_max_height = 8
+let g:ctrlp_max_depth = 100
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrl_root_makers = ['ctrlp']
+let g:ctrlp_clear_cache_on_exit = 0
+let g:ctrlp_use_caching = 1
+let g:ctrlp_custom_ignore = {
+\ 'dir':  '\v[\/]\.(git|hg|svn)$',
+\ 'file': '\v\.(exe|so|dll|rpm|tar|gz|bz2|zip|ctags|tags)|tags|ctags$',
+\ 'link': 'some_bad_symbolic_links',
+\ }
+
+" GundoToggle
+nnoremap <leader>g :GundoToggle<CR>
+let g:gundo_width = 35
+let g:gundo_preview_height = 20
+let g:gundo_right = 0
+let g:gundo_preview_bottom = 0
+
 " ====================================== For Function =====================================
-set backspace=indent,eol,start              " make backspace h, l, etc wrap to
+set backspace=indent,eol,start                  " make backspace h, l, etc wrap to
 " set whichwrap+=<,>,h,l
 
 " nmap <leader>s :ConqueTermSplit
@@ -456,8 +531,6 @@ nmap zmm :g/^/ s//\=line('.').' '/<CR>
 nmap zws :g/^\s*$/d<CR>                         " Delete white space
 
 set incsearch hlsearch ignorecase smartcase     " Search
-set ignorecase
-
 set magic                                       " Regular Expression
 
 " Tagbar
@@ -490,33 +563,38 @@ map <F4> :AuthorInfoDetect<CR>
 let g:vimrc_author='Marslo'
 let g:vimrc_email='marslo.vida@gmail.com'
 
-" MRU
-" let MRU_File=$VIM.'\Data\mru_files.txt'
-let MRU_Auto_Close=1
 " Most Recently Used(MRU)
-map <C-g> :MRU<CR>
+" let MRU_File=$VIM . 'vimfiles\Data\mru_files.txt'
 let MRU_Auto_Close = 1
 let MRU_Max_Entries = 10
+let MRU_Exclude_Files='^/tmp/.*'
+let MRU_Exclude_Files='^/temp/.*'
+let MRU_Exclude_Files='^/media/.*'
+let MRU_Exclude_Files='^/mnt/.*'
+map <C-g> :MRU<CR>
 
-" CtrlP
-let g:ctrlp_max_height = 8
-let g:ctrlp_max_depth = 100
-let g:ctrlp_working_path_mode = 'ra'
-let g:ctrl_root_makers = ['ctrlp']
-let g:ctrlp_clear_cache_on_exit = 0
-let g:ctrlp_use_caching = 1
-let g:ctrlp_custom_ignore = {
-\ 'dir':  '\v[\/]\.(git|hg|svn)$',
-\ 'file': '\v\.(exe|so|dll|rpm|tar|gz|bz2|zip|ctags|tags)|tags|ctags$',
-\ 'link': 'some_bad_symbolic_links',
-\ }
+" E21\: Cannot make changes, 'modifiable' is off:     $delete
+set linespace=0
+set wildmenu
+" Completion mode that is used for the character
+set wildmode=longest,list,full
+set wildignore+=*.swp,*.zip,*.exe
 
-" GundoToggle
-nnoremap <leader>g :GundoToggle<CR>
-let g:gundo_width = 35
-let g:gundo_preview_height = 20
-let g:gundo_right = 0
-let g:gundo_preview_bottom = 0
+" turn off error beep/flash
+set noerrorbells novisualbell
+set t_vb=
+
+set completeopt=longest,menuone
+let g:SuperTabDefaultCompletionType = "context"
+
+" set list listchars=tab:\ \ ,trail:.,extends:>,precedes:<,nbsp:.
+set list listchars=tab:\ \ ,trail:·,extends:»,precedes:«,nbsp:·
+
+" Cursor format
+set guicursor=a:hor6
+set guicursor+=i-r-ci-cr-o:hor6-blinkon0
+
+set cursorline                        " Highlight the current line
 
 let g:rbpt_loadcmd_toggle = 1
 au VimEnter * RainbowParenthesesToggle
@@ -542,57 +620,22 @@ let g:rbpt_colorpairs = [
     \ ['red',         'firebrick3'],
     \ ]
 
-
-set modifiable
-set write
-
-" E21\: Cannot make changes, 'modifiable' is off:     $delete
-set linespace=0
-set wildmenu
-" Completion mode that is used for the character
-set wildmode=longest,list,full
-set wildignore+=*.swp,*.zip,*.exe
-
-" Disable F1
-noremap <F1> <ESC>
-imap <F1> <ESC>a
-
-map <C-k> <C-w>k
-map <C-j> <C-w>j
-
-" Emacs Style shortcuts
-map <C-a> <ESC>^
-imap <C-a> <ESC>I
-map <C-e> <ESC>$
-imap <C-e> <ESC>A
-imap <A-f> <ESC><Space>Wi
-imap <A-b> <ESC>Bi
-imap <A-d> <ESC>dW
-
-" map <C-c> "+y
-" map <C-v> "+p
-map gl <CR>
-
-" Cursor format
-set guicursor=a:hor10
-set guicursor+=i-r-ci-cr-o:hor10-blinkon0
-set scrolloff=3
-set cursorline                        " Highlight the current line
-
-" turn off error beep/flash
-set noerrorbells novisualbell
-set t_vb=
-
-set path+=/home/marslo/Study
-
 " IndentLine
 let g:indentLine_color_gui = '#282828'
 let g:indentLine_color_term = 8
 let g:indentLine_indentLevel = 20
 let g:indentLine_showFirstIndentLevel = 1
-let g:indentLine_char = '¦'
+if has('gui_running') || 'xterm-256color' == $TERM
+    let g:indentLine_char = '¦'
+else
+    let g:indentLine_char = '|'
+endif
 " let g:indentLine_loaded = 1
 
-set list listchars=tab:\ \ ,trail:.,extends:>,precedes:<,nbsp:.
-
 " nnoremap <silent> <C-F6> :let old_reg=@"<CR>:let @"=substitute(expand("%:p"), "/", "\\", "g")<CR>:silent!!cmd /cstart <C-R><C-R>"<CR><CR>:let @"=old_reg<CR>
+
+" vim-ruby
+autocmd FileType ruby compiler ruby
+let g:rubycomplete_buffer_loading = 1
+let g:rubycomplete_classes_in_global = 1
+let g:rubycomplete_rails = 1
