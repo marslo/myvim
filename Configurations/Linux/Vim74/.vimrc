@@ -33,7 +33,14 @@ let mapleader=","
 let g:mapleader=","
 
 " colorscheme desert_Marslo_ForLinux_v2
-colorscheme desert_Marslo_ForLinux_v4
+" colorscheme desert_Marslo_ForLinux_v4
+
+if has('gui_running') || 'xterm-256color' == $TERM
+    colorscheme marslo256
+    let psc_style='cool'
+else
+    colorscheme marslo16
+endif
 
 if has('win32')
     autocmd! bufwritepost .vimrc source %
@@ -45,6 +52,7 @@ else
     autocmd! bufwritepost ~/.vimrc source %
     nmap <leader>v :e ~/.vimrc<CR>
     set guifont=Monaco\ 12
+    set clipboard=unnamedplus
 endif
 
 " Hide the tool bar
@@ -162,7 +170,7 @@ let MRU_Auto_Close = 1
 let MRU_Max_Entries = 10
 
 " Highlight the current line
-" set cursorline
+set cursorline
 " highlight CursorLine guibg=lightblue ctermbg=lightgray
 " set cursorcolumn
 
@@ -212,7 +220,7 @@ func! AutoPair(char)
     elseif "{" == a:char
         if &ft =~ '^\(java\|perl\)$'
             return "{\<Enter>}\<ESC>ko"
-        elseif '' == getline('.')[col('.')] && &ft =~ '^\(ruby\|python\|autohotkey\|vim\|snippet\)$'
+        elseif '' == getline('.')[col('.')] && &ft =~ '^\(ruby\|eruby\|python\|autohotkey\|vim\|snippet\)$'
             return "{}\<Left>"
         else
             return a:char
@@ -220,7 +228,7 @@ func! AutoPair(char)
     elseif "%" == a:char
         if '' == getline('.')[col('.')] && &ft =~ '^\(autohotkey\)$'
             return "%%\<left>"
-        else:
+        else
             return a:char
         endif
     endif
@@ -250,9 +258,30 @@ endfunction
 
 iabbrev <leader>/* /*********************************
 iabbrev <leader>*/ *********************************/
+iabbrev <leader>#- #------------------
 inoremap <leader>tt <c-r>=strftime("%d/%m/%y %H:%M:%S")<cr>
-inoremap <leader>\fn <C-R>=expand("%:t:r")<CR>
-inoremap <leader>\fe <C-R>=expand("%:t")<CR>
+inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
+inoremap <leader>fe <C-R>=expand("%:t")<CR>
+
+" Add suffix '.py' if the filetype is python
+func! GotoFile()
+    if 'python' == &ft
+        let com = expand('<cfile>') . '.py'
+    else
+        let com = expand('<cfile>')
+    endif
+    silent execute ':e ' . com
+    echo 'Open file "'. com . '" under the cursor'
+endfunc
+nmap gf :call GotoFile()<CR>
+
+" Update tags file automatic
+set tags=tags;
+set autochdir
+function! UpdateTagsFile()
+    silent !ctags -R --fields=+ianS --extra=+q
+endfunction
+nmap <F12> :call UpdateTagsFile()<CR>
 
 " Cursor format
 set guicursor=a:hor10

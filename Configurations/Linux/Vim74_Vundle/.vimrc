@@ -21,7 +21,7 @@
 " set shortmess=atI
 
 " Set color is 256
-if $COLORTERM == 'gnome-terminal'
+if 'xterm-256color' == $TERM
   set t_Co=256
 endif
 
@@ -97,6 +97,7 @@ Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-pathogen'
 Bundle 'gregsexton/MatchTag'
 Bundle 'Marslo/snipmate.vim.git'
+Bundle 'vantares/ruby-syntaxchecker.vim'
 
 " Get from vim-scripts
 Bundle 'Conque-Shell'
@@ -107,8 +108,8 @@ Bundle 'TeTrIs.vim'
 Bundle 'winmanager'
 Bundle 'matrix.vim--Yang'
 " Bundle 'pyflakes.vim'
-Bundle 'Conque-Shell'
-Bundle 'ruby-matchit'
+" Bundle 'colorsupport.vim'
+" Bundle 'ruby-matchit'
 
 " Others
 " Bundle 'snipMate'
@@ -198,10 +199,10 @@ func! AutoPair(char)
             return a:char
         endif
     elseif "{" == a:char
-        if &ft =~ '^\(ruby\|java\|perl\)$'
+        if &ft =~ '^\(java\|perl\)$'
             return "{\<Enter>}\<ESC>ko"
             " return "{\<Enter>}\<Up>\<Enter>"
-        elseif '' == bchar && &ft =~ '^\(python\|autohotkey\|vim\|snippet\|txt\)$'
+        elseif '' == bchar && &ft =~ '^\(ruby\|python\|eruby\|autohotkey\|vim\|snippet\|txt\|scss\)$'
             return "{}\<Left>"
         else
             return a:char
@@ -324,6 +325,14 @@ function! <SID>FontSize_Enlarge()
 endfunction
 nnoremap <A-+> :call <SID>FontSize_Enlarge()<CR> 
 
+" Show syntax highlighting groups for word under cursor
+function! SynStack()
+    if !exists("*synstack")
+        return
+    endif
+    echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunc
+
 " vnoremap < <gv
 " vnoremap > >gv
 
@@ -361,10 +370,13 @@ endif
 set nobackup noswapfile nowritebackup
 
 set number
-colorscheme marslo
-let psc_style='cool'
+if has('gui_running') || 'xterm-256color' == $TERM
+    colorscheme marslo256
+    let psc_style='cool'
+else
+    colorscheme marslo16
+endif
 
-" colorscheme desert
 syntax enable
 syntax on
 filetype plugin on
@@ -392,14 +404,14 @@ set softtabstop=4                           " the width while trigger <Tab> key
 set shiftwidth=4                            " the tab width by using >> & <<
 set lbr
 set tw=0
-autocmd FileType ruby,eruby,yaml set ai sw=2 sts=2 et
+autocmd FileType ruby,eruby,yaml,html set ai sw=2 sts=2 et
 
 set ruler                                   " Show Line and colum number
 
 " Set status bar
 set laststatus=2
 set statusline=%m%r
-set statusline=%f\ \ %y,%{&fileformat}\     " file path\file name & filetype
+set statusline+=%f\ \ %y,%{&fileformat}\     " file path\file name & filetype
 set statusline+=%=      " right align
 set statusline+=\ \ %-{strftime(\"%H:%M\ %d/%m/%Y\")}   " Current Time
 set statusline+=\ \ %b[A],0x%B              " ASCII code, Hex mode
@@ -419,6 +431,7 @@ set foldmethod=manual
 set foldcolumn=1
 set foldexpr=1                              "Shown line number after fold
 set foldlevel=100                           " Not fold while VIM set up
+" Load view automatic
 autocmd BufWinLeave * silent! mkview
 autocmd BufWinEnter * silent! loadview
 set viewoptions=folds
@@ -458,10 +471,10 @@ let g:tagbar_iconchars=['+', '-']
 let g:tagbar_autoshowtag=1
 
 " Comments
-let g:EnhCommentifyAlignRight='yes'
+let g:EnhCommentifyAlignRight='Yes'
 let g:EnhCommentifyRespectIndent='yes'
 let g:EnhCommentifyPretty='Yes'
-let g:EnhCommentifyMultiPartBlocks='yes'
+let g:EnhCommentifyMultiPartBlocks='Yes'
 let g:EnhCommentifyUseSyntax='Yes'
 function! EnhCommentifyCallback(ft)
     if a:ft == 'autohotkey'
@@ -480,8 +493,10 @@ let g:vimrc_email='marslo.vida@gmail.com'
 " MRU
 " let MRU_File=$VIM.'\Data\mru_files.txt'
 let MRU_Auto_Close=1
+" Most Recently Used(MRU)
 map <C-g> :MRU<CR>
-let MRU_Max_Entries=10
+let MRU_Auto_Close = 1
+let MRU_Max_Entries = 10
 
 " CtrlP
 let g:ctrlp_max_height = 8
@@ -509,22 +524,22 @@ au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
 let g:rbpt_colorpairs = [
-    \ ['brown', 'RoyalBlue3'],
-    \ ['Darkblue', 'SeaGreen3'],
-    \ ['darkgray', 'DarkOrchid3'],
-    \ ['darkgreen', 'firebrick3'],
-    \ ['darkcyan', 'RoyalBlue3'],
-    \ ['darkred', 'SeaGreen3'],
+    \ ['brown',       'RoyalBlue3'],
+    \ ['Darkblue',    'SeaGreen3'],
+    \ ['darkgray',    'DarkOrchid3'],
+    \ ['darkgreen',   'firebrick3'],
+    \ ['darkcyan',    'RoyalBlue3'],
+    \ ['darkred',     'SeaGreen3'],
     \ ['darkmagenta', 'DarkOrchid3'],
-    \ ['brown', 'firebrick3'],
-    \ ['gray', 'RoyalBlue3'],
-    \ ['black', 'SeaGreen3'],
+    \ ['brown',       'firebrick3'],
+    \ ['gray',        'RoyalBlue3'],
+    \ ['black',       'SeaGreen3'],
     \ ['darkmagenta', 'DarkOrchid3'],
-    \ ['Darkblue', 'firebrick3'],
-    \ ['darkgreen', 'RoyalBlue3'],
-    \ ['darkcyan', 'SeaGreen3'],
-    \ ['darkred', 'DarkOrchid3'],
-    \ ['red', 'firebrick3'],
+    \ ['Darkblue',    'firebrick3'],
+    \ ['darkgreen',   'RoyalBlue3'],
+    \ ['darkcyan',    'SeaGreen3'],
+    \ ['darkred',     'DarkOrchid3'],
+    \ ['red',         'firebrick3'],
     \ ]
 
 
@@ -561,17 +576,14 @@ map gl <CR>
 " Cursor format
 set guicursor=a:hor10
 set guicursor+=i-r-ci-cr-o:hor10-blinkon0
-set scrolloff=5
-" set cursorline                        " Highlight the current line
+set scrolloff=3
+set cursorline                        " Highlight the current line
 
 " turn off error beep/flash
 set noerrorbells novisualbell
 set t_vb=
 
 set path+=/home/marslo/Study
-hi LineNr guifg=#555555 guibg=background ctermfg=darkgrey ctermbg=none
-hi CursorLineNr guifg=#A6E22E guibg=background gui=NONE ctermbg=black ctermfg=lightgreen
-" hi CursorLine   cterm=NONE ctermbg=darkgrey ctermfg=white guibg=darkgrey guifg=white
 
 " IndentLine
 let g:indentLine_color_gui = '#282828'
