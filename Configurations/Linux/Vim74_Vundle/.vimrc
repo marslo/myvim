@@ -483,9 +483,9 @@ map <C-a> <ESC>^
 imap <C-a> <ESC>I
 map <C-e> <ESC>$
 imap <C-e> <ESC>A
-imap <A-f> <ESC><Space>Wi
-imap <A-b> <ESC>Bi
-imap <A-d> <ESC>dW
+imap <M-f> <ESC><Space>Wi
+imap <M-b> <ESC>Bi
+imap <M-d> <ESC>cW
 
 " map <C-c> "+y
 " map <C-v> "+p
@@ -586,9 +586,6 @@ set wildignore+=*.swp,*.zip,*.exe
 set noerrorbells novisualbell
 set t_vb=
 
-set completeopt=longest,menuone
-let g:SuperTabDefaultCompletionType = "context"
-
 " set list listchars=tab:\ \ ,trail:.,extends:>,precedes:<,nbsp:.
 set list listchars=tab:\ \ ,trail:·,extends:»,precedes:«,nbsp:·
 
@@ -644,5 +641,10 @@ let g:rubycomplete_rails = 1
 " let g:ruby_syntaxcheck_map='<F10>'
 " autocmd FileType ruby map <F4> :w<CR>:!ruby -c %<CR>
 
+set completeopt=longest,menuone
 " Supper Tab
-let g:SuperTabDefaultCompletionType = "context"
+" let SuperTabDefaultCompletionType = "context"
+let SuperTabDefaultCompletionType = '<c-p>'
+let SuperTabMappingForward = '<c-p>'
+let SuperTabMappingTabLiteral = '<Tab>'
+let SuperTabClosePreviewOnPopupClose = 1
