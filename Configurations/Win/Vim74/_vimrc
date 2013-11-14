@@ -145,18 +145,16 @@ Bundle 'sjl/gundo.vim.git'
 Bundle 'majutsushi/tagbar'
 Bundle 'dantezhu/authorinfo'
 Bundle 'kien/rainbow_parentheses.vim'
-" Bundle 'hdima/python-syntax.git'
 Bundle 'plasticboy/vim-markdown.git'
 Bundle 'Marslo/EnhCommentify.vim'
 Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-pathogen'
 Bundle 'gregsexton/MatchTag'
-Bundle 'vantares/ruby-syntaxchecker.vim'
 Bundle 'vim-ruby/vim-ruby'
+Bundle 'ervandew/supertab'
 
 " snipmate works on windows by using pathogen
 Bundle 'Marslo/snipmate.vim.git'
-Bundle 'vantares/ruby-syntaxchecker.vim'
 
 " Get from vim-scripts
 Bundle 'Conque-Shell'
@@ -166,13 +164,15 @@ Bundle 'taglist.vim'
 Bundle 'TeTrIs.vim'
 Bundle 'winmanager'
 Bundle 'matrix.vim--Yang'
-" Bundle 'pyflakes.vim'
-" Bundle 'colorsupport.vim'
-" Bundle 'ruby-matchit'
+Bundle 'pyflakes.vim'
 
 " Others
 " Bundle 'Tagbar'
+" Bundle 'colorsupport.vim'
+" Bundle 'ruby-matchit'
 " Bundle 'mattn/emmet-vim'
+" Bundle 'hdima/python-syntax.git'
+" Bundle 'vjantares/ruby-syntaxchecker.vim'
 " Bundle 'dirkwallenstein/vim-excess-lines'
 " Bundle 'xolox/vim-shell'
 " Bundle 'xolox/vim-misc'
@@ -390,8 +390,6 @@ function! FontSize_Enlarge()
     let &gfn=cmd
 endfunction
 nnoremap <A-+> :call FontSize_Enlarge()<CR>
-
-
 
 " ====================================== For Inteface =====================================
 " Make vim maximize while it startup
@@ -615,7 +613,6 @@ endfunction
 let g:EnhCommentifyCallbackExists = 'Yes'
 let g:EnhCommentifyAlignRight='Yes'
 
-
 " AutoInfo
 map <F4> :AuthorInfoDetect<CR>
 let g:vimrc_author='Marslo'
@@ -694,3 +691,10 @@ autocmd FileType ruby compiler ruby
 let g:rubycomplete_buffer_loading = 1
 let g:rubycomplete_classes_in_global = 1
 let g:rubycomplete_rails = 1
+
+" Supper Tab
+" let g:SuperTabDefaultCompletionType = "context"
+let SuperTabDefaultCompletionType = '<c-p>'
+let SuperTabMappingForward = '<c-p>'
+let SuperTabMappingTabLiteral = '<Tab>'
+let SuperTabClosePreviewOnPopupClose = 1

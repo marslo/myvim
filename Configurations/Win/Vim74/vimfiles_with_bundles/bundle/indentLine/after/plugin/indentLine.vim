@@ -60,6 +60,10 @@ if !exists("g:indentLine_faster")
     let g:indentLine_faster = 0
 endif
 
+if !exists("g:indentLine_setColors")
+    let g:indentLine_setColors = 1
+endif
+
 if !exists("g:indentLine_noConcealCursor")
   set concealcursor=inc
 endif
@@ -68,6 +72,10 @@ set conceallevel=1
 
 "{{{1 function! <SID>InitColor()
 function! <SID>InitColor()
+    if !g:indentLine_setColors
+        return
+    endif
+
     if !exists("g:indentLine_color_term")
         if &bg ==? "light"
             let term_color = 249
@@ -179,7 +187,7 @@ endfunction
 "{{{1 commands
 autocmd BufWinEnter * call <SID>Setup()
 autocmd BufRead,BufNewFile,ColorScheme * call <SID>InitColor()
-autocmd Syntax * if exists("b:indentLine_set") | call <SID>InitColor() | call <SID>SetIndentLine() | endif
+autocmd Syntax * if exists("b:indentLine_set") && exists("b:indentLine_enabled") && b:indentLine_enabled | call <SID>InitColor() | call <SID>SetIndentLine() | endif
 
 
 command! -nargs=? IndentLinesReset call <SID>ResetWidth(<f-args>)

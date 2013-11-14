@@ -714,7 +714,7 @@ function s:GetFileTypeSettings(ft)
 	let b:ECcommentClose =
 		    \ substitute(&commentstring, '.*%s', "", "")
     " Multipart comments:
-    elseif fileType =~ '^\(c\|b\|css\|csc\|cupl\|indent\|jam\|lex\|lifelines\|'.
+    elseif fileType =~ '^\(c\|b\|css\|scss\|csc\|cupl\|indent\|jam\|lex\|lifelines\|'.
 		\ 'lite\|nqc\|phtml\|progress\|rexx\|rpl\|sas\|sdl\|sl\|'.
 		\ 'strace\|xpm\|yacc\)$'
 	let b:ECcommentOpen = '/*'
@@ -783,7 +783,7 @@ function s:GetFileTypeSettings(ft)
 		\ 'psf\|ptcap\|r\|radiance\|ratpoison\|readline\remind\|'.
 		\ 'ruby\|screen\|sed\|sm\|snnsnet\|snnspat\|snnsres\|spec\|'.
 		\ 'squid\|terminfo\|tidy\|tli\|tsscl\|vgrindefs\|vrml\|'.
-		\ 'wget\|wml\|xf86conf\|xmath\)$'
+		\ 'wget\|wml\|xf86conf\|xmath\|gitconfig\|txt\)$'
 	let b:ECcommentOpen = '#'
 	let b:ECcommentClose = ''
     elseif fileType == 'webmacro'
