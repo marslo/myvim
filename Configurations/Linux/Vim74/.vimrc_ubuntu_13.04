@@ -27,6 +27,8 @@ behave mswin
 let g:ruby_path=$RUBY_BIN
 let g:solarized_termcolors=256
 
+set diffopt=filler,context:3
+
 " Remove the Welcome interface
 " set shortmess=atI
 
@@ -102,7 +104,6 @@ Bundle 'sjl/gundo.vim.git'
 Bundle 'majutsushi/tagbar'
 Bundle 'dantezhu/authorinfo'
 Bundle 'kien/rainbow_parentheses.vim'
-" Bundle 'hdima/python-syntax.git'
 Bundle 'plasticboy/vim-markdown.git'
 Bundle 'Marslo/EnhCommentify.vim'
 Bundle 'tpope/vim-rails'
@@ -110,8 +111,7 @@ Bundle 'tpope/vim-pathogen'
 Bundle 'gregsexton/MatchTag'
 Bundle 'vim-ruby/vim-ruby'
 Bundle 'Marslo/snipmate.vim.git'
-" Bundle 'vantares/ruby-syntaxchecker.vim'
-" Bundle 'semmons99/vim-ruby-matchit'
+Bundle 'ervandew/supertab'
 
 " Get from vim-scripts
 Bundle 'Conque-Shell'
@@ -122,14 +122,17 @@ Bundle 'TeTrIs.vim'
 Bundle 'winmanager'
 Bundle 'matrix.vim--Yang'
 Bundle 'pyflakes.vim'
-" Bundle 'colorsupport.vim'
-" Bundle 'ruby-matchit'
 
 " Others
 " Bundle 'snipMate'
 " Bundle 'mattn/emmet-vim'
 " Bundle 'Tagbar'
 " Bundle 'AuthorInfo'
+" Bundle 'colorsupport.vim'
+" Bundle 'ruby-matchit'
+" Bundle 'hdima/python-syntax.git'
+" Bundle 'vantares/ruby-syntaxchecker.vim'
+" Bundle 'semmons99/vim-ruby-matchit'
 
 " Colors
 Bundle 'txt.vim'
@@ -526,7 +529,7 @@ set incsearch hlsearch ignorecase smartcase     " Search
 set magic                                       " Regular Expression
 
 " Tagbar
-map <F6> :TagbarToggle<CR>
+map <leader>ta :TagbarToggle<CR>
 let g:tagbar_left=1
 let g:tagbar_width=20
 let g:tagbar_autofocus=1
@@ -633,3 +636,6 @@ let g:rubycomplete_classes_in_global = 1
 let g:rubycomplete_rails = 1
 " let g:ruby_syntaxcheck_map='<F10>'
 " autocmd FileType ruby map <F4> :w<CR>:!ruby -c %<CR>
+
+" Supper Tab
+let g:SuperTabDefaultCompletionType = "context"
