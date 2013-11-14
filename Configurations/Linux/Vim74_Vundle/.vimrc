@@ -108,10 +108,9 @@ Bundle 'Marslo/EnhCommentify.vim'
 Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-pathogen'
 Bundle 'gregsexton/MatchTag'
-Bundle 'vantares/ruby-syntaxchecker.vim'
 Bundle 'vim-ruby/vim-ruby'
 Bundle 'Marslo/snipmate.vim.git'
-Bundle 'vantares/ruby-syntaxchecker.vim'
+" Bundle 'vantares/ruby-syntaxchecker.vim'
 " Bundle 'semmons99/vim-ruby-matchit'
 
 " Get from vim-scripts
@@ -122,7 +121,7 @@ Bundle 'taglist.vim'
 Bundle 'TeTrIs.vim'
 Bundle 'winmanager'
 Bundle 'matrix.vim--Yang'
-" Bundle 'pyflakes.vim'
+Bundle 'pyflakes.vim'
 " Bundle 'colorsupport.vim'
 " Bundle 'ruby-matchit'
 
@@ -559,7 +558,7 @@ let g:EnhCommentifyCallbackExists = 'Yes'
 let g:EnhCommentifyAlignRight='Yes'
 
 " AutoInfo
-map <F4> :AuthorInfoDetect<CR>
+map <leader>aid :AuthorInfoDetect<CR>
 let g:vimrc_author='Marslo'
 let g:vimrc_email='marslo.vida@gmail.com'
 
@@ -639,3 +638,5 @@ autocmd FileType ruby compiler ruby
 let g:rubycomplete_buffer_loading = 1
 let g:rubycomplete_classes_in_global = 1
 let g:rubycomplete_rails = 1
+" let g:ruby_syntaxcheck_map='<F10>'
+" autocmd FileType ruby map <F4> :w<CR>:!ruby -c %<CR>

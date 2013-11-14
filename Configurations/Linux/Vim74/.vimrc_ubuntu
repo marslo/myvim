@@ -517,7 +517,7 @@ let g:EnhCommentifyCallbackExists = 'Yes'
 let g:EnhCommentifyAlignRight='Yes'
 
 " AutoInfo
-map <F4> :AuthorInfoDetect<CR>
+map <leader>aid :AuthorInfoDetect<CR>
 let g:vimrc_author='Marslo'
 let g:vimrc_email='marslo.vida@gmail.com'
 
@@ -537,7 +537,6 @@ set wildmenu
 " Completion mode that is used for the character
 set wildmode=longest,list,full
 set wildignore+=*.swp,*.zip,*.exe
-
 
 " turn off error beep/flash
 set noerrorbells novisualbell
@@ -598,3 +597,5 @@ autocmd FileType ruby compiler ruby
 let g:rubycomplete_buffer_loading = 1
 let g:rubycomplete_classes_in_global = 1
 let g:rubycomplete_rails = 1
+" let g:ruby_syntaxcheck_map='<F10>'
+" autocmd FileType ruby map <F4> :w<CR>:!ruby -c %<CR>
