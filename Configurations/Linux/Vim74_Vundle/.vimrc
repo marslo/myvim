@@ -24,9 +24,6 @@ source $VIMRUNTIME/menu.vim
 " runtime macros/matchit.vim
 behave mswin
 
-let g:ruby_path=$RUBY_BIN
-let g:solarized_termcolors=256
-
 set diffopt=filler,context:3
 
 " Remove the Welcome interface
@@ -633,14 +630,6 @@ endif
 
 " nnoremap <silent> <C-F6> :let old_reg=@"<CR>:let @"=substitute(expand("%:p"), "/", "\\", "g")<CR>:silent!!cmd /cstart <C-R><C-R>"<CR><CR>:let @"=old_reg<CR>
 
-" vim-ruby
-autocmd FileType ruby compiler ruby
-let g:rubycomplete_buffer_loading = 1
-let g:rubycomplete_classes_in_global = 1
-let g:rubycomplete_rails = 1
-" let g:ruby_syntaxcheck_map='<F10>'
-" autocmd FileType ruby map <F4> :w<CR>:!ruby -c %<CR>
-
 set completeopt=longest,menuone
 " Supper Tab
 " let SuperTabDefaultCompletionType = "context"
@@ -648,3 +637,21 @@ let SuperTabDefaultCompletionType = '<c-p>'
 let SuperTabMappingForward = '<c-p>'
 let SuperTabMappingTabLiteral = '<Tab>'
 let SuperTabClosePreviewOnPopupClose = 1
+
+" Config for ruby
+if has("autocmd")
+    autocmd FileType ruby set omnifunc=rubycomplete#Complete
+    " autocmd FileType ruby let g:rubycomplete_buffer_loading=1
+    " autocmd FileType ruby let g:rubycomplete_classes_in_global=1
+endif
+
+let g:ruby_path=$RUBY_BIN
+let g:solarized_termcolors=256
+
+" vim-ruby
+autocmd FileType ruby compiler ruby
+let g:rubycomplete_buffer_loading = 1
+let g:rubycomplete_classes_in_global = 1
+let g:rubycomplete_rails = 1
+" let g:ruby_syntaxcheck_map='<F10>'
+" autocmd FileType ruby map <F4> :w<CR>:!ruby -c %<CR>
