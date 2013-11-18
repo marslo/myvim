@@ -1,4 +1,3 @@
-test_mppdev
 MyVimConfig
 ===========
 Author: Marslo    
@@ -217,95 +216,95 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
 
 -----------------------------
 
-###Ê¹ÓÃ·½·¨
-- WindowsÓÃ»§
-    - ¸´ÖÆ **Configurations\Win\Vim74_Vundle\_vimrc** µ½ `C:\Program Files (x86)\Vim`
-    - »ñÈ¡ [Vundle](https://github.com/gmarik/vundle.git) [¿ËÂ¡´úÂëµ½ `$VIMHOME\vimfiles` Ä¿Â¼ÏÂ]
+###Ê¹ï¿½Ã·ï¿½ï¿½ï¿½
+- Windowsï¿½Ã»ï¿½
+    - ï¿½ï¿½ï¿½ï¿½ **Configurations\Win\Vim74_Vundle\_vimrc** ï¿½ï¿½ `C:\Program Files (x86)\Vim`
+    - ï¿½ï¿½È¡ [Vundle](https://github.com/gmarik/vundle.git) [ï¿½ï¿½Â¡ï¿½ï¿½ï¿½ëµ½ `$VIMHOME\vimfiles` Ä¿Â¼ï¿½ï¿½]
         - <del>>> git clone https://github.com/gmarik/vundle.git "C:\Program Files (x86)\Vim\vimfile\"</del>
-        - ´ò¿ªvim(ºöÂÔ´íÎó»ò¾¯¸æ)
+        - ï¿½ï¿½vim(ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½ò¾¯¸ï¿½)
         <pre><code>:call GetVundle()
         </code></pre>
-    - »ñÈ¡ÆäËû²å¼þ
+    - ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         <pre><code>:BundleInstall!
         </code></pre>
 
-- Linux ÓÃ»§:
-    - ¸´ÖÆ **Configurations\Linux\Vim74_vundle\.vimrc** µ½ `$HOME`
+- Linux ï¿½Ã»ï¿½:
+    - ï¿½ï¿½ï¿½ï¿½ **Configurations\Linux\Vim74_vundle\.vimrc** ï¿½ï¿½ `$HOME`
     <pre><code>$ cp Linux/Vim74_vundle/.vimrc ~/
     </code></pre>
-    - »ñÈ¡ [Vundle](https://github.com/gmarik/vundle.git) ¡¾¿ËÂ¡´úÂëµ½ `$HOME\.vim`¡¿
+    - ï¿½ï¿½È¡ [Vundle](https://github.com/gmarik/vundle.git) ï¿½ï¿½ï¿½ï¿½Â¡ï¿½ï¿½ï¿½ëµ½ `$HOME\.vim`ï¿½ï¿½
         <del>$ git clone https://github.com/gmarik/vundle.git ~/.vim</del>
-        - ´ò¿ªGvimÇÒÔËÐÐ (ºöÂÔ´íÎó»ò¾¯¸æ£©£º
+        - ï¿½ï¿½Gvimï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½Ô´ï¿½ï¿½ï¿½ò¾¯¸æ£©ï¿½ï¿½
             <pre><code>:call GetVundle()
             </code></pre>
-    - »ñÈ¡ÆäËû²å¼þ
+    - ï¿½ï¿½È¡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         <pre><code>:BundleInstall!
         </code></pre>
-    - ½«WindowsÏÂµÄÎÄ¼þ¸ñÊ½¸ÄÎªUnix¸ñÊ½
+    - ï¿½ï¿½Windowsï¿½Âµï¿½ï¿½Ä¼ï¿½ï¿½ï¿½Ê½ï¿½ï¿½ÎªUnixï¿½ï¿½Ê½
         <pre><code>$ sudo apt-get install dos2unix
         $ dos2unix ~/.vim/bundle/css.vim/syntax/css.vim
         </code></pre>
 
 -----------------------------
 
-### ´ò¿ªvim/gvimÄ¬ÈÏ×î´ó»¯
-- WindowsÓÃ»§, ÒÑÄ¬ÈÏ¿ªÆô×î´ó»¯
-- LinuxÓÃ»§£¬ÐèÒª°²×°`lwmctr`¡£ÏÂÔØµØÖ·£ºhttp://download.csdn.net/detail/jiaoxiaogu/4317843
+### ï¿½ï¿½vim/gvimÄ¬ï¿½ï¿½ï¿½ï¿½ï¿½
+- Windowsï¿½Ã»ï¿½, ï¿½ï¿½Ä¬ï¿½Ï¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+- Linuxï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½×°`lwmctr`ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½Ö·ï¿½ï¿½http://download.csdn.net/detail/jiaoxiaogu/4317843
 
-### ¿ì½Ý¼ü
-- `F5`: Ò»¼üÔËÐÐPython, Ruby ºÍ Perl¡£(ÔËÐÐ½á¹û½«ÏÔÊ¾ÔÚQuickfix´°¿ÚÖÐ)
-- `F3`: ´ò¿ªtagbar
-- `F4`: ×Ô¶¯Ìí¼ÓÓÃ»§ÐÅÏ¢
-
-+++++++++++++++++++++++++++++++++++++++++++
-
-### Ö÷ÌâÇë¿´Screenshot
-- ×Ô¶¯Åä¶Ô
-- ×Ô¶¯Ìí¼ÓÐÅÏ¢£º
-    - `<leader>fn`: Ìí¼Óµ±Ç°ÎÄ¼þÃû(ÎÞºó×º£¬·½±ãJavaÌí¼ÓÀàÃû)
-    - `<leader>fe`: Ìí¼Óµ±Ç°ÎÄ¼þÃû(ÓÐºó×º£¬·½±ãÌí¼Ó×¢ÊÍ)
-    - `<leader>tt`: Ìí¼Óµ±Ç°Ê±¼ä
-- ×Ô¶¯±£´æºÍ¼ÓÔØÕÛµþÐÅÏ¢
+### ï¿½ï¿½Ý¼ï¿½
+- `F5`: Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Python, Ruby ï¿½ï¿½ Perlï¿½ï¿½(ï¿½ï¿½ï¿½Ð½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½Quickfixï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
+- `F3`: ï¿½ï¿½tagbar
+- `F4`: ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½Ï¢
 
 +++++++++++++++++++++++++++++++++++++++++++
 
-- ×Ô¶¨Òåº¯Êý¿ì½Ý¼ü
-    - `<F12>`: ÖØÐÂÉú³ÉtagsÎÄ¼þ
-    - `gf`: ´ò¿ª¹â±êÏÂµÄµ¥´ÊÎªÎÄ¼þÃû £¨ÈôÊÇpythonÎÄ¼þ£¬Ôò×Ô¶¯Ìí¼Ó.pyÎªºó×º£©
-    - `Alt + -`: ËõÐ¡×ÖÌå
-    - `Alt + +`: Ôö´ó×ÖÌå
-    - `cmd`: ´ò¿ªÃüÁîÐÐ£¬ÇÒ×Ô¶¯cdµ½µ±Ç°ÎÄ¼þÄ¿Â¼£¨Linux´ò¿ªµÄÎªTerminal£¬Windows´ò¿ªµÄÎªcommand line£©
-    - `Alt + o`: ´ò¿ªÎÄ¼þä¯ÀÀÆ÷£¬ ÇÒ×Ô¶¯½øÈëµ±Ç°ÎÄµµµÄÄ¿Â¼ £¨Linux´ò¿ªÎªNautilus, Windows´ò¿ªÎªExplorer£©
+### ï¿½ï¿½ï¿½ï¿½ï¿½ë¿´Screenshot
+- ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½
+- ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½ï¿½
+    - `<leader>fn`: ï¿½ï¿½ï¿½Óµï¿½Ç°ï¿½Ä¼ï¿½ï¿½ï¿½(ï¿½Þºï¿½×ºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Javaï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
+    - `<leader>fe`: ï¿½ï¿½ï¿½Óµï¿½Ç°ï¿½Ä¼ï¿½ï¿½ï¿½(ï¿½Ðºï¿½×ºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×¢ï¿½ï¿½)
+    - `<leader>tt`: ï¿½ï¿½ï¿½Óµï¿½Ç°Ê±ï¿½ï¿½
+- ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½Í¼ï¿½ï¿½ï¿½ï¿½Ûµï¿½ï¿½ï¿½Ï¢
 
 +++++++++++++++++++++++++++++++++++++++++++
 
-- ²å¼þ¿ì½Ý¼ü
-    - `tl`: ÏÔÊ¾taglist
-    - `wm`: ÏÔÊ¾winmanager(¸½´øtaglistÐÅÏ¢)
-    - `<leader>v`: ´ò¿ªÅäÖÃÎÄ¼þ(_vimrc/.vimrc)
-    - `<leader>te`: ´ò¿ª¶íÂÞË¹·½¿éÓÎÏ·(Á·Ï°hjkl¿ì½Ý¼ü)
-    - `tv`: ÔÚvim/gvimÖÐÔËÐÐbash(ÊÇµÄ£¬ÄãÃ»¿´´í£¡)
-    - `pyli`: Python¾²Ì¬´úÂë·ÖÎö(¹æ·¶´úÂë£¬Ô¶Àë¿³ÊÖ¿³½Å)
-    - `ctrl + g`: ´ò¿ª×î½üÎÄ¼þÁÐ±í£¨10¸ö£©
-    - `<leader>v`: ×¢ÊÍ/·´×¢ÊÍ
+- ï¿½Ô¶ï¿½ï¿½åº¯ï¿½ï¿½ï¿½ï¿½Ý¼ï¿½
+    - `<F12>`: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½tagsï¿½Ä¼ï¿½
+    - `gf`: ï¿½ò¿ª¹ï¿½ï¿½ï¿½ÂµÄµï¿½ï¿½ï¿½Îªï¿½Ä¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½pythonï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ï¿½.pyÎªï¿½ï¿½×ºï¿½ï¿½
+    - `Alt + -`: ï¿½ï¿½Ð¡ï¿½ï¿½ï¿½ï¿½
+    - `Alt + +`: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    - `cmd`: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð£ï¿½ï¿½ï¿½ï¿½Ô¶ï¿½cdï¿½ï¿½ï¿½ï¿½Ç°ï¿½Ä¼ï¿½Ä¿Â¼ï¿½ï¿½Linuxï¿½ò¿ªµï¿½ÎªTerminalï¿½ï¿½Windowsï¿½ò¿ªµï¿½Îªcommand lineï¿½ï¿½
+    - `Alt + o`: ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ô¶ï¿½ï¿½ï¿½ï¿½ëµ±Ç°ï¿½Äµï¿½ï¿½ï¿½Ä¿Â¼ ï¿½ï¿½Linuxï¿½ï¿½ÎªNautilus, Windowsï¿½ï¿½ÎªExplorerï¿½ï¿½
 
 +++++++++++++++++++++++++++++++++++++++++++
 
-- Emacs ·ç¸ñ¿ì½Ý¼ü
-    - `Ctrl + a`: ¹â±êÒÆ¶¯µ½ÐÐÊ× [NormalÄ£Ê½ && ²åÈëÄ£Ê½]
-    - `Ctrl + e`: ¹â±êÒÆ¶¯µ½ÐÐÎ² [NormalÄ£Ê½ && ²åÈëÄ£Ê½]
-    - `Alt + b`: ¹â±êÏòÇ°Ìø¶¯Ò»¸öµ¥´Ê [²åÈëÄ£Ê½]
-    - `Alt + f`: ¹â±êÏòÇ°Ìø¶¯Ò»¸öµ¥´Ê [²åÈëÄ£Ê½]
-    - `Alt + d`: ÏòÇ°É¾³ýÒ»¸öµ¥´Ê [²åÈëÄ£Ê½]
-    - `Ctrl + w`: ÏòºóÉ¾³ýÒ»¸öµ¥´Ê [²åÈëÄ£Ê½]
+- ï¿½ï¿½ï¿½ï¿½ï¿½Ý¼ï¿½
+    - `tl`: ï¿½ï¿½Ê¾taglist
+    - `wm`: ï¿½ï¿½Ê¾winmanager(ï¿½ï¿½ï¿½ï¿½taglistï¿½ï¿½Ï¢)
+    - `<leader>v`: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½(_vimrc/.vimrc)
+    - `<leader>te`: ï¿½ò¿ª¶ï¿½ï¿½ï¿½Ë¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï·(ï¿½ï¿½Ï°hjklï¿½ï¿½Ý¼ï¿½)
+    - `tv`: ï¿½ï¿½vim/gvimï¿½ï¿½ï¿½ï¿½ï¿½ï¿½bash(ï¿½ÇµÄ£ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½)
+    - `pyli`: Pythonï¿½ï¿½Ì¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½æ·¶ï¿½ï¿½ï¿½ë£¬Ô¶ï¿½ë¿³ï¿½Ö¿ï¿½ï¿½ï¿½)
+    - `ctrl + g`: ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ð±ï¿½ï¿½ï¿½10ï¿½ï¿½ï¿½ï¿½
+    - `<leader>v`: ×¢ï¿½ï¿½/ï¿½ï¿½×¢ï¿½ï¿½
 
 +++++++++++++++++++++++++++++++++++++++++++
 
-- ÕýÔò±í´ïÊ½¿ì½Ý¼ü
-    - `zdb`: É¾³ýÐÐÎ²¿Õ¸ñ
-    - `zmm`: ²åÈëÎÄµµÐÐºÅ
+- Emacs ï¿½ï¿½ï¿½ï¿½Ý¼ï¿½
+    - `Ctrl + a`: ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ [NormalÄ£Ê½ && ï¿½ï¿½ï¿½ï¿½Ä£Ê½]
+    - `Ctrl + e`: ï¿½ï¿½ï¿½ï¿½Æ¶ï¿½ï¿½ï¿½ï¿½ï¿½Î² [NormalÄ£Ê½ && ï¿½ï¿½ï¿½ï¿½Ä£Ê½]
+    - `Alt + b`: ï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ [ï¿½ï¿½ï¿½ï¿½Ä£Ê½]
+    - `Alt + f`: ï¿½ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ [ï¿½ï¿½ï¿½ï¿½Ä£Ê½]
+    - `Alt + d`: ï¿½ï¿½Ç°É¾ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ [ï¿½ï¿½ï¿½ï¿½Ä£Ê½]
+    - `Ctrl + w`: ï¿½ï¿½ï¿½É¾ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ [ï¿½ï¿½ï¿½ï¿½Ä£Ê½]
 
-### ²å¼þÁÐ±í£º
++++++++++++++++++++++++++++++++++++++++++++
+
+- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê½ï¿½ï¿½Ý¼ï¿½
+    - `zdb`: É¾ï¿½ï¿½ï¿½ï¿½Î²ï¿½Õ¸ï¿½
+    - `zmm`: ï¿½ï¿½ï¿½ï¿½ï¿½Äµï¿½ï¿½Ðºï¿½
+
+### ï¿½ï¿½ï¿½ï¿½Ð±ï¿½ï¿½ï¿½
 - [AuthorInfo](https://github.com/dantezhu/authorinfo)
 - [Conque Term](http://code.google.com/p/conque/)
 - [EnhancedCommentify](https://github.com/woainvzu/EnhCommentify.vim), [EnhancedByMarslo](https://github.com/woainvzu/EnhCommentify.vim)
@@ -327,13 +326,13 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
 - [ruby-matchit](https://github.com/vim-scripts/ruby-matchit)
 - [vim-colorsque](https://github.com/gorodinskiy/vim-coloresque)
 
-#### Î´±»Ê¹ÓÃµÄ£¨Ôø±»Ê¹ÓÃ£©
+#### Î´ï¿½ï¿½Ê¹ï¿½ÃµÄ£ï¿½ï¿½ï¿½ï¿½ï¿½Ê¹ï¿½Ã£ï¿½
 - perl-support.vim
 - [tlib](https://github.com/tomtom/tlib_vim)
 - [vim-addon-mw-utils](https://github.com/MarcWeber/vim-addon-mw-utils)
-- [vim-css-color](https://github.com/ap/vim-css-color)                      # ²»Ö§³ÖVim74£¬ Ê¹ÓÃ**vim-colorsque**Ìæ´ú
+- [vim-css-color](https://github.com/ap/vim-css-color)                      # ï¿½ï¿½Ö§ï¿½ï¿½Vim74ï¿½ï¿½ Ê¹ï¿½ï¿½**vim-colorsque**ï¿½ï¿½ï¿½
 - [emmet.vim](https://github.com/mattn/emmet-vim)
 
 +++++++++++++++++++++++++++++++++++++++++++
 
-Ä¬ÈÏ×ÖÌåÎª£º Monaco, ÏÂÔØµØÖ·: http://download.csdn.net/detail/jiaoxiaogu/4317959
+Ä¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îªï¿½ï¿½ Monaco, ï¿½ï¿½ï¿½Øµï¿½Ö·: http://download.csdn.net/detail/jiaoxiaogu/4317959
