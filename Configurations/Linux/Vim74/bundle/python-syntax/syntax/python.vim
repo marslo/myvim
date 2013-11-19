@@ -382,7 +382,7 @@ if s:Enabled("g:python_highlight_builtin_objs")
     syn keyword pythonBoolean		True False
   endif
   syn keyword pythonBuiltinObj	Ellipsis NotImplemented
-  syn keyword pythonBuiltinObj	__debug__ __doc__ __file__ __name__ __package__
+  syn keyword pythonBuiltinObj	__debug__ __doc__ __file__ __name__ __package__ self
 endif
 
 "
