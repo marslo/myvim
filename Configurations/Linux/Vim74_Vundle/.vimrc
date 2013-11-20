@@ -136,7 +136,8 @@ Bundle 'txt.vim'
 Bundle 'css.vim'
 Bundle 'gorodinskiy/vim-coloresque'
 Bundle 'hail2u/vim-css3-syntax'
-Bundle 'Marslo/Marslo.vim'
+Bundle 'Marslo/python-syntax'
+Bundle 'Marslo/marslo.vim'
 " Bundle 'ap/vim-css-color'
 
 filetype plugin indent on
@@ -655,3 +656,6 @@ let g:rubycomplete_classes_in_global = 1
 let g:rubycomplete_rails = 1
 " let g:ruby_syntaxcheck_map='<F10>'
 " autocmd FileType ruby map <F4> :w<CR>:!ruby -c %<CR>
+
+" syntax-python
+let python_highlight_all = 1
