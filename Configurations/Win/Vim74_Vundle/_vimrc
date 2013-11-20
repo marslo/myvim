@@ -171,20 +171,28 @@ Bundle 'pyflakes.vim'
 " Bundle 'colorsupport.vim'
 " Bundle 'ruby-matchit'
 " Bundle 'mattn/emmet-vim'
-" Bundle 'hdima/python-syntax.git'
 " Bundle 'vjantares/ruby-syntaxchecker.vim'
 " Bundle 'dirkwallenstein/vim-excess-lines'
 " Bundle 'xolox/vim-shell'
 " Bundle 'xolox/vim-misc'
 " Bundle 'xolox/vim-easytags'
 " Bundle 'dbarsam/vim-vimtweak'
+" Bundle 'python.vim'
+" Taken by Marslo/python-syntax
+" Bundle 'hdima/python-syntax'
+" Bundle 'gorodinskiy/vim-coloresque'
+" Bundle 'css.vim'
 
 " Colors
 Bundle 'txt.vim'
-Bundle 'css.vim'
-Bundle 'gorodinskiy/vim-coloresque'
+Bundle 'gui2term.py'
+Bundle 'colorsel.vim'
+Bundle 'JulesWang/css.vim'
 Bundle 'hail2u/vim-css3-syntax'
-Bundle 'Marslo/Marslo.vim'
+Bundle 'Marslo/vim-coloresque'
+Bundle 'Marslo/marslo.vim'
+Bundle 'Marslo/MarsloVimOthers'
+Bundle 'Marslo/python-syntax'
 " Bundle 'ap/vim-css-color'
 
 filetype plugin indent on
@@ -640,14 +648,11 @@ set wildignore+=*.swp,*.zip,*.exe
 set noerrorbells novisualbell
 set t_vb=
 
-set completeopt=longest,menuone
-let g:SuperTabDefaultCompletionType = "context"
-
 set list listchars=tab:\ \ ,trail:·,extends:»,precedes:«,nbsp:·
 
 " Cursor format
-set guicursor=a:hor6
-set guicursor+=i-r-ci-cr-o:hor6-blinkon0
+set guicursor=a:hor1
+set guicursor+=i-r-ci-cr-o:hor2-blinkon0
 
 set cursorline                        " Highlight the current line
 
@@ -693,8 +698,12 @@ let g:rubycomplete_classes_in_global = 1
 let g:rubycomplete_rails = 1
 
 " Supper Tab
+set completeopt=longest,menuone
 " let g:SuperTabDefaultCompletionType = "context"
 let SuperTabDefaultCompletionType = '<c-p>'
 let SuperTabMappingForward = '<c-p>'
 let SuperTabMappingTabLiteral = '<Tab>'
 let SuperTabClosePreviewOnPopupClose = 1
+
+" python-syntax
+let python_highlight_all = 1
