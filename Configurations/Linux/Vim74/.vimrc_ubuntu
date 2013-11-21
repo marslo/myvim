@@ -20,6 +20,9 @@ source $VIMRUNTIME/menu.vim
 " runtime macros/matchit.vim
 behave mswin
 
+let g:ruby_path=$RUBY_BIN
+let g:solarized_termcolors=256
+
 set diffopt=filler,context:3
 
 " Remove the Welcome interface
@@ -52,12 +55,12 @@ let &termencoding=&encoding
 set scrolloff=3
 
 " Vim Bundle
-" Get Vundle by: git clone https://github.com/gmarik/vundle.git ~/.vim
+" Get Vundle from: git clone https://github.com/gmarik/vundle.git ~/.vim
 set nocompatible
 filetype off
 if has('win32') || has('win64')
-    set rtp+=$VIM/vimfiles/bundle/vundle
-    call vundle#rc('$VIM/vimfiles/bundle/')
+    set rtp+=$VIM/bundle/vundle
+    call vundle#rc('$VIM/bundle')
 else
     set rtp+=~/.vim/bundle/vundle
     call vundle#rc()
@@ -102,9 +105,12 @@ Bundle 'pyflakes.vim'
 
 " Colors
 Bundle 'txt.vim'
-Bundle 'css.vim'
-Bundle 'gorodinskiy/vim-coloresque'
+Bundle 'gui2term.py'
+Bundle 'colorsel.vim'
+Bundle 'JulesWang/css.vim'
 Bundle 'hail2u/vim-css3-syntax'
+Bundle 'Marslo/vim-coloresque'
+Bundle 'Marslo/marslo.vim'
 Bundle 'Marslo/python-syntax'
 Bundle 'Marslo/marslo.vim'
 " Bundle 'ap/vim-css-color'
@@ -113,9 +119,10 @@ filetype plugin indent on
 nmap <leader>bi :BundleInstall<CR>
 nmap <leader>bu :BundleUpdate<CR>
 
+" ====================================== For Programming =====================================
 " Open the current file path by cmd
-function! OpenCMD()
-    if has('win32')
+func! OpenCMD()
+    if has('win32') || has('win95') || has('win64')
         " let com = '!cmd /c start C:\Marslo\Tools\Softwares\Data\System\CMD\Console2\Console.exe -d "'. expand('%:p:h') . '"'
         " let com = '!cmd /c start cd '. expand('%:p:h')
         " let com = '!cmd /c start "C:\Program Files\JPSoft\TCCLE13\tcc.exe" /c "' . expand('%:p:h') .'"'
@@ -132,7 +139,7 @@ function! OpenCMD()
     endif
     echo 'Goto "' . expand('%:p:h') . '" in command line'
     silent execute com
-endfunction
+endfunc
 nmap cmd :call OpenCMD()<CR>
 
 func! OpenFoler()
@@ -143,7 +150,7 @@ func! OpenFoler()
 endfunc
 map <M-o> :call OpenFoler()<CR>
 
-" Get vim by: git clone git@github.com:b4winckler/vim.git
+" Get vim from: git clone git@github.com:b4winckler/vim.git
 func! GetVim()
 if has('unix')
     let vimgitcfg=expand('~/.vim/src/vim/.git/config')
@@ -185,6 +192,8 @@ func! RunResult()
         setlocal makeprg=perl
     elseif &filetype == "ruby"
         setlocal makeprg=ruby
+    elseif &ft == "autohotkey"
+        setlocal makeprg=AutoHotkey
     endif
     set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
     silent make %
@@ -257,7 +266,7 @@ endfunction
 inoremap <buffer> <BS> <c-r>=DeletePairs()<CR>
 inoremap <buffer> <C-h> <c-r>=DeletePairs()<CR>
 
-" Delete a pair of parentheses, brackets, or braces
+" Delete the pair of parentheses, brackets and braces
 function! DeletePairs()
     let curchar = getline('.')[col('.') - 1]
     let prechar = getline('.')[col('.') - 2]
@@ -366,6 +375,7 @@ set nobackup noswapfile nowritebackup
 " ruler: Show Line and colum number; number: line number
 set ruler number
 set report=0
+
 if has('gui_running') || 'xterm-256color' == $TERM
     colorscheme marslo256
     let psc_style='cool'
@@ -415,10 +425,10 @@ set statusline+=\ \ %p%%\
 set showcmd                                 " Show (partial) command in status line
 
 " Fold
-set foldenable                              "Enable Fold
+set foldenable                              " Enable Fold
 set foldmethod=manual
 set foldcolumn=1
-set foldexpr=1                              "Shown line number after fold
+set foldexpr=1                              " Shown line number after fold
 set foldlevel=100                           " Not fold while VIM set up
 " Load view automatic
 autocmd BufWinLeave * silent! mkview
@@ -495,6 +505,27 @@ nmap zws :g/^\s*$/d<CR>                         " Delete white space
 set incsearch hlsearch ignorecase smartcase     " Search
 set magic                                       " Regular Expression
 
+" WinManager
+" let g:AutoOpenWinManager=1
+let g:winManagerWidth = 20
+let g:winManagerWindowLayout='FileExplorer|TagList'
+nmap mm :WMToggle<cr>
+
+" Tlist
+let Tlist_Show_One_File=1
+let Tlist_Exit_OnlyWindow=1
+let Tlist_Use_SingleClick=1
+let Tlist_File_Fold_Auto_Close=1
+let Tlist_GainFocus_On_ToggleOpen=1
+let Tlist_show_Menu=1
+let Tlist_sql_settings = 'sql;P:package;t:table'
+let Tlist_Process_File_Always=0
+" let Tlist_Close_On_Select=1
+" let Tlist_Auto_Open=1
+" let Tlist_Ctags_Cmd=$VIM . 'vimfiles\ctags58\ctags.exe'
+" let updatetime=1000
+nmap tl :TlistToggle<CR>
+
 " Tagbar
 map <leader>ta :TagbarToggle<CR>
 let g:tagbar_left=1
@@ -520,7 +551,7 @@ endfunction
 let g:EnhCommentifyCallbackExists = 'Yes'
 let g:EnhCommentifyAlignRight='Yes'
 
-" AutoInfo
+" AuthorInfo
 map <leader>aid :AuthorInfoDetect<CR>
 let g:vimrc_author='Marslo'
 let g:vimrc_email='marslo.vida@gmail.com'
@@ -550,8 +581,8 @@ set t_vb=
 set list listchars=tab:\ \ ,trail:·,extends:»,precedes:«,nbsp:·
 
 " Cursor format
-set guicursor=a:hor6
-set guicursor+=i-r-ci-cr-o:hor6-blinkon0
+set guicursor=a:hor1
+set guicursor+=i-r-ci-cr-o:hor2-blinkon0
 
 set cursorline                        " Highlight the current line
 
@@ -580,7 +611,7 @@ let g:rbpt_colorpairs = [
     \ ]
 
 " IndentLine
-let g:indentLine_color_gui = '#282828'
+let g:indentLine_color_gui = "#282828"
 let g:indentLine_color_term = 8
 let g:indentLine_indentLevel = 20
 let g:indentLine_showFirstIndentLevel = 1
@@ -607,9 +638,6 @@ if has("autocmd")
     " autocmd FileType ruby let g:rubycomplete_buffer_loading=1
     " autocmd FileType ruby let g:rubycomplete_classes_in_global=1
 endif
-
-let g:ruby_path=$RUBY_BIN
-let g:solarized_termcolors=256
 
 " vim-ruby
 autocmd FileType ruby compiler ruby
