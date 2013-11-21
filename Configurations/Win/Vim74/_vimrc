@@ -98,11 +98,11 @@ func! MyDiff()
 endfunc
 
 " Vim Bundle
-" Get Vundle by: git clone https://github.com/gmarik/vundle.git "C:\Program Files (x86)\vim\vimfiles"
+" Get Vundle from: git clone https://github.com/gmarik/vundle.git "C:\Program Files (x86)\vim\vimfiles"
 set nocompatible
 filetype off
 
-" Inspired from http://pastebin.com/embed_iframe.php?i=C9fUE0M3
+" GetVundle() inspired by: http://pastebin.com/embed_iframe.php?i=C9fUE0M3
 func! GetVundle()
     " execute 'silent !git clone https://github.com/Marslo/snipmate.vim.git "' . expand('$VIM') . '"'
 
@@ -133,7 +133,7 @@ if has('win32') || has('win64')
     set rtp+=$VIM/bundle/vundle
     call vundle#rc('$VIM/bundle')
 else
-    set rtp+=~/.vim/bunle/vundle
+    set rtp+=~/.vim/bundle/vundle
     call vundle#rc()
 endif
 
@@ -242,8 +242,9 @@ func! PylintCheck()
     let &errorformat = ef
 endfunc
 nmap <leader>li :call PylintCheck()<CR>
-
 " map rc :call CompileRunGpp()<CR>
+
+" ====================================== For Programming =====================================
 func! CompileRunGpp()
     exec "w"
     exec "!gcc % -o %<"
@@ -256,11 +257,11 @@ func! RunResult()
     " let exeFile = expand("%:t")
     let exeFile = expand("%:t")
     exec "w"
-    if &ft == "Python"
+    if &filetype == "Python"
         setlocal makeprg=python\ -u
-    elseif &ft == "perl"
+    elseif &filetype == "perl"
         setlocal makeprg=perl
-    elseif &ft == "ruby"
+    elseif &filetype == "ruby"
         setlocal makeprg=ruby
     elseif &ft == "autohotkey"
         setlocal makeprg=AutoHotkey
@@ -501,7 +502,7 @@ set write
 
 " Disable <F1> to open help file
 nmap <F1> <ESC>
-imap <F1> <ESC>
+imap <F1> <ESC>a
 
 " Set the Ctrl-K/Ctrl-J switch the Top/Bottom window
 map <C-k> <C-w>k
@@ -588,7 +589,7 @@ let Tlist_Process_File_Always=0
 nmap tl :TlistToggle<CR>
 
 " Tagbar
-map <F3> :TagbarToggle<CR>
+map <leader>ta :TagbarToggle<CR>
 let g:tagbar_left=1
 let g:tagbar_width=20
 let g:tagbar_autofocus=1
@@ -621,8 +622,8 @@ endfunction
 let g:EnhCommentifyCallbackExists = 'Yes'
 let g:EnhCommentifyAlignRight='Yes'
 
-" AutoInfo
-map <F4> :AuthorInfoDetect<CR>
+" AuthorInfo
+map <leader>aid :AuthorInfoDetect<CR>
 let g:vimrc_author='Marslo'
 let g:vimrc_email='marslo.vida@gmail.com'
 
@@ -681,7 +682,7 @@ let g:rbpt_colorpairs = [
     \ ]
 
 " IndentLine
-let g:indentLine_color_gui = '#282828'
+let g:indentLine_color_gui = "#282828"
 let g:indentLine_color_term = 8
 let g:indentLine_indentLevel = 20
 let g:indentLine_showFirstIndentLevel = 1
@@ -691,11 +692,7 @@ else
     let g:indentLine_char = '|'
 endif
 " let g:indentLine_loaded = 1
-" vim-ruby
-autocmd FileType ruby compiler ruby
-let g:rubycomplete_buffer_loading = 1
-let g:rubycomplete_classes_in_global = 1
-let g:rubycomplete_rails = 1
+
 
 " Supper Tab
 set completeopt=longest,menuone
@@ -705,5 +702,17 @@ let SuperTabMappingForward = '<c-p>'
 let SuperTabMappingTabLiteral = '<Tab>'
 let SuperTabClosePreviewOnPopupClose = 1
 
+" Config for ruby
+if has("autocmd")
+    autocmd FileType ruby set omnifunc=rubycomplete#Complete
+    " autocmd FileType ruby let g:rubycomplete_buffer_loading=1
+    " autocmd FileType ruby let g:rubycomplete_classes_in_global=1
+endif
+
+" vim-ruby
+autocmd FileType ruby compiler ruby
+let g:rubycomplete_buffer_loading = 1
+let g:rubycomplete_classes_in_global = 1
+let g:rubycomplete_rails = 1
 " python-syntax
 let python_highlight_all = 1

@@ -89,9 +89,10 @@ func! GetVundle()
     endif
 endfunc
 
+" Setting runtimepath for Vundle use
 if has('win32') || has('win64')
-    set rtp+=$VIM/vimfiles/bundle/vundle
-    call vundle#rc('$VIM/vimfiles/bundle/')
+    set rtp+=$VIM/bundle/vundle
+    call vundle#rc('$VIM/bundle')
 else
     set rtp+=~/.vim/bundle/vundle
     call vundle#rc()
@@ -150,6 +151,7 @@ filetype plugin indent on
 nmap <leader>bi :BundleInstall<CR>
 nmap <leader>bu :BundleUpdate<CR>
 
+" ====================================== For Programming =====================================
 " Open the current file path by cmd
 func! OpenCMD()
     if has('win32') || has('win95') || has('win64')
@@ -222,6 +224,8 @@ func! RunResult()
         setlocal makeprg=perl
     elseif &filetype == "ruby"
         setlocal makeprg=ruby
+    elseif &ft == "autohotkey"
+        setlocal makeprg=AutoHotkey
     endif
     set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
     silent make %
@@ -539,6 +543,27 @@ nmap zws :g/^\s*$/d<CR>                         " Delete white space
 
 set incsearch hlsearch ignorecase smartcase     " Search
 set magic                                       " Regular Expression
+
+" WinManager
+" let g:AutoOpenWinManager=1
+let g:winManagerWidth = 20
+let g:winManagerWindowLayout='FileExplorer|TagList'
+nmap mm :WMToggle<cr>
+
+" Tlist
+let Tlist_Show_One_File=1
+let Tlist_Exit_OnlyWindow=1
+let Tlist_Use_SingleClick=1
+let Tlist_File_Fold_Auto_Close=1
+let Tlist_GainFocus_On_ToggleOpen=1
+let Tlist_show_Menu=1
+let Tlist_sql_settings = 'sql;P:package;t:table'
+let Tlist_Process_File_Always=0
+" let Tlist_Close_On_Select=1
+" let Tlist_Auto_Open=1
+" let Tlist_Ctags_Cmd=$VIM . 'vimfiles\ctags58\ctags.exe'
+" let updatetime=1000
+nmap tl :TlistToggle<CR>
 
 " Tagbar
 map <leader>ta :TagbarToggle<CR>
