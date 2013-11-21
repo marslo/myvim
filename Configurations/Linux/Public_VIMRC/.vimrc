@@ -27,6 +27,13 @@ if &term=="xterm"
 else
     set t_Co=256
 endif
+" Set mapleader
+let mapleader=","
+let g:mapleader=","
+
+set encoding=utf-8
+
+set scrolloff=3
 
 " Vim Bundle
 " Get Vundle from: git clone https://github.com/gmarik/vundle.git ~/.vim
@@ -76,24 +83,19 @@ Bundle 'sjl/gundo.vim.git'
 Bundle 'majutsushi/tagbar'
 Bundle 'dantezhu/authorinfo'
 Bundle 'kien/rainbow_parentheses.vim'
-" Bundle 'hdima/python-syntax.git'
 Bundle 'plasticboy/vim-markdown.git'
 Bundle 'Marslo/EnhCommentify.vim'
-
 Bundle 'tpope/vim-rails'
-
 Bundle 'tpope/vim-pathogen'
 Bundle 'gregsexton/MatchTag'
+Bundle 'vim-ruby/vim-ruby'
 Bundle 'Marslo/snipmate.vim.git'
-Bundle 'vantares/ruby-syntaxchecker.vim'
-" Bundle 'vim-ruby/vim-ruby'
-" Bundle 'semmons99/vim-ruby-matchit'
+Bundle 'ervandew/supertab'
 
 " Get from vim-scripts
 Bundle 'Conque-Shell'
 Bundle 'mru.vim'
 Bundle 'python_fold'
-" Bundle 'Tagbar'
 Bundle 'taglist.vim'
 Bundle 'TeTrIs.vim'
 Bundle 'winmanager'
@@ -104,10 +106,14 @@ Bundle 'pyflakes.vim'
 
 " Colors
 Bundle 'txt.vim'
-Bundle 'css.vim'
-Bundle 'gorodinskiy/vim-coloresque'
+Bundle 'gui2term.py'
+Bundle 'colorsel.vim'
+Bundle 'JulesWang/css.vim'
 Bundle 'hail2u/vim-css3-syntax'
-Bundle 'Marslo/Marslo.vim'
+Bundle 'Marslo/vim-coloresque'
+Bundle 'Marslo/marslo.vim'
+Bundle 'Marslo/python-syntax'
+" Bundle 'ap/vim-css-color'
 
 filetype plugin indent on
 
@@ -152,7 +158,7 @@ func! AutoPair(char)
     elseif "{" == a:char
         if &ft =~ '^\(java\|perl\)$'
             return "{\<Enter>}\<ESC>ko"
-        elseif '' == getline('.')[col('.')] && &ft =~ '^\(ruby\|python\|autohotkey\|vim\|snippet\)$'
+        elseif '' == getline('.')[col('.')] && &ft =~ '^\(ruby\|python\|eruby\|autohotkey\|vim\|snippet\|txt\|scss\)$'
             return "{}\<Left>"
         else
             return a:char
@@ -208,10 +214,15 @@ nmap gf :call GotoFile()<CR>
 " Update tags file automatic
 set tags=tags;
 set autochdir
-function! UpdateTagsFile()
+function! UpdateTags()
     silent !ctags -R --fields=+ianS --extra=+q
 endfunction
-nmap <F12> :call UpdateTagsFile()<CR>
+nmap <F12> :call UpdateTags()<CR>
+set nobackup noswapfile nowritebackup
+
+" ruler: Show Line and colum number; number: line number
+set ruler number
+set report=0
 
 if has('gui_running') || 'xterm-256color' == $TERM
     colorscheme marslo256
@@ -220,15 +231,6 @@ else
     colorscheme marslo16
 endif
 
-" Set mapleader
-let mapleader=","
-let g:mapleader=","
-
-set encoding=utf-8
-set number
-
-" backup files settings
-set nobackup noswapfile nowritebackup
 
 syntax enable
 syntax on
@@ -246,31 +248,22 @@ else
     set guifont=Monaco\ 12
 endif
 
-" Hghlight the txt file
-au BufRead,BufNewFile * setfiletype txt
+set showmatch                               " Show matching bracets
 
-" Wrap line
-set nowrap
-
-" Show matching bracets
-set showmatch
+set nowrap                                  " Wrap lines
 
 set autoread
 set tags=tags
 
 " Search opts
-set smarttab expandtab
-set magic
-
-" Fomart settings
-" the width of <tab> in first line would refer to 'shiftwidth' parameter
-set autoindent smartindent cindent
-set shiftwidth=4                        " the tab width by using >> & <<
-set softtabstop=4                       " the width while trigger <Tab> key
-set tabstop=4
+set autoindent smartindent
+set smarttab expandtab                      " smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
+set tabstop=4                               " Tab width
+set softtabstop=4                           " the width while trigger <Tab> key
+set shiftwidth=4                            " the tab width by using >> & <<
+autocmd FileType ruby,eruby,yaml,html set ai sw=2 sts=2 et
 set lbr
 set tw=0
-autocmd FileType ruby,eruby,yaml,html set ai sw=2 sts=2 et
 
 " set cindent
 " set textwidth=150
@@ -280,25 +273,23 @@ autocmd FileType ruby,eruby,yaml,html set ai sw=2 sts=2 et
 " set selection=exclusive
 " set selectmode=mouse,key
 
-" Show Line and colum number
-set ruler
-
 " Set status bar
 set laststatus=2
 set statusline=%m%r
-set statusline+=%F\ \ %Y,%{&fileformat}\    " file path\filename & filetype
-set statusline+=%=                          " right align
-set statusline+=\ \ %-{strftime(\"%H:%M\ %d/%m/%Y\")}    " Current time
-set statusline+=\ \ %b[A],0x%B              " ASCII code, Hex mode
-set statusline+=\ \ %c%V,%l/%L              " Current Column, Current Line/All Line
+set statusline+=%f\ \ %y,%{&fileformat}\                 " file path\file name & filetype
+set statusline+=%=                                      " right align
+set statusline+=\ \ %-{strftime(\"%H:%M\ %d/%m/%Y\")}   " Current Time
+set statusline+=\ \ %b[A],0x%B                          " ASCII code, Hex mode
+set statusline+=\ \ %c%V,%l/%L                          " current Column, current Line/All Line
 set statusline+=\ \ %p%%
+
 set showcmd                                 " Show (partial) command in status line
 
 " Fold
-set foldenable                              "Enable Fold
+set foldenable                              " Enable Fold
 set foldmethod=manual
 set foldcolumn=1
-set foldexpr=1                              "Shown line number after fold
+set foldexpr=1                              " Shown line number after fold
 set foldlevel=100                           " Not fold while VIM set up
 " Load view automatic
 autocmd BufWinLeave * silent! mkview
@@ -307,6 +298,58 @@ set viewoptions=folds
 
 au BufRead,BufNewFile * setfiletype txt     " Highlight the txt file
 au BufRead,BufNewFile *.t set ft=perl       " Perl test file as Perl code
+
+set modifiable
+set write
+
+" Disable <F1> to open help file
+noremap <F1> <ESC>
+imap <F1> <ESC>a
+
+map <C-k> <C-w>k
+map <C-h> <C-w>h
+map <C-j> <C-w>j
+map <C-l> <C-w>l
+
+" Emacs Style shortcuts
+map <C-a> <ESC>^
+imap <C-a> <ESC>I
+map <C-e> <ESC>$
+imap <C-e> <ESC>A
+imap <A-f> <ESC><Space>Wi
+imap <A-b> <ESC>Bi
+imap <A-d> <ESC>cW
+" inoremap <M-b> <ESC>Bi
+" inoremap <M-f> <ESC>f<Space>a
+" inoremap <M-d> <ESC>cf<Space>
+
+" vmap <C-c> "+y
+" vmap <C-v> "+gP
+
+" set path+=/home/marslo/Study
+
+" CtrlP
+" let g:ctrlp_map = '<s-w>'
+" let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'
+" let g:ctrlp_working_path_mode = '.ctrlp'
+let g:ctrlp_max_height = 8
+let g:ctrlp_max_depth = 100
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrl_root_makers = ['ctrlp']
+let g:ctrlp_clear_cache_on_exit = 0
+let g:ctrlp_use_caching = 1
+let g:ctrlp_custom_ignore = {
+\ 'dir':  '\v[\/]\.(git|hg|svn)$',
+\ 'file': '\v\.(exe|so|dll|rpm|tar|gz|bz2|zip|ctags|tags)|tags|ctags$',
+\ 'link': 'some_bad_symbolic_links',
+\ }
+
+" GundoToggle
+nnoremap <leader>g :GundoToggle<CR>
+let g:gundo_width = 35
+let g:gundo_preview_height = 20
+let g:gundo_right = 0
+let g:gundo_preview_bottom = 0
 
 " ====================================== For Function =====================================
 " Make backspace key can manage normal indent, eol, start, etc
@@ -326,7 +369,9 @@ nmap zdb :%s/\s\+$//<CR>                        " Delete the black space in the 
 nmap zhh :%s/^\s\+//<CR>
 nmap zmm :g/^/ s//\=line('.').' '/<CR>
 nmap zws :g/^\s*$/d<CR>                         " Delete white space
-set incsearch hlsearch ignorecase smartcase
+
+set incsearch hlsearch ignorecase smartcase     " Search
+set magic                                       " Regular Expression
 
 " Tagbar
 map <leader>ta :TagbarToggle<CR>
@@ -338,7 +383,7 @@ let g:tagbar_singleclick=1
 let g:tagbar_iconchars=['+', '-']
 let g:tagbar_autoshowtag=1
 
-" Comments setting
+" Comments
 let g:EnhCommentifyAlignRight='Yes'
 let g:EnhCommentifyRespectIndent='yes'
 let g:EnhCommentifyPretty='Yes'
@@ -354,14 +399,18 @@ let g:EnhCommentifyCallbackExists = 'Yes'
 let g:EnhCommentifyAlignRight='Yes'
 
 " AuthorInfo
-map tif :AuthorInfoDetect<CR>
+map <leader>aid :AuthorInfoDetect<CR>
 let g:vimrc_author='Marslo'
 let g:vimrc_email='li.jiao@tieto.com'
 
 " Most Recently Used(MRU)
-map <C-g> :MRU<CR>
 let MRU_Auto_Close = 1
 let MRU_Max_Entries = 10
+let MRU_Exclude_Files='^/tmp/.*'
+let MRU_Exclude_Files='^/temp/.*'
+let MRU_Exclude_Files='^/media/.*'
+let MRU_Exclude_Files='^/mnt/.*'
+map <C-g> :MRU<CR>
 
 " WinManager
 " let g:AutoOpenWinManager=1
@@ -383,6 +432,25 @@ let Tlist_Process_File_Always=0
 " let Tlist_Ctags_Cmd=$VIM . 'vimfiles\ctags58\ctags.exe'
 " let updatetime=1000
 nmap tl :TlistToggle<CR>
+
+" E21\: Cannot make changes, 'modifiable' is off:     $delete
+set linespace=0
+set wildmenu
+" Completion mode that is used for the character
+set wildmode=longest,list,full
+set wildignore+=*.swp,*.zip,*.exe
+
+" turn off error beep/flash
+set noerrorbells novisualbell
+set t_vb=
+
+set list listchars=tab:\ \ ,trail:.,extends:>,precedes:<,nbsp:.
+
+" Cursor format
+set guicursor=a:hor1
+set guicursor+=i-r-ci-cr-o:hor2-blinkon0
+
+set cursorline                        " Highlight the current line
 
 let g:rbpt_loadcmd_toggle = 1
 au VimEnter * RainbowParenthesesToggle
@@ -408,58 +476,41 @@ let g:rbpt_colorpairs = [
     \ ['red',         'firebrick3'],
     \ ]
 
-
-set modifiable
-set write
-
-" E21\: Cannot make changes, 'modifiable' is off:     $delete
-set linespace=0
-set wildmenu
-" Completion mode that is used for the character
-set wildmode=longest,list,full
-set wildignore+=*.swp,*.zip,*.exe
-
-" Disable F1
-noremap <F1> <ESC>
-imap <F1> <ESC>a
-
-map <C-k> <C-w>k
-map <C-h> <C-w>h
-map <C-j> <C-w>j
-map <C-l> <C-w>l
-
-" Emacs Style shortcuts
-map <C-a> <ESC>^
-imap <C-a> <ESC>I
-map <C-e> <ESC>$
-imap <C-e> <ESC>A
-imap <A-f> <ESC><Space>Wi
-imap <A-b> <ESC>Bi
-imap <A-d> <ESC>dW
-" inoremap <M-b> <ESC>Bi
-" inoremap <M-f> <ESC>f<Space>a
-" inoremap <M-d> <ESC>cf<Space>
-
-vmap <C-c> "+y
-vmap <C-v> "+gP
-" Cursor format
-set guicursor=a:hor10
-set guicursor+=i-r-ci-cr-o:hor10-blinkon0
-set scrolloff=3
-" set completeopt=longest,menu
-set cursorline                        " Highlight the current line
-" turn off error beep/flash
-set noerrorbells novisualbell
-set t_vb=
-
-" set path+=/home/marslo/Study
-
 " IndentLine
 let g:indentLine_color_gui = "#282828"
 let g:indentLine_color_term = 8
 let g:indentLine_indentLevel = 20
 let g:indentLine_showFirstIndentLevel = 1
-let g:indentLine_char = '¦'
+if has('gui_running') || 'xterm-256color' == $TERM
+    let g:indentLine_char = '¦'
+else
+    let g:indentLine_char = '|'
+endif
 " let g:indentLine_loaded = 1
 
-set list listchars=tab:\ \ ,trail:.,extends:>,precedes:<,nbsp:.
+
+set completeopt=longest,menuone
+" Supper Tab
+" let SuperTabDefaultCompletionType = "context"
+let SuperTabDefaultCompletionType = '<c-p>'
+let SuperTabMappingForward = '<c-p>'
+let SuperTabMappingTabLiteral = '<Tab>'
+let SuperTabClosePreviewOnPopupClose = 1
+
+" Config for ruby
+if has("autocmd")
+    autocmd FileType ruby set omnifunc=rubycomplete#Complete
+    " autocmd FileType ruby let g:rubycomplete_buffer_loading=1
+    " autocmd FileType ruby let g:rubycomplete_classes_in_global=1
+endif
+
+" vim-ruby
+autocmd FileType ruby compiler ruby
+let g:rubycomplete_buffer_loading = 1
+let g:rubycomplete_classes_in_global = 1
+let g:rubycomplete_rails = 1
+" let g:ruby_syntaxcheck_map='<F10>'
+" autocmd FileType ruby map <F4> :w<CR>:!ruby -c %<CR>
+
+" syntax-python
+let python_highlight_all = 1

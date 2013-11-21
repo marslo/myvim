@@ -1,9 +1,9 @@
 MyVimConfig
 ===========
-Author: Marslo    
-Email: marslo.vida@gmail.com    
-Version: 0.0.4    
-LastChange: 2013-10-29 09:48:48   
+- Author: Marslo
+- Email: marslo.vida@gmail.com
+- Version: 0.0.5
+- LastChange: 2013-11-21 18:59:56
 
 -----------------------------
 ## ScreenShots:
@@ -11,7 +11,6 @@ LastChange: 2013-10-29 09:48:48
 ![Screenshot_Ubuntu](https://github.com/Marslo/VimConfig/blob/master/Screenshots/screenshot_gvim.png?raw=true)
 ### Windows
 ![Screenshot_Windows](https://github.com/Marslo/VimConfig/blob/master/Screenshots/Screenshots_Ubuntu.png?raw=true)
-
 
 ## Compile VIM/GVIM by source code on Linux(Ubuntu)
 ### 1. Prepare environment:
@@ -92,8 +91,7 @@ Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
 ### Usage
 - Windows User:
     - Copy **_vimrc** from into `C:\Program Files\Vim`.
-    - Get [Vundle](https://github.com/gmarik/vundle.git)
-        - <del>>> git clone https://github.com/gmarik/vundle.git "C:\Program Files (x86)\vim\vimfiles"</del>
+    - Get [Vundle](https://github.com/gmarik/vundle.git) automatically
         - Open Vim and execute (Ignore warning and errors)
             <pre><code>:call GetVundle()
             </code></pre>
@@ -105,21 +103,16 @@ Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
     - Copy **.vimrc** into `$HOME`
     <pre><code>$ cp .vimrc ~/
     </code></pre>
-    - Get [Vundle](https://github.com/gmarik/vundle.git)
+    - Get [Vundle](https://github.com/gmarik/vundle.git) automatically
         <pre><code>$ cat .vimrc | grep "set rtp"
             set rtp+=$VIM/vimfiles/bundle/vundle
             set rtp+=~/.vim/bunle/vundle
         </code></pre>
-        <del>$ git clone https://github.com/gmarik/vundle.git ~/.vim</del>
         - Open Vim and Run (Ignore warnings and errors):
             <pre><code>:call GetVundle()
             </code></pre>
     - Get the other plugins
         <pre><code>:BundleInstall!
-        </code></pre>
-    - Transfer the file type from Dos to Unix
-        <pre><code>$ sudo apt-get install dos2unix
-        $ dos2unix ~/.vim/bundle/css.vim/syntax/css.vim
         </code></pre>
 
 -----------------------------
@@ -159,7 +152,7 @@ Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
     - `wm`:     Show winmanager
     - `<leader>v`:     Open the configure file (_vimrc in windows and .vimrc in Linux)
     - `<leader>te`:    Open the Tetris
-    - `tv`:     Open bash in the vim/gvim against Liunxu and open command line against Windows (Yes! That's true)
+    - `<leader>tv`:     Open bash in the vim/gvim against Liunxu and open command line against Windows (Yes! That's true)
     - `pyli`:   Static Code Analysis for python
     - `ctrl + g`:     Open the most recently used files
     - `<leader>v`: Comments/Uncomments
@@ -181,27 +174,45 @@ Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
     - `zdb`: Delete the backspace at the each of each line
     - `zmm`: Insert the line number
 
-###Plugins:
+### Plugins:
 - [AuthorInfo](https://github.com/dantezhu/authorinfo)
-- [Conque Term](http://code.google.com/p/conque/)
-- [EnhancedCommentify](https://github.com/woainvzu/EnhCommentify.vim), [EnhancedByMarslo](https://github.com/woainvzu/EnhCommentify.vim)
+- [Conque Term](https://github.com/vim-scripts/Conque-Shell)
 - [MiniBufExpl](http://www.vim.org/scripts/script.php?script_id=159)
 - [mru](https://github.com/vim-scripts/mru.vim)
 - [ctrlp](https://github.com/kien/ctrlp.vim)
-- [python_fold.vim](https://github.com/vim-scripts/python_fold)
 - [TagBar](http://majutsushi.github.io/tagbar/)
 - [TagList](http://vim-taglist.sourceforge.net/)
 - [TeTrIs](https://github.com/vim-scripts/TeTrIs.vim)
 - [WinManager](https://github.com/vim-scripts/winmanager)
 - [IndentLine](https://github.com/Yggdroot/indentLine)
 - [Vim Bunlde](https://github.com/gmarik/vundle)
-- [snipMate](http://www.vim.org/scripts/script.php?script_id=2540), [Github](https://github.com/garbas/vim-snipmate), [EnhancedByMarslo](https://github.com/woainvzu/snipmate.vim)
 - [Rainbow Parentheses](https://github.com/kien/rainbow_parentheses.vim)
-- [vim-rails](https://github.com/tpope/vim-rails)
-- [Marslo.vim](https://github.com/woainvzu/Marslo.vim)
+- [vim-pathogen](https://github.com/tpope/vim-pathogen)
+- [supertab](https://github.com/ervandew/supertab)
 - [MatchTag](https://github.com/gregsexton/MatchTag)
-- [ruby-matchit](https://github.com/vim-scripts/ruby-matchit)
+- [txt.vim](https://github.com/vim-scripts/txt.vim)
+
+#### Enhanced by Myself
+- [marslo.vim](https://github.com/Marslo/marslo.vim)
+- [EnhancedCommentify](https://github.com/hrp/EnhancedCommentify), [EnhancedByMarslo](https://github.com/Marslo/EnhCommentify.vim)
+- [snipMate](http://www.vim.org/scripts/script.php?script_id=2540), [Github](https://github.com/garbas/vim-snipmate), [EnhancedByMarslo](https://github.com/Marslo/snipmate.vim)
+- [python-syntax](https://github.com/hdima/python-syntax), [EnhancedByMarslo](https://github.com/Marslo/python-syntax)
+- [vim-coloresque](https://github.com/gorodinskiy/vim-coloresque), [EnhancedByMarslo](https://github.com/Marslo/vim-coloresque)
+
+#### For Python
+- [pyflakes.vim](https://github.com/vim-scripts/pyflakes.vim)
+- [python_fold.vim](https://github.com/vim-scripts/python_fold)
+
+#### For Ruby and RoR
+- [vim-rails](https://github.com/tpope/vim-rails)
+- [vim-ruby](https://github.com/vim-ruby/vim-ruby)
+
+#### Theme and colors
+- [vim-css3-syntax](https://github.com/hail2u/vim-css3-syntax)
+- [colorsel.vim](https://github.com/vim-scripts/colorsel.vim)
+- [css.vim](https://github.com/JulesWang/css.vim)
 - [vim-colorsque](https://github.com/gorodinskiy/vim-coloresque)
+- [gui2term.py](http://www.vim.org/scripts/script.php?script_id=2778)
 
 #### Not be used
 - perl-support.vim
@@ -209,6 +220,7 @@ Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
 - [vim-addon-mw-utils](https://github.com/MarcWeber/vim-addon-mw-utils)
 - [vim-css-color](https://github.com/ap/vim-css-color)          # Cannot work for vim74, using **vim-colorsque** instead
 - [emmet.vim](https://github.com/mattn/emmet-vim)
+- [ruby-matchit](https://github.com/vim-scripts/ruby-matchit)
 
 +++++++++++++++++++++++++++++++++++++++++++
 
@@ -216,123 +228,135 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
 
 -----------------------------
 
-###ʹ�÷���
-- Windows�û�
-    - ���� **Configurations\Win\Vim74_Vundle\_vimrc** �� `C:\Program Files (x86)\Vim`
-    - ��ȡ [Vundle](https://github.com/gmarik/vundle.git) [��¡���뵽 `$VIMHOME\vimfiles` Ŀ¼��]
-        - <del>>> git clone https://github.com/gmarik/vundle.git "C:\Program Files (x86)\Vim\vimfile\"</del>
-        - ��vim(���Դ���򾯸�)
-        <pre><code>:call GetVundle()
-        </code></pre>
-    - ��ȡ�������
+###使用方法
+- Windows用户
+    - 复制 **Configurations\Win\Vim74_Vundle\_vimrc** 到 `C:\Program Files (x86)\Vim`
+    - 自动获取 [Vundle](https://github.com/gmarik/vundle.git)
+        - 打开vim(忽略错误或警告)
+            <pre><code>:call GetVundle()
+            </code></pre>
+    - 获取其他插件
         <pre><code>:BundleInstall!
         </code></pre>
 
-- Linux �û�:
-    - ���� **Configurations\Linux\Vim74_vundle\.vimrc** �� `$HOME`
-    <pre><code>$ cp Linux/Vim74_vundle/.vimrc ~/
-    </code></pre>
-    - ��ȡ [Vundle](https://github.com/gmarik/vundle.git) ����¡���뵽 `$HOME\.vim`��
-        <del>$ git clone https://github.com/gmarik/vundle.git ~/.vim</del>
-        - ��Gvim������ (���Դ���򾯸棩��
+- Linux 用户:
+    - 复制 **Configurations\Linux\Vim74_vundle\.vimrc** 到 `$HOME`
+        <pre><code>$ cp Linux/Vim74_vundle/.vimrc ~/
+        </code></pre>
+    - 自动获取 [Vundle](https://github.com/gmarik/vundle.git)
+        - 打开Gvim且运行 (忽略错误或警告）：
             <pre><code>:call GetVundle()
             </code></pre>
-    - ��ȡ�������
+    - 获取其他插件
         <pre><code>:BundleInstall!
-        </code></pre>
-    - ��Windows�µ��ļ���ʽ��ΪUnix��ʽ
-        <pre><code>$ sudo apt-get install dos2unix
-        $ dos2unix ~/.vim/bundle/css.vim/syntax/css.vim
         </code></pre>
 
 -----------------------------
 
-### ��vim/gvimĬ�����
-- Windows�û�, ��Ĭ�Ͽ������
-- Linux�û�����Ҫ��װ`lwmctr`�����ص�ַ��http://download.csdn.net/detail/jiaoxiaogu/4317843
+### 打开vim/gvim默认最大化
+- Windows用户, 已默认开启最大化
+- Linux用户，需要安装`lwmctr`。下载地址：http://download.csdn.net/detail/jiaoxiaogu/4317843
 
-### ��ݼ�
-- `F5`: һ������Python, Ruby �� Perl��(���н������ʾ��Quickfix������)
-- `F3`: ��tagbar
-- `F4`: �Զ������û���Ϣ
-
-+++++++++++++++++++++++++++++++++++++++++++
-
-### �����뿴Screenshot
-- �Զ����
-- �Զ�������Ϣ��
-    - `<leader>fn`: ���ӵ�ǰ�ļ���(�޺�׺������Java��������)
-    - `<leader>fe`: ���ӵ�ǰ�ļ���(�к�׺����������ע��)
-    - `<leader>tt`: ���ӵ�ǰʱ��
-- �Զ�����ͼ����۵���Ϣ
+### 快捷键
+- `F5`: 一键运行Python, Ruby 和 Perl。(运行结果将显示在Quickfix窗口中)
+- `F3`: 打开tagbar
+- `F4`: 自动添加用户信息
 
 +++++++++++++++++++++++++++++++++++++++++++
 
-- �Զ��庯����ݼ�
-    - `<F12>`: ��������tags�ļ�
-    - `gf`: �򿪹���µĵ���Ϊ�ļ��� ������python�ļ������Զ�����.pyΪ��׺��
-    - `Alt + -`: ��С����
-    - `Alt + +`: ��������
-    - `cmd`: �������У����Զ�cd����ǰ�ļ�Ŀ¼��Linux�򿪵�ΪTerminal��Windows�򿪵�Ϊcommand line��
-    - `Alt + o`: ���ļ�������� ���Զ����뵱ǰ�ĵ���Ŀ¼ ��Linux��ΪNautilus, Windows��ΪExplorer��
+### 主题请看Screenshot
+- 自动配对
+- 自动添加信息：
+    - `<leader>fn`: 添加当前文件名(无后缀，方便Java添加类名)
+    - `<leader>fe`: 添加当前文件名(有后缀，方便添加注释)
+    - `<leader>tt`: 添加当前时间
+- 自动保存和加载折叠信息
 
 +++++++++++++++++++++++++++++++++++++++++++
 
-- �����ݼ�
-    - `tl`: ��ʾtaglist
-    - `wm`: ��ʾwinmanager(����taglist��Ϣ)
-    - `<leader>v`: �������ļ�(_vimrc/.vimrc)
-    - `<leader>te`: �򿪶���˹������Ϸ(��ϰhjkl��ݼ�)
-    - `tv`: ��vim/gvim������bash(�ǵģ���û������)
-    - `pyli`: Python��̬�������(�淶���룬Զ�뿳�ֿ���)
-    - `ctrl + g`: ������ļ��б���10����
-    - `<leader>v`: ע��/��ע��
+- 自定义函数快捷键
+    - `<F12>`: 重新生成tags文件
+    - `gf`: 打开光标下的单词为文件名 （若是python文件，则自动添加.py为后缀）
+    - `Alt + -`: 缩小字体
+    - `Alt + +`: 增大字体
+    - `cmd`: 打开命令行，且自动cd到当前文件目录（Linux打开的为Terminal，Windows打开的为command line）
+    - `Alt + o`: 打开文件浏览器， 且自动进入当前文档的目录 （Linux打开为Nautilus, Windows打开为Explorer）
 
 +++++++++++++++++++++++++++++++++++++++++++
 
-- Emacs ����ݼ�
-    - `Ctrl + a`: ����ƶ������� [Normalģʽ && ����ģʽ]
-    - `Ctrl + e`: ����ƶ�����β [Normalģʽ && ����ģʽ]
-    - `Alt + b`: �����ǰ����һ������ [����ģʽ]
-    - `Alt + f`: �����ǰ����һ������ [����ģʽ]
-    - `Alt + d`: ��ǰɾ��һ������ [����ģʽ]
-    - `Ctrl + w`: ���ɾ��һ������ [����ģʽ]
+- 插件快捷键
+    - `tl`: 显示taglist
+    - `mm`: 显示winmanager(附带taglist信息)
+    - `<leader>v`: 打开配置文件(_vimrc/.vimrc)
+    - `<leader>te`: 打开俄罗斯方块游戏(练习hjkl快捷键)
+    - `<leader>tv`: 在vim/gvim中运行bash(是的，你没看错！)
+    - `pyli`: Python静态代码分析(规范代码，远离砍手砍脚)
+    - `ctrl + g`: 打开最近文件列表（10个）
+    - `<leader>v`: 注释/反注释
 
 +++++++++++++++++++++++++++++++++++++++++++
 
-- �������ʽ��ݼ�
-    - `zdb`: ɾ����β�ո�
-    - `zmm`: �����ĵ��к�
+- Emacs 风格快捷键
+    - `Ctrl + a`: 光标移动到行首 [Normal模式 && 插入模式]
+    - `Ctrl + e`: 光标移动到行尾 [Normal模式 && 插入模式]
+    - `Alt + b`: 光标向前跳动一个单词 [插入模式]
+    - `Alt + f`: 光标向前跳动一个单词 [插入模式]
+    - `Alt + d`: 向前删除一个单词 [插入模式]
+    - `Ctrl + w`: 向后删除一个单词 [插入模式]
 
-### ����б���
++++++++++++++++++++++++++++++++++++++++++++
+
+- 正则表达式快捷键
+    - `zdb`: 删除行尾空格
+    - `zmm`: 插入文档行号
+
+### 插件列表：
 - [AuthorInfo](https://github.com/dantezhu/authorinfo)
-- [Conque Term](http://code.google.com/p/conque/)
-- [EnhancedCommentify](https://github.com/woainvzu/EnhCommentify.vim), [EnhancedByMarslo](https://github.com/woainvzu/EnhCommentify.vim)
+- [Conque Term](https://github.com/vim-scripts/Conque-Shell)
 - [MiniBufExpl](http://www.vim.org/scripts/script.php?script_id=159)
 - [mru](https://github.com/vim-scripts/mru.vim)
 - [ctrlp](https://github.com/kien/ctrlp.vim)
-- [python_fold.vim](https://github.com/vim-scripts/python_fold)
 - [TagBar](http://majutsushi.github.io/tagbar/)
 - [TagList](http://vim-taglist.sourceforge.net/)
 - [TeTrIs](https://github.com/vim-scripts/TeTrIs.vim)
 - [WinManager](https://github.com/vim-scripts/winmanager)
 - [IndentLine](https://github.com/Yggdroot/indentLine)
 - [Vim Bunlde](https://github.com/gmarik/vundle)
-- [snipMate](http://www.vim.org/scripts/script.php?script_id=2540), [Github](https://github.com/garbas/vim-snipmate), [EnhancedByMarslo](https://github.com/woainvzu/snipmate.vim)
 - [Rainbow Parentheses](https://github.com/kien/rainbow_parentheses.vim)
-- [vim-rails](https://github.com/tpope/vim-rails)
-- [Marslo.vim](https://github.com/woainvzu/Marslo.vim)
+- [vim-pathogen](https://github.com/tpope/vim-pathogen)
+- [supertab](https://github.com/ervandew/supertab)
 - [MatchTag](https://github.com/gregsexton/MatchTag)
-- [ruby-matchit](https://github.com/vim-scripts/ruby-matchit)
-- [vim-colorsque](https://github.com/gorodinskiy/vim-coloresque)
+- [txt.vim](https://github.com/vim-scripts/txt.vim)
 
-#### δ��ʹ�õģ�����ʹ�ã�
+#### 我加工的增强版
+- [marslo.vim](https://github.com/Marslo/marslo.vim)
+- [EnhancedCommentify](https://github.com/hrp/EnhancedCommentify), [EnhancedByMarslo](https://github.com/Marslo/EnhCommentify.vim)
+- [snipMate](http://www.vim.org/scripts/script.php?script_id=2540), [Github](https://github.com/garbas/vim-snipmate), [EnhancedByMarslo](https://github.com/Marslo/snipmate.vim)
+- [python-syntax](https://github.com/hdima/python-syntax), [EnhancedByMarslo](https://github.com/Marslo/python-syntax)
+- [vim-coloresque](https://github.com/gorodinskiy/vim-coloresque), [EnhancedByMarslo](https://github.com/Marslo/vim-coloresque)
+
+#### Python插件
+- [pyflakes.vim](https://github.com/vim-scripts/pyflakes.vim)
+- [python_fold.vim](https://github.com/vim-scripts/python_fold)
+
+#### Ruby和RoR插件
+- [vim-rails](https://github.com/tpope/vim-rails)
+- [vim-ruby](https://github.com/vim-ruby/vim-ruby)
+
+#### 主题以及颜色
+- [vim-css3-syntax](https://github.com/hail2u/vim-css3-syntax)
+- [colorsel.vim](https://github.com/vim-scripts/colorsel.vim)
+- [css.vim](https://github.com/JulesWang/css.vim)
+- [vim-colorsque](https://github.com/gorodinskiy/vim-coloresque)
+- [gui2term.py](http://www.vim.org/scripts/script.php?script_id=2778)
+
+#### 未被使用的（曾被使用）
 - perl-support.vim
 - [tlib](https://github.com/tomtom/tlib_vim)
 - [vim-addon-mw-utils](https://github.com/MarcWeber/vim-addon-mw-utils)
-- [vim-css-color](https://github.com/ap/vim-css-color)                      # ��֧��Vim74�� ʹ��**vim-colorsque**���
+- [vim-css-color](https://github.com/ap/vim-css-color)                      # 不支持Vim74， 使用**vim-colorsque**替代
 - [emmet.vim](https://github.com/mattn/emmet-vim)
 
 +++++++++++++++++++++++++++++++++++++++++++
 
-Ĭ������Ϊ�� Monaco, ���ص�ַ: http://download.csdn.net/detail/jiaoxiaogu/4317959
+默认字体为： Monaco, 下载地址: http://download.csdn.net/detail/jiaoxiaogu/4317959

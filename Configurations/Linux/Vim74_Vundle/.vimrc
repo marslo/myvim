@@ -24,6 +24,9 @@ source $VIMRUNTIME/menu.vim
 " runtime macros/matchit.vim
 behave mswin
 
+let g:ruby_path=$RUBY_BIN
+let g:solarized_termcolors=256
+
 set diffopt=filler,context:3
 
 " Remove the Welcome interface
@@ -56,11 +59,11 @@ let &termencoding=&encoding
 set scrolloff=3
 
 " Vim Bundle
-" Get Vundle by: git clone https://github.com/gmarik/vundle.git ~/.vim
+" Get Vundle from: git clone https://github.com/gmarik/vundle.git ~/.vim
 set nocompatible
 filetype off
 
-" Inspired from http://pastebin.com/embed_iframe.php?i=C9fUE0M3
+" GetVundle() inspired by: http://pastebin.com/embed_iframe.php?i=C9fUE0M3
 func! GetVundle()
     " execute 'silent !git clone https://github.com/Marslo/snipmate.vim.git "' . expand('$VIM') . '"'
 
@@ -133,11 +136,13 @@ Bundle 'pyflakes.vim'
 
 " Colors
 Bundle 'txt.vim'
-Bundle 'css.vim'
-Bundle 'gorodinskiy/vim-coloresque'
+Bundle 'gui2term.py'
+Bundle 'colorsel.vim'
+Bundle 'JulesWang/css.vim'
 Bundle 'hail2u/vim-css3-syntax'
-Bundle 'Marslo/python-syntax'
+Bundle 'Marslo/vim-coloresque'
 Bundle 'Marslo/marslo.vim'
+Bundle 'Marslo/python-syntax'
 " Bundle 'ap/vim-css-color'
 
 filetype plugin indent on
@@ -145,8 +150,8 @@ nmap <leader>bi :BundleInstall<CR>
 nmap <leader>bu :BundleUpdate<CR>
 
 " Open the current file path by cmd
-function! OpenCMD()
-    if has('win32')
+func! OpenCMD()
+    if has('win32') || has('win95') || has('win64')
         " let com = '!cmd /c start C:\Marslo\Tools\Softwares\Data\System\CMD\Console2\Console.exe -d "'. expand('%:p:h') . '"'
         " let com = '!cmd /c start cd '. expand('%:p:h')
         " let com = '!cmd /c start "C:\Program Files\JPSoft\TCCLE13\tcc.exe" /c "' . expand('%:p:h') .'"'
@@ -163,7 +168,7 @@ function! OpenCMD()
     endif
     echo 'Goto "' . expand('%:p:h') . '" in command line'
     silent execute com
-endfunction
+endfunc
 nmap cmd :call OpenCMD()<CR>
 
 func! OpenFoler()
@@ -174,7 +179,7 @@ func! OpenFoler()
 endfunc
 map <M-o> :call OpenFoler()<CR>
 
-" Get vim by: git clone git@github.com:b4winckler/vim.git
+" Get vim from: git clone git@github.com:b4winckler/vim.git
 func! GetVim()
 if has('unix')
     let vimgitcfg=expand('~/.vim/src/vim/.git/config')
@@ -288,7 +293,7 @@ endfunction
 inoremap <buffer> <BS> <c-r>=DeletePairs()<CR>
 inoremap <buffer> <C-h> <c-r>=DeletePairs()<CR>
 
-" Delete a pair of parentheses, brackets, or braces
+" Delete the pair of parentheses, brackets and braces
 function! DeletePairs()
     let curchar = getline('.')[col('.') - 1]
     let prechar = getline('.')[col('.') - 2]
@@ -367,7 +372,6 @@ function! SynStack()
     endif
     echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunc
-
 " vnoremap < <gv
 " vnoremap > >gv
 
@@ -404,6 +408,7 @@ set nobackup noswapfile nowritebackup
 " ruler: Show Line and colum number; number: line number
 set ruler number
 set report=0
+
 if has('gui_running') || 'xterm-256color' == $TERM
     colorscheme marslo256
     let psc_style='cool'
@@ -441,11 +446,11 @@ set tw=0
 " Set status bar
 set laststatus=2
 set statusline=%m%r
-set statusline+=%f\ \ %y,%{&fileformat}\     " file path\file name & filetype
-set statusline+=%=      " right align
+set statusline+=%f\ \ %y,%{&fileformat}\                 " file path\file name & filetype
+set statusline+=%=                                      " right align
 set statusline+=\ \ %-{strftime(\"%H:%M\ %d/%m/%Y\")}   " Current Time
-set statusline+=\ \ %b[A],0x%B              " ASCII code, Hex mode
-set statusline+=\ \ %c%V,%l/%L              " current Column, current Line/All Line
+set statusline+=\ \ %b[A],0x%B                          " ASCII code, Hex mode
+set statusline+=\ \ %c%V,%l/%L                          " current Column, current Line/All Line
 set statusline+=\ \ %p%%\
 
 " At Console
@@ -453,10 +458,10 @@ set statusline+=\ \ %p%%\
 set showcmd                                 " Show (partial) command in status line
 
 " Fold
-set foldenable                              "Enable Fold
+set foldenable                              " Enable Fold
 set foldmethod=manual
 set foldcolumn=1
-set foldexpr=1                              "Shown line number after fold
+set foldexpr=1                              " Shown line number after fold
 set foldlevel=100                           " Not fold while VIM set up
 " Load view automatic
 autocmd BufWinLeave * silent! mkview
@@ -558,7 +563,7 @@ endfunction
 let g:EnhCommentifyCallbackExists = 'Yes'
 let g:EnhCommentifyAlignRight='Yes'
 
-" AutoInfo
+" AuthorInfo
 map <leader>aid :AuthorInfoDetect<CR>
 let g:vimrc_author='Marslo'
 let g:vimrc_email='marslo.vida@gmail.com'
@@ -588,8 +593,8 @@ set t_vb=
 set list listchars=tab:\ \ ,trail:·,extends:»,precedes:«,nbsp:·
 
 " Cursor format
-set guicursor=a:hor6
-set guicursor+=i-r-ci-cr-o:hor6-blinkon0
+set guicursor=a:hor1
+set guicursor+=i-r-ci-cr-o:hor2-blinkon0
 
 set cursorline                        " Highlight the current line
 
@@ -618,7 +623,7 @@ let g:rbpt_colorpairs = [
     \ ]
 
 " IndentLine
-let g:indentLine_color_gui = '#282828'
+let g:indentLine_color_gui = "#282828"
 let g:indentLine_color_term = 8
 let g:indentLine_indentLevel = 20
 let g:indentLine_showFirstIndentLevel = 1
@@ -645,9 +650,6 @@ if has("autocmd")
     " autocmd FileType ruby let g:rubycomplete_buffer_loading=1
     " autocmd FileType ruby let g:rubycomplete_classes_in_global=1
 endif
-
-let g:ruby_path=$RUBY_BIN
-let g:solarized_termcolors=256
 
 " vim-ruby
 autocmd FileType ruby compiler ruby
