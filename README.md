@@ -140,7 +140,7 @@ Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
 ### Shortcuts
 - `F5`: Run Python, Ruby and Perl by one key! (The result could be shown in the Quickfix window)
 - `F3`: Open the tagbar
-- `F4`: Add the personal information
+- `<leader>aid`: Add the personal information
 
 +++++++++++++++++++++++++++++++++++++++++++
 
@@ -210,10 +210,10 @@ Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
 
 #### Enhanced by Myself
 - [marslo.vim](https://github.com/Marslo/marslo.vim)
-- [EnhancedCommentify](https://github.com/hrp/EnhancedCommentify), [EnhancedByMarslo](https://github.com/Marslo/EnhCommentify.vim)
-- [snipMate](http://www.vim.org/scripts/script.php?script_id=2540), [Github](https://github.com/garbas/vim-snipmate), [EnhancedByMarslo](https://github.com/Marslo/snipmate.vim)
-- [python-syntax](https://github.com/hdima/python-syntax), [EnhancedByMarslo](https://github.com/Marslo/python-syntax)
-- [vim-coloresque](https://github.com/gorodinskiy/vim-coloresque), [EnhancedByMarslo](https://github.com/Marslo/vim-coloresque)
+- [EnhancedCommentify](https://github.com/hrp/EnhancedCommentify) | [EnhancedByMarslo](https://github.com/Marslo/EnhCommentify.vim)
+- [snipMate](http://www.vim.org/scripts/script.php?script_id=2540) | [Github](https://github.com/garbas/vim-snipmate) | [EnhancedByMarslo](https://github.com/Marslo/snipmate.vim)
+- [python-syntax](https://github.com/hdima/python-syntax) | [EnhancedByMarslo](https://github.com/Marslo/python-syntax)
+- [vim-coloresque](https://github.com/gorodinskiy/vim-coloresque) | [EnhancedByMarslo](https://github.com/Marslo/vim-coloresque)
 
 #### For Python
 - [pyflakes.vim](https://github.com/vim-scripts/pyflakes.vim)
@@ -276,7 +276,7 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
 ### 快捷键
 - `F5`: 一键运行Python, Ruby 和 Perl。(运行结果将显示在Quickfix窗口中)
 - `F3`: 打开tagbar
-- `F4`: 自动添加用户信息
+- `<leader>aid`: 自动添加用户信息
 
 +++++++++++++++++++++++++++++++++++++++++++
 
@@ -346,10 +346,10 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
 
 #### 我加工的增强版
 - [marslo.vim](https://github.com/Marslo/marslo.vim)
-- [EnhancedCommentify](https://github.com/hrp/EnhancedCommentify), [EnhancedByMarslo](https://github.com/Marslo/EnhCommentify.vim)
-- [snipMate](http://www.vim.org/scripts/script.php?script_id=2540), [Github](https://github.com/garbas/vim-snipmate), [EnhancedByMarslo](https://github.com/Marslo/snipmate.vim)
-- [python-syntax](https://github.com/hdima/python-syntax), [EnhancedByMarslo](https://github.com/Marslo/python-syntax)
-- [vim-coloresque](https://github.com/gorodinskiy/vim-coloresque), [EnhancedByMarslo](https://github.com/Marslo/vim-coloresque)
+- [EnhancedCommentify](https://github.com/hrp/EnhancedCommentify) | [Marslo增强版](https://github.com/Marslo/EnhCommentify.vim)
+- [snipMate](http://www.vim.org/scripts/script.php?script_id=2540) | [Github](https://github.com/garbas/vim-snipmate) | [Marslo](https://github.com/Marslo/snipmate.vim)
+- [python-syntax](https://github.com/hdima/python-syntax) | [Marslo增强版](https://github.com/Marslo/python-syntax)
+- [vim-coloresque](https://github.com/gorodinskiy/vim-coloresque) | [Marslo增强版](https://github.com/Marslo/vim-coloresque)
 
 #### Python插件
 - [pyflakes.vim](https://github.com/vim-scripts/pyflakes.vim)
