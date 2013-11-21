@@ -18,7 +18,6 @@ MyVimConfig
         - [Shortcuts](https://github.com/Marslo/VimConfig#shortcuts)
         - [Plugins](https://github.com/Marslo/VimConfig#plugins)
     - 中文版本
-        - [配置](https://github.com/Marslo/VimConfig#使用方法)
         - [使用方法](https://github.com/Marslo/VimConfig#使用方法)
         - [快捷键](https://github.com/Marslo/VimConfig#快捷键)
         - [插件列表](https://github.com/Marslo/VimConfig#插件列表)
