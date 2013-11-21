@@ -13,13 +13,15 @@ MyVimConfig
     - [Compile and Install](https://github.com/Marslo/VimConfig#2-compile-and-install)
     - [Make compiled vim as default text editor](https://github.com/Marslo/VimConfig#3-make-the-compiled-gvim-as-the-default-text-editor-in-ubunut)
 - [Configuration](https://github.com/Marslo/VimConfig#compile-vimgvim-by-source-code-on-linuxubuntu)
-    - [Usage](https://github.com/Marslo/VimConfig#usage)
-    - [Shortcuts](https://github.com/Marslo/VimConfig#shortcuts)
-    - [Plugins](https://github.com/Marslo/VimConfig#plugins)
-- [配置](https://github.com/Marslo/VimConfig#使用方法)
-    - [使用方法](https://github.com/Marslo/VimConfig#使用方法)
-    - [快捷键](https://github.com/Marslo/VimConfig#快捷键)
-    - [插件列表](https://github.com/Marslo/VimConfig#插件列表)
+    - English Version
+        - [Usage](https://github.com/Marslo/VimConfig#usage)
+        - [Shortcuts](https://github.com/Marslo/VimConfig#shortcuts)
+        - [Plugins](https://github.com/Marslo/VimConfig#plugins)
+    - 中文版本
+        - [配置](https://github.com/Marslo/VimConfig#使用方法)
+        - [使用方法](https://github.com/Marslo/VimConfig#使用方法)
+        - [快捷键](https://github.com/Marslo/VimConfig#快捷键)
+        - [插件列表](https://github.com/Marslo/VimConfig#插件列表)
 
 ## ScreenShots:
 ### Ubuntu(Ubuntu):
