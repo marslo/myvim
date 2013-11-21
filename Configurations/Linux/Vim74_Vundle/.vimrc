@@ -143,6 +143,7 @@ Bundle 'hail2u/vim-css3-syntax'
 Bundle 'Marslo/vim-coloresque'
 Bundle 'Marslo/marslo.vim'
 Bundle 'Marslo/python-syntax'
+Bundle 'Marslo/marslo.vim'
 " Bundle 'ap/vim-css-color'
 
 filetype plugin indent on
@@ -372,6 +373,7 @@ function! SynStack()
     endif
     echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunc
+
 " vnoremap < <gv
 " vnoremap > >gv
 
@@ -446,11 +448,11 @@ set tw=0
 " Set status bar
 set laststatus=2
 set statusline=%m%r
-set statusline+=%f\ \ %y,%{&fileformat}\                 " file path\file name & filetype
-set statusline+=%=                                      " right align
+set statusline+=%f\ \ %y,%{&fileformat}\     " file path\file name & filetype
+set statusline+=%=      " right align
 set statusline+=\ \ %-{strftime(\"%H:%M\ %d/%m/%Y\")}   " Current Time
-set statusline+=\ \ %b[A],0x%B                          " ASCII code, Hex mode
-set statusline+=\ \ %c%V,%l/%L                          " current Column, current Line/All Line
+set statusline+=\ \ %b[A],0x%B              " ASCII code, Hex mode
+set statusline+=\ \ %c%V,%l/%L              " current Column, current Line/All Line
 set statusline+=\ \ %p%%\
 
 " At Console
