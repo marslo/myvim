@@ -1,7 +1,7 @@
 MyVimConfig
 ===========
 - Author: Marslo
-- Email: marslo.vida@gmail.com
+- Email: marslo.jiao@gmail.com
 - Version: 0.0.5
 - LastChange: 2013-11-21 18:59:56
 
