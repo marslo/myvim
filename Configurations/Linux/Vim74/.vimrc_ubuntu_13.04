@@ -107,22 +107,30 @@ Bundle 'dantezhu/authorinfo'
 Bundle 'kien/rainbow_parentheses.vim'
 Bundle 'plasticboy/vim-markdown.git'
 Bundle 'Marslo/EnhCommentify.vim'
-Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-pathogen'
 Bundle 'gregsexton/MatchTag'
-Bundle 'vim-ruby/vim-ruby'
-Bundle 'Marslo/snipmate.vim.git'
 Bundle 'ervandew/supertab'
+
+" snipmate works on windows by using pathogen
+Bundle 'Marslo/snipmate.vim.git'
 
 " Get from vim-scripts
 Bundle 'Conque-Shell'
 Bundle 'mru.vim'
-Bundle 'python_fold'
 Bundle 'taglist.vim'
 Bundle 'TeTrIs.vim'
 Bundle 'winmanager'
 Bundle 'matrix.vim--Yang'
+
+" For Python
+Bundle 'python_fold'
 Bundle 'pyflakes.vim'
+
+" For ruby
+Bundle 'tpope/vim-rails'
+Bundle 'vim-ruby/vim-ruby'
+Bundle 'nelstrom/vim-textobj-rubyblock'
+Bundle 'kana/vim-textobj-user'
 
 " Others
 " Bundle 'snipMate'
@@ -144,12 +152,9 @@ Bundle 'hail2u/vim-css3-syntax'
 Bundle 'Marslo/vim-coloresque'
 Bundle 'Marslo/marslo.vim'
 Bundle 'Marslo/python-syntax'
-Bundle 'Marslo/marslo.vim'
 " Bundle 'ap/vim-css-color'
 
 filetype plugin indent on
-nmap <leader>bi :BundleInstall<CR>
-nmap <leader>bu :BundleUpdate<CR>
 
 " ====================================== For Programming =====================================
 " Open the current file path by cmd
@@ -445,11 +450,11 @@ set tw=0
 " Set status bar
 set laststatus=2
 set statusline=%m%r
-set statusline+=%f\ \ %y,%{&fileformat}\     " file path\file name & filetype
-set statusline+=%=      " right align
+set statusline+=%f\ \ %y,%{&fileformat}\                " file path\file name & filetype
+set statusline+=%=                                      " right align
 set statusline+=\ \ %-{strftime(\"%H:%M\ %d/%m/%Y\")}   " Current Time
-set statusline+=\ \ %b[A],0x%B              " ASCII code, Hex mode
-set statusline+=\ \ %c%V,%l/%L              " current Column, current Line/All Line
+set statusline+=\ \ %b[A],0x%B                          " ASCII code, Hex mode
+set statusline+=\ \ %c%V,%l/%L                          " current Column, current Line/All Line
 set statusline+=\ \ %p%%\
 
 " At Console

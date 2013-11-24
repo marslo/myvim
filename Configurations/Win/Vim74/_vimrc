@@ -28,7 +28,7 @@ source $VIMRUNTIME/mswin.vim
 source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
 
-" runtime macros/matchit.vim
+runtime macros/matchit.vim
 behave mswin
 
 let g:ruby_path=$RUBY_BIN
@@ -52,7 +52,7 @@ set autochdir
 
 " Tags
 " set tags=tags
-set tags=./tags
+set tags=.\tags
 set tags+=c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\.tags
 set tags+=C:\Marslo\Job\Summa\TEX\SVN\.tags
 autocmd BufEnter c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\* :setlocal tags+=c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\.tags
@@ -147,10 +147,8 @@ Bundle 'dantezhu/authorinfo'
 Bundle 'kien/rainbow_parentheses.vim'
 Bundle 'plasticboy/vim-markdown.git'
 Bundle 'Marslo/EnhCommentify.vim'
-Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-pathogen'
 Bundle 'gregsexton/MatchTag'
-Bundle 'vim-ruby/vim-ruby'
 Bundle 'ervandew/supertab'
 
 " snipmate works on windows by using pathogen
@@ -159,12 +157,20 @@ Bundle 'Marslo/snipmate.vim.git'
 " Get from vim-scripts
 Bundle 'Conque-Shell'
 Bundle 'mru.vim'
-Bundle 'python_fold'
 Bundle 'taglist.vim'
 Bundle 'TeTrIs.vim'
 Bundle 'winmanager'
 Bundle 'matrix.vim--Yang'
+
+" For Python
+Bundle 'python_fold'
 Bundle 'pyflakes.vim'
+
+" For ruby
+Bundle 'tpope/vim-rails'
+Bundle 'vim-ruby/vim-ruby'
+Bundle 'nelstrom/vim-textobj-rubyblock'
+Bundle 'kana/vim-textobj-user'
 
 " Others
 " Bundle 'Tagbar'
@@ -178,12 +184,12 @@ Bundle 'pyflakes.vim'
 " Bundle 'xolox/vim-easytags'
 " Bundle 'dbarsam/vim-vimtweak'
 " Bundle 'python.vim'
-" Taken by Marslo/python-syntax
+" Replaced by Marslo/python-syntax
 " Bundle 'hdima/python-syntax'
 " Bundle 'gorodinskiy/vim-coloresque'
-" Bundle 'css.vim'
+" Bundle 'ap/vim-css-color'
 
-" Colors
+" Colors and themes
 Bundle 'txt.vim'
 Bundle 'gui2term.py'
 Bundle 'colorsel.vim'
@@ -193,12 +199,8 @@ Bundle 'Marslo/vim-coloresque'
 Bundle 'Marslo/marslo.vim'
 Bundle 'Marslo/MarsloVimOthers'
 Bundle 'Marslo/python-syntax'
-" Bundle 'ap/vim-css-color'
 
 filetype plugin indent on
-
-nmap <leader>bi :BundleInstall<CR>
-nmap <leader>bu :BundleUpdate<CR>
 
 " ====================================== For Programming =====================================
 " Open the current file path by cmd
@@ -242,6 +244,7 @@ func! PylintCheck()
     let &errorformat = ef
 endfunc
 nmap <leader>li :call PylintCheck()<CR>
+
 " map rc :call CompileRunGpp()<CR>
 
 " ====================================== For Programming =====================================
@@ -514,9 +517,9 @@ imap <C-a> <ESC>I
 map <C-e> <ESC>$
 imap <C-e> <ESC>A
 " Moveing shortcut under the Insert mode
+inoremap <M-f> <ESC><Space>Wi
 inoremap <M-b> <Esc>Bi
-inoremap <M-f> <Esc>f<Space>a
-inoremap <M-d> <Esc>cf<Space>
+inoremap <M-d> <ESC>cW
 
 " map ecq :echo system("ruby -e 'print $:.join(%q{,})'")<CR>
 
@@ -554,9 +557,9 @@ set backspace=indent,eol,start                  " make backspace h, l, etc wrap 
 
 " nmap <leader>s :ConqueTermSplit
 if has('win32') || has('win95') || has('win64')
-    nmap tv :ConqueTermSplit cmd <CR>
+    nmap <leader>tv :ConqueTermSplit cmd <CR>
 else
-    nmap tv :ConqueTermSplit bash <CR>
+    nmap <leader>tv :ConqueTermSplit bash <CR>
 endif
 
 nmap zdb :%s/\s\+$//<CR>                        " Delete the black space in the end of each line
@@ -714,5 +717,8 @@ autocmd FileType ruby compiler ruby
 let g:rubycomplete_buffer_loading = 1
 let g:rubycomplete_classes_in_global = 1
 let g:rubycomplete_rails = 1
-" python-syntax
+" let g:ruby_syntaxcheck_map='<F10>'
+" autocmd FileType ruby map <F4> :w<CR>:!ruby -c %<CR>
+
+" syntax-python
 let python_highlight_all = 1
