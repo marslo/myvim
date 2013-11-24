@@ -171,6 +171,9 @@ Bundle 'tpope/vim-rails'
 Bundle 'vim-ruby/vim-ruby'
 Bundle 'nelstrom/vim-textobj-rubyblock'
 Bundle 'kana/vim-textobj-user'
+if "ruby" == &filetype
+    Bundle 'ruby-matchit'
+endif
 
 " Others
 " Bundle 'Tagbar'
@@ -209,7 +212,7 @@ func! OpenCMD()
         " let com = '!cmd /c start C:\Marslo\Tools\Softwares\Data\System\CMD\Console2\Console.exe -d "'. expand('%:p:h') . '"'
         " let com = '!cmd /c start cd '. expand('%:p:h')
         " let com = '!cmd /c start C:\WINDOWS\system32\WindowsPowerShell\v1.0\powershell.exe -NoExit -Command "Set-Location ' . expand ('%:p:h') . '"'
-        if 'java' == &ft
+        if 'java' == &filetype
             let com = '!cmd /c start "C:\Program Files\JPSoft\TCCLE13x64\tcc.exe" /d "' . expand('%:p:h') .'"'
         else
             let com1 = '!cmd /c start C:\WINDOWS\system32\WindowsPowerShell\v1.0\powershell.exe -NoExit -Command '
@@ -245,8 +248,6 @@ func! PylintCheck()
 endfunc
 nmap <leader>li :call PylintCheck()<CR>
 
-" map rc :call CompileRunGpp()<CR>
-
 " ====================================== For Programming =====================================
 func! CompileRunGpp()
     exec "w"
@@ -260,20 +261,20 @@ func! RunResult()
     " let exeFile = expand("%:t")
     let exeFile = expand("%:t")
     exec "w"
-    if &filetype == "Python"
+    if "python" == &filetype
         setlocal makeprg=python\ -u
-    elseif &filetype == "perl"
+    elseif "perl" == &filetype
         setlocal makeprg=perl
-    elseif &filetype == "ruby"
+    elseif "ruby" == &filetype
         setlocal makeprg=ruby
-    elseif &ft == "autohotkey"
+    elseif "autohotkey" == &filetype
         setlocal makeprg=AutoHotkey
     endif
     " let com = make . ' "' . expand("%") . '"'
     " silent execute com
     silent make %
     " silent make expand("%")
-    if &ft != "autohotkey"
+    if "autohotkey" != &filetype
         set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
         copen
     endif
@@ -295,7 +296,7 @@ inoremap <buffer> % <c-r>=AutoPair('%')<CR>
 
 func! AutoPair(char)
     if "(" == a:char
-        if &ft =~ '^\(sql\)$'
+        if &filetype =~ '^\(sql\)$'
             return "(\<Enter>);\<Up>\<Enter>"
         elseif '' == getline('.')[col('.')]
             return "()\<Left>"
@@ -309,7 +310,7 @@ func! AutoPair(char)
             return a:char
         endif
     elseif "{" == a:char
-        if &ft =~ '^\(ruby\|java\|perl\)$'
+        if &filetype =~ '^\(java\|perl\)$'
             return "{\<Enter>}\<ESC>ko"
             " return "{}\<ESC>i\<Enter>"
         elseif '' == getline('.')[col('.')] && &ft =~ '^\(python\|autohotkey\|vim\|snippet\)$'
@@ -318,7 +319,7 @@ func! AutoPair(char)
             return a:char
         endif
     elseif "%" == a:char
-        if '' == getline('.')[col('.')] && &ft =~ '^\(autohotkey\)$'
+        if '' == getline('.')[col('.')] && &filetype =~ '^\(autohotkey\)$'
             return "%%\<left>"
         else
             return a:char
@@ -326,13 +327,13 @@ func! AutoPair(char)
     endif
 endfunc
 
-func! ClosePair(char)
+function! ClosePair(char)
     if getline('.')[col('.') - 1] == a:char
         return "\<Right>"
     else
         return a:char
     endif
-endfunc
+endfunction
 
 inoremap <buffer> <BS> <c-r>=DeletePairs()<CR>
 inoremap <buffer> <C-h> <c-r>=DeletePairs()<CR>
@@ -356,9 +357,9 @@ inoremap <leader>fe <C-R>=expand("%:t")<CR>
 
 " Add suffix '.py' if the filetype is python
 function! GotoFile()
-    if 'python' == &ft
+    if 'python' == &filetype
         let com = expand('%:p:h') . '\' . expand('<cfile>') . '.py'
-    " elseif 'ruby' == &ft
+    " elseif 'ruby' == &filetype
         " let com = expand('%:p:h') . '\' . expand('<cfile>')
         " let com = 'C:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\' . expand('<cfile>')
     else
@@ -462,7 +463,8 @@ set cpoptions+=n
 set autoread                                " Set auto read when a file is changed by outside
 set showmatch                               " Show matching bracets
 
-set nowrap                                  " Wrap lines
+set wrap                                  " Wrap lines
+
 " set textwidth=150
 set autoindent smartindent
 set smarttab expandtab                      " smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
@@ -500,6 +502,7 @@ set viewoptions=folds
 
 au BufRead,BufNewFile * setfiletype txt     " Highlight the txt file
 au BufRead,BufNewFile *.t set ft=perl       " Perl test file as Perl code
+
 set modifiable
 set write
 
@@ -518,8 +521,8 @@ map <C-e> <ESC>$
 imap <C-e> <ESC>A
 " Moveing shortcut under the Insert mode
 inoremap <M-f> <ESC><Space>Wi
+" inoremap <M-f> <Esc>f<Space>a
 inoremap <M-b> <Esc>Bi
-inoremap <M-f> <Esc>f<Space>a
 inoremap <M-d> <ESC>cW
 
 " map ecq :echo system("ruby -e 'print $:.join(%q{,})'")<CR>
@@ -575,7 +578,7 @@ set magic                                       " Regular Expression
 " let g:AutoOpenWinManager=1
 let g:winManagerWidth = 20
 let g:winManagerWindowLayout='FileExplorer|TagList'
-nmap mm :WMToggle<cr>
+nmap <leader>mm :WMToggle<cr>
 
 " Tlist
 let Tlist_Show_One_File=1
@@ -590,7 +593,7 @@ let Tlist_Process_File_Always=0
 " let Tlist_Auto_Open=1
 " let Tlist_Ctags_Cmd=$VIM . 'vimfiles\ctags58\ctags.exe'
 " let updatetime=1000
-nmap tl :TlistToggle<CR>
+nmap <leader>tl :TlistToggle<CR>
 
 " Tagbar
 map <leader>ta :TagbarToggle<CR>
