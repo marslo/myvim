@@ -85,26 +85,37 @@ Bundle 'dantezhu/authorinfo'
 Bundle 'kien/rainbow_parentheses.vim'
 Bundle 'plasticboy/vim-markdown.git'
 Bundle 'Marslo/EnhCommentify.vim'
-Bundle 'tpope/vim-rails'
 Bundle 'tpope/vim-pathogen'
 Bundle 'gregsexton/MatchTag'
-Bundle 'vim-ruby/vim-ruby'
-Bundle 'Marslo/snipmate.vim.git'
 Bundle 'ervandew/supertab'
+Bundle 'Marslo/snipmate.vim.git'
 
 " Get from vim-scripts
 Bundle 'Conque-Shell'
 Bundle 'mru.vim'
-Bundle 'python_fold'
 Bundle 'taglist.vim'
 Bundle 'TeTrIs.vim'
 Bundle 'winmanager'
 Bundle 'matrix.vim--Yang'
+
+" For Python
+Bundle 'python_fold'
 Bundle 'pyflakes.vim'
+
+" For ruby
+Bundle 'tpope/vim-rails'
+Bundle 'vim-ruby/vim-ruby'
+Bundle 'nelstrom/vim-textobj-rubyblock'
+Bundle 'kana/vim-textobj-user'
+if "ruby" == &filetype
+    Bundle 'ruby-matchit'
+endif
+
 " Bundle 'colorsupport.vim'
 " Bundle 'ruby-matchit'
+" Bundle 'ap/vim-css-color'
 
-" Colors
+" Colors and themes
 Bundle 'txt.vim'
 Bundle 'gui2term.py'
 Bundle 'colorsel.vim'
@@ -113,14 +124,10 @@ Bundle 'hail2u/vim-css3-syntax'
 Bundle 'Marslo/vim-coloresque'
 Bundle 'Marslo/marslo.vim'
 Bundle 'Marslo/python-syntax'
-" Bundle 'ap/vim-css-color'
 
 filetype plugin indent on
 
-nmap <leader>bi :BundleInstall<CR>
-nmap <leader>bu :BundleUpdate<CR>
-nmap <leader>bi! :BundleInstall!<CR>
-
+" ====================================== For Programming =====================================
 " Get vim from: git clone git@github.com:b4winckler/vim.git
 func! GetVim()
 if has('unix')
@@ -131,7 +138,32 @@ if has('unix')
 endif
 endfunc
 
-" automatic Pair
+func! RunResult()
+    let mp = &makeprg
+    let ef = &errorformat
+    let exeFile = expand("%:t")
+    exec "w"
+    if "python" == &filetype
+        setlocal makeprg=python\ -u
+    elseif "perl" == &filetype
+        setlocal makeprg=perl
+    elseif "ruby" == &filetype
+        setlocal makeprg=ruby
+    elseif "autohotkey" == &filetype
+        setlocal makeprg=AutoHotkey
+    endif
+    set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
+    silent make %
+    if "autohotkey" != &filetype
+        set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
+        copen
+    endif
+    let &makeprg     = mp
+    let &errorformat = ef
+endfunc
+map <F5> :call RunResult()<CR>
+
+" Automatic Pair
 inoremap ( <c-r>=AutoPair('(')<CR>
 inoremap ) <c-r>=ClosePair(')')<CR>
 inoremap [ <c-r>=AutoPair('[')<CR>
@@ -142,7 +174,7 @@ inoremap } <c-r>=ClosePair('}')<CR>
 
 func! AutoPair(char)
     if "(" == a:char
-        if &ft =~ '^\(sql\)$'
+        if &filetype =~ '^\(sql\)$'
             return "(\<Enter>);\<Up>\<Enter>"
         elseif '' == getline('.')[col('.')]
             return "()\<Left>"
@@ -156,15 +188,15 @@ func! AutoPair(char)
             return a:char
         endif
     elseif "{" == a:char
-        if &ft =~ '^\(java\|perl\)$'
+        if &filetype =~ '^\(java\|perl\)$'
             return "{\<Enter>}\<ESC>ko"
-        elseif '' == getline('.')[col('.')] && &ft =~ '^\(ruby\|python\|eruby\|autohotkey\|vim\|snippet\|txt\|scss\)$'
+        elseif '' == getline('.')[col('.')] && &filetype =~ '^\(ruby\|python\|eruby\|autohotkey\|vim\|snippet\|txt\|scss\)$'
             return "{}\<Left>"
         else
             return a:char
         endif
     elseif "%" == a:char
-        if '' == getline('.')[col('.')] && &ft =~ '^\(autohotkey\)$'
+        if '' == getline('.')[col('.')] && &filetype =~ '^\(autohotkey\)$'
             return "%%\<left>"
         else
             return a:char
@@ -195,20 +227,24 @@ endfunction
 
 iabbrev <leader>/* /*********************************
 iabbrev <leader>*/ *********************************/
+iabbrev <leader>#- #------------------
 inoremap <leader>tt <c-r>=strftime("%d/%m/%y %H:%M:%S")<cr>
 inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
 inoremap <leader>fe <C-R>=expand("%:t")<CR>
 
 " Add suffix '.py' if the filetype is python
-func! GotoFile()
-    if 'python' == &ft
-        let com = expand('<cfile>') . '.py'
+function! GotoFile()
+    if 'python' == &filetype
+        let com = expand('%:p:h') . '\' . expand('<cfile>') . '.py'
+    " elseif 'ruby' == &filetype
+        " let com = expand('%:p:h') . '\' . expand('<cfile>')
+        " let com = 'C:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\' . expand('<cfile>')
     else
         let com = expand('<cfile>')
     endif
     silent execute ':e ' . com
-    echo 'Open file "'. com . '" under the cursor'
-endfunc
+    echo 'Open file "' . com . '" under the cursor'
+endfunction
 nmap gf :call GotoFile()<CR>
 
 " Update tags file automatic
@@ -218,6 +254,19 @@ function! UpdateTags()
     silent !ctags -R --fields=+ianS --extra=+q
 endfunction
 nmap <F12> :call UpdateTags()<CR>
+" ====================================== For Inteface =====================================
+if has('win32') || has('win95') || has('win64')
+    autocmd! bufwritepost $VIM/_vimrc source %      " autoload _vimrc
+    nmap <leader>v :e $VIM/_vimrc<CR>               " Fast Edit vim configuration
+    set guifont=Monaco:h12                          " Fonts
+    " Copy the content to system clipboard by using y/p
+    set clipboard+=unnamed
+    set clipboard+=unnamedplus
+else
+    autocmd! bufwritepost $HOME/Marslo/.vimrc source %
+    nmap <leader>v :e $HOME/Marslo/.vimrc<CR>
+    set guifont=Monaco\ 12
+endif
 set nobackup noswapfile nowritebackup
 
 " ruler: Show Line and colum number; number: line number
@@ -236,23 +285,12 @@ syntax enable
 syntax on
 filetype plugin on
 
-if has('win32')
-    autocmd! bufwritepost .vimrc source %
-    " Fast Edit vim configuration
-    nmap <leader>v :e $VIM/.vimrc<cr>
-    " Font
-    set guifont=Monaco:h12
-else
-    autocmd! bufwritepost $HOME/Marslo/.vimrc source %
-    nmap ,v :e $HOME/Marslo/.vimrc<CR>
-    set guifont=Monaco\ 12
-endif
 
+set autoread                                " Set auto read when a file is changed by outside
 set showmatch                               " Show matching bracets
 
 set nowrap                                  " Wrap lines
 
-set autoread
 set tags=tags
 
 " Search opts
@@ -261,7 +299,7 @@ set smarttab expandtab                      " smarttab: the width of <Tab> in fi
 set tabstop=4                               " Tab width
 set softtabstop=4                           " the width while trigger <Tab> key
 set shiftwidth=4                            " the tab width by using >> & <<
-autocmd FileType ruby,eruby,yaml,html set ai sw=2 sts=2 et
+autocmd FileType ruby,eruby,yaml,html,css,scss set ai sw=2 sts=2 et
 set lbr
 set tw=0
 
@@ -276,25 +314,14 @@ set tw=0
 " Set status bar
 set laststatus=2
 set statusline=%m%r
-set statusline+=%f\ \ %y,%{&fileformat}\                 " file path\file name & filetype
+set statusline+=%f\ \ %y,%{&fileformat}\                " file path\file name & filetype
 set statusline+=%=                                      " right align
 set statusline+=\ \ %-{strftime(\"%H:%M\ %d/%m/%Y\")}   " Current Time
 set statusline+=\ \ %b[A],0x%B                          " ASCII code, Hex mode
 set statusline+=\ \ %c%V,%l/%L                          " current Column, current Line/All Line
-set statusline+=\ \ %p%%
+set statusline+=\ \ %p%%\
 
 set showcmd                                 " Show (partial) command in status line
-
-" Fold
-set foldenable                              " Enable Fold
-set foldmethod=manual
-set foldcolumn=1
-set foldexpr=1                              " Shown line number after fold
-set foldlevel=100                           " Not fold while VIM set up
-" Load view automatic
-autocmd BufWinLeave * silent! mkview
-autocmd BufWinEnter * silent! loadview
-set viewoptions=folds
 
 au BufRead,BufNewFile * setfiletype txt     " Highlight the txt file
 au BufRead,BufNewFile *.t set ft=perl       " Perl test file as Perl code
@@ -316,9 +343,9 @@ map <C-a> <ESC>^
 imap <C-a> <ESC>I
 map <C-e> <ESC>$
 imap <C-e> <ESC>A
-imap <A-f> <ESC><Space>Wi
-imap <A-b> <ESC>Bi
-imap <A-d> <ESC>cW
+imap <M-f> <ESC><Space>Wi
+imap <M-b> <ESC>Bi
+imap <M-d> <ESC>cW
 " inoremap <M-b> <ESC>Bi
 " inoremap <M-f> <ESC>f<Space>a
 " inoremap <M-d> <ESC>cf<Space>
@@ -353,7 +380,7 @@ let g:gundo_preview_bottom = 0
 
 " ====================================== For Function =====================================
 " Make backspace key can manage normal indent, eol, start, etc
-set backspace=indent,eol,start              " make backspace h, l, etc wrap to
+set backspace=indent,eol,start                  " make backspace h, l, etc wrap to
 " set whichwrap+=<,>,h,l
 " set backspace=2
 " set report=0
@@ -372,6 +399,27 @@ nmap zws :g/^\s*$/d<CR>                         " Delete white space
 
 set incsearch hlsearch ignorecase smartcase     " Search
 set magic                                       " Regular Expression
+
+" WinManager
+" let g:AutoOpenWinManager=1
+let g:winManagerWidth = 20
+let g:winManagerWindowLayout='FileExplorer|TagList'
+nmap <leader>mm :WMToggle<cr>
+
+" Tlist
+let Tlist_Show_One_File=1
+let Tlist_Exit_OnlyWindow=1
+let Tlist_Use_SingleClick=1
+let Tlist_File_Fold_Auto_Close=1
+let Tlist_GainFocus_On_ToggleOpen=1
+let Tlist_show_Menu=1
+let Tlist_sql_settings = 'sql;P:package;t:table'
+let Tlist_Process_File_Always=0
+" let Tlist_Close_On_Select=1
+" let Tlist_Auto_Open=1
+" let Tlist_Ctags_Cmd=$VIM . 'vimfiles\ctags58\ctags.exe'
+" let updatetime=1000
+nmap <leader>tl :TlistToggle<CR>
 
 " Tagbar
 map <leader>ta :TagbarToggle<CR>
@@ -411,27 +459,6 @@ let MRU_Exclude_Files='^/temp/.*'
 let MRU_Exclude_Files='^/media/.*'
 let MRU_Exclude_Files='^/mnt/.*'
 map <C-g> :MRU<CR>
-
-" WinManager
-" let g:AutoOpenWinManager=1
-let g:winManagerWidth = 20
-let g:winManagerWindowLayout='FileExplorer|TagList'
-nmap <leader>mm :WMToggle<cr>
-
-" Tlist
-let Tlist_Show_One_File=1
-let Tlist_Exit_OnlyWindow=1
-let Tlist_Use_SingleClick=1
-let Tlist_File_Fold_Auto_Close=1
-let Tlist_GainFocus_On_ToggleOpen=1
-let Tlist_show_Menu=1
-let Tlist_sql_settings = 'sql;P:package;t:table'
-let Tlist_Process_File_Always=0
-" let Tlist_Close_On_Select=1
-" let Tlist_Auto_Open=1
-" let Tlist_Ctags_Cmd=$VIM . 'vimfiles\ctags58\ctags.exe'
-" let updatetime=1000
-nmap tl :TlistToggle<CR>
 
 " E21\: Cannot make changes, 'modifiable' is off:     $delete
 set linespace=0
@@ -514,3 +541,19 @@ let g:rubycomplete_rails = 1
 
 " syntax-python
 let python_highlight_all = 1
+
+" Fold
+set foldenable                              " Enable Fold
+" set foldmethod=manual
+set foldcolumn=1
+set foldexpr=1                              " Shown line number after fold
+set foldlevel=100                           " Not fold while VIM set up
+" Load view automatic
+autocmd BufWinLeave * silent! mkview
+autocmd BufWinEnter * silent! loadview
+set viewoptions=folds
+
+augroup vimrc
+  au BufReadPre * setlocal foldmethod=indent
+  au BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
+augroup END
