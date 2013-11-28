@@ -50,8 +50,8 @@ func! GetVundle()
         let vbundle='$VIM\bundle'
         let vvundle=vbundle . '\vundle'
     else
-        let vundle_readme=expand('~/.vim/bunle/vundle/README.md')
-        let vbundle='~/.vim/bundle'
+        let vundle_readme=expand('~/Marslo/.vim/bunle/vundle/README.md')
+        let vbundle='~/Marslo/.vim/bundle'
         let vvundle=vbundle . '/vundle'
     endif
 
