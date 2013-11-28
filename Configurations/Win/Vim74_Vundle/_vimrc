@@ -209,7 +209,7 @@ filetype plugin indent on
 " Open the current file path by cmd
 func! OpenCMD()
     if has('win32') || has('win95') || has('win64')
-        " let com = '!cmd /c start C:\Marslo\Tools\Softwares\Data\System\CMD\Console2\Console.exe -d "'. expand('%:p:h') . '"'
+        let com = '!cmd /c start C:\Marslo\Tools\Software\System\CommandLine\Console2\Console.exe -d "'. expand('%:p:h') . '"'
         " let com = '!cmd /c start cd '. expand('%:p:h')
         " let com = '!cmd /c start C:\WINDOWS\system32\WindowsPowerShell\v1.0\powershell.exe -NoExit -Command "Set-Location ' . expand ('%:p:h') . '"'
         if 'java' == &filetype
@@ -217,7 +217,7 @@ func! OpenCMD()
         else
             let com1 = '!cmd /c start C:\WINDOWS\system32\WindowsPowerShell\v1.0\powershell.exe -NoExit -Command '
             let com2 = '"Set-Location ' . "'" . expand ('%:p:h') ."'" . '"'
-            let com = com1 . com2
+            " let com = com1 . com2
         endif
     else
         let com = '!/usr/bin/gnome-terminal --working-directory=' . expand('%:p:h')
@@ -320,7 +320,7 @@ func! AutoPair(char)
         endif
     elseif "%" == a:char
         if '' == getline('.')[col('.')] && &filetype =~ '^\(autohotkey\)$'
-            return "%%\<left>"
+            return "%%<Esc>i"
         else
             return a:char
         endif
@@ -471,7 +471,7 @@ set smarttab expandtab                      " smarttab: the width of <Tab> in fi
 set tabstop=4                               " Tab width
 set softtabstop=4                           " the width while trigger <Tab> key
 set shiftwidth=4                            " the tab width by using >> & <<
-autocmd FileType ruby,eruby,yaml,html set ai sw=2 sts=2 et
+autocmd FileType ruby,eruby,yaml,html,css,scss set ai sw=2 sts=2 et
 set lbr
 set tw=0
 
@@ -488,17 +488,6 @@ set statusline+=\ \ %p%%\
 " At Console
 language messages utf-8
 set showcmd                                 " Show (partial) command in status line
-
-" Fold
-set foldenable                              " Enable Fold
-set foldmethod=manual
-set foldcolumn=1
-set foldexpr=1                              " Shown line number after fold
-set foldlevel=100                           " Not fold while VIM set up
-" au BufWinLeave * silent mkview
-autocmd BufWinLeave * silent! mkview
-autocmd BufWinEnter * silent! loadview
-set viewoptions=folds
 
 au BufRead,BufNewFile * setfiletype txt     " Highlight the txt file
 au BufRead,BufNewFile *.t set ft=perl       " Perl test file as Perl code
@@ -726,3 +715,19 @@ let g:rubycomplete_rails = 1
 
 " syntax-python
 let python_highlight_all = 1
+
+" Fold
+set foldenable                              " Enable Fold
+" set foldmethod=manual
+set foldcolumn=1
+set foldexpr=1                              " Shown line number after fold
+set foldlevel=100                           " Not fold while VIM set up
+" au BufWinLeave * silent mkview
+autocmd BufWinLeave * silent! mkview
+autocmd BufWinEnter * silent! loadview
+set viewoptions=folds
+
+augroup vimrc
+  au BufReadPre * setlocal foldmethod=indent
+  au BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
+augroup END
