@@ -146,6 +146,7 @@ endif
 " Bundle 'hdima/python-syntax.git'
 " Bundle 'vantares/ruby-syntaxchecker.vim'
 " Bundle 'semmons99/vim-ruby-matchit'
+" Bundle 'ap/vim-css-color'
 
 " Colors and themes
 Bundle 'txt.vim'
@@ -156,7 +157,6 @@ Bundle 'hail2u/vim-css3-syntax'
 Bundle 'Marslo/vim-coloresque'
 Bundle 'Marslo/marslo.vim'
 Bundle 'Marslo/python-syntax'
-" Bundle 'ap/vim-css-color'
 
 filetype plugin indent on
 
@@ -164,7 +164,7 @@ filetype plugin indent on
 " Open the current file path by cmd
 func! OpenCMD()
     if has('win32') || has('win95') || has('win64')
-        " let com = '!cmd /c start C:\Marslo\Tools\Softwares\Data\System\CMD\Console2\Console.exe -d "'. expand('%:p:h') . '"'
+        let com = '!cmd /c start C:\Marslo\Tools\Software\System\CommandLine\Console2\Console.exe -d "'. expand('%:p:h') . '"'
         " let com = '!cmd /c start cd '. expand('%:p:h')
         " let com = '!cmd /c start "C:\Program Files\JPSoft\TCCLE13\tcc.exe" /c "' . expand('%:p:h') .'"'
         " let com = '!cmd /c start C:\WINDOWS\system32\WindowsPowerShell\v1.0\powershell.exe -NoExit -Command "Set-Location ' . expand ('%:p:h') . '"'
@@ -173,7 +173,7 @@ func! OpenCMD()
         else
             let com1 = '!cmd /c start C:\WINDOWS\system32\WindowsPowerShell\v1.0\powershell.exe -NoExit -Command '
             let com2 = '"Set-Location ' . "'" . expand ('%:p:h') ."'" . '"'
-            let com = com1 . com2
+            " let com = com1 . com2
         endif
     else
         let com = '!/usr/bin/gnome-terminal --working-directory=' . expand('%:p:h')
@@ -328,7 +328,7 @@ inoremap <leader>fe <C-R>=expand("%:t")<CR>
 
 
 " Add suffix '.py' if the filetype is python
-func! GotoFile()
+function! GotoFile()
     if 'python' == &filetype
         let com = expand('%:p:h') . '\' . expand('<cfile>') . '.py'
     " elseif 'ruby' == &filetype
@@ -339,7 +339,7 @@ func! GotoFile()
     endif
     silent execute ':e ' . com
     echo 'Open file "' . com . '" under the cursor'
-endfunc
+endfunction
 nmap gf :call GotoFile()<CR>
 
 " Update tags file automatic
@@ -451,7 +451,7 @@ set smarttab expandtab                      " smarttab: the width of <Tab> in fi
 set tabstop=4                               " Tab width
 set softtabstop=4                           " the width while trigger <Tab> key
 set shiftwidth=4                            " the tab width by using >> & <<
-autocmd FileType ruby,eruby,yaml,html set ai sw=2 sts=2 et
+autocmd FileType ruby,eruby,yaml,html,css,scss set ai sw=2 sts=2 et
 set lbr
 set tw=0
 
@@ -468,17 +468,6 @@ set statusline+=\ \ %p%%\
 " At Console
 " language messages utf8
 set showcmd                                 " Show (partial) command in status line
-
-" Fold
-set foldenable                              " Enable Fold
-set foldmethod=manual
-set foldcolumn=1
-set foldexpr=1                              " Shown line number after fold
-set foldlevel=100                           " Not fold while VIM set up
-" Load view automatic
-autocmd BufWinLeave * silent! mkview
-autocmd BufWinEnter * silent! loadview
-set viewoptions=folds
 
 au BufRead,BufNewFile * setfiletype txt     " Highlight the txt file
 au BufRead,BufNewFile *.t set ft=perl       " Perl test file as Perl code
@@ -694,3 +683,19 @@ let g:rubycomplete_rails = 1
 
 " syntax-python
 let python_highlight_all = 1
+
+" Fold
+set foldenable                              " Enable Fold
+" set foldmethod=manual
+set foldcolumn=1
+set foldexpr=1                              " Shown line number after fold
+set foldlevel=100                           " Not fold while VIM set up
+" Load view automatic
+autocmd BufWinLeave * silent! mkview
+autocmd BufWinEnter * silent! loadview
+set viewoptions=folds
+
+augroup vimrc
+  au BufReadPre * setlocal foldmethod=indent
+  au BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
+augroup END

@@ -222,6 +222,7 @@ func! OpenCMD()
     else
         let com = '!/usr/bin/gnome-terminal --working-directory=' . expand('%:p:h')
     endif
+    echo 'Goto "' . expand('%:p:h') . '" in command line'
     silent execute com
 endfunc
 nmap cmd :call OpenCMD()<CR>
@@ -258,7 +259,6 @@ endfunc
 func! RunResult()
     let mp = &makeprg
     let ef = &errorformat
-    " let exeFile = expand("%:t")
     let exeFile = expand("%:t")
     exec "w"
     if "python" == &filetype
@@ -478,7 +478,7 @@ set tw=0
 " Set status bar
 set laststatus=2
 set statusline=%m%r
-set statusline+=%f\ \ %y,%{&fileformat}\                 " file path\file name & filetype
+set statusline+=%f\ \ %y,%{&fileformat}\                " file path\file name & filetype
 set statusline+=%=                                      " right align
 set statusline+=\ \ %-{strftime(\"%H:%M\ %d/%m/%Y\")}   " Current Time
 set statusline+=\ \ %b[A],0x%B                          " ASCII code, Hex mode
@@ -690,8 +690,8 @@ endif
 " let g:indentLine_loaded = 1
 
 
-" Supper Tab
 set completeopt=longest,menuone
+" Supper Tab
 " let g:SuperTabDefaultCompletionType = "context"
 let SuperTabDefaultCompletionType = '<c-p>'
 let SuperTabMappingForward = '<c-p>'
