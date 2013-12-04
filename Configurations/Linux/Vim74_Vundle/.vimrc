@@ -58,6 +58,33 @@ let &termencoding=&encoding
 
 set scrolloff=3
 
+set diffexpr=MyDiff()
+func! MyDiff()
+    let opt = '-a --binary '
+    if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
+    if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
+    let arg1 = v:fname_in
+    if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
+    let arg2 = v:fname_new
+    if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
+    let mp = &makeprg
+    let mp = &makeprg
+    let arg3 = v:fname_out
+    if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
+    let eq = ''
+    if $VIMRUNTIME =~ ' '
+        if &sh =~ '\<cmd'
+            let cmd = '""' . $VIMRUNTIME . '\diff"'
+            let eq = '"'
+        else
+            let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+        endif
+    else
+        let cmd = $VIMRUNTIME . '\diff'
+    endif
+    silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
+endfunc
+
 " Vim Bundle
 " Get Vundle from: git clone https://github.com/gmarik/vundle.git ~/.vim
 set nocompatible
@@ -325,8 +352,6 @@ inoremap <leader>tt <c-r>=strftime("%d/%m/%y %H:%M:%S")<cr>
 inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
 inoremap <leader>fe <C-R>=expand("%:t")<CR>
 
-
-
 " Add suffix '.py' if the filetype is python
 function! GotoFile()
     if 'python' == &filetype
@@ -401,17 +426,17 @@ if has('gui_running')
 endif
 
 if has('win32') || has('win95') || has('win64')
+    nmap <leader>v :e $VIM/_vimrc<CR>
     " au GUIEnter * simalt ~x                       " Max after start vim
     autocmd! bufwritepost $VIM/_vimrc source %      " autoload _vimrc
-    nmap <leader>v :e $VIM/_vimrc<CR>               " Fast Edit vim configuration
     set guifont=Monaco:h12                          " Fonts
     " Copy the content to system clipboard by using y/p
     set clipboard+=unnamed
     set clipboard+=unnamedplus
 else
+    nmap <leader>v :e ~/.vimrc<CR>
     " au GUIEnter * call MaximizeWindow()
     autocmd! bufwritepost ~/.vimrc source %
-    nmap <leader>v :e ~/.vimrc<CR>
     set guifont=Monaco\ 12
     set clipboard=unnamedplus
 endif
@@ -458,7 +483,7 @@ set tw=0
 " Set status bar
 set laststatus=2
 set statusline=%m%r
-set statusline+=%f\ \ %y,%{&fileformat}\                " file path\file name & filetype
+set statusline+=%F\ \ %y,%{&fileformat}\                " file path\file name & filetype
 set statusline+=%=                                      " right align
 set statusline+=\ \ %-{strftime(\"%H:%M\ %d/%m/%Y\")}   " Current Time
 set statusline+=\ \ %b[A],0x%B                          " ASCII code, Hex mode
@@ -620,6 +645,43 @@ set guicursor+=i-r-ci-cr-o:hor2-blinkon0
 
 set cursorline                        " Highlight the current line
 
+" Remember Cursor position in last time, inspired from http://vim.wikia.com/wiki/VimTip80
+function! ResCur()
+  if line("'\"") <= line("$")
+    normal! g`"
+    return 1
+  endif
+endfunction
+
+augroup resCur
+  autocmd!
+  if has("folding")
+    autocmd BufWinEnter * if ResCur() | call UnfoldCur() | endif
+  else
+    autocmd BufWinEnter * call ResCur()
+  endif
+augroup END
+
+if has("folding")
+  function! UnfoldCur()
+    if !&foldenable
+      return
+    endif
+    let cl = line(".")
+    if cl <= 1
+      return
+    endif
+    let cf  = foldlevel(cl)
+    let uf  = foldlevel(cl - 1)
+    let min = (cf > uf ? uf : cf)
+    if min
+      execute "normal!" min . "zo"
+      return 1
+    endif
+  endfunction
+endif
+
+" Rainbow bracket
 let g:rbpt_loadcmd_toggle = 1
 au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
@@ -651,15 +713,15 @@ let g:indentLine_indentLevel = 20
 let g:indentLine_showFirstIndentLevel = 1
 if has('gui_running') || 'xterm-256color' == $TERM
     let g:indentLine_char = '¦'
-else
+elseif has('win32')
     let g:indentLine_char = '|'
 endif
 " let g:indentLine_loaded = 1
 
 " nnoremap <silent> <C-F6> :let old_reg=@"<CR>:let @"=substitute(expand("%:p"), "/", "\\", "g")<CR>:silent!!cmd /cstart <C-R><C-R>"<CR><CR>:let @"=old_reg<CR>
 
-set completeopt=longest,menuone
 " Supper Tab
+set completeopt=longest,menuone
 " let SuperTabDefaultCompletionType = "context"
 let SuperTabDefaultCompletionType = '<c-p>'
 let SuperTabMappingForward = '<c-p>'

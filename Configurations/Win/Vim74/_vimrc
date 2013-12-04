@@ -3,8 +3,8 @@
 "          Desc:
 "        Author: Marslo
 "       Created: 2010-10
-"       Version: 0.0.14
-"    LastChange: 2013-10-31 19:40:52
+"       Version: 0.0.15
+"    LastChange: 2013-12-04 18:01:39
 "       History:
 "                0.0.3  | Marslo | Add the Autoload and Fast Edit difference between win32 and non-win32
 "                0.0.4  | Marslo | Add CheckRubySyntax() function for checking and run ruby script
@@ -19,6 +19,7 @@
 "                0.0.12 | Marslo | Add function GetVundle() to get vundle automaticly
 "                0.0.13 | Marslo | Add Alpha setting for vim tweak
 "                0.0.14 | Marslo | Change woainvu repos to Marslo
+"                0.0.15 | Marslo | Add Remember curosr position function
 " =============================================================================
 
 source $VIMRUNTIME/vimrc_example.vim
@@ -222,6 +223,7 @@ func! OpenCMD()
     else
         let com = '!/usr/bin/gnome-terminal --working-directory=' . expand('%:p:h')
     endif
+    echo 'Goto "' . expand('%:p:h') . '" in command line'
     silent execute com
 endfunc
 nmap cmd :call OpenCMD()<CR>
@@ -417,17 +419,17 @@ if has('gui_running')
 endif
 
 if has('win32') || has('win95') || has('win64')
+    nmap <leader>v :e $VIM/_vimrc<CR>
     " au GUIEnter * simalt ~x                       " Max after start vim
     autocmd! bufwritepost $VIM/_vimrc source %      " autoload _vimrc
-    nmap <leader>v :e $VIM/_vimrc<CR>               " Fast Edit vim configuration
     set guifont=Monaco:h12                          " Fonts
     " Copy the content to system clipboard by using y/p
     set clipboard+=unnamed
     set clipboard+=unnamedplus
 else
+    nmap <leader>v :e ~/.vimrc<CR>
     " au GUIEnter * call MaximizeWindow()
     autocmd! bufwritepost ~/.vimrc source %
-    nmap <leader>v :e ~/.vimrc<CR>
     set guifont=Monaco\ 12
     set clipboard=unnamedplus
 endif
@@ -478,7 +480,7 @@ set tw=0
 " Set status bar
 set laststatus=2
 set statusline=%m%r
-set statusline+=%f\ \ %y,%{&fileformat}\                 " file path\file name & filetype
+set statusline+=%F\ \ %y,%{&fileformat}\                " file path\file name & filetype
 set statusline+=%=                                      " right align
 set statusline+=\ \ %-{strftime(\"%H:%M\ %d/%m/%Y\")}   " Current Time
 set statusline+=\ \ %b[A],0x%B                          " ASCII code, Hex mode
@@ -652,6 +654,43 @@ set guicursor+=i-r-ci-cr-o:hor2-blinkon0
 
 set cursorline                        " Highlight the current line
 
+" Remember Cursor position in last time, inspired from http://vim.wikia.com/wiki/VimTip80
+function! ResCur()
+  if line("'\"") <= line("$")
+    normal! g`"
+    return 1
+  endif
+endfunction
+
+augroup resCur
+  autocmd!
+  if has("folding")
+    autocmd BufWinEnter * if ResCur() | call UnfoldCur() | endif
+  else
+    autocmd BufWinEnter * call ResCur()
+  endif
+augroup END
+
+if has("folding")
+  function! UnfoldCur()
+    if !&foldenable
+      return
+    endif
+    let cl = line(".")
+    if cl <= 1
+      return
+    endif
+    let cf  = foldlevel(cl)
+    let uf  = foldlevel(cl - 1)
+    let min = (cf > uf ? uf : cf)
+    if min
+      execute "normal!" min . "zo"
+      return 1
+    endif
+  endfunction
+endif
+
+" Rainbow bracket
 let g:rbpt_loadcmd_toggle = 1
 au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
@@ -683,7 +722,7 @@ let g:indentLine_indentLevel = 20
 let g:indentLine_showFirstIndentLevel = 1
 if has('gui_running') || 'xterm-256color' == $TERM
     let g:indentLine_char = '¦'
-else
+elseif has('win32')
     let g:indentLine_char = '|'
 endif
 " let g:indentLine_loaded = 1
@@ -691,7 +730,7 @@ endif
 
 " Supper Tab
 set completeopt=longest,menuone
-" let g:SuperTabDefaultCompletionType = "context"
+" let SuperTabDefaultCompletionType = "context"
 let SuperTabDefaultCompletionType = '<c-p>'
 let SuperTabMappingForward = '<c-p>'
 let SuperTabMappingTabLiteral = '<Tab>'
