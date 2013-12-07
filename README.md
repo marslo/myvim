@@ -131,6 +131,18 @@ Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
         <pre><code>:BundleInstall!
         </code></pre>
 
+### 4. Q&A
+4.1 ncurses:
+- Problem:
+
+    You need to install a terminal library; for example ncurses.
+    Or specify the name of the library with --with-tlib.
+
+- Soluction:
+
+    $ sudo apt-get install libncurses5-dev
+
+
 -----------------------------
 
 ### Open is Maximize
