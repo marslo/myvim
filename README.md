@@ -12,6 +12,7 @@ MyVimConfig
     - [Precondiction](https://github.com/Marslo/VimConfig#1-prepare-environment)
     - [Compile and Install](https://github.com/Marslo/VimConfig#2-compile-and-install)
     - [Make compiled vim as default text editor](https://github.com/Marslo/VimConfig#3-make-the-compiled-gvim-as-the-default-text-editor-in-ubunut)
+    - [Q&A](https://github.com/Marslo/VimConfig#4-qa)
 - [Configuration](https://github.com/Marslo/VimConfig#compile-vimgvim-by-source-code-on-linuxubuntu)
     - English Version
         - [Usage](https://github.com/Marslo/VimConfig#usage)
@@ -24,9 +25,9 @@ MyVimConfig
 
 ## ScreenShots:
 ### Ubuntu(Ubuntu):
-![Screenshot_Ubuntu](https://github.com/Marslo/VimConfig/blob/master/Screenshots/screenshot_gvim.png?raw=true)
+![Screenshot_Ubuntu](https://github.com/Marslo/VimConfig/blob/master/Screenshots/Screenshots_Ubuntu.png?raw=true)
 ### Windows
-![Screenshot_Windows](https://github.com/Marslo/VimConfig/blob/master/Screenshots/Screenshots_Ubuntu.png?raw=true)
+![Screenshot_Windows](https://github.com/Marslo/VimConfig/blob/master/Screenshots/screenshot_gvim.png?raw=true)
 
 ## Compile VIM/GVIM by source code on Linux(Ubuntu)
 ### 1. Prepare environment:
