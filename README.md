@@ -103,6 +103,24 @@ Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
 </code></pre>
 - An fully [gvim.desktop](http://mirrors2.kernel.org/slackware/slackware-14.0/source/ap/vim/gvim.desktop)
 
+
+### 4. Q&A
+4.1 ncurses:
+- Problem:
+    <pre><code>You need to install a terminal library; for example ncurses.
+    Or specify the name of the library with --with-tlib.
+    </code></pre>
+- Soluction:
+    <pre></code>$ sudo apt-get install libncurses5-dev
+    </code></pre>
+
+4.2 C compiler
+- Problem:
+    <pre><code>no acceptable C compiler found in $PATH</code></pre>
+- Soluction:
+    <pre><code>$ sudo apt-get update && sudo apt-get install build-essential</code></pre>
+
+
 # Configuration
 ### Usage
 - Windows User:
@@ -130,17 +148,6 @@ Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
     - Get the other plugins
         <pre><code>:BundleInstall!
         </code></pre>
-
-### 4. Q&A
-4.1 ncurses:
-- Problem:
-
-    You need to install a terminal library; for example ncurses.
-    Or specify the name of the library with --with-tlib.
-
-- Soluction:
-
-    $ sudo apt-get install libncurses5-dev
 
 
 -----------------------------
