@@ -66,7 +66,6 @@ func! GetVundle()
     endif
 endfunc
 
-
 if has('win32') || has('win64')
     set rtp+=$VIM/vimfiles/bundle/vundle
     call vundle#rc('$VIM/vimfiles/bundle/')
@@ -280,7 +279,6 @@ else
     colorscheme marslo16
 endif
 
-
 syntax enable
 syntax on
 filetype plugin on
@@ -299,7 +297,7 @@ set smarttab expandtab                      " smarttab: the width of <Tab> in fi
 set tabstop=4                               " Tab width
 set softtabstop=4                           " the width while trigger <Tab> key
 set shiftwidth=4                            " the tab width by using >> & <<
-autocmd FileType ruby,eruby,yaml,html,css,scss set ai sw=2 sts=2 et
+autocmd FileType ruby,eruby,yaml,html,css,scss,javascript set ai sw=2 sts=2 et
 set lbr
 set tw=0
 
@@ -314,7 +312,7 @@ set tw=0
 " Set status bar
 set laststatus=2
 set statusline=%m%r
-set statusline+=%f\ \ %y,%{&fileformat}\                " file path\file name & filetype
+set statusline+=%F\ \ %y,%{&fileformat}\                " file path\file name & filetype
 set statusline+=%=                                      " right align
 set statusline+=\ \ %-{strftime(\"%H:%M\ %d/%m/%Y\")}   " Current Time
 set statusline+=\ \ %b[A],0x%B                          " ASCII code, Hex mode
@@ -449,7 +447,7 @@ let g:EnhCommentifyAlignRight='Yes'
 " AuthorInfo
 map <leader>aid :AuthorInfoDetect<CR>
 let g:vimrc_author='Marslo'
-let g:vimrc_email='li.jiao@tieto.com'
+let g:vimrc_email='marslo.jiao@gmail.com'
 
 " Most Recently Used(MRU)
 let MRU_Auto_Close = 1
@@ -479,6 +477,43 @@ set guicursor+=i-r-ci-cr-o:hor2-blinkon0
 
 set cursorline                        " Highlight the current line
 
+" Remember Cursor position in last time, inspired from http://vim.wikia.com/wiki/VimTip80
+function! ResCur()
+  if line("'\"") <= line("$")
+    normal! g`"
+    return 1
+  endif
+endfunction
+
+augroup resCur
+  autocmd!
+  if has("folding")
+    autocmd BufWinEnter * if ResCur() | call UnfoldCur() | endif
+  else
+    autocmd BufWinEnter * call ResCur()
+  endif
+augroup END
+
+if has("folding")
+  function! UnfoldCur()
+    if !&foldenable
+      return
+    endif
+    let cl = line(".")
+    if cl <= 1
+      return
+    endif
+    let cf  = foldlevel(cl)
+    let uf  = foldlevel(cl - 1)
+    let min = (cf > uf ? uf : cf)
+    if min
+      execute "normal!" min . "zo"
+      return 1
+    endif
+  endfunction
+endif
+
+" Rainbow bracket
 let g:rbpt_loadcmd_toggle = 1
 au VimEnter * RainbowParenthesesToggle
 au Syntax * RainbowParenthesesLoadRound
@@ -510,7 +545,7 @@ let g:indentLine_indentLevel = 20
 let g:indentLine_showFirstIndentLevel = 1
 if has('gui_running') || 'xterm-256color' == $TERM
     let g:indentLine_char = '¦'
-else
+elseif has('win32')
     let g:indentLine_char = '|'
 endif
 " let g:indentLine_loaded = 1

@@ -587,7 +587,7 @@ let g:EnhCommentifyAlignRight='Yes'
 " AuthorInfo
 map <leader>aid :AuthorInfoDetect<CR>
 let g:vimrc_author='Marslo'
-let g:vimrc_email='marslo.vida@gmail.com'
+let g:vimrc_email='marslo.jiao@gmail.com'
 
 " Most Recently Used(MRU)
 " let MRU_File=$VIM . 'vimfiles\Data\mru_files.txt'
@@ -694,8 +694,8 @@ endif
 
 " nnoremap <silent> <C-F6> :let old_reg=@"<CR>:let @"=substitute(expand("%:p"), "/", "\\", "g")<CR>:silent!!cmd /cstart <C-R><C-R>"<CR><CR>:let @"=old_reg<CR>
 
-" Supper Tab
 set completeopt=longest,menuone
+" Supper Tab
 " let SuperTabDefaultCompletionType = "context"
 let SuperTabDefaultCompletionType = '<c-p>'
 let SuperTabMappingForward = '<c-p>'
