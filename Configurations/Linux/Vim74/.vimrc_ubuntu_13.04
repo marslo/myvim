@@ -28,6 +28,13 @@ behave mswin
 let g:ruby_path=$RUBY_BIN
 let g:solarized_termcolors=256
 
+" Make vim open faster :help slow-start
+" set viminfo='20,<50,s10
+" Inspired from https://groups.google.com/forum/#!topic/vim_use/ImK21wi_JXg
+" save/restore buffer list, lines saved each register, files marks, search history, command-line history, disable 'hlsearch', 'file marks 0 = NOT stored'
+set viminfo=%,\"4,'4,/50,:50,h,f0
+set history=50
+
 set diffopt=filler,context:3
 
 " Remove the Welcome interface
@@ -202,19 +209,21 @@ if has('unix')
 endif
 endfunc
 
-" Run pylint
-func! PylintCheck()
-    let mp = &makeprg
-    let ef = &errorformat
-    let exeFile = '"' . expand("%:t") . '"'
-    setlocal makeprg=pylint\ --reports=n\ --output-format=parseable
-    set efm=%A%f:%l:\ [%t%.%#]\ %m,%Z%p^^,%-C%.%#
-    silent make "%:p"
-    copen
-    let &makeprg     = mp
-    let &errorformat = ef
-endfunc
-nmap <leader>li :call PylintCheck()<CR>
+if "python" == &filetype
+    " Run pylint
+    func! PylintCheck()
+        let mp = &makeprg
+        let ef = &errorformat
+        let exeFile = '"' . expand("%:t") . '"'
+        setlocal makeprg=pylint\ --reports=n\ --output-format=parseable
+        set efm=%A%f:%l:\ [%t%.%#]\ %m,%Z%p^^,%-C%.%#
+        silent make "%:p"
+        copen
+        let &makeprg     = mp
+        let &errorformat = ef
+    endfunc
+    nmap <leader>li :call PylintCheck()<CR>
+endif
 
 " ====================================== For Programming =====================================
 func! CompileRunGpp()
@@ -349,54 +358,60 @@ function! UpdateTags()
 endfunction
 nmap <F12> :call UpdateTags()<CR>
 
-" Reduce the font
-function! <SID>FontSize_Reduce()
-    if has('unix')
-        let pattern = '\<\d\+$'
-    elseif has('win32') || has('win95') || has('win64')
-        let pattern = ':h\zs\d\+\ze:'
-    endif
-    let fontsize = matchstr(&gfn, pattern)
-    echo fontsize
-    let cmd = substitute(&gfn, pattern, string(fontsize - 1), 'g')
-    let &gfn=cmd
-endfunction
-nnoremap <A--> :call <SID>FontSize_Reduce()<CR>
+if has('gui_running')
+    " Reduce the font
+    function! <SID>FontSize_Reduce()
+        if has('unix')
+            let pattern = '\<\d\+$'
+        elseif has('win32') || has('win95') || has('win64')
+            let pattern = ':h\zs\d\+\ze:'
+        endif
+        let fontsize = matchstr(&gfn, pattern)
+        echo fontsize
+        let cmd = substitute(&gfn, pattern, string(fontsize - 1), 'g')
+        let &gfn=cmd
+    endfunction
+    nnoremap <A--> :call <SID>FontSize_Reduce()<CR>
 
-" Enlarge the font
-function! <SID>FontSize_Enlarge()
-    if has('unix')
-        let pattern = '\<\d\+$'
-    elseif has('win32') || has('win95') || has('win64')
-        let pattern = ':h\zs\d\+\ze:'
-    endif
-    let fontsize = matchstr(&gfn, pattern)
-    let cmd = substitute(&gfn, pattern, string(fontsize + 1), 'g')
-    let &gfn=cmd
-endfunction
-nnoremap <A-+> :call <SID>FontSize_Enlarge()<CR> 
+    " Enlarge the font
+    function! <SID>FontSize_Enlarge()
+        if has('unix')
+            let pattern = '\<\d\+$'
+        elseif has('win32') || has('win95') || has('win64')
+            let pattern = ':h\zs\d\+\ze:'
+        endif
+        let fontsize = matchstr(&gfn, pattern)
+        let cmd = substitute(&gfn, pattern, string(fontsize + 1), 'g')
+        let &gfn=cmd
+    endfunction
+    nnoremap <A-+> :call <SID>FontSize_Enlarge()<CR>
 
-" Show syntax highlighting groups for word under cursor
-function! SynStack()
-    if !exists("*synstack")
-        return
-    endif
-    echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-endfunc
-
-" vnoremap < <gv
-" vnoremap > >gv
+    " Show syntax highlighting groups for word under cursor
+    function! SynStack()
+        if !exists("*synstack")
+            return
+        endif
+        echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+    endfunc
+endif
 
 " ====================================== For Inteface =====================================
-" Make vim maximize while it startup
-func! MaximizeWindow()
-    silent !wmctrl -r :ACTIVE: -b add,maximized_vert,maximized_horz
-endfunc
-
-" The initialize size
 if has('gui_running')
+    " The initialize size
     set lines=32
     set columns=108
+
+    " Make vim maximize while it startup
+    func! MaximizeWindow()
+        silent !wmctrl -r :ACTIVE: -b add,maximized_vert,maximized_horz
+    endfunc
+
+    " set go=                                    Hide everything
+    " set guioptions+=b                          Add the bottom scroll bar
+    set guioptions-=T                           " Hide the tool bar
+    set guioptions-=r                           " Hide the side scroll bar
+    set guioptions-=m                           " Hide the Menu
+    set cpoptions+=n
 endif
 
 if has('win32') || has('win95') || has('win64')
@@ -431,13 +446,6 @@ endif
 syntax enable
 syntax on
 filetype plugin on
-
-" set go=                                   " Hide everything
-" set guioptions+=b                         " Add the bottom scroll bar
-set guioptions-=T                           " Hide the tool bar
-set guioptions-=r                           " Hide the side scroll bar
-set guioptions-=m                           " Hide the Menu
-set cpoptions+=n
 
 set autoread                                " Set auto read when a file is changed by outside
 set showmatch                               " Show matching bracets
@@ -495,7 +503,7 @@ imap <M-d> <ESC>cW
 " map <C-v> "+p
 map gl <CR>
 
-set path+=/home/marslo/Study
+" set path+=/home/marslo/Study
 
 " CtrlP
 " let g:ctrlp_map = '<s-w>'
