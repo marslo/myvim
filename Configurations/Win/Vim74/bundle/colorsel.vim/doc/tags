@@ -1,0 +1,12 @@
+colorsel-configuration	colorsel.txt	/*colorsel-configuration*
+colorsel-dependencies	colorsel.txt	/*colorsel-dependencies*
+colorsel-description	colorsel.txt	/*colorsel-description*
+colorsel-ideas	colorsel.txt	/*colorsel-ideas*
+colorsel-installation	colorsel.txt	/*colorsel-installation*
+colorsel-keys	colorsel.txt	/*colorsel-keys*
+colorsel-known-problems	colorsel.txt	/*colorsel-known-problems*
+colorsel-limitations	colorsel.txt	/*colorsel-limitations*
+colorsel-todo	colorsel.txt	/*colorsel-todo*
+colorsel-usage	colorsel.txt	/*colorsel-usage*
+colorsel.txt	colorsel.txt	/*colorsel.txt*
+colorsel.vim	colorsel.txt	/*colorsel.vim*

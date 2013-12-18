@@ -1,0 +1,23 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=927
+
+A simple interactive RGB/HSV color selector modelled after Gimp2 RGB/HSV color selector. Needs gvim and :set nocp (and probably a high-color display).
+
+Usage: :so colorsel.vim and
+
+:ColorSel [color]
+
+starts the color selector.  The optional color argument can be in rrggbb or rgb form or a CSS named color.
+
+j, k (or arrows) change active channel.
+
+h, l (or arrows), b, w (or pgdown, pgup), 0, $ (or home, end) change channel values (by 1, by `word' and to 0/maximum).
+
+y yanks the current color as #rrggbb to the unnamed register, "xy to register x.
+
+"xp/"xP gets the color from register x.
+
+x swaps the current and alternate color.
+
+q immediately quits.
+
+The swatch and slider sizes are configurable, palettes and alternate colors can be switched off, see the source.

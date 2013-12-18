@@ -1,0 +1,121 @@
+*colorsel.txt*          A simple interactive RGB/HSV color selector.
+
+			  COLORSEL    by David Necas
+								*colorsel.vim*
+description			|colorsel-description|
+usage	    			|colorsel-usage|
+keys	    			|colorsel-keys|
+installation   			|colorsel-installation|
+configuration  			|colorsel-configuration|
+limitations			|colorsel-limitations|
+known problems			|colorsel-known-problems|
+todo				|colorsel-todo|
+
+==============================================================================
+DESCRIPTION						*colorsel-description*
+
+A simple interactive RGB/HSV color selector modelled after the Gimp2 RGB/HSV
+color selector. Needs gvim 7 or higher and :set nocp (and probably a high-
+color display).
+
+==============================================================================
+USAGE							      *colorsel-usage*
+
+:ColorSel [{rrbbgg}|{color-name} [{rrbbgg}|{color-name}]]
+
+The command accepts one or two optional {rrggbb} or {color-name} arguments.
+The second one will become the reference (alternate) or foreground/background
+color that is not currently being edited if specified. One can also keep an
+existing color by passing '.', '-' or '*' in its place, so for example use >
+    :ColorSel . White
+to set the foreground color to white.
+
+:ColorSel [guifg={color-name}] [guibg={color-name}]
+
+When editing a Vim highlighting or colorscheme, you can directly pass the
+(previously yanked) |guifg| and |guibg| |highlight-gui| arguments. 
+
+:ColorSel {hlgroup-name}
+
+The "guifg" and "guibg" attributes of the existing Vim highlight group
+{hlgroup-name} will be used to initialize the foreground/background color
+selection. Editing will start with the foreground color if the highlight group
+has no "guibg" attribute. Use the "X" key to toggle between editing the
+foreground and background color, and "f" to change the "gui" attribute (bold
+and italic attributes are supported). Any changes are applied "live" to the
+highlight group, so you can easily preview your changes if you have another
+buffer opened which has the corresponding syntax highlightings. You can still
+update the colors via :ColorSel {color-name} commands; the link to the
+highlight group will only be broken when you close the color selector window
+(e.g. via "q").
+
+KEYS							       *colorsel-keys*
+
+j, k  switch between channels (also: <up>, <down>)
+0, $  sets value to zero, maximum (also: <home>, <end>)
+h, l  increment/decrement by 1 (also: <left>, <right>)
+w, b  increment/decrement by larger amount (also: <pageup>, <pagedown>)
+q     quits immediately
+y     yanks color in #rrggbb form to the unnamed register
+["x]y yanks color in #rrggbb form to register x and shows the color in
+      palette entry x
+["x]p pastes the color from palette entry x into the color selector (and
+      overrides the currently edited color)
+["x]Y yanks the alternate color selector (if the swatch has been split via
+      'x') or the foreground/background color that is not currently edited
+      in #rrggbb form to register x and shows the color in palette entry x
+["x]P pastes the color from palette entry x into the alternate color
+      selector (if the swatch has been split via 'x') or as the
+      foreground/background color that is not currently edited
+ x    keeps the current color as a reference in the lower half of the swatch
+      and subsequently swaps the current with that alternate color
+ X    toggles between editing the foreground text and background swatch color
+ /    prompts for a new foreground text shown in the swatch; enter multiple
+      lines of text through CTRL-V <Enter>
+ f    formats the foreground text shown in the swatch in bold and/or italic,
+      or turns it off
+
+==============================================================================
+INSTALLATION					       *colorsel-installation*
+
+This script is packaged as a|vimball|. Inside Vim, install by sourcing the
+vimball or via the|:UseVimball|command. >
+    vim colorsel.vba
+    :so %
+To uninstall, use the|:RmVimball|command.
+
+DEPENDENCIES					       *colorsel-dependencies*
+
+- Requires Vim 7.0 or higher.
+
+==============================================================================
+CONFIGURATION					      *colorsel-configuration*
+
+colorsel_swatch_size [number]: vertical swatch size, do not set below 6
+colorsel_slider_size [number]: slider size, longer sliders a need faster
+                               computer
+colorsel_show_palette [0/1]:   flag whether to show palette
+colorsel_show_swatch_difference [0/1]:  flag whether to split the swatch
+                                        into two parts; the alternate color
+                                        can be swapped with the main one and
+                                        can also be set from the palette to
+                                        compare two colors side-by-side
+colorsel_swatch_text [string]:  text to display in the swatch; multiple
+                                lines can be included via "\n".
+
+==============================================================================
+LIMITATIONS						*colorsel-limitations*
+
+- Must reload script to change parameters
+
+KNOWN PROBLEMS					     *colorsel-known-problems*
+
+TODO							       *colorsel-todo*
+
+- Mouse support
+
+IDEAS							      *colorsel-ideas*
+
+License: This Vim script is in the public domain.
+==============================================================================
+ vim:tw=78:ts=8:ft=help:norl:

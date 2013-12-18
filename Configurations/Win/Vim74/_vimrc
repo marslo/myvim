@@ -54,8 +54,9 @@ set autochdir
 " Tags
 " set tags=tags
 set tags=.\tags
-set tags+=c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\.tags
-set tags+=C:\Marslo\Job\Summa\TEX\SVN\.tags
+set tags+=C:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\tags
+set tags+=C:\Marslo\Job\Summa\TEX\SVN\viis-lab-scripts\tags
+set tags+=C:\Marslo\Job\Summa\TEX\SVN\tags
 autocmd BufEnter c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\* :setlocal tags+=c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\.tags
 
 " Code format
@@ -192,12 +193,12 @@ endif
 " Bundle 'hdima/python-syntax'
 " Bundle 'gorodinskiy/vim-coloresque'
 " Bundle 'ap/vim-css-color'
+" Bundle 'JulesWang/css.vim'
 
 " Colors and themes
 Bundle 'txt.vim'
 Bundle 'gui2term.py'
 Bundle 'colorsel.vim'
-Bundle 'JulesWang/css.vim'
 Bundle 'hail2u/vim-css3-syntax'
 Bundle 'Marslo/vim-coloresque'
 Bundle 'Marslo/marslo.vim'
@@ -452,7 +453,7 @@ syntax on
 filetype plugin on
 
 if !filereadable("$VIM\vim74\vimtweak.dll")
-    au GUIENTER * call libcallnr("vimtweak.dll","SetAlpha",245)
+    au GUIENTER * call libcallnr("vimtweak.dll","SetAlpha",243)
 endif
 
 " set go=                                   " Hide everything
@@ -517,16 +518,29 @@ inoremap <M-d> <ESC>cW
 
 " map ecq :echo system("ruby -e 'print $:.join(%q{,})'")<CR>
 
+function! FindProjectRoot(lookFor)
+    let pathMaker='%:p'
+    while(len(expand(pathMaker))>len(expand(pathMaker.':h')))
+        let pathMaker=pathMaker.':h'
+        let fileToCheck=expand(pathMaker).'/'.a:lookFor
+        if filereadable(fileToCheck)||isdirectory(fileToCheck)
+            return expand(pathMaker)
+        endif
+    endwhile
+    return 0
+endfunction
+
 " CtrlP
-" let g:ctrlp_map = '<s-w>'
 " let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'
-" let g:ctrlp_working_path_mode = '.ctrlp'
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_working_path_mode = 'ra'                " Search parents as well (stop searching sartly)
 let g:ctrlp_max_height = 8
 let g:ctrlp_max_depth = 100
 let g:ctrlp_working_path_mode = 'ra'
-let g:ctrl_root_makers = ['ctrlp']
-let g:ctrlp_clear_cache_on_exit = 0
+let g:ctrl_root_makers = ['.ctrlp']                 " Stop search if these files present
 let g:ctrlp_use_caching = 1
+let g:ctrlp_clear_cache_on_exit = 0                 " Cross session caching
+let g:ctrlp_cache_dir = $VIM . '/cache/ctrlp'
 let g:ctrlp_custom_ignore = {
 \ 'dir':  '\v[\/]\.(git|hg|svn)$',
 \ 'file': '\v\.(exe|so|dll|rpm|tar|gz|bz2|zip|ctags|tags)|tags|ctags$',
@@ -540,11 +554,6 @@ let g:gundo_preview_height = 20
 let g:gundo_right = 0
 let g:gundo_preview_bottom = 0
 
-" VIM Excess Lines
-" let s:expl_permanent_matches = [
-    " \ ["LineNr", '\%81v.\+', -70]
-    " \ ]
-
 " ====================================== For Function =====================================
 set backspace=indent,eol,start                  " make backspace h, l, etc wrap to
 " set whichwrap+=<,>,h,l
@@ -556,10 +565,10 @@ else
     nmap <leader>tv :ConqueTermSplit bash <CR>
 endif
 
-nmap zdb :%s/\s\+$//<CR>                        " Delete the black space in the end of each line
+nmap zdb :%s/\s\+$//<CR>
 nmap zhh :%s/^\s\+//<CR>
 nmap zmm :g/^/ s//\=line('.').' '/<CR>
-nmap zws :g/^\s*$/d<CR>                         " Delete white space
+nmap zws :g/^\s*$/d<CR>
 
 set incsearch hlsearch ignorecase smartcase     " Search
 set magic                                       " Regular Expression
