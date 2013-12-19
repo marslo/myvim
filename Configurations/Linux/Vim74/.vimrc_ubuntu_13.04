@@ -2,6 +2,7 @@
 "       FileName: .vimrc_ubuntu_13.04
 "           Desc:
 "         Author: Marslo
+"          Email: marslo.jiao@gmail.com
 "        Created: 2010-10
 "        Version: 0.1.13
 "     LastChange: 2013-12-19 17:47:32
@@ -53,6 +54,9 @@ let g:mapleader=","
 
 " set paste
 set go+=a
+
+set tags=tags;
+set autochdir
 
 " document format
 set fileformat=unix
@@ -212,22 +216,6 @@ func! GetVim()
   endif
 endfunc
 
-if "python" == &filetype
-  " Run pylint
-  func! PylintCheck()
-    let mp = &makeprg
-    let ef = &errorformat
-    let exeFile = '"' . expand("%:t") . '"'
-    setlocal makeprg=pylint\ --reports=n\ --output-format=parseable
-    set efm=%A%f:%l:\ [%t%.%#]\ %m,%Z%p^^,%-C%.%#
-    silent make "%:p"
-    copen
-    let &makeprg     = mp
-    let &errorformat = ef
-  endfunc
-  nmap <leader>li :call PylintCheck()<CR>
-endif
-
 " ====================================== For Programming =====================================
 func! CompileRunGpp()
   exec "w"
@@ -250,11 +238,11 @@ func! RunResult()
     setlocal makeprg=AutoHotkey
   endif
   set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
+  " let com = make . ' "' . expand("%") . '"'
+  " silent execute com
   silent make %
-  if "autohotkey" != &filetype
-    set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
+  " silent make expand("%")
     copen
-  endif
   let &makeprg     = mp
   let &errorformat = ef
 endfunc
@@ -354,8 +342,6 @@ endfunction
 nmap gf :call GotoFile()<CR>
 
 " Update tags file automatic
-set tags=tags;
-set autochdir
 function! UpdateTags()
   silent !ctags -R --fields=+ianS --extra=+q
 endfunction
@@ -368,6 +354,7 @@ if has('gui_running')
       let pattern = '\<\d\+$'
     elseif has('win32') || has('win95') || has('win64')
       let pattern = ':h\zs\d\+\ze:'
+      " let pattern = '\([1-9][0-9]*\)$'
     endif
     let fontsize = matchstr(&gfn, pattern)
     echo fontsize
@@ -382,6 +369,7 @@ if has('gui_running')
       let pattern = '\<\d\+$'
     elseif has('win32') || has('win95') || has('win64')
       let pattern = ':h\zs\d\+\ze:'
+      " let pattern = '\([1-9][0-9]*\)$'
     endif
     let fontsize = matchstr(&gfn, pattern)
     let cmd = substitute(&gfn, pattern, string(fontsize + 1), 'g')
@@ -395,6 +383,40 @@ if has('gui_running')
       return
     endif
     echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+  endfunction
+endif
+
+" Config for ruby
+" map ecq :echo system("ruby -e 'print $:.join(%q{,})'")<CR>
+if has("autocmd")
+  autocmd FileType ruby set omnifunc=rubycomplete#Complete
+  " autocmd FileType ruby let g:rubycomplete_buffer_loading=1
+  " autocmd FileType ruby let g:rubycomplete_classes_in_global=1
+endif
+
+" vim-ruby
+autocmd FileType ruby compiler ruby
+let g:rubycomplete_buffer_loading = 1
+let g:rubycomplete_classes_in_global = 1
+let g:rubycomplete_rails = 1
+" let g:ruby_syntaxcheck_map='<F10>'
+" autocmd FileType ruby map <F4> :w<CR>:!ruby -c %<CR>
+
+if "python" == &filetype
+  " syntax-python
+  let python_highlight_all = 1
+
+  " Run pylint
+  func! PylintCheck()
+    let mp = &makeprg
+    let ef = &errorformat
+    let exeFile = '"' . expand("%:t") . '"'
+    setlocal makeprg=pylint\ --reports=n\ --output-format=parseable
+    set efm=%A%f:%l:\ [%t%.%#]\ %m,%Z%p^^,%-C%.%#
+    silent make "%:p"
+    copen
+    let &makeprg     = mp
+    let &errorformat = ef
   endfunc
 endif
 
@@ -498,9 +520,11 @@ map <C-a> <ESC>^
 imap <C-a> <ESC>I
 map <C-e> <ESC>$
 imap <C-e> <ESC>A
-imap <M-f> <ESC><Space>Wi
-imap <M-b> <ESC>Bi
-imap <M-d> <ESC>cW
+
+" Moveing shortcut under the Insert mode
+inoremap <M-f> <ESC><Space>Wi
+inoremap <M-b> <Esc>Bi
+inoremap <M-d> <ESC>cW
 
 " map <C-c> "+y
 " map <C-v> "+p
@@ -526,7 +550,6 @@ let g:ctrlp_map = '<c-p>'
 let g:ctrlp_working_path_mode = 'ra'                " Search parents as well (stop searching sartly)
 let g:ctrlp_max_height = 8
 let g:ctrlp_max_depth = 100
-let g:ctrlp_working_path_mode = 'ra'
 let g:ctrl_root_makers = ['.ctrlp']                 " Stop search if these files present
 let g:ctrlp_use_caching = 1
 let g:ctrlp_clear_cache_on_exit = 0                 " Cross session caching
@@ -631,6 +654,8 @@ set wildmenu
 set wildmode=longest,list,full
 set wildignore+=*.swp,*.zip,*.exe
 
+" set mat=2                                     " The blinding frequency
+
 " turn off error beep/flash
 set noerrorbells novisualbell
 set t_vb=
@@ -729,24 +754,6 @@ let SuperTabDefaultCompletionType = '<c-p>'
 let SuperTabMappingForward = '<c-p>'
 let SuperTabMappingTabLiteral = '<Tab>'
 let SuperTabClosePreviewOnPopupClose = 1
-
-" Config for ruby
-if has("autocmd")
-  autocmd FileType ruby set omnifunc=rubycomplete#Complete
-  " autocmd FileType ruby let g:rubycomplete_buffer_loading=1
-  " autocmd FileType ruby let g:rubycomplete_classes_in_global=1
-endif
-
-" vim-ruby
-autocmd FileType ruby compiler ruby
-let g:rubycomplete_buffer_loading = 1
-let g:rubycomplete_classes_in_global = 1
-let g:rubycomplete_rails = 1
-" let g:ruby_syntaxcheck_map='<F10>'
-" autocmd FileType ruby map <F4> :w<CR>:!ruby -c %<CR>
-
-" syntax-python
-let python_highlight_all = 1
 
 " Fold
 set foldenable                              " Enable Fold

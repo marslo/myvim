@@ -36,6 +36,15 @@ behave mswin
 let g:ruby_path=$RUBY_BIN
 let g:solarized_termcolors=256
 
+" Make vim open faster :help slow-start
+" set viminfo='20,<50,s10
+" Inspired from https://groups.google.com/forum/#!topic/vim_use/ImK21wi_JXg
+" save/restore buffer list, lines saved each register, files marks, search history, command-line history, disable 'hlsearch', 'file marks 0 = NOT stored'
+set viminfo=%,\"4,'4,/50,:50,h,f0
+set history=50
+
+set diffopt=filler,context:3
+
 " Remove the Welcome interface
 " set shortmess=atI
 
@@ -261,14 +270,12 @@ func! RunResult()
   elseif "autohotkey" == &filetype
     setlocal makeprg=AutoHotkey
   endif
+  set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
   " let com = make . ' "' . expand("%") . '"'
   " silent execute com
   silent make %
   " silent make expand("%")
-  if "autohotkey" != &filetype
-    set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
     copen
-  endif
   let &makeprg     = mp
   let &errorformat = ef
 endfunc
@@ -377,6 +384,7 @@ if has('gui_running')
       " let pattern = '\([1-9][0-9]*\)$'
     endif
     let fontsize = matchstr(&gfn, pattern)
+    echo fontsize
     let cmd = substitute(&gfn, pattern, string(fontsize - 1), 'g')
     let &gfn=cmd
   endfunction
@@ -395,9 +403,18 @@ if has('gui_running')
     let &gfn=cmd
   endfunction
   nnoremap <A-+> :call FontSize_Enlarge()<CR>
+
+  " Show syntax highlighting groups for word under cursor
+  function! SynStack()
+    if !exists("*synstack")
+      return
+    endif
+    echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+  endfunction
 endif
 
 " Config for ruby
+" map ecq :echo system("ruby -e 'print $:.join(%q{,})'")<CR>
 if has("autocmd")
   autocmd FileType ruby set omnifunc=rubycomplete#Complete
   " autocmd FileType ruby let g:rubycomplete_buffer_loading=1
@@ -488,8 +505,7 @@ filetype plugin on
 
 set autoread                                " Set auto read when a file is changed by outside
 set showmatch                               " Show matching bracets
-set nowrap                                  " Wrap lines
-set wrap                                  " Wrap lines
+set wrap                                    " Wrap lines
 
 " Tab width
 " set textwidth=150
@@ -498,7 +514,7 @@ set smarttab expandtab                      " smarttab: the width of <Tab> in fi
 set tabstop=2                               " Tab width
 set softtabstop=2                           " the width while trigger <Tab> key
 set shiftwidth=2                            " the tab width by using >> & <<
-" autocmd FileType ruby,eruby,yaml,html,css,scss set ai sw=2 sts=2 et
+" autocmd FileType ruby,eruby,yaml,html,css,scss,javascript set ai sw=2 sts=2 et
 set lbr
 set tw=0
 
@@ -523,7 +539,7 @@ set modifiable
 set write
 
 " Disable <F1> to open help file
-nmap <F1> <ESC>
+noremap <F1> <ESC>
 imap <F1> <ESC>a
 
 " Set the Ctrl-K/Ctrl-J switch the Top/Bottom window
@@ -535,12 +551,11 @@ map <C-a> <ESC>^
 imap <C-a> <ESC>I
 map <C-e> <ESC>$
 imap <C-e> <ESC>A
+
 " Moveing shortcut under the Insert mode
 inoremap <M-f> <ESC><Space>Wi
 inoremap <M-b> <Esc>Bi
 inoremap <M-d> <ESC>cW
-
-" map ecq :echo system("ruby -e 'print $:.join(%q{,})'")<CR>
 
 function! FindProjectRoot(lookFor)
   let pathMaker='%:p'

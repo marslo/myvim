@@ -2,7 +2,7 @@
 " #     FileName: .vimrc
 " #         Desc:
 " #       Author: Marslo
-" #        Email: marslo.vida@gmail.com
+"          Email: marslo.jiao@gmail.com
 " #      Version: 0.0.2
 " #   LastChange: 2013-12-19 17:46:09
 " #      History:
