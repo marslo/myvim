@@ -1,10 +1,10 @@
 " =============================================================================
 " #     FileName: .vimrc
-" #         Desc: 
+" #         Desc:
 " #       Author: Marslo
 " #        Email: marslo.vida@gmail.com
 " #      Version: 0.0.2
-" #   LastChange: 2013-10-17 19:54:45
+" #   LastChange: 2013-12-19 17:46:09
 " #      History:
 " =============================================================================
 
@@ -24,8 +24,8 @@ set clipboard+=unnamed
 set clipboard+=unnamedplus
 
 if has('gui_running')
-    set lines=36
-    set columns=108
+  set lines=36
+  set columns=108
 endif
 
 " Set mapleader
@@ -36,23 +36,23 @@ let g:mapleader=","
 " colorscheme desert_Marslo_ForLinux_v4
 
 if has('gui_running') || 'xterm-256color' == $TERM
-    colorscheme marslo256
-    let psc_style='cool'
+  colorscheme marslo256
+  let psc_style='cool'
 else
-    colorscheme marslo16
+  colorscheme marslo16
 endif
 
 if has('win32')
-    autocmd! bufwritepost .vimrc source %
-    " Fast Edit vim configuration
-    nmap <leader>v :e $VIM/.vimrc<CR>
-    " Font
-    set guifont=Monaco:h12
+  autocmd! bufwritepost .vimrc source %
+  " Fast Edit vim configuration
+  nmap <leader>v :e $VIM/.vimrc<CR>
+  " Font
+  set guifont=Monaco:h12
 else
-    autocmd! bufwritepost ~/.vimrc source %
-    nmap <leader>v :e ~/.vimrc<CR>
-    set guifont=Monaco\ 12
-    set clipboard=unnamedplus
+  autocmd! bufwritepost ~/.vimrc source %
+  nmap <leader>v :e ~/.vimrc<CR>
+  set guifont=Monaco\ 12
+  set clipboard=unnamedplus
 endif
 
 " Hide the tool bar
@@ -67,7 +67,7 @@ au BufRead,BufNewFile * setfiletype txt
 " Wrap line
 set wrap
 
-" Make backspace key can manage normal indent, eol, start, etc 
+" Make backspace key can manage normal indent, eol, start, etc
 set backspace=indent,eol,start
 " set backspace=2
 
@@ -102,9 +102,9 @@ set lbr
 set tw=0
 
 " if &term=="xterm"
-    " set t_Co=8
-    " set t_Sb=^[[4%dm
-    " set t_Sf=^[[3%dm
+" set t_Co=8
+" set t_Sb=^[[4%dm
+" set t_Sf=^[[3%dm
 " endif
 
 " Mouse Settings
@@ -203,43 +203,43 @@ inoremap } <c-r>=ClosePair('}')<CR>
 inoremap % <c-r>=AutoPair('%')<CR>
 
 func! AutoPair(char)
-    if "(" == a:char
-        if &ft =~ '^\(sql\)$'
-            return "(\<Enter>);\<Up>\<Enter>"
-        elseif '' == getline('.')[col('.')]
-            return "()\<Left>"
-        else
-            return a:char
-        endif
-    elseif "[" == a:char
-        if '' == getline('.')[col('.')]
-            return "[]\<Left>"
-        else
-            return a:char
-        endif
-    elseif "{" == a:char
-        if &ft =~ '^\(java\|perl\)$'
-            return "{\<Enter>}\<ESC>ko"
-        elseif '' == getline('.')[col('.')] && &ft =~ '^\(ruby\|eruby\|python\|autohotkey\|vim\|snippet\)$'
-            return "{}\<Left>"
-        else
-            return a:char
-        endif
-    elseif "%" == a:char
-        if '' == getline('.')[col('.')] && &ft =~ '^\(autohotkey\)$'
-            return "%%\<left>"
-        else
-            return a:char
-        endif
+  if "(" == a:char
+    if &ft =~ '^\(sql\)$'
+      return "(\<Enter>);\<Up>\<Enter>"
+    elseif '' == getline('.')[col('.')]
+      return "()\<Left>"
+    else
+      return a:char
     endif
+  elseif "[" == a:char
+    if '' == getline('.')[col('.')]
+      return "[]\<Left>"
+    else
+      return a:char
+    endif
+  elseif "{" == a:char
+    if &ft =~ '^\(java\|perl\)$'
+      return "{\<Enter>}\<ESC>ko"
+    elseif '' == getline('.')[col('.')] && &ft =~ '^\(ruby\|eruby\|python\|autohotkey\|vim\|snippet\)$'
+      return "{}\<Left>"
+    else
+      return a:char
+    endif
+  elseif "%" == a:char
+    if '' == getline('.')[col('.')] && &ft =~ '^\(autohotkey\)$'
+      return "%%\<left>"
+    else
+      return a:char
+    endif
+  endif
 endfunc
 
 function! ClosePair(char)
-    if getline('.')[col('.') - 1] == a:char
-        return "\<Right>"
-    else
-        return a:char
-    endif
+  if getline('.')[col('.') - 1] == a:char
+    return "\<Right>"
+  else
+    return a:char
+  endif
 endfunction
 
 inoremap <buffer> <BS> <c-r>=DeletePairs()<CR>
@@ -247,12 +247,12 @@ inoremap <buffer> <C-h> <c-r>=DeletePairs()<CR>
 
 " Delete the pair of parentheses, brackets and braces
 function! DeletePairs()
-    let AutoPaires = {')': '(',']': '[','}': '{'}
-    if has_key(AutoPaires, getline('.')[col('.') - 1]) && getline('.')[col('.') - 2 ] == AutoPaires[getline('.')[col('.') - 1]]
-        return "\<BS>\<DEL>"
-    else
-        return "\<BS>"
-    endif
+  let AutoPaires = {')': '(',']': '[','}': '{'}
+  if has_key(AutoPaires, getline('.')[col('.') - 1]) && getline('.')[col('.') - 2 ] == AutoPaires[getline('.')[col('.') - 1]]
+    return "\<BS>\<DEL>"
+  else
+    return "\<BS>"
+  endif
 endfunction
 
 
@@ -265,13 +265,13 @@ inoremap <leader>fe <C-R>=expand("%:t")<CR>
 
 " Add suffix '.py' if the filetype is python
 func! GotoFile()
-    if 'python' == &ft
-        let com = expand('<cfile>') . '.py'
-    else
-        let com = expand('<cfile>')
-    endif
-    silent execute ':e ' . com
-    echo 'Open file "'. com . '" under the cursor'
+  if 'python' == &ft
+    let com = expand('<cfile>') . '.py'
+  else
+    let com = expand('<cfile>')
+  endif
+  silent execute ':e ' . com
+  echo 'Open file "'. com . '" under the cursor'
 endfunc
 nmap gf :call GotoFile()<CR>
 
@@ -279,7 +279,7 @@ nmap gf :call GotoFile()<CR>
 set tags=tags;
 set autochdir
 function! UpdateTagsFile()
-    silent !ctags -R --fields=+ianS --extra=+q
+  silent !ctags -R --fields=+ianS --extra=+q
 endfunction
 nmap <F12> :call UpdateTagsFile()<CR>
 

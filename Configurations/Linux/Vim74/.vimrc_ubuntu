@@ -3,7 +3,7 @@
 "           Desc:
 "         Author: Marslo
 "        Version: 0.0.11
-"     LastChange: 2013-12-04 18:00:50
+"     LastChange: 2013-12-19 17:47:41
 "        History: 0.0.3: Add the Autoload and Fast Edit difference between win32 and non-win32
 "                 0.0.4: Add CheckRubySyntax() function for checking and run ruby script
 "                 0.0.5: Add the function of highlight txt file
@@ -427,9 +427,9 @@ set wrap                                    " Wrap lines
 " set textwidth=150
 set autoindent smartindent
 set smarttab expandtab                      " smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
-set tabstop=4                               " Tab width
-set softtabstop=4                           " the width while trigger <Tab> key
-set shiftwidth=4                            " the tab width by using >> & <<
+set tabstop=2                               " Tab width
+set softtabstop=2                           " the width while trigger <Tab> key
+set shiftwidth=2                            " the tab width by using >> & <<
 " autocmd FileType ruby,eruby,yaml,html,css,scss,javascript set ai sw=2 sts=2 et
 set lbr
 set tw=0
@@ -499,7 +499,7 @@ let g:ctrlp_working_path_mode = 'ra'
 let g:ctrl_root_makers = ['.ctrlp']                 " Stop search if these files present
 let g:ctrlp_use_caching = 1
 let g:ctrlp_clear_cache_on_exit = 0                 " Cross session caching
-let g:ctrlp_cache_dir = $VIM . '/cache/ctrlp'
+let g:ctrlp_cache_dir = '$HOME/.vim/cache/ctrlp'
 let g:ctrlp_custom_ignore = {
       \ 'dir':  '\v[\/]\.(git|hg|svn)$',
       \ 'file': '\v\.(exe|so|dll|rpm|tar|gz|bz2|zip|ctags|tags)|tags|ctags$',

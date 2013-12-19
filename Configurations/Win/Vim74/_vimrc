@@ -3,8 +3,8 @@
 "          Desc:
 "        Author: Marslo
 "       Created: 2010-10
-"       Version: 0.0.15
-"    LastChange: 2013-12-04 18:01:39
+"       Version: 0.0.16
+"    LastChange: 2013-12-19 17:49:39
 "       History:
 "                0.0.3  | Marslo | Add the Autoload and Fast Edit difference between win32 and non-win32
 "                0.0.4  | Marslo | Add CheckRubySyntax() function for checking and run ruby script
@@ -20,6 +20,7 @@
 "                0.0.13 | Marslo | Add Alpha setting for vim tweak
 "                0.0.14 | Marslo | Change woainvu repos to Marslo
 "                0.0.15 | Marslo | Add Remember curosr position function
+"                0.0.16 | Marslo | Modificaton for startup faster
 " =============================================================================
 
 source $VIMRUNTIME/vimrc_example.vim
@@ -540,7 +541,6 @@ let g:ctrlp_map = '<c-p>'
 let g:ctrlp_working_path_mode = 'ra'                " Search parents as well (stop searching sartly)
 let g:ctrlp_max_height = 8
 let g:ctrlp_max_depth = 100
-let g:ctrlp_working_path_mode = 'ra'
 let g:ctrl_root_makers = ['.ctrlp']                 " Stop search if these files present
 let g:ctrlp_use_caching = 1
 let g:ctrlp_clear_cache_on_exit = 0                 " Cross session caching
@@ -670,7 +670,7 @@ endfunction
 augroup resCur
   autocmd!
   " if has("folding")
-    " autocmd BufWinEnter * if ResCur() | call UnfoldCur() | endif
+  " autocmd BufWinEnter * if ResCur() | call UnfoldCur() | endif
   " else
   autocmd BufWinEnter * call ResCur()
   " endif

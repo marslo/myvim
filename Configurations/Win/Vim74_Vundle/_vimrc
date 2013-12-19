@@ -3,8 +3,8 @@
 "          Desc:
 "        Author: Marslo
 "       Created: 2010-10
-"       Version: 0.0.15
-"    LastChange: 2013-12-04 18:01:39
+"       Version: 0.0.16
+"    LastChange: 2013-12-19 17:52:45
 "       History:
 "                0.0.3  | Marslo | Add the Autoload and Fast Edit difference between win32 and non-win32
 "                0.0.4  | Marslo | Add CheckRubySyntax() function for checking and run ruby script
@@ -20,6 +20,7 @@
 "                0.0.13 | Marslo | Add Alpha setting for vim tweak
 "                0.0.14 | Marslo | Change woainvu repos to Marslo
 "                0.0.15 | Marslo | Add Remember curosr position function
+"                0.0.16 | Marslo | Modification for startup faster
 " =============================================================================
 
 source $VIMRUNTIME/vimrc_example.vim
@@ -239,21 +240,6 @@ func! OpenFoler()
 endfunc
 map <M-o> :call OpenFoler()<CR>
 
-if "python" == &filetype
-  " Run pylint
-  func! PylintCheck()
-    let mp = &makeprg
-    let ef = &errorformat
-    let exeFile = '"' . expand("%:t") . '"'
-    setlocal makeprg=pylint\ --reports=n\ --output-format=parseable
-    set efm=%A%f:%l:\ [%t%.%#]\ %m,%Z%p^^,%-C%.%#
-    silent make "%:p"
-    copen
-    let &makeprg     = mp
-    let &errorformat = ef
-  endfunc
-endif
-
 " ====================================== For Programming =====================================
 func! CompileRunGpp()
   exec "w"
@@ -411,6 +397,39 @@ if has('gui_running')
   nnoremap <A-+> :call FontSize_Enlarge()<CR>
 endif
 
+" Config for ruby
+if has("autocmd")
+  autocmd FileType ruby set omnifunc=rubycomplete#Complete
+  " autocmd FileType ruby let g:rubycomplete_buffer_loading=1
+  " autocmd FileType ruby let g:rubycomplete_classes_in_global=1
+endif
+
+" vim-ruby
+autocmd FileType ruby compiler ruby
+let g:rubycomplete_buffer_loading = 1
+let g:rubycomplete_classes_in_global = 1
+let g:rubycomplete_rails = 1
+" let g:ruby_syntaxcheck_map='<F10>'
+" autocmd FileType ruby map <F4> :w<CR>:!ruby -c %<CR>
+
+if "python" == &filetype
+  " syntax-python
+  let python_highlight_all = 1
+
+  " Run pylint
+  func! PylintCheck()
+    let mp = &makeprg
+    let ef = &errorformat
+    let exeFile = '"' . expand("%:t") . '"'
+    setlocal makeprg=pylint\ --reports=n\ --output-format=parseable
+    set efm=%A%f:%l:\ [%t%.%#]\ %m,%Z%p^^,%-C%.%#
+    silent make "%:p"
+    copen
+    let &makeprg     = mp
+    let &errorformat = ef
+  endfunc
+endif
+
 " ====================================== For Inteface =====================================
 if has('gui_running')
   " The initialize size
@@ -541,7 +560,6 @@ let g:ctrlp_map = '<c-p>'
 let g:ctrlp_working_path_mode = 'ra'                " Search parents as well (stop searching sartly)
 let g:ctrlp_max_height = 8
 let g:ctrlp_max_depth = 100
-let g:ctrlp_working_path_mode = 'ra'
 let g:ctrl_root_makers = ['.ctrlp']                 " Stop search if these files present
 let g:ctrlp_use_caching = 1
 let g:ctrlp_clear_cache_on_exit = 0                 " Cross session caching
@@ -671,7 +689,7 @@ endfunction
 augroup resCur
   autocmd!
   " if has("folding")
-    " autocmd BufWinEnter * if ResCur() | call UnfoldCur() | endif
+  " autocmd BufWinEnter * if ResCur() | call UnfoldCur() | endif
   " else
   autocmd BufWinEnter * call ResCur()
   " endif
@@ -752,24 +770,6 @@ let SuperTabDefaultCompletionType = '<c-p>'
 let SuperTabMappingForward = '<c-p>'
 let SuperTabMappingTabLiteral = '<Tab>'
 let SuperTabClosePreviewOnPopupClose = 1
-
-" Config for ruby
-if has("autocmd")
-  autocmd FileType ruby set omnifunc=rubycomplete#Complete
-  " autocmd FileType ruby let g:rubycomplete_buffer_loading=1
-  " autocmd FileType ruby let g:rubycomplete_classes_in_global=1
-endif
-
-" vim-ruby
-autocmd FileType ruby compiler ruby
-let g:rubycomplete_buffer_loading = 1
-let g:rubycomplete_classes_in_global = 1
-let g:rubycomplete_rails = 1
-" let g:ruby_syntaxcheck_map='<F10>'
-" autocmd FileType ruby map <F4> :w<CR>:!ruby -c %<CR>
-
-" syntax-python
-let python_highlight_all = 1
 
 " Fold
 set foldenable                              " Enable Fold
