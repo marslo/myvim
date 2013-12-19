@@ -214,6 +214,7 @@ func! OpenCMD()
   if has('win32') || has('win95') || has('win64')
     let com = '!cmd /c start C:\Marslo\Tools\Software\System\CommandLine\Console2\Console.exe -d "'. expand('%:p:h') . '"'
     " let com = '!cmd /c start cd '. expand('%:p:h')
+    " let com = '!cmd /c start "C:\Program Files\JPSoft\TCCLE13\tcc.exe" /c "' . expand('%:p:h') .'"'
     " let com = '!cmd /c start C:\WINDOWS\system32\WindowsPowerShell\v1.0\powershell.exe -NoExit -Command "Set-Location ' . expand ('%:p:h') . '"'
     if 'java' == &filetype
       let com = '!cmd /c start "C:\Program Files\JPSoft\TCCLE13x64\tcc.exe" /d "' . expand('%:p:h') .'"'
@@ -238,19 +239,20 @@ func! OpenFoler()
 endfunc
 map <M-o> :call OpenFoler()<CR>
 
-" Run pylint
-func! PylintCheck()
-  let mp = &makeprg
-  let ef = &errorformat
-  let exeFile = '"' . expand("%:t") . '"'
-  setlocal makeprg=pylint\ --reports=n\ --output-format=parseable
-  set efm=%A%f:%l:\ [%t%.%#]\ %m,%Z%p^^,%-C%.%#
-  silent make "%:p"
-  copen
-  let &makeprg     = mp
-  let &errorformat = ef
-endfunc
-nmap <leader>li :call PylintCheck()<CR>
+if "python" == &filetype
+  " Run pylint
+  func! PylintCheck()
+    let mp = &makeprg
+    let ef = &errorformat
+    let exeFile = '"' . expand("%:t") . '"'
+    setlocal makeprg=pylint\ --reports=n\ --output-format=parseable
+    set efm=%A%f:%l:\ [%t%.%#]\ %m,%Z%p^^,%-C%.%#
+    silent make "%:p"
+    copen
+    let &makeprg     = mp
+    let &errorformat = ef
+  endfunc
+endif
 
 " ====================================== For Programming =====================================
 func! CompileRunGpp()
@@ -262,7 +264,6 @@ endfunc
 func! RunResult()
   let mp = &makeprg
   let ef = &errorformat
-  " let exeFile = expand("%:t")
   let exeFile = expand("%:t")
   exec "w"
   if "python" == &filetype
@@ -421,8 +422,8 @@ if has('gui_running')
     silent !wmctrl -r :ACTIVE: -b add,maximized_vert,maximized_horz
   endfunc
 
-  " set go=                                   " Hide everything
-  " set guioptions+=b                         " Add the bottom scroll bar
+  " set go=                                    Hide everything
+  " set guioptions+=b                          Add the bottom scroll bar
   set guioptions-=T                           " Hide the tool bar
   set guioptions-=r                           " Hide the side scroll bar
   set guioptions-=m                           " Hide the Menu
@@ -469,14 +470,16 @@ filetype plugin on
 set autoread                                " Set auto read when a file is changed by outside
 set showmatch                               " Show matching bracets
 set nowrap                                  " Wrap lines
+set wrap                                  " Wrap lines
 
+" Tab width
 " set textwidth=150
 set autoindent smartindent
 set smarttab expandtab                      " smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
 set tabstop=2                               " Tab width
 set softtabstop=2                           " the width while trigger <Tab> key
 set shiftwidth=2                            " the tab width by using >> & <<
-autocmd FileType ruby,eruby,yaml,html,css,scss set ai sw=2 sts=2 et
+" autocmd FileType ruby,eruby,yaml,html,css,scss set ai sw=2 sts=2 et
 set lbr
 set tw=0
 
@@ -624,7 +627,7 @@ let g:EnhCommentifyAlignRight='Yes'
 " AuthorInfo
 map <leader>aid :AuthorInfoDetect<CR>
 let g:vimrc_author='Marslo'
-let g:vimrc_email='marslo.vida@gmail.com'
+let g:vimrc_email='marslo.jiao@gmail.com'
 
 " Most Recently Used(MRU)
 " let MRU_File=$VIM . 'vimfiles\Data\mru_files.txt'
@@ -636,13 +639,12 @@ let MRU_Exclude_Files='^/media/.*'
 let MRU_Exclude_Files='^/mnt/.*'
 map <C-g> :MRU<CR>
 
+" E21\: Cannot make changes, 'modifiable' is off:     $delete
 set linespace=0
 set wildmenu
 " Completion mode that is used for the character
 set wildmode=longest,list,full
 set wildignore+=*.swp,*.zip,*.exe
-
-" set mat=2                                     " The blinding frequency
 
 " turn off error beep/flash
 set noerrorbells novisualbell
