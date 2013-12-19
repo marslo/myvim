@@ -646,6 +646,8 @@ set wildmenu
 set wildmode=longest,list,full
 set wildignore+=*.swp,*.zip,*.exe
 
+" set mat=2                                     " The blinding frequency
+
 " turn off error beep/flash
 set noerrorbells novisualbell
 set t_vb=
