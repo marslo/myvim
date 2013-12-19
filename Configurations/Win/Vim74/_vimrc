@@ -60,10 +60,10 @@ set tags+=C:\Marslo\Job\Summa\TEX\SVN\tags
 autocmd BufEnter c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\* :setlocal tags+=c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\.tags
 
 " Code format
-set fileencodings=utf8,ucs-bom,gbk,cp936,gb2312,gb18030
+set fileencodings=utf-8,ucs-bom,gbk,cp936,gb2312,gb18030
 set termencoding=utf-8
-set encoding=utf8
-set fileencoding=utf8
+set encoding=utf-8
+set fileencoding=utf-8
 let &termencoding=&encoding
 
 " Mouse Settings
@@ -74,29 +74,29 @@ set scrolloff=3
 
 set diffexpr=MyDiff()
 func! MyDiff()
-    let opt = '-a --binary '
-    if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
-    if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
-    let arg1 = v:fname_in
-    if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
-    let arg2 = v:fname_new
-    if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
-    let mp = &makeprg
-    let mp = &makeprg
-    let arg3 = v:fname_out
-    if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
-    let eq = ''
-    if $VIMRUNTIME =~ ' '
-        if &sh =~ '\<cmd'
-            let cmd = '""' . $VIMRUNTIME . '\diff"'
-            let eq = '"'
-        else
-            let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
-        endif
+  let opt = '-a --binary '
+  if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
+  if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
+  let arg1 = v:fname_in
+  if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
+  let arg2 = v:fname_new
+  if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
+  let mp = &makeprg
+  let mp = &makeprg
+  let arg3 = v:fname_out
+  if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
+  let eq = ''
+  if $VIMRUNTIME =~ ' '
+    if &sh =~ '\<cmd'
+      let cmd = '""' . $VIMRUNTIME . '\diff"'
+      let eq = '"'
     else
-        let cmd = $VIMRUNTIME . '\diff'
+      let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
     endif
-    silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
+  else
+    let cmd = $VIMRUNTIME . '\diff'
+  endif
+  silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
 endfunc
 
 " Vim Bundle
@@ -106,37 +106,37 @@ filetype off
 
 " GetVundle() inspired by: http://pastebin.com/embed_iframe.php?i=C9fUE0M3
 func! GetVundle()
-    " execute 'silent !git clone https://github.com/Marslo/snipmate.vim.git "' . expand('$VIM') . '"'
+  " execute 'silent !git clone https://github.com/Marslo/snipmate.vim.git "' . expand('$VIM') . '"'
 
-    let vundleAlreadyExists=1
-    if has('win32') || has('win64')
-        let vundle_readme=expand('$VIM\bundle\vundle\README.md')
-        let vbundle='$VIM\bundle'
-        let vvundle=vbundle . '\vundle'
-    else
-        let vundle_readme=expand('~/.vim/bunle/vundle/README.md')
-        let vbundle='$VIM/bundle'
-        let vvundle=vbundle . '/vundle'
-    endif
+  let vundleAlreadyExists=1
+  if has('win32') || has('win64')
+    let vundle_readme=expand('$VIM\bundle\vundle\README.md')
+    let vbundle='$VIM\bundle'
+    let vvundle=vbundle . '\vundle'
+  else
+    let vundle_readme=expand('~/.vim/bunle/vundle/README.md')
+    let vbundle='$VIM/bundle'
+    let vvundle=vbundle . '/vundle'
+  endif
 
-    if !filereadable(vundle_readme)
-        echo "Installing Vundle..."
-        echo ""
-        if isdirectory(expand(vbundle)) == 0
-            call mkdir(expand(vbundle), 'p')
-        endif
-        execute 'silent !git clone https://github.com/gmarik/vundle.git "' . expand(vvundle) . '"'
-        let vundleAlreadyExists=0
+  if !filereadable(vundle_readme)
+    echo "Installing Vundle..."
+    echo ""
+    if isdirectory(expand(vbundle)) == 0
+      call mkdir(expand(vbundle), 'p')
     endif
+    execute 'silent !git clone https://github.com/gmarik/vundle.git "' . expand(vvundle) . '"'
+    let vundleAlreadyExists=0
+  endif
 endfunc
 
 " Setting runtimepath for Vundle use
 if has('win32') || has('win64')
-    set rtp+=$VIM/bundle/vundle
-    call vundle#rc('$VIM/bundle')
+  set rtp+=$VIM/bundle/vundle
+  call vundle#rc('$VIM/bundle')
 else
-    set rtp+=~/.vim/bundle/vundle
-    call vundle#rc()
+  set rtp+=~/.vim/bundle/vundle
+  call vundle#rc()
 endif
 
 " Plugins
@@ -165,6 +165,7 @@ Bundle 'winmanager'
 Bundle 'matrix.vim--Yang'
 
 " For Python
+" Bundle 'python-mode'
 Bundle 'python_fold'
 Bundle 'pyflakes.vim'
 
@@ -174,7 +175,7 @@ Bundle 'vim-ruby/vim-ruby'
 Bundle 'nelstrom/vim-textobj-rubyblock'
 Bundle 'kana/vim-textobj-user'
 if "ruby" == &filetype
-    Bundle 'ruby-matchit'
+  Bundle 'ruby-matchit'
 endif
 
 " Others
@@ -210,79 +211,79 @@ filetype plugin indent on
 " ====================================== For Programming =====================================
 " Open the current file path by cmd
 func! OpenCMD()
-    if has('win32') || has('win95') || has('win64')
-        let com = '!cmd /c start C:\Marslo\Tools\Software\System\CommandLine\Console2\Console.exe -d "'. expand('%:p:h') . '"'
-        " let com = '!cmd /c start cd '. expand('%:p:h')
-        " let com = '!cmd /c start C:\WINDOWS\system32\WindowsPowerShell\v1.0\powershell.exe -NoExit -Command "Set-Location ' . expand ('%:p:h') . '"'
-        if 'java' == &filetype
-            let com = '!cmd /c start "C:\Program Files\JPSoft\TCCLE13x64\tcc.exe" /d "' . expand('%:p:h') .'"'
-        else
-            let com1 = '!cmd /c start C:\WINDOWS\system32\WindowsPowerShell\v1.0\powershell.exe -NoExit -Command '
-            let com2 = '"Set-Location ' . "'" . expand ('%:p:h') ."'" . '"'
-            " let com = com1 . com2
-        endif
+  if has('win32') || has('win95') || has('win64')
+    let com = '!cmd /c start C:\Marslo\Tools\Software\System\CommandLine\Console2\Console.exe -d "'. expand('%:p:h') . '"'
+    " let com = '!cmd /c start cd '. expand('%:p:h')
+    " let com = '!cmd /c start C:\WINDOWS\system32\WindowsPowerShell\v1.0\powershell.exe -NoExit -Command "Set-Location ' . expand ('%:p:h') . '"'
+    if 'java' == &filetype
+      let com = '!cmd /c start "C:\Program Files\JPSoft\TCCLE13x64\tcc.exe" /d "' . expand('%:p:h') .'"'
     else
-        let com = '!/usr/bin/gnome-terminal --working-directory=' . expand('%:p:h')
+      let com1 = '!cmd /c start C:\WINDOWS\system32\WindowsPowerShell\v1.0\powershell.exe -NoExit -Command '
+      let com2 = '"Set-Location ' . "'" . expand ('%:p:h') ."'" . '"'
+      " let com = com1 . com2
     endif
-    echo 'Goto "' . expand('%:p:h') . '" in command line'
-    silent execute com
+  else
+    let com = '!/usr/bin/gnome-terminal --working-directory=' . expand('%:p:h')
+  endif
+  echo 'Goto "' . expand('%:p:h') . '" in command line'
+  silent execute com
 endfunc
 nmap cmd :call OpenCMD()<CR>
 
 func! OpenFoler()
-    if has('win32') || has('win95') || has('win64')
-        let folderpath = expand('%:p:h')
-    endif
-    silent execute '!C:\Windows\explorer.exe "' . folderpath . '"'
+  if has('win32') || has('win95') || has('win64')
+    let folderpath = expand('%:p:h')
+  endif
+  silent execute '!C:\Windows\explorer.exe "' . folderpath . '"'
 endfunc
 map <M-o> :call OpenFoler()<CR>
 
 " Run pylint
 func! PylintCheck()
-    let mp = &makeprg
-    let ef = &errorformat
-    let exeFile = '"' . expand("%:t") . '"'
-    setlocal makeprg=pylint\ --reports=n\ --output-format=parseable
-    set efm=%A%f:%l:\ [%t%.%#]\ %m,%Z%p^^,%-C%.%#
-    silent make "%:p"
-    copen
-    let &makeprg     = mp
-    let &errorformat = ef
+  let mp = &makeprg
+  let ef = &errorformat
+  let exeFile = '"' . expand("%:t") . '"'
+  setlocal makeprg=pylint\ --reports=n\ --output-format=parseable
+  set efm=%A%f:%l:\ [%t%.%#]\ %m,%Z%p^^,%-C%.%#
+  silent make "%:p"
+  copen
+  let &makeprg     = mp
+  let &errorformat = ef
 endfunc
 nmap <leader>li :call PylintCheck()<CR>
 
 " ====================================== For Programming =====================================
 func! CompileRunGpp()
-    exec "w"
-    exec "!gcc % -o %<"
-    exec "! %<"
+  exec "w"
+  exec "!gcc % -o %<"
+  exec "! %<"
 endfunc
 
 func! RunResult()
-    let mp = &makeprg
-    let ef = &errorformat
-    " let exeFile = expand("%:t")
-    let exeFile = expand("%:t")
-    exec "w"
-    if "python" == &filetype
-        setlocal makeprg=python\ -u
-    elseif "perl" == &filetype
-        setlocal makeprg=perl
-    elseif "ruby" == &filetype
-        setlocal makeprg=ruby
-    elseif "autohotkey" == &filetype
-        setlocal makeprg=AutoHotkey
-    endif
-    " let com = make . ' "' . expand("%") . '"'
-    " silent execute com
-    silent make %
-    " silent make expand("%")
-    if "autohotkey" != &filetype
-        set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
-        copen
-    endif
-    let &makeprg     = mp
-    let &errorformat = ef
+  let mp = &makeprg
+  let ef = &errorformat
+  " let exeFile = expand("%:t")
+  let exeFile = expand("%:t")
+  exec "w"
+  if "python" == &filetype
+    setlocal makeprg=python\ -u
+  elseif "perl" == &filetype
+    setlocal makeprg=perl
+  elseif "ruby" == &filetype
+    setlocal makeprg=ruby
+  elseif "autohotkey" == &filetype
+    setlocal makeprg=AutoHotkey
+  endif
+  " let com = make . ' "' . expand("%") . '"'
+  " silent execute com
+  silent make %
+  " silent make expand("%")
+  if "autohotkey" != &filetype
+    set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
+    copen
+  endif
+  let &makeprg     = mp
+  let &errorformat = ef
 endfunc
 map <F5> :call RunResult()<CR>
 
@@ -298,44 +299,44 @@ inoremap <buffer> } <c-r>=ClosePair('}')<CR>
 inoremap <buffer> % <c-r>=AutoPair('%')<CR>
 
 func! AutoPair(char)
-    if "(" == a:char
-        if &filetype =~ '^\(sql\)$'
-            return "(\<Enter>);\<Up>\<Enter>"
-        elseif '' == getline('.')[col('.')]
-            return "()\<Left>"
-        else
-            return a:char
-        endif
-    elseif "[" == a:char
-        if '' == getline('.')[col('.')]
-            return "[]\<Left>"
-        else
-            return a:char
-        endif
-    elseif "{" == a:char
-        if &filetype =~ '^\(java\|perl\)$'
-            return "{\<Enter>}\<ESC>ko"
-            " return "{}\<ESC>i\<Enter>"
-        elseif '' == getline('.')[col('.')] && &ft =~ '^\(python\|autohotkey\|vim\|snippet\)$'
-            return "{}\<Left>"
-        else
-            return a:char
-        endif
-    elseif "%" == a:char
-        if '' == getline('.')[col('.')] && &filetype =~ '^\(autohotkey\)$'
-            return "%%<Esc>i"
-        else
-            return a:char
-        endif
+  if "(" == a:char
+    if &filetype =~ '^\(sql\)$'
+      return "(\<Enter>);\<Up>\<Enter>"
+    elseif '' == getline('.')[col('.')]
+      return "()\<Left>"
+    else
+      return a:char
     endif
+  elseif "[" == a:char
+    if '' == getline('.')[col('.')]
+      return "[]\<Left>"
+    else
+      return a:char
+    endif
+  elseif "{" == a:char
+    if &filetype =~ '^\(java\|perl\)$'
+      return "{\<Enter>}\<ESC>ko"
+      " return "{}\<ESC>i\<Enter>"
+    elseif '' == getline('.')[col('.')] && &ft =~ '^\(python\|autohotkey\|vim\|snippet\)$'
+      return "{}\<Left>"
+    else
+      return a:char
+    endif
+  elseif "%" == a:char
+    if '' == getline('.')[col('.')] && &filetype =~ '^\(autohotkey\)$'
+      return "%%<Esc>i"
+    else
+      return a:char
+    endif
+  endif
 endfunc
 
 function! ClosePair(char)
-    if getline('.')[col('.') - 1] == a:char
-        return "\<Right>"
-    else
-        return a:char
-    endif
+  if getline('.')[col('.') - 1] == a:char
+    return "\<Right>"
+  else
+    return a:char
+  endif
 endfunction
 
 inoremap <buffer> <BS> <c-r>=DeletePairs()<CR>
@@ -343,12 +344,12 @@ inoremap <buffer> <C-h> <c-r>=DeletePairs()<CR>
 
 " Delete the pair of parentheses, brackets and braces
 function! DeletePairs()
-    let AutoPaires = {')': '(',']': '[','}': '{'}
-    if has_key(AutoPaires, getline('.')[col('.') - 1]) && getline('.')[col('.') - 2 ] == AutoPaires[getline('.')[col('.') - 1]]
-        return "\<BS>\<DEL>"
-    else
-        return "\<BS>"
-    endif
+  let AutoPaires = {')': '(',']': '[','}': '{'}
+  if has_key(AutoPaires, getline('.')[col('.') - 1]) && getline('.')[col('.') - 2 ] == AutoPaires[getline('.')[col('.') - 1]]
+    return "\<BS>\<DEL>"
+  else
+    return "\<BS>"
+  endif
 endfunction
 
 iabbrev <leader>/* /*********************************
@@ -360,79 +361,92 @@ inoremap <leader>fe <C-R>=expand("%:t")<CR>
 
 " Add suffix '.py' if the filetype is python
 function! GotoFile()
-    if 'python' == &filetype
-        let com = expand('%:p:h') . '\' . expand('<cfile>') . '.py'
+  if 'python' == &filetype
+    let com = expand('%:p:h') . '\' . expand('<cfile>') . '.py'
     " elseif 'ruby' == &filetype
-        " let com = expand('%:p:h') . '\' . expand('<cfile>')
-        " let com = 'C:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\' . expand('<cfile>')
-    else
-        let com = expand('<cfile>')
-    endif
-    silent execute ':e ' . com
-    echo 'Open file "' . com . '" under the cursor'
+    " let com = expand('%:p:h') . '\' . expand('<cfile>')
+    " let com = 'C:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\' . expand('<cfile>')
+  else
+    let com = expand('<cfile>')
+  endif
+  silent execute ':e ' . com
+  echo 'Open file "' . com . '" under the cursor'
 endfunction
 nmap gf :call GotoFile()<CR>
 
 " Update tags file automatic
 function! UpdateTags()
-    silent !ctags -R --fields=+ianS --extra=+q
+  silent !ctags -R --fields=+ianS --extra=+q
 endfunction
 nmap <F12> :call UpdateTags()<CR>
 
-" Reduce the font
-function! FontSize_Reduce()
+if has('gui_running')
+  " Reduce the font
+  function! FontSize_Reduce()
     if has('unix')
-        let pattern = '\<\d\+$'
+      let pattern = '\<\d\+$'
     elseif has('win32') || has('win95') || has('win64')
-        let pattern = ':h\zs\d\+\ze'
-        " let pattern = '\([1-9][0-9]*\)$'
+      let pattern = ':h\zs\d\+\ze'
+      " let pattern = '\([1-9][0-9]*\)$'
     endif
     let fontsize = matchstr(&gfn, pattern)
     let cmd = substitute(&gfn, pattern, string(fontsize - 1), 'g')
     let &gfn=cmd
-endfunction
-nnoremap <A--> :call FontSize_Reduce()<CR>
+  endfunction
+  nnoremap <A--> :call FontSize_Reduce()<CR>
 
-" Enlarge the font
-function! FontSize_Enlarge()
+  " Enlarge the font
+  function! FontSize_Enlarge()
     if has('unix')
-        let pattern = '\<\d\+$'
+      let pattern = '\<\d\+$'
     elseif has('win32') || has('win95') || has('win64')
-        let pattern = ':h\zs\d\+\ze'
-        " let pattern = '\([1-9][0-9]*\)$'
+      let pattern = ':h\zs\d\+\ze'
+      " let pattern = '\([1-9][0-9]*\)$'
     endif
     let fontsize = matchstr(&gfn, pattern)
     let cmd = substitute(&gfn, pattern, string(fontsize + 1), 'g')
     let &gfn=cmd
-endfunction
-nnoremap <A-+> :call FontSize_Enlarge()<CR>
+  endfunction
+  nnoremap <A-+> :call FontSize_Enlarge()<CR>
+endif
 
 " ====================================== For Inteface =====================================
-" Make vim maximize while it startup
-func! MaximizeWindow()
-    silent !wmctrl -r :ACTIVE: -b add,maximized_vert,maximized_horz
-endfunc
-
-" The initialize size
 if has('gui_running')
-    set lines=40
-    set columns=122
+  " The initialize size
+  set lines=40
+  set columns=122
+
+  " Make vim maximize while it startup
+  func! MaximizeWindow()
+    silent !wmctrl -r :ACTIVE: -b add,maximized_vert,maximized_horz
+  endfunc
+
+  " set go=                                   " Hide everything
+  " set guioptions+=b                         " Add the bottom scroll bar
+  set guioptions-=T                           " Hide the tool bar
+  set guioptions-=r                           " Hide the side scroll bar
+  set guioptions-=m                           " Hide the Menu
+  set cpoptions+=n
+
+  if !filereadable("$VIM\vim74\vimtweak.dll")
+    au GUIENTER * call libcallnr("vimtweak.dll","SetAlpha",243)
+  endif
 endif
 
 if has('win32') || has('win95') || has('win64')
-    nmap <leader>v :e $VIM/_vimrc<CR>
-    " au GUIEnter * simalt ~x                       " Max after start vim
-    autocmd! bufwritepost $VIM/_vimrc source %      " autoload _vimrc
-    set guifont=Monaco:h12                          " Fonts
-    " Copy the content to system clipboard by using y/p
-    set clipboard+=unnamed
-    set clipboard+=unnamedplus
+  nmap <leader>v :e $VIM/_vimrc<CR>
+  " au GUIEnter * simalt ~x                       " Max after start vim
+  autocmd! bufwritepost $VIM/_vimrc source %      " autoload _vimrc
+  set guifont=Monaco:h12                          " Fonts
+  " Copy the content to system clipboard by using y/p
+  set clipboard+=unnamed
+  set clipboard+=unnamedplus
 else
-    nmap <leader>v :e ~/.vimrc<CR>
-    " au GUIEnter * call MaximizeWindow()
-    autocmd! bufwritepost ~/.vimrc source %
-    set guifont=Monaco\ 12
-    set clipboard=unnamedplus
+  nmap <leader>v :e ~/.vimrc<CR>
+  " au GUIEnter * call MaximizeWindow()
+  autocmd! bufwritepost ~/.vimrc source %
+  set guifont=Monaco\ 12
+  set clipboard=unnamedplus
 endif
 
 set nobackup noswapfile nowritebackup
@@ -442,38 +456,26 @@ set ruler number
 set report=0
 
 if has('gui_running') || 'xterm-256color' == $TERM
-    colorscheme marslo256
-    let psc_style='cool'
+  colorscheme marslo256
+  let psc_style='cool'
 else
-    colorscheme marslo16
+  colorscheme marslo16
 endif
 
 syntax enable
 syntax on
 filetype plugin on
 
-if !filereadable("$VIM\vim74\vimtweak.dll")
-    au GUIENTER * call libcallnr("vimtweak.dll","SetAlpha",243)
-endif
-
-" set go=                                   " Hide everything
-" set guioptions+=b                         " Add the bottom scroll bar
-set guioptions-=T                           " Hide the tool bar
-set guioptions-=r                           " Hide the side scroll bar
-set guioptions-=m                           " Hide the Menu
-set cpoptions+=n
-
 set autoread                                " Set auto read when a file is changed by outside
 set showmatch                               " Show matching bracets
-
 set nowrap                                  " Wrap lines
 
 " set textwidth=150
 set autoindent smartindent
 set smarttab expandtab                      " smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
-set tabstop=4                               " Tab width
-set softtabstop=4                           " the width while trigger <Tab> key
-set shiftwidth=4                            " the tab width by using >> & <<
+set tabstop=2                               " Tab width
+set softtabstop=2                           " the width while trigger <Tab> key
+set shiftwidth=2                            " the tab width by using >> & <<
 autocmd FileType ruby,eruby,yaml,html,css,scss set ai sw=2 sts=2 et
 set lbr
 set tw=0
@@ -519,15 +521,15 @@ inoremap <M-d> <ESC>cW
 " map ecq :echo system("ruby -e 'print $:.join(%q{,})'")<CR>
 
 function! FindProjectRoot(lookFor)
-    let pathMaker='%:p'
-    while(len(expand(pathMaker))>len(expand(pathMaker.':h')))
-        let pathMaker=pathMaker.':h'
-        let fileToCheck=expand(pathMaker).'/'.a:lookFor
-        if filereadable(fileToCheck)||isdirectory(fileToCheck)
-            return expand(pathMaker)
-        endif
-    endwhile
-    return 0
+  let pathMaker='%:p'
+  while(len(expand(pathMaker))>len(expand(pathMaker.':h')))
+    let pathMaker=pathMaker.':h'
+    let fileToCheck=expand(pathMaker).'/'.a:lookFor
+    if filereadable(fileToCheck)||isdirectory(fileToCheck)
+      return expand(pathMaker)
+    endif
+  endwhile
+  return 0
 endfunction
 
 " CtrlP
@@ -542,10 +544,10 @@ let g:ctrlp_use_caching = 1
 let g:ctrlp_clear_cache_on_exit = 0                 " Cross session caching
 let g:ctrlp_cache_dir = $VIM . '/cache/ctrlp'
 let g:ctrlp_custom_ignore = {
-\ 'dir':  '\v[\/]\.(git|hg|svn)$',
-\ 'file': '\v\.(exe|so|dll|rpm|tar|gz|bz2|zip|ctags|tags)|tags|ctags$',
-\ 'link': 'some_bad_symbolic_links',
-\ }
+      \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+      \ 'file': '\v\.(exe|so|dll|rpm|tar|gz|bz2|zip|ctags|tags)|tags|ctags$',
+      \ 'link': 'some_bad_symbolic_links',
+      \ }
 
 " GundoToggle
 nnoremap <leader>g :GundoToggle<CR>
@@ -560,9 +562,9 @@ set backspace=indent,eol,start                  " make backspace h, l, etc wrap 
 
 " nmap <leader>s :ConqueTermSplit
 if has('win32') || has('win95') || has('win64')
-    nmap <leader>tv :ConqueTermSplit cmd <CR>
+  nmap <leader>tv :ConqueTermSplit cmd <CR>
 else
-    nmap <leader>tv :ConqueTermSplit bash <CR>
+  nmap <leader>tv :ConqueTermSplit bash <CR>
 endif
 
 nmap zdb :%s/\s\+$//<CR>
@@ -604,15 +606,6 @@ let g:tagbar_singleclick=1
 let g:tagbar_iconchars=['+', '-']
 let g:tagbar_autoshowtag=1
 
-" MiniBufExplorer
-let g:miniBufExplMapCTabSwitchBufs=1
-let g:miniBufExplMapWindowNavArrows=1
-let g:miniBufExplorerMoreThanOne=0              " Mult-files openning at one minibufexplorer
-let g:miniBufExplMapWindowNavVim=1              " Using <HJKL> to change the buffer
-let g:miniBufExplTabWra=1
-let g:miniBufExplModSelTarget=1                 " Use other explorers like TagList set it at 1
-let g:miniBufExplUseSingleClick=1               " Single Click could switch the buffers
-
 " Comments
 let g:EnhCommentifyAlignRight='Yes'
 let g:EnhCommentifyRespectIndent='yes'
@@ -620,10 +613,10 @@ let g:EnhCommentifyPretty='Yes'
 let g:EnhCommentifyMultiPartBlocks='Yes'
 let g:EnhCommentifyUseSyntax='Yes'
 function! EnhCommentifyCallback(ft)
-    if a:ft == 'autohotkey'
-        let b:ECcommentOpen = ';'
-        let b:ECcommentClose = ''
-    endif
+  if a:ft == 'autohotkey'
+    let b:ECcommentOpen = ';'
+    let b:ECcommentClose = ''
+  endif
 endfunction
 let g:EnhCommentifyCallbackExists = 'Yes'
 let g:EnhCommentifyAlignRight='Yes'
@@ -673,30 +666,42 @@ endfunction
 
 augroup resCur
   autocmd!
-  if has("folding")
-    autocmd BufWinEnter * if ResCur() | call UnfoldCur() | endif
-  else
-    autocmd BufWinEnter * call ResCur()
-  endif
+  " if has("folding")
+    " autocmd BufWinEnter * if ResCur() | call UnfoldCur() | endif
+  " else
+  autocmd BufWinEnter * call ResCur()
+  " endif
 augroup END
 
-if has("folding")
-  function! UnfoldCur()
-    if !&foldenable
-      return
-    endif
-    let cl = line(".")
-    if cl <= 1
-      return
-    endif
-    let cf  = foldlevel(cl)
-    let uf  = foldlevel(cl - 1)
-    let min = (cf > uf ? uf : cf)
-    if min
-      execute "normal!" min . "zo"
-      return 1
-    endif
-  endfunction
+" Block comment in vimrc
+if 0
+  if has("folding")
+    function! UnfoldCur()
+      if !&foldenable
+        return
+      endif
+      let cl = line(".")
+      if cl <= 1
+        return
+      endif
+      let cf  = foldlevel(cl)
+      let uf  = foldlevel(cl - 1)
+      let min = (cf > uf ? uf : cf)
+      if min
+        execute "normal!" min . "zo"
+        return 1
+      endif
+    endfunction
+  endif
+
+  " MiniBufExplorer
+  let g:miniBufExplMapCTabSwitchBufs=1
+  let g:miniBufExplMapWindowNavArrows=1
+  let g:miniBufExplorerMoreThanOne=0              " Mult-files openning at one minibufexplorer
+  let g:miniBufExplMapWindowNavVim=1              " Using <HJKL> to change the buffer
+  let g:miniBufExplTabWra=1
+  let g:miniBufExplModSelTarget=1                 " Use other explorers like TagList set it at 1
+  let g:miniBufExplUseSingleClick=1               " Single Click could switch the buffers
 endif
 
 " Rainbow bracket
@@ -706,23 +711,23 @@ au Syntax * RainbowParenthesesLoadRound
 au Syntax * RainbowParenthesesLoadSquare
 au Syntax * RainbowParenthesesLoadBraces
 let g:rbpt_colorpairs = [
-    \ ['brown',       'RoyalBlue3'],
-    \ ['Darkblue',    'SeaGreen3'],
-    \ ['darkgray',    'DarkOrchid3'],
-    \ ['darkgreen',   'firebrick3'],
-    \ ['darkcyan',    'RoyalBlue3'],
-    \ ['darkred',     'SeaGreen3'],
-    \ ['darkmagenta', 'DarkOrchid3'],
-    \ ['brown',       'firebrick3'],
-    \ ['gray',        'RoyalBlue3'],
-    \ ['black',       'SeaGreen3'],
-    \ ['darkmagenta', 'DarkOrchid3'],
-    \ ['Darkblue',    'firebrick3'],
-    \ ['darkgreen',   'RoyalBlue3'],
-    \ ['darkcyan',    'SeaGreen3'],
-    \ ['darkred',     'DarkOrchid3'],
-    \ ['red',         'firebrick3'],
-    \ ]
+      \ ['brown',       'RoyalBlue3'],
+      \ ['Darkblue',    'SeaGreen3'],
+      \ ['darkgray',    'DarkOrchid3'],
+      \ ['darkgreen',   'firebrick3'],
+      \ ['darkcyan',    'RoyalBlue3'],
+      \ ['darkred',     'SeaGreen3'],
+      \ ['darkmagenta', 'DarkOrchid3'],
+      \ ['brown',       'firebrick3'],
+      \ ['gray',        'RoyalBlue3'],
+      \ ['black',       'SeaGreen3'],
+      \ ['darkmagenta', 'DarkOrchid3'],
+      \ ['Darkblue',    'firebrick3'],
+      \ ['darkgreen',   'RoyalBlue3'],
+      \ ['darkcyan',    'SeaGreen3'],
+      \ ['darkred',     'DarkOrchid3'],
+      \ ['red',         'firebrick3'],
+      \ ]
 
 " IndentLine
 let g:indentLine_color_gui = "#282828"
@@ -730,12 +735,11 @@ let g:indentLine_color_term = 8
 let g:indentLine_indentLevel = 20
 let g:indentLine_showFirstIndentLevel = 1
 if has('gui_running') || 'xterm-256color' == $TERM
-    let g:indentLine_char = '¦'
+  let g:indentLine_char = '¦'
 elseif has('win32')
-    let g:indentLine_char = '|'
+  let g:indentLine_char = '|'
 endif
 " let g:indentLine_loaded = 1
-
 
 " Supper Tab
 set completeopt=longest,menuone
@@ -747,9 +751,9 @@ let SuperTabClosePreviewOnPopupClose = 1
 
 " Config for ruby
 if has("autocmd")
-    autocmd FileType ruby set omnifunc=rubycomplete#Complete
-    " autocmd FileType ruby let g:rubycomplete_buffer_loading=1
-    " autocmd FileType ruby let g:rubycomplete_classes_in_global=1
+  autocmd FileType ruby set omnifunc=rubycomplete#Complete
+  " autocmd FileType ruby let g:rubycomplete_buffer_loading=1
+  " autocmd FileType ruby let g:rubycomplete_classes_in_global=1
 endif
 
 " vim-ruby
