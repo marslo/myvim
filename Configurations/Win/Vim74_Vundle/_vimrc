@@ -80,7 +80,6 @@ let &termencoding=&encoding
 " set mouse=a
 set selection=exclusive
 set selectmode=mouse,key
-set scrolloff=3
 
 set diffexpr=MyDiff()
 func! MyDiff()
@@ -376,11 +375,11 @@ nmap <F12> :call UpdateTags()<CR>
 
 if has('gui_running')
   " Reduce the font
-  function! FontSize_Reduce()
+  function! <SID>FontSize_Reduce()
     if has('unix')
       let pattern = '\<\d\+$'
     elseif has('win32') || has('win95') || has('win64')
-      let pattern = ':h\zs\d\+\ze'
+      let pattern = ':h\zs\d\+\ze:'
       " let pattern = '\([1-9][0-9]*\)$'
     endif
     let fontsize = matchstr(&gfn, pattern)
@@ -388,21 +387,21 @@ if has('gui_running')
     let cmd = substitute(&gfn, pattern, string(fontsize - 1), 'g')
     let &gfn=cmd
   endfunction
-  nnoremap <A--> :call FontSize_Reduce()<CR>
+  nnoremap <A--> :call <SID>FontSize_Reduce()<CR>
 
   " Enlarge the font
-  function! FontSize_Enlarge()
+  function! <SID>FontSize_Enlarge()
     if has('unix')
       let pattern = '\<\d\+$'
     elseif has('win32') || has('win95') || has('win64')
-      let pattern = ':h\zs\d\+\ze'
+      let pattern = ':h\zs\d\+\ze:'
       " let pattern = '\([1-9][0-9]*\)$'
     endif
     let fontsize = matchstr(&gfn, pattern)
     let cmd = substitute(&gfn, pattern, string(fontsize + 1), 'g')
     let &gfn=cmd
   endfunction
-  nnoremap <A-+> :call FontSize_Enlarge()<CR>
+  nnoremap <A-+> :call <SID>FontSize_Enlarge()<CR>
 
   " Show syntax highlighting groups for word under cursor
   function! SynStack()
@@ -413,7 +412,7 @@ if has('gui_running')
   endfunction
 endif
 
-" Config for ruby
+" Programming configs for Ruby and Rails
 " map ecq :echo system("ruby -e 'print $:.join(%q{,})'")<CR>
 if has("autocmd")
   autocmd FileType ruby set omnifunc=rubycomplete#Complete
@@ -429,9 +428,11 @@ let g:rubycomplete_rails = 1
 " let g:ruby_syntaxcheck_map='<F10>'
 " autocmd FileType ruby map <F4> :w<CR>:!ruby -c %<CR>
 
+" Programming configs for Python
 if "python" == &filetype
   " syntax-python
   let python_highlight_all = 1
+  au FileType python syn keyword pythonDecorator True None False self
 
   " Run pylint
   func! PylintCheck()
@@ -445,6 +446,13 @@ if "python" == &filetype
     let &makeprg     = mp
     let &errorformat = ef
   endfunc
+
+  " Jump to Next Def or Class
+  " Inspired from https://gitcafe.com/pythoner/vim_conf/blob/master/.vimrc
+  " au FileType python map <C-j> :call search('^\s*def\ ', "w")<cr>
+  " au FileType python map <C-k> :call search('^\s*def\ ', 'wb')<cr>
+  " au FileType python map <Leader>j :call search('^\s*class\ ', "w")<cr>
+  " au FileType python map <Leader>k :call search('^\s*class\ ', "wb")<cr>
 endif
 
 " ====================================== For Inteface =====================================
@@ -505,7 +513,7 @@ filetype plugin on
 
 set autoread                                " Set auto read when a file is changed by outside
 set showmatch                               " Show matching bracets
-set wrap                                    " Wrap lines
+set nowrap                                  " Wrap lines
 
 " Tab width
 " set textwidth=150
@@ -688,10 +696,16 @@ set t_vb=
 set list listchars=tab:\ \ ,trail:·,extends:»,precedes:«,nbsp:·
 
 " Cursor format
+set cursorline                        " Highlight the current line
 set guicursor=a:hor1
 set guicursor+=i-r-ci-cr-o:hor2-blinkon0
+set scrolloff=3
+" set scrolljump=5
+set sidescroll=1
+set sidescrolloff=5
 
-set cursorline                        " Highlight the current line
+" Fix context menu messing
+set imcmdline
 
 " Remember Cursor position in last time, inspired from http://vim.wikia.com/wiki/VimTip80
 function! ResCur()
