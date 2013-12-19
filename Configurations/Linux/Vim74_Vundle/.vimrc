@@ -277,7 +277,7 @@ func! AutoPair(char)
   elseif "{" == a:char
     if &filetype =~ '^\(java\|perl\)$'
       return "{\<Enter>}\<ESC>ko"
-      " return "{}\<ESC>i\<Enter>"
+      " return "{\<Enter>}\<Up>\<Enter>"
     elseif '' == getline('.')[col('.')] && &ft =~ '^\(python\|autohotkey\|vim\|snippet\)$'
       return "{}\<Left>"
     else
