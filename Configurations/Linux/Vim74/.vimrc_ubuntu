@@ -67,8 +67,6 @@ set encoding=utf-8
 set fileencoding=utf-8
 let &termencoding=&encoding
 
-set scrolloff=3
-
 " Vim Bundle
 " Get Vundle from: git clone https://github.com/gmarik/vundle.git ~/.vim
 set nocompatible
@@ -122,6 +120,9 @@ Bundle 'kana/vim-textobj-user'
 if "ruby" == &filetype
   Bundle 'ruby-matchit'
 endif
+
+" For Javascript
+Bundle "pangloss/vim-javascript"
 
 " Others
 " Bundle 'snipMate'
@@ -212,13 +213,13 @@ func! RunResult()
   set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
   " let com = make . ' "' . expand("%") . '"'
   " silent execute com
-  silent make %
   " silent make expand("%")
-    copen
+  silent make %
+  copen
   let &makeprg     = mp
   let &errorformat = ef
 endfunc
-map <F5> :call RunResult()<CR>
+" map <F5> :call RunResult()<CR>
 
 " Automatic Pair
 " inoremap ( ()<ESC>i
@@ -232,7 +233,7 @@ inoremap <buffer> { <c-r>=AutoPair('{')<CR>
 inoremap <buffer> } <c-r>=ClosePair('}')<CR>
 inoremap <buffer> % <c-r>=AutoPair('%')<CR>
 
-func! AutoPair(char)
+function! AutoPair(char)
   if "(" == a:char
     if &filetype =~ '^\(disable_sql\)$'
       return "(\<Enter>);\<Up>\<Enter>"
@@ -250,8 +251,7 @@ func! AutoPair(char)
   elseif "{" == a:char
     if &filetype =~ '^\(java\|perl\)$'
       return "{\<Enter>}\<ESC>ko"
-      " return "{\<Enter>}\<Up>\<Enter>"
-    elseif '' == getline('.')[col('.')] && &ft =~ '^\(python\|autohotkey\|vim\|snippet\)$'
+    elseif '' == getline('.')[col('.')] && &filetype =~ '^\(python\|autohotkey\|vim\|snippet\)$'
       return "{}\<Left>"
     else
       return a:char
@@ -263,7 +263,7 @@ func! AutoPair(char)
       return a:char
     endif
   endif
-endfunc
+endfunction
 
 function! ClosePair(char)
   if getline('.')[col('.') - 1] == a:char
@@ -343,15 +343,15 @@ if has('gui_running')
     let &gfn=cmd
   endfunction
   nnoremap <A-+> :call <SID>FontSize_Enlarge()<CR>
-
-  " Show syntax highlighting groups for word under cursor
-  function! SynStack()
-    if !exists("*synstack")
-      return
-    endif
-    echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-  endfunction
 endif
+
+" Show syntax highlighting groups for word under cursor
+function! SynStack()
+  if !exists("*synstack")
+    return
+  endif
+  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunction
 
 " Programming configs for Ruby and Rails
 " map ecq :echo system("ruby -e 'print $:.join(%q{,})'")<CR>
@@ -390,10 +390,12 @@ if "python" == &filetype
 
   " Jump to Next Def or Class
   " Inspired from https://gitcafe.com/pythoner/vim_conf/blob/master/.vimrc
-  " au FileType python map <C-j> :call search('^\s*def\ ', "w")<cr>
-  " au FileType python map <C-k> :call search('^\s*def\ ', 'wb')<cr>
-  " au FileType python map <Leader>j :call search('^\s*class\ ', "w")<cr>
-  " au FileType python map <Leader>k :call search('^\s*class\ ', "wb")<cr>
+  if 0
+    au FileType python map <C-j> :call search('^\s*def\ ', "w")<cr>
+    au FileType python map <C-k> :call search('^\s*def\ ', 'wb')<cr>
+    au FileType python map <Leader>j :call search('^\s*class\ ', "w")<cr>
+    au FileType python map <Leader>k :call search('^\s*class\ ', "wb")<cr>
+  endif
 endif
 
 " ====================================== For Inteface =====================================
@@ -599,14 +601,6 @@ let g:EnhCommentifyRespectIndent='yes'
 let g:EnhCommentifyPretty='Yes'
 let g:EnhCommentifyMultiPartBlocks='Yes'
 let g:EnhCommentifyUseSyntax='Yes'
-function! EnhCommentifyCallback(ft)
-  if a:ft == 'autohotkey'
-    let b:ECcommentOpen = ';'
-    let b:ECcommentClose = ''
-  endif
-endfunction
-let g:EnhCommentifyCallbackExists = 'Yes'
-let g:EnhCommentifyAlignRight='Yes'
 
 " AuthorInfo
 map <leader>aid :AuthorInfoDetect<CR>
@@ -643,6 +637,8 @@ set list listchars=tab:\ \ ,trail:·,extends:»,precedes:«,nbsp:·
 set cursorline                        " Highlight the current line
 set guicursor=a:hor1
 set guicursor+=i-r-ci-cr-o:hor2-blinkon0
+
+" Scroll settings
 set scrolloff=3
 " set scrolljump=5
 set sidescroll=1
@@ -661,15 +657,20 @@ endfunction
 
 augroup resCur
   autocmd!
-  " if has("folding")
-  " autocmd BufWinEnter * if ResCur() | call UnfoldCur() | endif
-  " else
   autocmd BufWinEnter * call ResCur()
-  " endif
 augroup END
 
 " Block comment in vimrc
 if 0
+  augroup resCur
+    autocmd!
+    if has("folding")
+      autocmd BufWinEnter * if ResCur() | call UnfoldCur() | endif
+    else
+      autocmd BufWinEnter * call ResCur()
+    endif
+  augroup END
+
   if has("folding")
     function! UnfoldCur()
       if !&foldenable
@@ -744,6 +745,7 @@ set foldcolumn=1
 set foldexpr=1                              " Shown line number after fold
 set foldlevel=100                           " Not fold while VIM set up
 " Load view automatic
+" au BufWinLeave * silent mkview
 autocmd BufWinLeave * silent! mkview
 autocmd BufWinEnter * silent! loadview
 set viewoptions=folds
