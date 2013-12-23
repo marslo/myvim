@@ -415,12 +415,24 @@ function! SynStack()
   echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunction
 
+function! FindProjectRoot(lookFor)
+  let pathMaker='%:p'
+  while(len(expand(pathMaker))>len(expand(pathMaker.':h')))
+    let pathMaker=pathMaker.':h'
+    let fileToCheck=expand(pathMaker).'/'.a:lookFor
+    if filereadable(fileToCheck)||isdirectory(fileToCheck)
+      return expand(pathMaker)
+    endif
+  endwhile
+  return 0
+endfunction
+
 " Programming configs for Ruby and Rails
 " map ecq :echo system("ruby -e 'print $:.join(%q{,})'")<CR>
 if has("autocmd")
   autocmd FileType ruby set omnifunc=rubycomplete#Complete
-  " autocmd FileType ruby let g:rubycomplete_buffer_loading=1
-  " autocmd FileType ruby let g:rubycomplete_classes_in_global=1
+  autocmd FileType ruby let g:rubycomplete_buffer_loading=1
+  autocmd FileType ruby let g:rubycomplete_classes_in_global=1
 endif
 
 " vim-ruby
@@ -430,6 +442,13 @@ let g:rubycomplete_classes_in_global = 1
 let g:rubycomplete_rails = 1
 " let g:ruby_syntaxcheck_map='<F10>'
 " autocmd FileType ruby map <F4> :w<CR>:!ruby -c %<CR>
+
+" Inspired from :h new-filetype
+augroup filetypedetect
+  au BufNewFile,BufRead *.html.erb set filetype=html.ruby
+  au BufNewFile,BufRead *.js.erb set filetype=javascript.ruby
+  au BufNewFile,BufRead *.r.erb set filetype=r.ruby
+augroup end
 
 " Programming configs for Python
 if "python" == &filetype
@@ -570,18 +589,6 @@ inoremap <M-f> <ESC><Space>Wi
 inoremap <M-b> <Esc>Bi
 inoremap <M-d> <ESC>cW
 
-function! FindProjectRoot(lookFor)
-  let pathMaker='%:p'
-  while(len(expand(pathMaker))>len(expand(pathMaker.':h')))
-    let pathMaker=pathMaker.':h'
-    let fileToCheck=expand(pathMaker).'/'.a:lookFor
-    if filereadable(fileToCheck)||isdirectory(fileToCheck)
-      return expand(pathMaker)
-    endif
-  endwhile
-  return 0
-endfunction
-
 " CtrlP
 " let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'
 let g:ctrlp_map = '<c-p>'
@@ -591,12 +598,16 @@ let g:ctrlp_max_depth = 100
 let g:ctrl_root_makers = ['.ctrlp']                 " Stop search if these files present
 let g:ctrlp_use_caching = 1
 let g:ctrlp_clear_cache_on_exit = 0                 " Cross session caching
-let g:ctrlp_cache_dir = $VIM . '/cache/ctrlp'
+if has('win32') || has('win95') || has('win64')
+  let g:ctrlp_cache_dir = $VIM . '/cache/ctrlp'
+else
+  let g:ctrlp_cache_dir = '$HOME/.vim/cache/ctrlp'
+endif
 let g:ctrlp_custom_ignore = {
-      \ 'dir':  '\v[\/]\.(git|hg|svn)$',
-      \ 'file': '\v\.(exe|so|dll|rpm|tar|gz|bz2|zip|ctags|tags)|tags|ctags$',
-      \ 'link': 'some_bad_symbolic_links',
-      \ }
+    \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+    \ 'file': '\v\.(exe|so|dll|rpm|tar|gz|bz2|zip|ctags|tags)|tags|ctags$',
+    \ 'link': 'some_bad_symbolic_links',
+    \ }
 
 " GundoToggle
 nnoremap <leader>g :GundoToggle<CR>
