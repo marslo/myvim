@@ -4,8 +4,8 @@
 "         Author: Marslo
 "          Email: marslo.jiao@gmail.com
 "        Created: 2010-10
-"        Version: 0.1.12
-"     LastChange: 2013-12-19 17:48:19
+"        Version: 0.1.13
+"     LastChange: 2013-12-23 16:05:33
 "        History: 0.0.3 | Marslo | Add the Autoload and Fast Edit difference between win32 and non-win32
 "                 0.0.4 | Marslo | Add CheckRubySyntax() function for checking and run ruby script
 "                 0.0.5 | Marslo | Add the function of highlight txt file
@@ -17,6 +17,7 @@
 "                 0.0.10 | Marslo | Add function of GetVundle() and GetVim() for git clone automaticlly"
 "                 0.0.11 | Marslo | Change repository woainvzu to Marslo
 "                 0.0.12 | Marslo | Modification for startup faster
+"                 0.0.13 | Marslo | Remove autopairs functions. Replaced by auto-pairs
 " =============================================================================
 
 " At Menu
@@ -121,6 +122,7 @@ Bundle 'Marslo/EnhCommentify.vim'
 Bundle 'tpope/vim-pathogen'
 Bundle 'gregsexton/MatchTag'
 Bundle 'ervandew/supertab'
+Bundle 'jiangmiao/auto-pairs'
 
 " snipmate works on windows by using pathogen
 Bundle 'Marslo/snipmate.vim.git'
@@ -246,71 +248,6 @@ func! RunResult()
   let &errorformat = ef
 endfunc
 " map <F5> :call RunResult()<CR>
-
-" Automatic Pair
-" inoremap ( ()<ESC>i
-inoremap <buffer> ( <c-r>=AutoPair('(')<CR>
-inoremap <buffer> ) <c-r>=ClosePair(')')<CR>
-" inoremap [ []<ESC>i
-inoremap <buffer> [ <c-r>=AutoPair('[')<CR>
-inoremap <buffer> ] <c-r>=ClosePair(']')<CR>
-" inoremap { {<CR>}<ESC>ka<CR>
-inoremap <buffer> { <c-r>=AutoPair('{')<CR>
-inoremap <buffer> } <c-r>=ClosePair('}')<CR>
-inoremap <buffer> % <c-r>=AutoPair('%')<CR>
-
-function! AutoPair(char)
-  if "(" == a:char
-    if &filetype =~ '^\(disable_sql\)$'
-      return "(\<Enter>);\<Up>\<Enter>"
-    elseif '' == getline('.')[col('.')]
-      return "()\<Left>"
-    else
-      return a:char
-    endif
-  elseif "[" == a:char
-    if '' == getline('.')[col('.')]
-      return "[]\<Left>"
-    else
-      return a:char
-    endif
-  elseif "{" == a:char
-    if &filetype =~ '^\(java\|perl\)$'
-      return "{\<Enter>}\<ESC>ko"
-    elseif '' == getline('.')[col('.')] && &filetype =~ '^\(python\|autohotkey\|vim\|snippet\)$'
-      return "{}\<Left>"
-    else
-      return a:char
-    endif
-  elseif "%" == a:char
-    if '' == getline('.')[col('.')] && &filetype =~ '^\(autohotkey\)$'
-      return "%%<Esc>i"
-    else
-      return a:char
-    endif
-  endif
-endfunction
-
-function! ClosePair(char)
-  if getline('.')[col('.') - 1] == a:char
-    return "\<Right>"
-  else
-    return a:char
-  endif
-endfunction
-
-inoremap <buffer> <BS> <c-r>=DeletePairs()<CR>
-inoremap <buffer> <C-h> <c-r>=DeletePairs()<CR>
-
-" Delete the pair of parentheses, brackets and braces
-function! DeletePairs()
-  let AutoPaires = {')': '(',']': '[','}': '{'}
-  if has_key(AutoPaires, getline('.')[col('.') - 1]) && getline('.')[col('.') - 2 ] == AutoPaires[getline('.')[col('.') - 1]]
-    return "\<BS>\<DEL>"
-  else
-    return "\<BS>"
-  endif
-endfunction
 
 iabbrev <leader>/* /*********************************
 iabbrev <leader>*/ *********************************/
