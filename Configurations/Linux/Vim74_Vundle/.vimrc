@@ -33,9 +33,17 @@ let g:solarized_termcolors=256
 " Make vim open faster :help slow-start
 " set viminfo='20,<50,s10
 " Inspired from https://groups.google.com/forum/#!topic/vim_use/ImK21wi_JXg
-" save/restore buffer list, lines saved each register, files marks, search history, command-line history, disable 'hlsearch', 'file marks 0 = NOT stored'
-set viminfo=%,\"4,'4,/50,:50,h,f0
-set history=50
+set viminfo=%,\"100,'10,/50,:100,h,f0,n~/.vim/cache/viminfo
+"           |  |  |  |    |    | | + viminfo file path
+"           |  |  |  |    |    | + file marks 0-9,A-Z 0=NOT stored
+"           |  |  |  |    |    + disable 'hlsearch' loading viminfo
+"           |  |  |  |    + command-line history saved
+"           |  |  |  + search history saved
+"           |  |  + files marks saved
+"           |  + lines saved each register (old name for <, vi6.2)
+"           + save/restore buffer list
+
+set history=500
 
 set diffopt=filler,context:3
 
