@@ -96,8 +96,6 @@ Bundle 'tpope/vim-pathogen'
 Bundle 'gregsexton/MatchTag'
 Bundle 'ervandew/supertab'
 Bundle 'Marslo/auto-pairs'
-
-" snipmate works on windows by using pathogen
 Bundle 'Marslo/snipmate.vim.git'
 
 " Get from vim-scripts
@@ -105,13 +103,12 @@ Bundle 'Conque-Shell'
 Bundle 'mru.vim'
 Bundle 'taglist.vim'
 Bundle 'winmanager'
-" Bundle 'TeTrIs.vim'
-" Bundle 'matrix.vim--Yang'
 
 " For Python
 " Bundle 'python-mode'
 Bundle 'python_fold'
 Bundle 'pyflakes.vim'
+Bundle 'python_match.vim'
 
 " For ruby
 Bundle 'tpope/vim-rails'
@@ -127,23 +124,27 @@ Bundle "pangloss/vim-javascript"
 
 " For web design
 Bundle "tpope/vim-surround"
+Bundle 'tpope/vim-repeat'
+
+" For fun
+" Bundle 'TeTrIs.vim'
+" Bundle 'matrix.vim--Yang'
+" Bundle 'colorsel.vim'
+" Bundle 'gui2term.py'
 
 " Others
-" Bundle 'snipMate'
+" Bundle 'snipMate'                   Replaced by 'Marslo/snipmate.vim.git'
 " Bundle 'mattn/emmet-vim'
-" Bundle 'Tagbar'
-" Bundle 'AuthorInfo'
+" Bundle 'Tagbar'                     Replaced by 'majutsushi/tagbar'
+" Bundle 'AuthorInfo'                 Replaced by 'dantezhu/authorinfo'
 " Bundle 'colorsupport.vim'
-" Bundle 'ruby-matchit'
-" Bundle 'hdima/python-syntax.git'
+" Bundle 'hdima/python-syntax.git'    Replaced by'Marslo/python-syntax'
 " Bundle 'vantares/ruby-syntaxchecker.vim'
 " Bundle 'semmons99/vim-ruby-matchit'
 " Bundle 'ap/vim-css-color'
 
 " Colors and themes
 Bundle 'txt.vim'
-Bundle 'gui2term.py'
-Bundle 'colorsel.vim'
 Bundle 'JulesWang/css.vim'
 Bundle 'hail2u/vim-css3-syntax'
 Bundle 'Marslo/vim-coloresque'
@@ -330,6 +331,11 @@ function! FindProjectRoot(lookFor)
   endwhile
   return 0
 endfunction
+
+" map <F4> :execute "noautocmd vimgrep /" . expand("<cword>") . "/j " . FindProjectRoot('.project') . "/**" <Bar> cw<CR>
+" map <F5> :execute "noautocmd vimgrep /" . expand("<cword>") . "/j " . FindProjectRoot('.project') . "/**/*" <Bar> cw<C-Left><C-Left><Left><Left>
+" map <leader>vg :execute "noautocmd vimgrep //j " . FindProjectRoot('.ctrlp') . "/**/*" <Bar> cw<C-Left><C-Left><C-Left><C-Left><C-Left><C-Left><C-Left><C-Left><Right>
+
 
 " Programming configs for Ruby and Rails
 " map ecq :echo system("ruby -e 'print $:.join(%q{,})'")<CR>
