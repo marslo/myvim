@@ -1,3 +1,31 @@
+# class name
+snippet #
+	$("#${1:id}")
+snippet .
+	$(".${1:class}")
+snippet ej
+	escape_javascript()
+# document function
+snippet dfun
+	$(document).ready(function(){
+		${1:// content...}
+	})
+snippet sub
+	$("#${1:id}").submit(
+		${2:// content...}
+	)
+snippet this
+	$(this)${1}
+snippet ajq
+	jQuery.ajaxSetup({
+		${1:// content...}
+	})
+snippet srh
+	function(srh) {srh.setRequestHeader(${1:"Accetp"}, ${2:"text/javascript"})}
+snippet before
+	$("#${1:id}").before('${2:// content...}')
+snippet append
+	$("#${1:id}").append('${2:// content...}')
 # Prototype
 snippet proto
 	${1:class_name}.prototype.${2:method_name} =
@@ -140,7 +168,7 @@ snippet sing
 		$1 = function $1($2) {
 			return instance;
 		};
-		
+
 		// carry over the prototype properties
 		$1.prototype = this;
 

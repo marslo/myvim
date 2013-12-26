@@ -163,7 +163,7 @@ Bundle 'Marslo/EnhCommentify.vim'
 Bundle 'tpope/vim-pathogen'
 Bundle 'gregsexton/MatchTag'
 Bundle 'ervandew/supertab'
-Bundle 'jiangmiao/auto-pairs'
+Bundle 'Marslo/auto-pairs'
 
 " snipmate works on windows by using pathogen
 Bundle 'Marslo/snipmate.vim.git'
@@ -192,6 +192,9 @@ endif
 
 " For Javascript
 Bundle "pangloss/vim-javascript"
+
+" For web design
+Bundle "tpope/vim-surround"
 
 " Others
 " Bundle 'Tagbar'

@@ -2,6 +2,13 @@
 
 # Includes html.snippets
 
+# js.erub
+snippet j#
+	$("#${1:id}")
+snippet j.
+	$(".${1:class}")
+snippet ej
+	escape_javascript('${1}')
 # Rails *****************************
 snippet sff
 	<%= simple_form_for(${1:resource}, :as => ${2:resource_name}, :url => session_path($2), :html => { :class => '${3:form-horizontal}'}) do |${4:f}| %>
