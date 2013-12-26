@@ -2,6 +2,13 @@
 
 # Includes html.snippets
 
+# js.erub
+snippet j#
+	$("#${1:id}")
+snippet j.
+	$(".${1:class}")
+snippet ej
+	escape_javascript('${1}')
 # Rails *****************************
 snippet sff
 	<%= simple_form_for(${1:resource}, :as => ${2:resource_name}, :url => session_path($2), :html => { :class => '${3:form-horizontal}'}) do |${4:f}| %>
@@ -130,6 +137,10 @@ snippet slt
 	<%= stylesheet_link_tag ${1::all}, :cache => ${2:true} %>
 snippet sslt
 	<%= stylesheet_link_tag "${1}" %>
+
+# HTML *****************************
+snippet com
+	<!-- ${1} -->
 # Generic Doctype
 snippet doctype HTML 4.01 Strict
 	<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN"
@@ -929,6 +940,10 @@ snippet output
 	<output>${1}</output>
 snippet p
 	<p>${1}</p>
+snippet p.
+	<p class="${1}">${2}</p>
+snippet p#
+	<p id="${1}">${2}</p>
 snippet param
 	<param name="${1}" value="${2}" />
 snippet pre
@@ -986,6 +1001,8 @@ snippet source
 	<source src="${1}" type="${2}" media="${3}" />
 snippet span
 	<span>${1}</span>
+snippet span.
+	<span class="${1}">${2}</span>
 snippet strong
 	<strong>${1}</strong>
 snippet style

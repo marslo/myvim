@@ -1,0 +1,9 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =7
+let g:netrw_dirhist_1='/home/marslo/Study/Rails/sdt/app/assets/javascripts'
+let g:netrw_dirhist_2='/home/marslo/Study/Rails/sdt/app/assets'
+let g:netrw_dirhist_3='/home/marslo/Study/Rails/sdt/app/views/my'
+let g:netrw_dirhist_4='/home/marslo/Study/Rails/sdt/app/assets/javascripts'
+let g:netrw_dirhist_5='/home/marslo/Study/Rails/sdt/app/controllers'
+let g:netrw_dirhist_6='/home/marslo/Study/Rails/sdt/app/views/replies'
+let g:netrw_dirhist_7='/home/marslo/Study/Rails/sdt/app/views/sharings'

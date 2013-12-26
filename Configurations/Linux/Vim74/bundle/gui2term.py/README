@@ -1,0 +1,16 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=2778
+
+Requirement: python3 for 2.0+. However, it should not be hard to make it work under Python 2 if you are familiar with Python (you can try the `2to3` command).
+
+Usage:
+invoke it like this in commandline:
+  ./gui2term.py sourcefile newfile
+or
+  python3 gui2term.py sourcefile newfile
+
+Note:
+* It searches and processes lines in a vim colorscheme that seems like a normal highlight command, so it does not work with all the colorscheme.
+* Some GUI only colorschemes may use the default scheme if it found itself under a terminal. You need to manually remove these lines.
+* For some colors, the output is rather bad.
+
+gui2term is part of winterpy on github: https://github.com/lilydjwg/winterpy/tree/master/pyexe/gui2term.py

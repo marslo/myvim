@@ -4,7 +4,7 @@
 " Author:      Jan Larres <jan@majutsushi.net>
 " Licence:     Vim licence
 " Website:     http://majutsushi.github.com/tagbar/
-" Version:     2.5
+" Version:     2.6
 " Note:        This plugin was heavily inspired by the 'Taglist' plugin by
 "              Yegappan Lakshmanan and uses a small amount of code from it.
 "
@@ -58,6 +58,7 @@ let s:winrestcmd      = ''
 let s:short_help      = 1
 let s:nearby_disabled = 0
 let s:paused = 0
+let s:pwin_by_tagbar = 0
 
 let s:window_expanded   = 0
 let s:expand_bufnr = -1
@@ -69,7 +70,6 @@ let s:window_pos = {
 " Script-local variable needed since compare functions can't
 " take extra arguments
 let s:compare_typeinfo = {}
-
 
 let s:visibility_symbols = {
     \ 'public'    : '+',
@@ -547,6 +547,8 @@ function! s:InitTypes() abort
         \ 'function' : 'f'
     \ }
     let s:known_types.python = type_python
+    let s:known_types.pyrex  = type_python
+    let s:known_types.cython = type_python
     " REXX {{{3
     let type_rexx = s:TypeInfo.New()
     let type_rexx.ctagstype = 'rexx'
@@ -970,7 +972,7 @@ function! s:CreateAutocommands() abort
             autocmd CursorMoved __Tagbar__ nested call s:ShowInPreviewWin()
         endif
 
-        autocmd BufEnter * nested call s:QuitIfOnlyWindow()
+        autocmd WinEnter * nested call s:QuitIfOnlyWindow()
         autocmd WinEnter * if bufwinnr('__Tagbar__') == -1 |
                          \     call s:ShrinkIfExpanded() |
                          \ endif
@@ -1495,7 +1497,7 @@ endfunction
 
 " s:KindheaderTag.toggleFold() {{{3
 function! s:KindheaderTag.toggleFold() abort dict
-    let fileinfo = s:known_files.getCurrent()
+    let fileinfo = s:known_files.getCurrent(0)
 
     let fileinfo.kindfolds[self.short] = !fileinfo.kindfolds[self.short]
 endfunction
@@ -1840,6 +1842,11 @@ function! s:CloseWindow() abort
         return
     endif
 
+    " Close the preview window if it was opened by us
+    if s:pwin_by_tagbar
+        pclose
+    endif
+
     let tagbarbufnr = winbufnr(tagbarwinnr)
 
     if winnr() == tagbarwinnr
@@ -1882,6 +1889,12 @@ function! s:CloseWindow() abort
     endif
 
     call s:ShrinkIfExpanded()
+
+    " The window sizes may have changed due to the shrinking happening after
+    " the window closing, so equalize them again.
+    if &equalalways
+        wincmd =
+    endif
 
     if s:autocommands_done && !s:statusline_in_use
         autocmd! TagbarAutoCmds
@@ -2112,7 +2125,7 @@ function! s:ExecuteCtagsOnFile(fname, realfname, typeinfo) abort
                           \ '--excmd=pattern',
                           \ '--fields=nksSa',
                           \ '--extra=',
-                          \ '--sort=yes'
+                          \ '--sort=no'
                           \ ]
 
         " Include extra type definitions
@@ -2987,17 +3000,20 @@ function! s:JumpToTag(stay_in_tagbar) abort
     normal! z.
     call cursor(taginfo.fields.line, taginfo.fields.column)
 
-    if foldclosed('.') != -1
-        .foldopen
-    endif
+    normal! zv
 
     if a:stay_in_tagbar
         call s:HighlightTag(0)
         call s:goto_win(tagbarwinnr)
         redraw
     elseif g:tagbar_autoclose || autoclose
+        " Also closes preview window
         call s:CloseWindow()
     else
+        " Close the preview window if it was opened by us
+        if s:pwin_by_tagbar
+            pclose
+        endif
         call s:HighlightTag(0)
     endif
 endfunction
@@ -3010,8 +3026,43 @@ function! s:ShowInPreviewWin() abort
         return
     endif
 
-    execute g:tagbar_previewwin_pos . ' pedit +' . taginfo.fields.line . ' ' .
-          \ s:known_files.getCurrent(0).fpath
+    " Check whether the preview window is already open and open it if not.
+    " This has to be done before the :psearch below so the window is relative
+    " to the Tagbar window.
+    let pwin_open = 0
+    for win in range(1, winnr('$'))
+        if getwinvar(win, '&previewwindow')
+            let pwin_open = 1
+            break
+        endif
+    endfor
+
+    if !pwin_open
+        silent! execute
+            \ g:tagbar_previewwin_pos . ' pedit ' . taginfo.fileinfo.fpath
+        " Remember that the preview window was opened by Tagbar so we can
+        " safely close it by ourselves
+        let s:pwin_by_tagbar = 1
+    endif
+
+    " Use psearch instead of pedit since pedit essentially reloads the file
+    " and creates an empty undo entry. psearch has to be called from the file
+    " window, and since we only want matches in the current file we disable
+    " the 'include' option. Also start searching at the correct line number to
+    " find the correct tag in case of tags with the same name and to speed up
+    " the searching. Unfortunately the /\%l pattern doesn't seem to work with
+    " psearch.
+    call s:GotoFileWindow(taginfo.fileinfo, 1)
+    let include_save = &include
+    set include=
+    silent! execute taginfo.fields.line . ',$psearch! /' . taginfo.pattern . '/'
+    let &include = include_save
+    call s:goto_tagbar(1)
+
+    call s:goto_win('P', 1)
+    normal! zv
+    normal! zz
+    call s:goto_win('p', 1)
 endfunction
 
 " s:ShowPrototype() {{{2
@@ -3565,10 +3616,12 @@ endfunction
 " s:GotoFileWindow() {{{2
 " Try to switch to the window that has Tagbar's current file loaded in it, or
 " open the file in a window otherwise.
-function! s:GotoFileWindow(fileinfo) abort
+function! s:GotoFileWindow(fileinfo, ...) abort
+    let noauto = a:0 > 0 ? a:1 : 0
+
     let tagbarwinnr = bufwinnr('__Tagbar__')
 
-    call s:goto_win('p')
+    call s:goto_win('p', noauto)
 
     let filebufnr = bufnr(a:fileinfo.fpath)
     if bufnr('%') != filebufnr || &previewwindow
@@ -3597,8 +3650,8 @@ function! s:GotoFileWindow(fileinfo) abort
 
         " To make ctrl-w_p work we switch between the Tagbar window and the
         " correct window once
-        call s:goto_win(tagbarwinnr)
-        call s:goto_win('p')
+        call s:goto_win(tagbarwinnr, noauto)
+        call s:goto_win('p', noauto)
     endif
 
     return winnr()
@@ -3747,7 +3800,8 @@ endfunction
 
 " s:goto_win() {{{2
 function! s:goto_win(winnr, ...) abort
-    let cmd = a:winnr == 'p' ? 'wincmd p' : a:winnr . 'wincmd w'
+    let cmd = type(a:winnr) == type(0) ? a:winnr . 'wincmd w'
+                                     \ : 'wincmd ' . a:winnr
     let noauto = a:0 > 0 ? a:1 : 0
 
     call s:LogDebugMessage("goto_win(): " . cmd . ", " . noauto)
@@ -3757,6 +3811,12 @@ function! s:goto_win(winnr, ...) abort
     else
         execute cmd
     endif
+endfunction
+
+" s:goto_tagbar() {{{2
+function! s:goto_tagbar(...) abort
+    let noauto = a:0 > 0 ? a:1 : 0
+    call s:goto_win(bufwinnr('__Tagbar__'), noauto)
 endfunction
 
 " TagbarBalloonExpr() {{{2

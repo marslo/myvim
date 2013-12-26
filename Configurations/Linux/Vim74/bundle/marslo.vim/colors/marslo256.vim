@@ -63,7 +63,7 @@
 "       File Name: marslo256.vim
 "       Modified:
 "               Update the format
-" v1.8: Modified at 18/11/13 20:30:18
+" v1.8: Modified at 18/11/13  20:03:20
 "       Author: Marslo
 "       Email: marslo.jiao@gmail.com
 "       File Name: marslo256.vim
@@ -72,6 +72,8 @@
 "               Entity              guifg
 "               Support             guifg
 "               Type                guifg
+"               FoldColumn          guifg
+"               Directory           guifg
 
 " cool help screens
 " :he group-name
@@ -104,9 +106,9 @@ hi LineNr               guifg=#555555       guibg=background
 hi CursorLine           guibg=background
 hi CursorLineNr         guifg=#A6E22E       guibg=background    gui=NONE
 hi Folded	            guibg=grey15        guifg=grey60
-hi FoldColumn	        guibg=grey15        guifg=tan
+hi FoldColumn	        guibg=#181818       guifg=#484848
 " $,>,backspace,... and other sign
-hi NonText              guifg=#808080           gui=NONE
+hi NonText              guifg=#808080       gui=NONE
 hi VertSplit	        guibg=#282828       guifg=grey30        gui=none
 hi IncSearch	        guifg=slategrey     guibg=khaki
 hi ModeMsg	            guifg=goldenrod
@@ -137,7 +139,8 @@ hi MBEVisibleNormal     guifg=#A6DB29       guibg=#333333
 " Color for :set showmatch
 hi MatchParen           gui=inverse
 " NERDTree
-hi Directory            guifg=#87afdf
+" hi Directory            guifg=#87afdf
+hi Directory            guifg=#1E90FF
 hi treeCWD              guifg=#dfaf87
 hi treeClosable         guifg=#df8787
 hi treeOpenable         guifg=#afdf87
@@ -148,18 +151,32 @@ hi String               guifg=#9acd00       gui=NONE
 hi Entity               guifg=#fa6513       gui=NONE
 hi Support              guifg=#8fa6cd       gui=NONE
 hi Comment	            guifg=#484848       gui=NONE
+"""" <CR>, <leader>
 hi Special	            guifg=#fdb933       gui=NONE
+"""" Strings if nohi String
 hi Constant	            guifg=#A6E22E       gui=NONE
+"""" Key words (while, if, else, for, in)
 hi Statement	        guifg=#EE801E       gui=NONE
+"""" #! color
 hi PreProc	            guifg=OrangeRed3    gui=NONE
 " hi Type		            guifg=#afdf66       gui=NONE
 " hi Type		            guifg=#4169E1       gui=NONE
 " hi Type		            guifg=#EE3E3E       gui=NONE
 " hi Type		            guifg=#B2F432       gui=NONE
-hi Type		            guifg=#D0E141       gui=NONE
+" hi Type		            guifg=#D0E141       gui=NONE
+" hi Type		            guifg=#1E90FF       gui=NONE
+" hi Type		            guifg=#a4c148       gui=NONE
+" hi Type		            guifg=#6495ED       gui=NONE
+hi Type		            guifg=#5F87FF       gui=NONE
 hi Underlined	        gui=NONE
-hi htmlArg              guifg=#dfafdf
-hi htmlValue            guifg=#dfdfaf
+" HTML
+hi htmlTag              guifg=#484848
+hi htmlEndTag           guifg=#484848
+hi htmlArg              guifg=#FF5F5F
+hi htmlValue            guifg=#D7D7AF
+hi htmlTitle            guifg=#D7D700         gui=NONE
+hi htmlTagName          guifg=#5F87FF
+hi htmlString           guifg=#87d75f
 
 " For syntax-python
 " hi link Define          Entity
@@ -186,20 +203,21 @@ hi htmlValue            guifg=#dfdfaf
 "    3	    6	    DarkCyan
 "    4	    1	    DarkRed
 "    5	    5	    DarkMagenta
-"    6	    3	    Brown, DarkYellow
-"    7	    7	    LightGray, LightGrey, Gray, Grey
-"    8	    0*	    DarkGray, DarkGrey
-"    9	    4*	    Blue, LightBlue
-"    10	    2*	    Green, LightGreen
-"    11	    6*	    Cyan, LightCyan
-"    12	    1*	    Red, LightRed
-"    13	    5*	    Magenta, LightMagenta
-"    14	    3*	    Yellow, LightYellow
+"    6	    3	    Brown,          DarkYellow
+"    7	    7	    LightGray,      LightGrey,      Gray,       Grey
+"    8	    0*	    DarkGray,       DarkGrey
+"    9	    4*	    Blue,           LightBlue
+"    10	    2*	    Green,          LightGreen (#90EE90)
+"    11	    6*	    Cyan,           LightCyan
+"    12	    1*	    Red,            LightRed
+"    13	    5*	    Magenta,        LightMagenta
+"    14	    3*	    Yellow,         LightYellow (#FFFFE0)
 "    15	    7*	    White
 
 hi SpecialKey	        ctermfg=darkgreen
-hi NonText	            cterm=NONE          ctermfg=darkblue
-hi Directory	        ctermfg=red
+" hi NonText	            cterm=NONE          ctermfg=157
+hi NonText	            cterm=NONE          ctermfg=239
+hi Directory	        ctermfg=63
 hi ErrorMsg	            cterm=NONE          ctermfg=red         ctermbg=0
 hi IncSearch	        cterm=NONE          ctermfg=yellow      ctermbg=green
 hi Search	            cterm=NONE          ctermfg=grey        ctermbg=blue
@@ -216,11 +234,11 @@ hi WarningMsg	        ctermfg=yellow      ctermbg=black
 hi WildMenu	            ctermfg=0           ctermbg=3
 hi Folded	            ctermfg=darkgrey    ctermbg=NONE
 hi FoldColumn	        ctermfg=darkgrey    ctermbg=NONE
-hi DiffAdd	            cterm=NONE          ctermbg=56     ctermfg=255
+hi DiffAdd	            cterm=NONE          ctermbg=56          ctermfg=255
 hi DiffDelete	        cterm=NONE          ctermbg=239
 hi DiffAdded            ctermbg=93
 hi DiffRemoved          ctermbg=129
-hi DiffChange	        cterm=bold          ctermbg=99      ctermfg=255
+hi DiffChange	        cterm=bold          ctermbg=99          ctermfg=255
 hi DiffText	            cterm=NONE          ctermbg=196
 hi Pmenu                ctermbg=darkred
 hi PmenuSel             ctermfg=lightgreen
@@ -229,6 +247,9 @@ hi Cursor               cterm=underline     term=underline
 hi MatchParen           cterm=inverse       term=inverse
 hi LineNr               ctermfg=239         ctermbg=none
 hi CursorLine           cterm=NONE
+hi String               ctermfg=82       gui=NONE
+hi Entity               ctermfg=166       gui=NONE
+hi Support              ctermfg=202       gui=NONE
 hi CursorLineNr         ctermbg=NONE        ctermfg=118         term=bold
 hi Comment	            ctermfg=239
 hi Constant	            ctermfg=113
@@ -237,21 +258,23 @@ hi Statement	        ctermfg=red
 """" #! color
 hi PreProc	            ctermfg=red
 """" classname, <key>, <Groupname> color
-hi Type		            ctermfg=221
+" hi Type		            ctermfg=221
+hi Type		            ctermfg=69
 hi Special	            ctermfg=221
 hi Underlined	        cterm=underline     ctermfg=5
 hi Ignore	            cterm=NONE          ctermfg=7       ctermfg=darkgrey
 hi Error	            cterm=NONE          ctermfg=7       ctermbg=1
+" HTML
 hi htmlTag              ctermfg=244
 hi htmlEndTag           ctermfg=244
-hi htmlArg              ctermfg=119
-hi htmlValue            ctermfg=187
-hi htmlTitle            ctermfg=254         ctermbg=95
 hi htmlArg              ctermfg=203
+hi htmlValue            ctermfg=187
+hi htmlTitle            ctermfg=184         ctermbg=NONE
 hi htmlTagName          ctermfg=69
-hi htmlString           ctermfg=104
+" hi htmlString           ctermfg=104
+hi htmlString           ctermfg=113
 " NERDTree
-hi Directory            ctermfg=110
+" hi Directory            ctermfg=110
 hi treeCWD              ctermfg=180
 hi treeClosable         ctermfg=174
 hi treeOpenable         ctermfg=150

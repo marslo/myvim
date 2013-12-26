@@ -71,35 +71,8 @@ set fileencoding=utf-8
 let &termencoding=&encoding
 
 " Vim Bundle
-" Get Vundle from: git clone https://github.com/gmarik/vundle.git ~/.vim
 set nocompatible
 filetype off
-
-" GetVundle() inspired by: http://pastebin.com/embed_iframe.php?i=C9fUE0M3
-func! GetVundle()
-  " execute 'silent !git clone https://github.com/Marslo/snipmate.vim.git "' . expand('$VIM') . '"'
-
-  let vundleAlreadyExists=1
-  if has('win32') || has('win64')
-    let vundle_readme=expand('$VIM\bundle\vundle\README.md')
-    let vbundle='$VIM\bundle'
-    let vvundle=vbundle . '\vundle'
-  else
-    let vundle_readme=expand('~/.vim/bunle/vundle/README.md')
-    let vbundle='~/.vim/bundle'
-    let vvundle=vbundle . '/vundle'
-  endif
-
-  if !filereadable(vundle_readme)
-    echo "Installing Vundle..."
-    echo ""
-    if isdirectory(expand(vbundle)) == 0
-      call mkdir(expand(vbundle), 'p')
-    endif
-    execute 'silent !git clone https://github.com/gmarik/vundle.git "' . expand(vvundle) . '"'
-    let vundleAlreadyExists=0
-  endif
-endfunc
 
 " Setting runtimepath for Vundle use
 if has('win32') || has('win64')
@@ -123,7 +96,7 @@ Bundle 'Marslo/EnhCommentify.vim'
 Bundle 'tpope/vim-pathogen'
 Bundle 'gregsexton/MatchTag'
 Bundle 'ervandew/supertab'
-Bundle 'jiangmiao/auto-pairs'
+Bundle 'Marslo/auto-pairs'
 
 " snipmate works on windows by using pathogen
 Bundle 'Marslo/snipmate.vim.git'
@@ -152,6 +125,9 @@ endif
 
 " For Javascript
 Bundle "pangloss/vim-javascript"
+
+" For web design
+Bundle "tpope/vim-surround"
 
 " Others
 " Bundle 'snipMate'
@@ -207,6 +183,33 @@ func! OpenFoler()
   silent execute '!C:\Windows\explorer.exe "' . folderpath . '"'
 endfunc
 map <M-o> :call OpenFoler()<CR>
+
+" Get Vundle from: git clone https://github.com/gmarik/vundle.git ~/.vim
+" GetVundle() inspired by: http://pastebin.com/embed_iframe.php?i=C9fUE0M3
+func! GetVundle()
+  " execute 'silent !git clone https://github.com/Marslo/snipmate.vim.git "' . expand('$VIM') . '"'
+
+  let vundleAlreadyExists=1
+  if has('win32') || has('win64')
+    let vundle_readme=expand('$VIM\bundle\vundle\README.md')
+    let vbundle='$VIM\bundle'
+    let vvundle=vbundle . '\vundle'
+  else
+    let vundle_readme=expand('~/.vim/bunle/vundle/README.md')
+    let vbundle='~/.vim/bundle'
+    let vvundle=vbundle . '/vundle'
+  endif
+
+  if !filereadable(vundle_readme)
+    echo "Installing Vundle..."
+    echo ""
+    if isdirectory(expand(vbundle)) == 0
+      call mkdir(expand(vbundle), 'p')
+    endif
+    execute 'silent !git clone https://github.com/gmarik/vundle.git "' . expand(vvundle) . '"'
+    let vundleAlreadyExists=0
+  endif
+endfunc
 
 " Get vim from: git clone git@github.com:b4winckler/vim.git
 func! GetVim()
@@ -347,8 +350,8 @@ let g:rubycomplete_rails = 1
 
 " Inspired from :h new-filetype
 augroup filetypedetect
-  au BufNewFile,BufRead *.html.erb set filetype=html.ruby
-  au BufNewFile,BufRead *.js.erb set filetype=javascript.ruby
+  " au BufNewFile,BufRead *.html.erb set filetype=html.ruby
+  " au BufNewFile,BufRead *.js.erb set filetype=javascript.ruby
   au BufNewFile,BufRead *.r.erb set filetype=r.ruby
 augroup end
 

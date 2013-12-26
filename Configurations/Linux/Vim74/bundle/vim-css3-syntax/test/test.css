@@ -321,53 +321,63 @@
   ruby-position: ruby-base-container;
 }
 
-.selectors:not([DISABLED]),
-.selectors:matches(:hover, :focus),
-.selectors:any-link,
-.selectors:local-link,
-.selectors:local-link(0),
-.selectors:target,
-.selectors:scope,
-.selectors:current,
-.selectors:current(p, li, dt, dd),
-.selectors:past,
-.selectors:future,
-.selectors:enabled,
-.selectors:disabled,
-.selectors:checked,
-.selectors:indeterminate,
-.selectors:default,
-.selecors:in-range,
-.selectors:out-of-range,
-.selectors:required,
-.selectors:optional,
-.selectors:read-only,
-.selectors:read-write,
-.selectors:root,
-.selectors:empty,
-.selectors:nth-child(2n+1),
-.selectors:last-child,
-.selectors:nth-last-child(-n+2),
-.selectors:only-child,
-.selectors:first-of-type,
-.selectors:nth-of-type(2n+1),
-.selectors:last-of-type,
-.selectors:nth-last-of-type(n+2),
-.selectors:only-of-type,
-.selectors:nth-match(2n+1),
-.selectors:nth-last-match(-n+2),
-.selectors:column(p, li, dt, dd),
-.selectors:nth-column(2n+1),
-.selectors:nth-last-column(-n+2) {
+.selectors3:not([DISABLED]),
+.selectors3:matches(:hover, :focus),
+.selectors3:any-link,
+.selectors3:local-link,
+.selectors3:local-link(0),
+.selectors3:target,
+.selectors3:scope,
+.selectors3:current,
+.selectors3:current(p, li, dt, dd),
+.selectors3:past,
+.selectors3:future,
+.selectors3:enabled,
+.selectors3:disabled,
+.selectors3:checked,
+.selectors3:indeterminate,
+.selectors3:default,
+.selectors3:in-range,
+.selectors3:out-of-range,
+.selectors3:required,
+.selectors3:optional,
+.selectors3:read-only,
+.selectors3:read-write,
+.selectors3:root,
+.selectors3:empty,
+.selectors3:nth-child(2n+1),
+.selectors3:last-child,
+.selectors3:nth-last-child(-n+2),
+.selectors3:only-child,
+.selectors3:first-of-type,
+.selectors3:nth-of-type(2n+1),
+.selectors3:last-of-type,
+.selectors3:nth-last-of-type(n+2),
+.selectors3:only-of-type,
+.selectors3:nth-match(2n+1),
+.selectors3:nth-last-match(-n+2),
+.selectors3:column(p, li, dt, dd),
+.selectors3:nth-column(2n+1),
+.selectors3:nth-last-column(-n+2) {
+  display: auto;
+}
+
+foo | h1,
+.selectors4:dir(ltr),
+.selectors4:active-drop-target,
+.selectors4:valid-drop-target,
+.selectors4:invalid-drop-target,
+.selectors4:placeholder-shown,
+.selectors4:user-error {
   display: auto;
 }
 
 .shapes {
-  shape-image-threshold: rectangle(1px 1px 1198px 398px);
-  shape-inside: inset-rectangle(400px 100px 400px 200px);
-  shape-outside: circle(600px 200px 100px);
+  shape-outside: margin-box;
+  shape-image-threshold: inset(50% 50% 50% 50%);
+  shape-margin: circle(100px 50px 100px);
   display: ellipse(0 0 250px 100px);
-  display: polygon(350px,75px  379px,161px 469px,161px 397px,215px 423px,301px 350px,250px 277px,301px 303px,215px 231px,161px 321px,161px);
+  display: polygon(0 0, 100% 100%, 0 100%);
 }
 
 .sizing {
@@ -376,6 +386,23 @@
   display: fill-available;
   display: repudiate-floats;
   display: contain-floats;
+}
+
+.speech {
+  voice-volume: 10dB;
+  voice-balance: literal-punctuation;
+  rest-before: no-punctuation;
+  rest-after: x-weak;
+  rest: weak;
+  voice-rate: strong;
+  voice-pitch: x-strong;
+  voice-range: young;
+  voice-stress: old;
+  voice-duration: neutral;
+  display: preserve;
+  display: 10st;
+  display: moderate;
+  display: reduced;
 }
 
 @supports (display: auto) or

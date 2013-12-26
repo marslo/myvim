@@ -3,7 +3,7 @@
 Author:         Jan Larres <jan@majutsushi.net>
 Licence:        Vim licence, see |license|
 Homepage:       http://majutsushi.github.com/tagbar/
-Version:        2.5
+Version:        2.6
 
 ==============================================================================
 Contents                                            *tagbar* *tagbar-contents*
@@ -780,6 +780,9 @@ You can ignore specific files by setting the |buffer-variable|
 >
     autocmd BufNewFile,BufReadPost foo.cpp let b:tagbar_ignore = 1
 <
+Note that autocommands are order-sensitive, so make sure that this autocommand
+gets defined before the ones that Tagbar defines so the variable will get
+found at the right time.
 
 ==============================================================================
 6. Extending Tagbar                                            *tagbar-extend*
@@ -1228,6 +1231,20 @@ file.
 ==============================================================================
 8. History                                                    *tagbar-history*
 
+2.6 (2013-12-06)
+    - Added possibility to show tags in the preview window, either manually or
+      automatically.
+    - Allow customizing the statusline, see :help g:tagbar_status_func.
+    - Type configuration can now be project-specific.
+    - The keybindings in the Tagbar window are now configurable.
+    - Improvements to Ctags execution on Windows, thanks to Darcy Parker.
+    - Added function tagbar#currentfile() that returns the path to the file
+      currently being displayed in Tagbar, thanks to Zhao Cai.
+    - Added a :Tagbar command as an alias for :TagbarToggle.
+    - Added an way to ignore specific files in case they create problems.
+    - Optionally show line numbers in the Tagbar window.
+    - The usual bunch of small improvements and bugfixes.
+
 2.5 (2013-03-25)
     - New command :TagbarTogglePause to freeze Tagbar in its current state so
       you can switch to other files while keeping the old information
@@ -1380,11 +1397,18 @@ software.
 The folding technique was inspired by NERDTree by Martin Grenfell.
 
 Thanks to the following people for code contributions, feature suggestions etc:
+Peter Butkovic
+Zhao Cai
 Jan Christoph Ebersbach
 Vadim Fint
 Leandro Freitas
+Ingo Karkat
+Audrius Kažukauskas
+Michael McClimon
 Seth Milliken
 Kien N
+Darcy Parker
+fritzophrenic
 pielgrzym
 Taybin Rutkin
 Kian Ryan
