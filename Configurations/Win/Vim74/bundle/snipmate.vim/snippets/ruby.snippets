@@ -723,9 +723,13 @@ snippet ra
 	render :action => "${1:action}"
 snippet ral
 	render :action => "${1:action}", :layout => "${2:layoutname}"
-snippet rest
+snippet restw
 	respond_to do |wants|
 		wants.${1:html} { ${2} }
+	end
+snippet rest
+	respond_to do |${1:format}|
+		${2:# Content...}
 	end
 snippet rf
 	render :file => "${1:filepath}"
