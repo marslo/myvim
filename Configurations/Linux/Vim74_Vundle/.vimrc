@@ -4,8 +4,8 @@
 "         Author: Marslo
 "          Email: marslo.jiao@gmail.com
 "        Created: 2010-10
-"        Version: 0.1.13
-"     LastChange: 2013-12-23 16:05:33
+"        Version: 0.1.14
+"     LastChange: 2013-12-29 18:54:04
 "        History: 0.0.3 | Marslo | Add the Autoload and Fast Edit difference between win32 and non-win32
 "                 0.0.4 | Marslo | Add CheckRubySyntax() function for checking and run ruby script
 "                 0.0.5 | Marslo | Add the function of highlight txt file
@@ -18,7 +18,25 @@
 "                 0.0.11 | Marslo | Change repository woainvzu to Marslo
 "                 0.0.12 | Marslo | Modification for startup faster
 "                 0.0.13 | Marslo | Remove autopairs functions. Replaced by auto-pairs
+"                 0.0.14 | Marslo | Add viminfo settings
 " =============================================================================
+
+set nocompatible
+
+" Make vim open faster :help slow-start
+" set viminfo='20,<50,s10
+" Inspired from https://groups.google.com/forum/#!topic/vim_use/ImK21wi_JXg
+set viminfo=%,<1000,'10,/50,:100,h,f0,n~/.vim/cache/.viminfo
+"           | |     |   |   |    | |  + viminfo file path
+"           | |     |   |   |    | + file marks 0-9,A-Z 0=NOT stored
+"           | |     |   |   |    + disable 'hlsearch' loading viminfo
+"           | |     |   |   + command-line history saved
+"           | |     |   + search history saved
+"           | |     + files marks saved
+"           | + lines saved each register (old name for <, vi6.2)
+"           + save/restore buffer list
+
+set history=500
 
 " At Menu
 source $VIMRUNTIME/delmenu.vim
@@ -29,21 +47,6 @@ behave mswin
 
 let g:ruby_path=$RUBY_BIN
 let g:solarized_termcolors=256
-
-" Make vim open faster :help slow-start
-" set viminfo='20,<50,s10
-" Inspired from https://groups.google.com/forum/#!topic/vim_use/ImK21wi_JXg
-set viminfo=%,\"100,'10,/50,:100,h,f0,n~/.vim/cache/viminfo
-"           |  |  |  |    |    | | + viminfo file path
-"           |  |  |  |    |    | + file marks 0-9,A-Z 0=NOT stored
-"           |  |  |  |    |    + disable 'hlsearch' loading viminfo
-"           |  |  |  |    + command-line history saved
-"           |  |  |  + search history saved
-"           |  |  + files marks saved
-"           |  + lines saved each register (old name for <, vi6.2)
-"           + save/restore buffer list
-
-set history=500
 
 set diffopt=filler,context:3
 
@@ -78,7 +81,6 @@ set fileencoding=utf-8
 let &termencoding=&encoding
 
 " Vim Bundle
-set nocompatible
 filetype off
 
 " Setting runtimepath for Vundle use

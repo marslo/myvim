@@ -21,6 +21,23 @@
 "                 0.0.14 | Marslo | Remove autopairs functions. Replaced by auto-pairs
 " =============================================================================
 
+set nocompatible
+
+" Make vim open faster :help slow-start
+" set viminfo='20,<50,s10
+" Inspired from https://groups.google.com/forum/#!topic/vim_use/ImK21wi_JXg
+set viminfo=%,<1000,'10,/50,:100,h,f0,n~/.vim/cache/.viminfo
+"           | |     |   |   |    | |  + viminfo file path
+"           | |     |   |   |    | + file marks 0-9,A-Z 0=NOT stored
+"           | |     |   |   |    + disable 'hlsearch' loading viminfo
+"           | |     |   |   + command-line history saved
+"           | |     |   + search history saved
+"           | |     + files marks saved
+"           | + lines saved each register (old name for <, vi6.2)
+"           + save/restore buffer list
+
+set history=500
+
 " At Menu
 source $VIMRUNTIME/delmenu.vim
 source $VIMRUNTIME/menu.vim
@@ -30,21 +47,6 @@ behave mswin
 
 let g:ruby_path=$RUBY_BIN
 let g:solarized_termcolors=256
-
-" Make vim open faster :help slow-start
-" set viminfo='20,<50,s10
-" Inspired from https://groups.google.com/forum/#!topic/vim_use/ImK21wi_JXg
-set viminfo=%,\"100,'10,/50,:100,h,f0,n~/.vim/cache/viminfo
-"           |  |  |  |    |    | | + viminfo file path
-"           |  |  |  |    |    | + file marks 0-9,A-Z 0=NOT stored
-"           |  |  |  |    |    + disable 'hlsearch' loading viminfo
-"           |  |  |  |    + command-line history saved
-"           |  |  |  + search history saved
-"           |  |  + files marks saved
-"           |  + lines saved each register (old name for <, vi6.2)
-"           + save/restore buffer list
-
-set history=500
 
 set diffopt=filler,context:3
 
@@ -79,7 +81,6 @@ set fileencoding=utf-8
 let &termencoding=&encoding
 
 " Vim Bundle
-set nocompatible
 filetype off
 
 " Setting runtimepath for Vundle use
