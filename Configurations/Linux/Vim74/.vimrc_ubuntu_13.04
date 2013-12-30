@@ -99,7 +99,6 @@ Bundle 'kien/ctrlp.vim.git'
 Bundle 'sjl/gundo.vim.git'
 Bundle 'majutsushi/tagbar'
 Bundle 'dantezhu/authorinfo'
-Bundle 'kien/rainbow_parentheses.vim'
 Bundle 'plasticboy/vim-markdown.git'
 Bundle 'Marslo/EnhCommentify.vim'
 Bundle 'tpope/vim-pathogen'
@@ -119,6 +118,7 @@ Bundle 'winmanager'
 Bundle 'python_fold'
 Bundle 'pyflakes.vim'
 Bundle 'python_match.vim'
+Bundle 'Marslo/python-syntax'
 
 " For ruby
 Bundle 'tpope/vim-rails'
@@ -136,6 +136,13 @@ Bundle "pangloss/vim-javascript"
 Bundle "tpope/vim-surround"
 Bundle 'tpope/vim-repeat'
 
+" Colors and themes
+Bundle 'txt.vim'
+Bundle 'hail2u/vim-css3-syntax'
+Bundle 'Marslo/vim-coloresque'
+Bundle 'Marslo/marslo.vim'
+Bundle 'Marslo/MarsloVimOthers'
+
 " For fun
 " Bundle 'TeTrIs.vim'
 " Bundle 'matrix.vim--Yang'
@@ -152,14 +159,8 @@ Bundle 'tpope/vim-repeat'
 " Bundle 'vantares/ruby-syntaxchecker.vim'
 " Bundle 'semmons99/vim-ruby-matchit'
 " Bundle 'ap/vim-css-color'
+" Bundle 'JulesWang/css.vim'
 
-" Colors and themes
-Bundle 'txt.vim'
-Bundle 'JulesWang/css.vim'
-Bundle 'hail2u/vim-css3-syntax'
-Bundle 'Marslo/vim-coloresque'
-Bundle 'Marslo/marslo.vim'
-Bundle 'Marslo/python-syntax'
 
 filetype plugin indent on
 
@@ -181,7 +182,10 @@ func! OpenCMD()
   else
     let com = '!/usr/bin/gnome-terminal --working-directory=' . expand('%:p:h')
   endif
+  let saveit = ':w!'
+
   echo 'Goto "' . expand('%:p:h') . '" in command line'
+  silent execute saveit
   silent execute com
 endfunc
 nmap cmd :call OpenCMD()<CR>
@@ -371,32 +375,29 @@ augroup filetypedetect
 augroup end
 
 " Programming configs for Python
-if "python" == &filetype
-  " syntax-python
-  let python_highlight_all = 1
-  au FileType python syn keyword pythonDecorator True None False self
+au FileType python syn keyword pythonDecorator print self
+let python_highlight_all = 1                                          " syntax-python
 
-  " Run pylint
-  func! PylintCheck()
-    let mp = &makeprg
-    let ef = &errorformat
-    let exeFile = '"' . expand("%:t") . '"'
-    setlocal makeprg=pylint\ --reports=n\ --output-format=parseable
-    set efm=%A%f:%l:\ [%t%.%#]\ %m,%Z%p^^,%-C%.%#
-    silent make "%:p"
-    copen
-    let &makeprg     = mp
-    let &errorformat = ef
-  endfunc
+" Run pylint
+func! PylintCheck()
+  let mp = &makeprg
+  let ef = &errorformat
+  let exeFile = '"' . expand("%:t") . '"'
+  setlocal makeprg=pylint\ --reports=n\ --output-format=parseable
+  set efm=%A%f:%l:\ [%t%.%#]\ %m,%Z%p^^,%-C%.%#
+  silent make "%:p"
+  copen
+  let &makeprg     = mp
+  let &errorformat = ef
+endfunc
 
-  " Jump to Next Def or Class
-  " Inspired from https://gitcafe.com/pythoner/vim_conf/blob/master/.vimrc
-  if 0
-    au FileType python map <C-j> :call search('^\s*def\ ', "w")<cr>
-    au FileType python map <C-k> :call search('^\s*def\ ', 'wb')<cr>
-    au FileType python map <Leader>j :call search('^\s*class\ ', "w")<cr>
-    au FileType python map <Leader>k :call search('^\s*class\ ', "wb")<cr>
-  endif
+" Jump to Next Def or Class
+" Inspired from https://gitcafe.com/pythoner/vim_conf/blob/master/.vimrc
+if 0
+  au FileType python map <C-j> :call search('^\s*def\ ', "w")<cr>
+  au FileType python map <C-k> :call search('^\s*def\ ', 'wb')<cr>
+  au FileType python map <Leader>j :call search('^\s*class\ ', "w")<cr>
+  au FileType python map <Leader>k :call search('^\s*class\ ', "wb")<cr>
 endif
 
 " ====================================== For Inteface =====================================
@@ -684,30 +685,11 @@ if 0
   endif
 endif
 
-" Rainbow bracket
-let g:rbpt_loadcmd_toggle = 1
-au VimEnter * RainbowParenthesesToggle
-au Syntax * RainbowParenthesesLoadRound
-au Syntax * RainbowParenthesesLoadSquare
-au Syntax * RainbowParenthesesLoadBraces
-let g:rbpt_colorpairs = [
-      \ ['brown',       'RoyalBlue3'],
-      \ ['Darkblue',    'SeaGreen3'],
-      \ ['darkgray',    'DarkOrchid3'],
-      \ ['darkgreen',   'firebrick3'],
-      \ ['darkcyan',    'RoyalBlue3'],
-      \ ['darkred',     'SeaGreen3'],
-      \ ['darkmagenta', 'DarkOrchid3'],
-      \ ['brown',       'firebrick3'],
-      \ ['gray',        'RoyalBlue3'],
-      \ ['black',       'SeaGreen3'],
-      \ ['darkmagenta', 'DarkOrchid3'],
-      \ ['Darkblue',    'firebrick3'],
-      \ ['darkgreen',   'RoyalBlue3'],
-      \ ['darkcyan',    'SeaGreen3'],
-      \ ['darkred',     'DarkOrchid3'],
-      \ ['red',         'firebrick3'],
-      \ ]
+
+" Rainbow Parentheses Improved (http://www.vim.org/scripts/script.php?script_id=4176)
+let g:rainbow_active = 1
+let g:rainbow_operators = 4
+let g:rainbow_guifgs = ['gold', '#686868',  'firebrick', 'DarkOrchid3', 'DarkOrange2', 'PaleGreen',]
 
 " IndentLine
 let g:indentLine_color_gui = "#282828"
