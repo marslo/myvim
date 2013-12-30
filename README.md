@@ -222,7 +222,7 @@ Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
 - [WinManager](https://github.com/vim-scripts/winmanager)
 - [IndentLine](https://github.com/Yggdroot/indentLine)
 - [Vim Bunlde](https://github.com/gmarik/vundle)
-- [Rainbow Parentheses](https://github.com/kien/rainbow_parentheses.vim)
+- [Rainbow Parentheses Improved](http://www.vim.org/scripts/script.php?script_id=4176)
 - [vim-pathogen](https://github.com/tpope/vim-pathogen)
 - [supertab](https://github.com/ervandew/supertab)
 - [MatchTag](https://github.com/gregsexton/MatchTag)
@@ -257,6 +257,7 @@ Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
 - [vim-css-color](https://github.com/ap/vim-css-color)          # Cannot work for vim74, using **vim-colorsque** instead
 - [emmet.vim](https://github.com/mattn/emmet-vim)
 - [ruby-matchit](https://github.com/vim-scripts/ruby-matchit)
+- [Rainbow Parentheses](https://github.com/kien/rainbow_parentheses.vim)  # Replaced by [Rainbow Parentheses Improved](http://www.vim.org/scripts/script.php?script_id=4176)
 
 +++++++++++++++++++++++++++++++++++++++++++
 
@@ -357,8 +358,7 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
 - [TeTrIs](https://github.com/vim-scripts/TeTrIs.vim)
 - [WinManager](https://github.com/vim-scripts/winmanager)
 - [IndentLine](https://github.com/Yggdroot/indentLine)
-- [Vim Bunlde](https://github.com/gmarik/vundle)
-- [Rainbow Parentheses](https://github.com/kien/rainbow_parentheses.vim)
+- [Rainbow Parentheses Improved](http://www.vim.org/scripts/script.php?script_id=4176) [Vim Bunlde](https://github.com/gmarik/vundle)
 - [vim-pathogen](https://github.com/tpope/vim-pathogen)
 - [supertab](https://github.com/ervandew/supertab)
 - [MatchTag](https://github.com/gregsexton/MatchTag)
@@ -392,6 +392,7 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
 - [vim-addon-mw-utils](https://github.com/MarcWeber/vim-addon-mw-utils)
 - [vim-css-color](https://github.com/ap/vim-css-color)                      # 不支持Vim74， 使用**vim-colorsque**替代
 - [emmet.vim](https://github.com/mattn/emmet-vim)
+- [Rainbow Parentheses](https://github.com/kien/rainbow_parentheses.vim)    # 已经替换成 [Rainbow Parentheses Improved](http://www.vim.org/scripts/script.php?script_id=4176)
 
 +++++++++++++++++++++++++++++++++++++++++++
 
