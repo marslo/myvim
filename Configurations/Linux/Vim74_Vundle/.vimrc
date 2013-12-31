@@ -26,7 +26,7 @@ set nocompatible
 " Make vim open faster :help slow-start
 " set viminfo='20,<50,s10
 " Inspired from https://groups.google.com/forum/#!topic/vim_use/ImK21wi_JXg
-set viminfo=%,<1000,'10,/50,:100,h,f0,n~/.vim/cache/.viminfo
+set viminfo=%,<800,'10,/50,:100,h,f0,n~/.vim/cache/.viminfo
 "           | |     |   |   |    | |  + viminfo file path
 "           | |     |   |   |    | + file marks 0-9,A-Z 0=NOT stored
 "           | |     |   |   |    + disable 'hlsearch' loading viminfo
@@ -42,7 +42,7 @@ set history=500
 " source $VIMRUNTIME/delmenu.vim
 " source $VIMRUNTIME/menu.vim
 
-runtime macros/matchit.vim
+" runtime macros/matchit.vim
 behave mswin
 
 let g:ruby_path=$RUBY_BIN
@@ -137,6 +137,7 @@ Bundle "tpope/vim-surround"
 Bundle 'tpope/vim-repeat'
 
 " Colors and themes
+Bundle 'luochen1990/rainbow'
 Bundle 'txt.vim'
 Bundle 'hail2u/vim-css3-syntax'
 Bundle 'Marslo/vim-coloresque'
