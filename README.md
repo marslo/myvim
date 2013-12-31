@@ -243,7 +243,7 @@ Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
 - [vim-ruby](https://github.com/vim-ruby/vim-ruby)
 
 #### Theme and colors
-- [Rainbow Parentheses Improved](http://www.vim.org/scripts/script.php?script_id=4176) | [Github Repo](https://github.com/luochen1990/rainbow)
+- [Rainbow Parentheses Improved](https://github.com/oblitum/rainbow) | [Another Version](https://github.com/luochen1990/rainbow)
 - [vim-css3-syntax](https://github.com/hail2u/vim-css3-syntax)
 - [colorsel.vim](https://github.com/vim-scripts/colorsel.vim)
 - [css.vim](https://github.com/JulesWang/css.vim)
@@ -379,7 +379,7 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
 - [vim-ruby](https://github.com/vim-ruby/vim-ruby)
 
 #### 主题以及颜色
-- [Rainbow Parentheses Improved](http://www.vim.org/scripts/script.php?script_id=4176) | [Github Repo](https://github.com/luochen1990/rainbow)
+- [Rainbow Parentheses Improved](https://github.com/oblitum/rainbow) | [Another Version](https://github.com/luochen1990/rainbow)
 - [vim-css3-syntax](https://github.com/hail2u/vim-css3-syntax)
 - [colorsel.vim](https://github.com/vim-scripts/colorsel.vim)
 - [css.vim](https://github.com/JulesWang/css.vim)
