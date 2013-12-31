@@ -222,7 +222,6 @@ Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
 - [WinManager](https://github.com/vim-scripts/winmanager)
 - [IndentLine](https://github.com/Yggdroot/indentLine)
 - [Vim Bunlde](https://github.com/gmarik/vundle)
-- [Rainbow Parentheses Improved](http://www.vim.org/scripts/script.php?script_id=4176)
 - [vim-pathogen](https://github.com/tpope/vim-pathogen)
 - [supertab](https://github.com/ervandew/supertab)
 - [MatchTag](https://github.com/gregsexton/MatchTag)
@@ -244,6 +243,7 @@ Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
 - [vim-ruby](https://github.com/vim-ruby/vim-ruby)
 
 #### Theme and colors
+- [Rainbow Parentheses Improved](http://www.vim.org/scripts/script.php?script_id=4176) | [Github Repo](https://github.com/luochen1990/rainbow)
 - [vim-css3-syntax](https://github.com/hail2u/vim-css3-syntax)
 - [colorsel.vim](https://github.com/vim-scripts/colorsel.vim)
 - [css.vim](https://github.com/JulesWang/css.vim)
@@ -358,13 +358,12 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
 - [TeTrIs](https://github.com/vim-scripts/TeTrIs.vim)
 - [WinManager](https://github.com/vim-scripts/winmanager)
 - [IndentLine](https://github.com/Yggdroot/indentLine)
-- [Rainbow Parentheses Improved](http://www.vim.org/scripts/script.php?script_id=4176) [Vim Bunlde](https://github.com/gmarik/vundle)
 - [vim-pathogen](https://github.com/tpope/vim-pathogen)
 - [supertab](https://github.com/ervandew/supertab)
 - [MatchTag](https://github.com/gregsexton/MatchTag)
 - [txt.vim](https://github.com/vim-scripts/txt.vim)
 
-#### 我加工的增强版
+#### 我修改后的增强版
 - [marslo.vim](https://github.com/Marslo/marslo.vim)
 - [EnhancedCommentify](https://github.com/hrp/EnhancedCommentify) | [Marslo增强版](https://github.com/Marslo/EnhCommentify.vim)
 - [snipMate](http://www.vim.org/scripts/script.php?script_id=2540) | [Github](https://github.com/garbas/vim-snipmate) | [Marslo](https://github.com/Marslo/snipmate.vim)
@@ -380,6 +379,7 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
 - [vim-ruby](https://github.com/vim-ruby/vim-ruby)
 
 #### 主题以及颜色
+- [Rainbow Parentheses Improved](http://www.vim.org/scripts/script.php?script_id=4176) | [Github Repo](https://github.com/luochen1990/rainbow)
 - [vim-css3-syntax](https://github.com/hail2u/vim-css3-syntax)
 - [colorsel.vim](https://github.com/vim-scripts/colorsel.vim)
 - [css.vim](https://github.com/JulesWang/css.vim)
