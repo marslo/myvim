@@ -125,9 +125,7 @@ Bundle 'tpope/vim-rails'
 Bundle 'vim-ruby/vim-ruby'
 Bundle 'nelstrom/vim-textobj-rubyblock'
 Bundle 'kana/vim-textobj-user'
-if "ruby" == &filetype
-  Bundle 'ruby-matchit'
-endif
+Bundle 'ruby-matchit'
 
 " For Javascript
 Bundle "pangloss/vim-javascript"
@@ -154,13 +152,13 @@ Bundle 'Marslo/MarsloVimOthers'
 " Bundle 'snipMate'                   Replaced by 'Marslo/snipmate.vim.git'
 " Bundle 'mattn/emmet-vim'
 " Bundle 'Tagbar'                     Replaced by 'majutsushi/tagbar'
+" Bundle 'AuthorInfo'                 Replaced by 'dantezhu/authorinfo'
 " Bundle 'colorsupport.vim'
 " Bundle 'hdima/python-syntax.git'    Replaced by'Marslo/python-syntax'
 " Bundle 'vantares/ruby-syntaxchecker.vim'
 " Bundle 'semmons99/vim-ruby-matchit'
 " Bundle 'ap/vim-css-color'
 " Bundle 'JulesWang/css.vim'
-
 
 filetype plugin indent on
 
@@ -688,8 +686,13 @@ endif
 
 " Rainbow Parentheses Improved (http://www.vim.org/scripts/script.php?script_id=4176)
 let g:rainbow_active = 1
-let g:rainbow_operators = 4
-let g:rainbow_guifgs = ['gold', '#686868',  'firebrick', 'DarkOrchid3', 'DarkOrange2', 'PaleGreen',]
+let g:rainbow_operators = 2
+if has('gui_running') || 'xterm-256color' == $TERM
+  let g:rainbow_guifgs = ['#6A5ACD', '#B22222', '#C0FF3E', '#EEC900', '#9A32CD', '#EE7600', '#98fb98', '#686868']
+  let g:rainbow_ctermfgs = ['141', '196', '112', '208', '129', '166', '85', '237']
+else
+  let g:rainbow_ctermfgs = ['lightblue', 'lightgreen', 'yellow', 'red', 'magenta']
+endif
 
 " IndentLine
 let g:indentLine_color_gui = "#282828"
