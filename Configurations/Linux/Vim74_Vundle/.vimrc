@@ -26,8 +26,6 @@ set nocompatible
 " At Menu
 " source $VIMRUNTIME/delmenu.vim
 " source $VIMRUNTIME/menu.vim
-source $VIMRUNTIME/vimrc_example.vim
-source $VIMRUNTIME/mswin.vim
 
 runtime macros/matchit.vim
 behave mswin
