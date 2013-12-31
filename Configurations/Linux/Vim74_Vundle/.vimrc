@@ -42,7 +42,7 @@ set history=500
 " source $VIMRUNTIME/delmenu.vim
 " source $VIMRUNTIME/menu.vim
 
-" runtime macros/matchit.vim
+runtime macros/matchit.vim
 behave mswin
 
 let g:ruby_path=$RUBY_BIN
@@ -137,7 +137,7 @@ Bundle "tpope/vim-surround"
 Bundle 'tpope/vim-repeat'
 
 " Colors and themes
-Bundle 'luochen1990/rainbow'
+Bundle 'oblitum/rainbow'
 Bundle 'txt.vim'
 Bundle 'hail2u/vim-css3-syntax'
 Bundle 'Marslo/vim-coloresque'
@@ -154,7 +154,6 @@ Bundle 'Marslo/MarsloVimOthers'
 " Bundle 'snipMate'                   Replaced by 'Marslo/snipmate.vim.git'
 " Bundle 'mattn/emmet-vim'
 " Bundle 'Tagbar'                     Replaced by 'majutsushi/tagbar'
-" Bundle 'AuthorInfo'                 Replaced by 'dantezhu/authorinfo'
 " Bundle 'colorsupport.vim'
 " Bundle 'hdima/python-syntax.git'    Replaced by'Marslo/python-syntax'
 " Bundle 'vantares/ruby-syntaxchecker.vim'

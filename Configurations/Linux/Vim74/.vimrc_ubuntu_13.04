@@ -137,7 +137,7 @@ Bundle "tpope/vim-surround"
 Bundle 'tpope/vim-repeat'
 
 " Colors and themes
-Bundle 'luochen1990/rainbow'
+Bundle 'oblitum/rainbow'
 Bundle 'txt.vim'
 Bundle 'hail2u/vim-css3-syntax'
 Bundle 'Marslo/vim-coloresque'

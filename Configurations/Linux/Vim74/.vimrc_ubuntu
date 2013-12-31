@@ -40,7 +40,7 @@ set history=500
 " source $VIMRUNTIME/delmenu.vim
 " source $VIMRUNTIME/menu.vim
 
-" runtime macros/matchit.vim
+runtime macros/matchit.vim
 behave mswin
 
 let g:ruby_path=$RUBY_BIN
@@ -135,7 +135,7 @@ Bundle "tpope/vim-surround"
 Bundle 'tpope/vim-repeat'
 
 " Colors and themes
-Bundle 'luochen1990/rainbow'
+Bundle 'oblitum/rainbow'
 Bundle 'txt.vim'
 Bundle 'hail2u/vim-css3-syntax'
 Bundle 'Marslo/vim-coloresque'

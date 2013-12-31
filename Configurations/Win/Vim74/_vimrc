@@ -177,7 +177,7 @@ Bundle "tpope/vim-surround"
 Bundle 'tpope/vim-repeat'
 
 " Colors and themes
-Bundle 'luochen1990/rainbow'
+Bundle 'oblitum/rainbow'
 Bundle 'txt.vim'
 Bundle 'hail2u/vim-css3-syntax'
 Bundle 'Marslo/vim-coloresque'
@@ -192,10 +192,11 @@ Bundle 'Marslo/MarsloVimOthers'
 
 " Others
 " Bundle 'kien/rainbow_parentheses.vim'       " replaced by rainbow.vim (http://www.vim.org/scripts/script.php?script_id=4176)
+" Bundle 'mattn/emmet-vim'
 " Bundle 'Tagbar'                     Replaced by 'majutsushi/tagbar'
 " Bundle 'colorsupport.vim'
+" Bundle 'hdima/python-syntax.git'    Replaced by'Marslo/python-syntax'
 " Bundle 'ruby-matchit'
-" Bundle 'mattn/emmet-vim'
 " Bundle 'vjantares/ruby-syntaxchecker.vim'
 " Bundle 'dirkwallenstein/vim-excess-lines'
 " Bundle 'xolox/vim-shell'
@@ -203,7 +204,6 @@ Bundle 'Marslo/MarsloVimOthers'
 " Bundle 'xolox/vim-easytags'
 " Bundle 'dbarsam/vim-vimtweak'
 " Bundle 'python.vim'
-" Bundle 'hdima/python-syntax'                " Replaced by Marslo/python-syntax
 " Bundle 'gorodinskiy/vim-coloresque'
 " Bundle 'ap/vim-css-color'
 " Bundle 'JulesWang/css.vim'
