@@ -27,27 +27,11 @@
 
 set nocompatible
 
-" Make vim open faster :help slow-start
-" set viminfo='20,<50,s10
-" Inspired from https://groups.google.com/forum/#!topic/vim_use/ImK21wi_JXg
-set viminfo=%,<800,'10,/50,:100,h,f0,n~/.vim/cache/.viminfo
-"           | |     |   |   |    | |  + viminfo file path
-"           | |     |   |   |    | + file marks 0-9,A-Z 0=NOT stored
-"           | |     |   |   |    + disable 'hlsearch' loading viminfo
-"           | |     |   |   + command-line history saved
-"           | |     |   + search history saved
-"           | |     + files marks saved
-"           | + lines saved each register (old name for <, vi6.2)
-"           + save/restore buffer list
-
-set history=500
-
-source $VIMRUNTIME/vimrc_example.vim
-source $VIMRUNTIME/mswin.vim
-
 " At Menu
 " source $VIMRUNTIME/delmenu.vim
 " source $VIMRUNTIME/menu.vim
+source $VIMRUNTIME/vimrc_example.vim
+source $VIMRUNTIME/mswin.vim
 
 runtime macros/matchit.vim
 behave mswin
@@ -56,6 +40,24 @@ let g:ruby_path=$RUBY_BIN
 let g:solarized_termcolors=256
 
 set diffopt=filler,context:3
+set history=500
+
+" Make vim open faster :help slow-start
+" set viminfo='20,<50,s10
+" Inspired from https://groups.google.com/forum/#!topic/vim_use/ImK21wi_JXg
+if has('win32') || has('win64')
+  set viminfo=%,<800,'10,/50,:100,h,f0
+else
+  set viminfo=%,<800,'10,/50,:100,h,f0,n~/.vim/cache/.viminfo
+endif
+"             | |    |   |   |    | |  + viminfo file path
+"             | |    |   |   |    | + file marks 0-9,A-Z 0=NOT stored
+"             | |    |   |   |    + disable 'hlsearch' loading viminfo
+"             | |    |   |   + command-line history saved
+"             | |    |   + search history saved
+"             | |    + files marks saved
+"             | + lines saved each register (old name for <, vi6.2)
+"             + save/restore buffer list
 
 " Remove the Welcome interface
 " set shortmess=atI
@@ -169,6 +171,7 @@ Bundle 'ruby-matchit'
 
 " For Javascript
 Bundle "pangloss/vim-javascript"
+" Bundle 'jelera/vim-javascript-syntax'
 
 " For web design
 Bundle "tpope/vim-surround"
@@ -314,7 +317,7 @@ endfunc
 iabbrev <leader>/* /*********************************
 iabbrev <leader>*/ *********************************/
 iabbrev <leader>#- #------------------
-inoremap <leader>tt <c-r>=strftime("%d/%m/%y %H:%M:%S")<cr>
+inoremap <leader>tt <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
 inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
 inoremap <leader>fe <C-R>=expand("%:t")<CR>
 
@@ -447,7 +450,7 @@ endif
 " ====================================== For Inteface =====================================
 if has('gui_running')
   " The initialize size
-  set lines=40
+  set lines=38
   set columns=122
 
   " Make vim maximize while it startup
