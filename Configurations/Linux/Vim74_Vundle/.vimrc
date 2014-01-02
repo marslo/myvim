@@ -132,13 +132,14 @@ Bundle 'ruby-matchit'
 
 " For Javascript
 Bundle "pangloss/vim-javascript"
+" Bundle 'jelera/vim-javascript-syntax'
 
 " For web design
 Bundle "tpope/vim-surround"
 Bundle 'tpope/vim-repeat'
 
 " Colors and themes
-Bundle 'oblitum/rainbow'
+Bundle 'luochen1990/rainbow'
 Bundle 'txt.vim'
 Bundle 'hail2u/vim-css3-syntax'
 Bundle 'Marslo/vim-coloresque'
@@ -152,7 +153,7 @@ Bundle 'Marslo/MarsloVimOthers'
 " Bundle 'gui2term.py'
 
 " Others
-" Bundle 'luochen1990/rainbow'        Replaced by 'oblitum/rainbow'
+" Bundle 'oblitum/rainbow'            Replaced by 'luochen1990/rainbow'
 " Bundle 'snipMate'                   Replaced by 'Marslo/snipmate.vim.git'
 " Bundle 'mattn/emmet-vim'
 " Bundle 'Tagbar'                     Replaced by 'majutsushi/tagbar'
@@ -272,7 +273,7 @@ endfunc
 iabbrev <leader>/* /*********************************
 iabbrev <leader>*/ *********************************/
 iabbrev <leader>#- #------------------
-inoremap <leader>tt <c-r>=strftime("%d/%m/%y %H:%M:%S")<cr>
+inoremap <leader>tt <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
 inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
 inoremap <leader>fe <C-R>=expand("%:t")<CR>
 
@@ -690,18 +691,17 @@ endif
 
 " Rainbow Parentheses Improved (http://www.vim.org/scripts/script.php?script_id=4176)
 let g:rainbow_active = 1
-let g:rainbow_operators = 2
+let g:rainbow_operators = 1
 if has('gui_running') || 'xterm-256color' == $TERM
-  let g:rainbow_guifgs = ['#6A5ACD', '#B22222', '#C0FF3E', '#EEC900', '#9A32CD', '#EE7600', '#98fb98', '#686868']
-  let g:rainbow_ctermfgs = ['141', '196', '112', '208', '129', '166', '85', '237']
+  let g:rainbow_conf = extend({
+  \   'guifgs' : ['#6A5ACD', '#B22222', '#C0FF3E', '#EEC900', '#9A32CD', '#EE7600', '#98fb98', '#686868'],
+  \   'ctermfgs' : ['141', '196', '112', '208', '129', '166', '85', '237'],
+  \}, exists('g:rainbow_conf')? g:rainbow_conf : {})
 else
-  let g:rainbow_ctermfgs = ['lightblue', 'lightgreen', 'yellow', 'red', 'magenta']
+  let g:rainbow_conf = extend({
+  \   'ctermfgs' = ['lightblue', 'lightgreen', 'yellow', 'red', 'magenta'],
+  \}, exists('g:rainbow_conf')? g:rainbow_conf : {})
 endif
-let g:rainbow_load_separately = [
-    \ [ '*' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
-    \ [ '*.{html,htm,erb}' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
-    \ ]
-
 
 " IndentLine
 let g:indentLine_color_gui = "#282828"
