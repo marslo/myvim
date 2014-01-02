@@ -293,13 +293,6 @@ func! RunResult()
 endfunc
 " map <F5> :call RunResult()<CR>
 
-iabbrev <leader>/* /*********************************
-iabbrev <leader>*/ *********************************/
-iabbrev <leader>#- #------------------
-inoremap <leader>tt <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
-inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
-inoremap <leader>fe <C-R>=expand("%:t")<CR>
-
 " Add suffix '.py' if the filetype is python
 function! GotoFile()
   if 'python' == &filetype
@@ -466,8 +459,8 @@ endif
 if has('win32') || has('win95') || has('win64')
   nmap <leader>v :e $VIM/_vimrc<CR>
   " au GUIEnter * simalt ~x                       " Max after start vim
-  autocmd! bufwritepost $VIM/_vimrc source %      " autoload _vimrc
-  set guifont=Monaco:h12                          " Fonts
+  autocmd! bufwritepost $VIM/_vimrc source %                        " autoload _vimrc
+  set guifont=Monaco:h12                                            " Fonts
   " Copy the content to system clipboard by using y/p
   set clipboard+=unnamed
   set clipboard+=unnamedplus
@@ -506,17 +499,17 @@ set nobackup noswapfile nowritebackup
 set ruler number
 set report=0
 
-set autoread                                " Set auto read when a file is changed by outside
-set showmatch                               " Show matching bracets
-set nowrap                                  " Wrap lines
+set autoread                                            " Set auto read when a file is changed by outside
+set showmatch                                           " Show matching bracets
+set nowrap                                              " Wrap lines
 
 " Tab width
 " set textwidth=150
 set autoindent smartindent
-set smarttab expandtab                      " smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
-set tabstop=2                               " Tab width
-set softtabstop=2                           " the width while trigger <Tab> key
-set shiftwidth=2                            " the tab width by using >> & <<
+set smarttab expandtab                                  " smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
+set tabstop=2                                           " Tab width
+set softtabstop=2                                       " the width while trigger <Tab> key
+set shiftwidth=2                                        " the tab width by using >> & <<
 " autocmd FileType ruby,eruby,yaml,html,css,scss,javascript set ai sw=2 sts=2 et
 set lbr
 set tw=0
@@ -533,7 +526,7 @@ set statusline+=\ \ %p%%\
 
 " At Console
 language messages utf-8
-set showcmd                                 " Show (partial) command in status line
+set showcmd                                             " Show (partial) command in status line
 
 set modifiable
 set write
@@ -566,11 +559,11 @@ set sidescrolloff=5
 " Fix context menu messing
 set imcmdline
 " Fold
-set foldenable                              " Enable Fold
+set foldenable                                              " Enable Fold
 " set foldmethod=manual
 set foldcolumn=1
-set foldexpr=1                              " Shown line number after fold
-set foldlevel=100                           " Not fold while VIM set up
+set foldexpr=1                                              " Shown line number after fold
+set foldlevel=100                                           " Not fold while VIM set up
 set viewoptions=folds
 set backspace=indent,eol,start                  " make backspace h, l, etc wrap to
 " set whichwrap+=<,>,h,l
@@ -601,12 +594,12 @@ inoremap <M-d> <ESC>cW
 " CtrlP
 " let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'
 let g:ctrlp_map = '<c-p>'
-let g:ctrlp_working_path_mode = 'ra'                " Search parents as well (stop searching sartly)
+let g:ctrlp_working_path_mode = 'ra'                                " Search parents as well (stop searching sartly)
 let g:ctrlp_max_height = 8
 let g:ctrlp_max_depth = 100
-let g:ctrl_root_makers = ['.ctrlp']                 " Stop search if these files present
+let g:ctrl_root_makers = ['.ctrlp']                                 " Stop search if these files present
 let g:ctrlp_use_caching = 1
-let g:ctrlp_clear_cache_on_exit = 0                 " Cross session caching
+let g:ctrlp_clear_cache_on_exit = 0                                 " Cross session caching
 if has('win32') || has('win95') || has('win64')
   let g:ctrlp_cache_dir = $VIM . '/cache/ctrlp'
 else
@@ -790,3 +783,10 @@ autocmd BufWinEnter * silent! loadview
 autocmd BufEnter c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\* :setlocal tags+=c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\.tags
 au BufRead,BufNewFile * setfiletype txt     " Highlight the txt file
 au BufRead,BufNewFile *.t set ft=perl       " Perl test file as Perl code
+
+iabbrev <leader>/* /*********************************
+iabbrev <leader>*/ *********************************/
+iabbrev <leader>#- #------------------
+inoremap <leader>tt <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
+inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
+inoremap <leader>fe <C-R>=expand("%:t")<CR>

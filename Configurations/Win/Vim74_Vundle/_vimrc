@@ -129,8 +129,7 @@ func! OpenFoler()
 endfunc
 map <M-o> :call OpenFoler()<CR>
 
-" GetVundle() inspired by: http://pastebin.com/embed_iframe.php?i=C9fUE0M3
-func! GetVundle()
+func! GetVundle()                                                   " GetVundle() inspired by: http://pastebin.com/embed_iframe.php?i=C9fUE0M3
   let vundleAlreadyExists=1
   if has('win32') || has('win64')
     let vundle_readme=expand('$VIM\bundle\vundle\README.md')
@@ -152,7 +151,7 @@ func! GetVundle()
   endif
 endfunc
 
-func! GetVim()
+func! GetVim()                                                      " Get vim from: git clone git@github.com:b4winckler/vim.git
   if has('unix')
     let vimgitcfg=expand('~/.vim/src/vim/.git/config')
     if !filereadable(vimgitcfg)
@@ -210,13 +209,6 @@ func! RunResult()
   let &errorformat = ef
 endfunc
 
-iabbrev <leader>/* /*********************************
-iabbrev <leader>*/ *********************************/
-iabbrev <leader>#- #------------------
-inoremap <leader>tt <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
-inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
-inoremap <leader>fe <C-R>=expand("%:t")<CR>
-
 function! GotoFile()
   if 'python' == &filetype
     let com = expand('%:p:h') . '\' . expand('<cfile>') . '.py'
@@ -234,7 +226,7 @@ endfunction
 nmap <F12> :call UpdateTags()<CR>
 
 if has('gui_running')
-  function! <SID>FontSize_Reduce()                          " Reduce the font
+  function! <SID>FontSize_Reduce()                                  " Reduce the font
     if has('unix')
       let pattern = '\<\d\+$'
     elseif has('win32') || has('win95') || has('win64')
@@ -247,7 +239,7 @@ if has('gui_running')
   endfunction
   nnoremap <A--> :call <SID>FontSize_Reduce()<CR>
 
-  function! <SID>FontSize_Enlarge()                         " Enlarge the font
+  function! <SID>FontSize_Enlarge()                                 " Enlarge the font
     if has('unix')
       let pattern = '\<\d\+$'
     elseif has('win32') || has('win95') || has('win64')
@@ -323,9 +315,9 @@ endif
 
 if has('win32') || has('win95') || has('win64')
   nmap <leader>v :e $VIM/_vimrc<CR>
-  autocmd! bufwritepost $VIM/_vimrc source %                      " autoload _vimrc
-  set guifont=Monaco:h12                                          " Fonts
-  set clipboard+=unnamed                                          " Copy the content to system clipboard by using y/p
+  autocmd! bufwritepost $VIM/_vimrc source %                        " autoload _vimrc
+  set guifont=Monaco:h12                                            " Fonts
+  set clipboard+=unnamed                                            " Copy the content to system clipboard by using y/p
   set clipboard+=unnamedplus
 else
   nmap <leader>v :e ~/.vimrc<CR>
@@ -372,6 +364,8 @@ language messages utf-8                                 " At Console
 set showcmd                                             " Show (partial) command in status line
 set modifiable
 set write
+set incsearch hlsearch ignorecase smartcase     " Search
+set magic                                       " Regular Expression
 set linespace=0
 set wildmenu
 set wildmode=longest,list,full                              " Completion mode that is used for the character
@@ -386,7 +380,7 @@ set scrolloff=3                                             " Scroll settings
 set sidescroll=1
 set sidescrolloff=5
 set imcmdline                                               " Fix context menu messing
-set completeopt=longest,menuone
+set completeopt=longest,menuone                             " Supper Tab
 set foldenable                                              " Enable Fold
 set foldcolumn=1
 set foldexpr=1                                              " Shown line number after fold
@@ -394,9 +388,6 @@ set foldlevel=100                                           " Not fold while VIM
 set viewoptions=folds
 set backspace=indent,eol,start                  " make backspace h, l, etc wrap to
 set whichwrap+=<,>,h,l
-set incsearch hlsearch ignorecase smartcase     " Search
-set magic                                       " Regular Expression
-
 
 noremap <F1> <ESC>
 imap <F1> <ESC>a
@@ -411,13 +402,13 @@ inoremap <M-b> <Esc>Bi
 inoremap <M-d> <ESC>cW
 
 " ====================================== For Function =====================================
-let g:ctrlp_map = '<c-p>'                           " CtrlP
-let g:ctrlp_working_path_mode = 'ra'                " Search parents as well (stop searching sartly)
+let g:ctrlp_map = '<c-p>'                                           " CtrlP
+let g:ctrlp_working_path_mode = 'ra'                                " Search parents as well (stop searching sartly)
 let g:ctrlp_max_height = 8
 let g:ctrlp_max_depth = 100
-let g:ctrl_root_makers = ['.ctrlp']                 " Stop search if these files present
+let g:ctrl_root_makers = ['.ctrlp']                                 " Stop search if these files present
 let g:ctrlp_use_caching = 1
-let g:ctrlp_clear_cache_on_exit = 0                 " Cross session caching
+let g:ctrlp_clear_cache_on_exit = 0                                 " Cross session caching
 if has('win32') || has('win95') || has('win64')
   let g:ctrlp_cache_dir = $VIM . '/cache/ctrlp'
 else
@@ -498,7 +489,7 @@ augroup resCur
   autocmd BufWinEnter * call ResCur()
 augroup END
 
-augroup vimrc                                             " For Folding
+augroup vimrc                                                       " For Folding
   au BufReadPre * setlocal foldmethod=indent
   au BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
 augroup END
@@ -532,8 +523,15 @@ let SuperTabMappingForward = '<c-p>'
 let SuperTabMappingTabLiteral = '<Tab>'
 let SuperTabClosePreviewOnPopupClose = 1
 
-autocmd BufWinLeave * silent! mkview                        " Load view automatic
+autocmd BufWinLeave * silent! mkview                                " Load view automatic
 autocmd BufWinEnter * silent! loadview
+autocmd BufRead,BufNewFile * setfiletype txt                        " Highlight the txt file
+autocmd BufRead,BufNewFile *.t set ft=perl                          " Perl test file as Perl code
 autocmd BufEnter c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\* :setlocal tags+=c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\.tags
-autocmd BufRead,BufNewFile * setfiletype txt                 " Highlight the txt file
-autocmd BufRead,BufNewFile *.t set ft=perl                   " Perl test file as Perl code
+
+iabbrev <leader>/* /*********************************
+iabbrev <leader>*/ *********************************/
+iabbrev <leader>#- #------------------
+inoremap <leader>tt <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
+inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
+inoremap <leader>fe <C-R>=expand("%:t")<CR>

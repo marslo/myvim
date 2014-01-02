@@ -22,7 +22,9 @@
 " =============================================================================
 
 set nocompatible
-
+syntax enable
+syntax on
+filetype plugin on
 " At Menu
 " source $VIMRUNTIME/delmenu.vim
 " source $VIMRUNTIME/menu.vim
@@ -374,7 +376,7 @@ augroup end
 
 " Programming configs for Python
 au FileType python syn keyword pythonDecorator print self
-let python_highlight_all = 1                                          " syntax-python
+let python_highlight_all = 1                                        " syntax-python
 
 " Run pylint
 func! PylintCheck()
@@ -435,8 +437,8 @@ endif
 if has('win32') || has('win95') || has('win64')
   nmap <leader>v :e $VIM/_vimrc<CR>
   " au GUIEnter * simalt ~x                       " Max after start vim
-  autocmd! bufwritepost $VIM/_vimrc source %      " autoload _vimrc
-  set guifont=Monaco:h12                          " Fonts
+  autocmd! bufwritepost $VIM/_vimrc source %                        " autoload _vimrc
+  set guifont=Monaco:h12                                            " Fonts
   " Copy the content to system clipboard by using y/p
   set clipboard+=unnamed
   set clipboard+=unnamedplus
@@ -454,21 +456,17 @@ set nobackup noswapfile nowritebackup
 set ruler number
 set report=0
 
-syntax enable
-syntax on
-filetype plugin on
-
-set autoread                                " Set auto read when a file is changed by outside
-set showmatch                               " Show matching bracets
-set wrap                                    " Wrap lines
+set autoread                                            " Set auto read when a file is changed by outside
+set showmatch                                           " Show matching bracets
+set wrap                                                " Wrap lines
 
 " Tab width
 " set textwidth=150
 set autoindent smartindent
-set smarttab expandtab                      " smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
-set tabstop=2                               " Tab width
-set softtabstop=2                           " the width while trigger <Tab> key
-set shiftwidth=2                            " the tab width by using >> & <<
+set smarttab expandtab                                  " smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
+set tabstop=2                                           " Tab width
+set softtabstop=2                                       " the width while trigger <Tab> key
+set shiftwidth=2                                        " the tab width by using >> & <<
 " autocmd FileType ruby,eruby,yaml,html,css,scss,javascript set ai sw=2 sts=2 et
 set lbr
 set tw=0
@@ -485,11 +483,7 @@ set statusline+=\ \ %p%%\
 
 " At Console
 " language messages utf-8
-set showcmd                                 " Show (partial) command in status line
-
-au BufRead,BufNewFile * setfiletype txt     " Highlight the txt file
-au BufRead,BufNewFile *.t set ft=perl       " Perl test file as Perl code
-
+set showcmd                                             " Show (partial) command in status line
 set modifiable
 set write
 
@@ -523,6 +517,12 @@ set sidescrolloff=5
 
 " Fix context menu messing
 set imcmdline
+" Fold
+set foldenable                                              " Enable Fold
+" set foldmethod=manual
+set foldcolumn=1
+set foldexpr=1                                              " Shown line number after fold
+set foldlevel=100                                           " Not fold while VIM set up
 
 " Disable <F1> to open help file
 noremap <F1> <ESC>
@@ -552,12 +552,12 @@ map gl <CR>
 " CtrlP
 " let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'
 let g:ctrlp_map = '<c-p>'
-let g:ctrlp_working_path_mode = 'ra'                " Search parents as well (stop searching sartly)
+let g:ctrlp_working_path_mode = 'ra'                                " Search parents as well (stop searching sartly)
 let g:ctrlp_max_height = 8
 let g:ctrlp_max_depth = 100
-let g:ctrl_root_makers = ['.ctrlp']                 " Stop search if these files present
+let g:ctrl_root_makers = ['.ctrlp']                                 " Stop search if these files present
 let g:ctrlp_use_caching = 1
-let g:ctrlp_clear_cache_on_exit = 0                 " Cross session caching
+let g:ctrlp_clear_cache_on_exit = 0                                 " Cross session caching
 if has('win32') || has('win95') || has('win64')
   let g:ctrlp_cache_dir = $VIM . '/cache/ctrlp'
 else
@@ -659,6 +659,11 @@ augroup resCur
   autocmd BufWinEnter * call ResCur()
 augroup END
 
+augroup vimrc
+  au BufReadPre * setlocal foldmethod=indent
+  au BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
+augroup END
+
 " Block comment in vimrc
 if 0
   augroup resCur
@@ -690,7 +695,6 @@ if 0
   endif
 endif
 
-
 " Rainbow Parentheses Improved (http://www.vim.org/scripts/script.php?script_id=4176)
 let g:rainbow_active = 1
 let g:rainbow_operators = 1
@@ -710,12 +714,12 @@ let g:indentLine_color_gui = "#282828"
 let g:indentLine_color_term = 8
 let g:indentLine_indentLevel = 20
 let g:indentLine_showFirstIndentLevel = 1
+" let g:indentLine_loaded = 1
 if has('gui_running') || 'xterm-256color' == $TERM
   let g:indentLine_char = '¦'
 elseif has('win32')
   let g:indentLine_char = '|'
 endif
-" let g:indentLine_loaded = 1
 
 " nnoremap <silent> <C-F6> :let old_reg=@"<CR>:let @"=substitute(expand("%:p"), "/", "\\", "g")<CR>:silent!!cmd /cstart <C-R><C-R>"<CR><CR>:let @"=old_reg<CR>
 
@@ -727,19 +731,8 @@ let SuperTabMappingForward = '<c-p>'
 let SuperTabMappingTabLiteral = '<Tab>'
 let SuperTabClosePreviewOnPopupClose = 1
 
-" Fold
-set foldenable                              " Enable Fold
-" set foldmethod=manual
-set foldcolumn=1
-set foldexpr=1                              " Shown line number after fold
-set foldlevel=100                           " Not fold while VIM set up
 " Load view automatic
 " au BufWinLeave * silent mkview
 autocmd BufWinLeave * silent! mkview
 autocmd BufWinEnter * silent! loadview
 set viewoptions=folds
-
-augroup vimrc
-  au BufReadPre * setlocal foldmethod=indent
-  au BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
-augroup END

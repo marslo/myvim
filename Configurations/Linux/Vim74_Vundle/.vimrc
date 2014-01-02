@@ -5,7 +5,7 @@
 "          Email: marslo.jiao@gmail.com
 "        Created: 2010-10
 "        Version: 0.1.15
-"     LastChange: 2014-01-02 16:09:46
+"     LastChange: 2014-01-02 17:10:35
 "        History: 0.0.3 | Marslo | Add the Autoload and Fast Edit difference between win32 and non-win32
 "                 0.0.4 | Marslo | Add CheckRubySyntax() function for checking and run ruby script
 "                 0.0.5 | Marslo | Add the function of highlight txt file
@@ -23,6 +23,9 @@
 " =============================================================================
 
 set nocompatible
+syntax enable
+syntax on
+filetype plugin on
 runtime macros/matchit.vim
 behave mswin
 set diffopt=filler,context:3
@@ -32,17 +35,10 @@ if has('win32') || has('win64')
 else
   set viminfo=%,<800,'10,/50,:100,h,f0,n~/.vim/cache/.viminfo
 endif
+
+" ====================================== For Property =====================================
 let mapleader=","
 let g:mapleader=","
-set go+=a
-set tags=tags;
-set autochdir
-set fileformat=unix
-set fileencodings=utf-8,ucs-bom,gbk,cp936,gb2312,gb18030
-set termencoding=utf-8
-set encoding=utf-8
-set fileencoding=utf-8
-let &termencoding=&encoding
 
 " Vim Bundle
 filetype off
@@ -71,7 +67,6 @@ Bundle 'Conque-Shell'
 Bundle 'mru.vim'
 Bundle 'taglist.vim'
 Bundle 'winmanager'
-
 " For Python
 " Bundle 'python-mode'
 Bundle 'python_fold'
@@ -86,6 +81,7 @@ Bundle 'kana/vim-textobj-user'
 Bundle 'ruby-matchit'
 " For Javascript
 Bundle "pangloss/vim-javascript"
+" Bundle 'jelera/vim-javascript-syntax'
 " For web design
 Bundle "tpope/vim-surround"
 Bundle 'tpope/vim-repeat'
@@ -98,14 +94,16 @@ Bundle 'Marslo/marslo.vim'
 Bundle 'Marslo/MarsloVimOthers'
 " For fun
 " Bundle 'TeTrIs.vim'
+" Bundle 'matrix.vim--Yang'
 filetype plugin indent on
 
 " ====================================== For Programming =====================================
 func! OpenCMD()
   if has('win32') || has('win95') || has('win64')
-    let com = '!cmd /c start C:\Marslo\Tools\Software\System\CommandLine\Console2\Console.exe -d "'. expand('%:p:h') . '"'
     if 'java' == &filetype
       let com = '!cmd /c start "C:\Program Files\JPSoft\TCCLE13x64\tcc.exe" /d "' . expand('%:p:h') .'"'
+    else
+      let com = '!cmd /c start C:\Marslo\Tools\Software\System\CommandLine\Console2\Console.exe -d "'. expand('%:p:h') . '"'
     endif
   else
     let com = '!/usr/bin/gnome-terminal --working-directory=' . expand('%:p:h')
@@ -125,8 +123,7 @@ func! OpenFoler()
 endfunc
 map <M-o> :call OpenFoler()<CR>
 
-" GetVundle() inspired by: http://pastebin.com/embed_iframe.php?i=C9fUE0M3
-func! GetVundle()
+func! GetVundle()                                                   " GetVundle() inspired by: http://pastebin.com/embed_iframe.php?i=C9fUE0M3
   let vundleAlreadyExists=1
   if has('win32') || has('win64')
     let vundle_readme=expand('$VIM\bundle\vundle\README.md')
@@ -148,8 +145,7 @@ func! GetVundle()
   endif
 endfunc
 
-" Get vim from: git clone git@github.com:b4winckler/vim.git
-func! GetVim()
+func! GetVim()                                                      " Get vim from: git clone git@github.com:b4winckler/vim.git
   if has('unix')
     let vimgitcfg=expand('~/.vim/src/vim/.git/config')
     if !filereadable(vimgitcfg)
@@ -180,13 +176,6 @@ func! RunResult()
   let &errorformat = ef
 endfunc
 
-iabbrev <leader>/* /*********************************
-iabbrev <leader>*/ *********************************/
-iabbrev <leader>#- #------------------
-inoremap <leader>tt <c-r>=strftime("%d/%m/%y %H:%M:%S")<cr>
-inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
-inoremap <leader>fe <C-R>=expand("%:t")<CR>
-
 function! GotoFile()
   if 'python' == &filetype
     let com = expand('%:p:h') . '\' . expand('<cfile>') . '.py'
@@ -198,19 +187,17 @@ function! GotoFile()
 endfunction
 nmap gf :call GotoFile()<CR>
 
-" Update tags file automatic
 function! UpdateTags()
   silent !ctags -R --fields=+ianS --extra=+q
 endfunction
 nmap <F12> :call UpdateTags()<CR>
 
 if has('gui_running')
-  function! <SID>FontSize_Reduce()
+  function! <SID>FontSize_Reduce()                                  " Reduce the font
     if has('unix')
       let pattern = '\<\d\+$'
     elseif has('win32') || has('win95') || has('win64')
       let pattern = ':h\zs\d\+\ze:'
-      " let pattern = '\([1-9][0-9]*\)$'
     endif
     let fontsize = matchstr(&gfn, pattern)
     echo fontsize
@@ -219,7 +206,7 @@ if has('gui_running')
   endfunction
   nnoremap <A--> :call <SID>FontSize_Reduce()<CR>
 
-  function! <SID>FontSize_Enlarge()
+  function! <SID>FontSize_Enlarge()                                 " Enlarge the font
     if has('unix')
       let pattern = '\<\d\+$'
     elseif has('win32') || has('win95') || has('win64')
@@ -240,33 +227,24 @@ function! SynStack()
 endfunction
 
 " Programming configs for Ruby and Rails
-" map ecq :echo system("ruby -e 'print $:.join(%q{,})'")<CR>
 let g:ruby_path=$RUBY_BIN
-let g:solarized_termcolors=256
 if has("autocmd")
   autocmd FileType ruby set omnifunc=rubycomplete#Complete
   autocmd FileType ruby let g:rubycomplete_buffer_loading=1
   autocmd FileType ruby let g:rubycomplete_classes_in_global=1
 endif
-
-" vim-ruby
 autocmd FileType ruby compiler ruby
 let g:rubycomplete_buffer_loading = 1
 let g:rubycomplete_classes_in_global = 1
 let g:rubycomplete_rails = 1
-
-" Inspired from :h new-filetype
-augroup filetypedetect
-  " au BufNewFile,BufRead *.html.erb set filetype=html.ruby
-  " au BufNewFile,BufRead *.js.erb set filetype=javascript.ruby
+augroup filetypedetect                                              " Inspired from :h new-filetype
   au BufNewFile,BufRead *.r.erb set filetype=r.ruby
 augroup end
 
 " Programming configs for Python
 au FileType python syn keyword pythonDecorator print self
-let python_highlight_all = 1                                          " syntax-python
-" Run pylint
-func! PylintCheck()
+let python_highlight_all = 1                                        " syntax-python
+func! PylintCheck()                                                 " Run pylint
   let mp = &makeprg
   let ef = &errorformat
   let exeFile = '"' . expand("%:t") . '"'
@@ -280,12 +258,13 @@ endfunc
 
 " ====================================== For Inteface =====================================
 if has('gui_running')
-  set lines=32
+  set lines=32                                                      " The initialize size
   set columns=108
-  func! MaximizeWindow()
+  func! MaximizeWindow()                                            " Make vim maximize while it startup
     silent !wmctrl -r :ACTIVE: -b add,maximized_vert,maximized_horz
   endfunc
-  set go=			" Hide everything
+  set go=                                                           " Hide everything
+  set cpoptions+=n
 endif
 
 if 'xterm-256color' == $TERM
@@ -300,9 +279,9 @@ endif
 
 if has('win32') || has('win95') || has('win64')
   nmap <leader>v :e $VIM/_vimrc<CR>
-  autocmd! bufwritepost $VIM/_vimrc source %      " autoload _vimrc
-  set guifont=Monaco:h12                          " Fonts
-  set clipboard+=unnamed
+  autocmd! bufwritepost $VIM/_vimrc source %                        " autoload _vimrc
+  set guifont=Monaco:h12                                            " Fonts
+  set clipboard+=unnamed                                            " Copy the content to system clipboard by using y/p
   set clipboard+=unnamedplus
 else
   nmap <leader>v :e ~/.vimrc<CR>
@@ -310,23 +289,32 @@ else
   set guifont=Monaco\ 12
   set clipboard=unnamedplus
 endif
+
+set go+=a
+set tags=tags;
+set autochdir
+set fileformat=unix
+set fileencodings=utf-8,ucs-bom,gbk,cp936,gb2312,gb18030      " Code Format
+set termencoding=utf-8
+set encoding=utf-8
+set fileencoding=utf-8
+let &termencoding=&encoding
+set selection=exclusive                                       " Mouse Settings
+set selectmode=mouse,key
 set nobackup noswapfile nowritebackup
 set ruler number
 set report=0
-syntax enable
-syntax on
-filetype plugin on
-set autoread                                " Set auto read when a file is changed by outside
-set showmatch                               " Show matching bracets
-set wrap                                    " Wrap lines
+set autoread                                            " Set auto read when a file is changed by outside
+set showmatch                                           " Show matching bracets
+set wrap                                                " Wrap lines
 set autoindent smartindent
-set smarttab expandtab                      " smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
-set tabstop=2                               " Tab width
-set softtabstop=2                           " the width while trigger <Tab> key
-set shiftwidth=2                            " the tab width by using >> & <<
+set smarttab expandtab                                  " smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
+set tabstop=2                                           " Tab width
+set softtabstop=2                                       " the width while trigger <Tab> key
+set shiftwidth=2                                        " the tab width by using >> & <<
 set lbr
 set tw=0
-set laststatus=2
+set laststatus=2                                        " Set status bar
 set statusline=%m%r
 set statusline+=%F\ \ %y,%{&fileformat}\                " file path\file name & filetype
 set statusline+=%=                                      " right align
@@ -334,27 +322,33 @@ set statusline+=\ \ %-{strftime(\"%H:%M\ %d/%m/%Y\")}   " Current Time
 set statusline+=\ \ %b[A],0x%B                          " ASCII code, Hex mode
 set statusline+=\ \ %c%V,%l/%L                          " current Column, current Line/All Line
 set statusline+=\ \ %p%%\
-set showcmd                                 " Show (partial) command in status line
-au BufRead,BufNewFile * setfiletype txt     " Highlight the txt file
-au BufRead,BufNewFile *.t set ft=perl       " Perl test file as Perl code
+set showcmd                                             " Show (partial) command in status line
 set modifiable
 set write
 set incsearch hlsearch ignorecase smartcase     " Search
 set magic                                       " Regular Expression
 set linespace=0
 set wildmenu
-set wildmode=longest,list,full
+set wildmode=longest,list,full                              " Completion mode that is used for the character
 set wildignore+=*.swp,*.zip,*.exe
-set noerrorbells novisualbell
+set noerrorbells novisualbell                               " turn off error beep/flash
 set t_vb=
 set list listchars=tab:\ \ ,trail:·,extends:»,precedes:«,nbsp:·
 set cursorline                        " Highlight the current line
 set guicursor=a:hor1
 set guicursor+=i-r-ci-cr-o:hor2-blinkon0
-set scrolloff=3
+set scrolloff=3                                             " Scroll settings
 set sidescroll=1
 set sidescrolloff=5
-set imcmdline
+set imcmdline                                               " Fix context menu messing
+set completeopt=longest,menuone                             " Supper Tab
+set foldenable                                              " Enable Fold
+set foldcolumn=1
+set foldexpr=1                                              " Shown line number after fold
+set foldlevel=100                                           " Not fold while VIM set up
+set viewoptions=folds
+set backspace=indent,eol,start                  " make backspace h, l, etc wrap to
+set whichwrap+=<,>,h,l
 
 noremap <F1> <ESC>
 imap <F1> <ESC>a
@@ -369,13 +363,14 @@ inoremap <M-b> <Esc>Bi
 inoremap <M-d> <ESC>cW
 map gl <CR>
 
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_working_path_mode = 'ra'                " Search parents as well (stop searching sartly)
+" ====================================== For Function =====================================
+let g:ctrlp_map = '<c-p>'                                           " CtrlP
+let g:ctrlp_working_path_mode = 'ra'                                " Search parents as well (stop searching sartly)
 let g:ctrlp_max_height = 8
 let g:ctrlp_max_depth = 100
-let g:ctrl_root_makers = ['.ctrlp']                 " Stop search if these files present
+let g:ctrl_root_makers = ['.ctrlp']                                 " Stop search if these files present
 let g:ctrlp_use_caching = 1
-let g:ctrlp_clear_cache_on_exit = 0                 " Cross session caching
+let g:ctrlp_clear_cache_on_exit = 0                                 " Cross session caching
 if has('win32') || has('win95') || has('win64')
   let g:ctrlp_cache_dir = $VIM . '/cache/ctrlp'
 else
@@ -393,17 +388,17 @@ let g:gundo_preview_height = 20
 let g:gundo_right = 0
 let g:gundo_preview_bottom = 0
 
-" ====================================== For Function =====================================
-set backspace=indent,eol,start                  " make backspace h, l, etc wrap to
 if has('win32') || has('win95') || has('win64')
   nmap <leader>tv :ConqueTermSplit cmd <CR>
 else
   nmap <leader>tv :ConqueTermSplit bash <CR>
 endif
+
 nmap zdb :%s/\s\+$//<CR>
 nmap zhh :%s/^\s\+//<CR>
 nmap zmm :g/^/ s//\=line('.').' '/<CR>
 nmap zws :g/^\s*$/d<CR>
+
 let g:winManagerWidth = 20
 let g:winManagerWindowLayout='FileExplorer|TagList'
 nmap <leader>mm :WMToggle<cr>
@@ -437,7 +432,7 @@ map <leader>aid :AuthorInfoDetect<CR>
 let g:vimrc_author='Marslo'
 let g:vimrc_email='marslo.jiao@gmail.com'
 
-let MRU_Auto_Close = 1
+let MRU_Auto_Close = 1                                              " Most Recently Used(MRU)
 let MRU_Max_Entries = 10
 let MRU_Exclude_Files='^/tmp/.*'
 let MRU_Exclude_Files='^/temp/.*'
@@ -445,16 +440,20 @@ let MRU_Exclude_Files='^/media/.*'
 let MRU_Exclude_Files='^/mnt/.*'
 map <C-g> :MRU<CR>
 
-function! ResCur()
+function! ResCur()                                                  " Remember Cursor position in last time, inspired from http://vim.wikia.com/wiki/VimTip80
   if line("'\"") <= line("$")
     normal! g`"
     return 1
   endif
 endfunction
-
 augroup resCur
   autocmd!
   autocmd BufWinEnter * call ResCur()
+augroup END
+
+augroup vimrc                                                       " For Folding
+  au BufReadPre * setlocal foldmethod=indent
+  au BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
 augroup END
 
 let g:rainbow_active = 1
@@ -481,21 +480,12 @@ elseif has('win32')
   let g:indentLine_char = '|'
 endif
 
-set completeopt=longest,menuone             " Supper Tab
 let SuperTabDefaultCompletionType = '<c-p>'
 let SuperTabMappingForward = '<c-p>'
 let SuperTabMappingTabLiteral = '<Tab>'
 let SuperTabClosePreviewOnPopupClose = 1
 
-set foldenable                              " Enable Fold
-set foldcolumn=1
-set foldexpr=1                              " Shown line number after fold
-set foldlevel=100                           " Not fold while VIM set up
-autocmd BufWinLeave * silent! mkview
+autocmd BufWinLeave * silent! mkview                                " Load view automatic
 autocmd BufWinEnter * silent! loadview
-set viewoptions=folds
-
-augroup vimrc
-  au BufReadPre * setlocal foldmethod=indent
-  au BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
-augroup END
+autocmd BufRead,BufNewFile * setfiletype txt                        " Highlight the txt file
+autocmd BufRead,BufNewFile *.t set ft=perl                          " Perl test file as Perl code
