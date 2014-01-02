@@ -285,7 +285,7 @@ if has('gui_running')
   func! MaximizeWindow()
     silent !wmctrl -r :ACTIVE: -b add,maximized_vert,maximized_horz
   endfunc
-  set go=
+  set go=			" Hide everything
 endif
 
 if 'xterm-256color' == $TERM

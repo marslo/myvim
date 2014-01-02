@@ -1,34 +1,45 @@
 " =============================================================================
-"       FileName: .vimrc
-"           Desc:
-"         Author: Marslo
-"          Email: marslo.jiao@gmail.com
-"        Created: 2010-10
-"        Version: 0.1.14
-"     LastChange: 2013-12-29 18:54:04
-"        History: 0.0.3 | Marslo | Add the Autoload and Fast Edit difference between win32 and non-win32
-"                 0.0.4 | Marslo | Add CheckRubySyntax() function for checking and run ruby script
-"                 0.0.5 | Marslo | Add the function of highlight txt file
-"                       | Marslo | Add the function of Automatic paire signs (), [], {}, '', etc
-"                 0.0.6 | Marslo | Remove a pair of parentheses, brackets, or braces
-"                 0.0.7 | Marslo | Modification about autoPair(): if there are char behind the ( or [ or { it wont pair
-"                 0.0.8 | Marslo | Add the function of OpenCMD(), GotoFile(), FontSize_Enlarge(), FontSize_Reduce() and UpdateTagsFile()
-"                 0.0.9 | Marslo | Add three bundles: woainvzu/EnhCommentify.vim && woainvzu/Marslo.vim && tpope/vim-rails
-"                 0.0.10 | Marslo | Add function of GetVundle() and GetVim() for git clone automaticlly"
-"                 0.0.11 | Marslo | Change repository woainvzu to Marslo
-"                 0.0.12 | Marslo | Modification for startup faster
-"                 0.0.13 | Marslo | Remove autopairs functions. Replaced by auto-pairs
-"                 0.0.14 | Marslo | Add viminfo settings
+"      FileName: _vimrc
+"          Desc:
+"        Author: Marslo
+"         Email: marslo.jiao@gmail.com
+"       Created: 2010-10
+"       Version: 0.0.17
+"    LastChange: 2013-12-23 16:00:18
+"       History:
+"                0.0.3  | Marslo | Add the Autoload and Fast Edit difference between win32 and non-win32
+"                0.0.4  | Marslo | Add CheckRubySyntax() function for checking and run ruby script
+"                0.0.5  | Marslo | Add the function of highlight txt file
+"                                  Add the function of Automatic paire signs (), [], {}, '', etc
+"                0.0.6  | Marslo | Add bundle plugin for manager plugins automatic
+"                0.0.7  | Marslo | Add pyflakes plugin for python syntax checking
+"                0.0.8  | Marslo | Remap the shortcut key: Ctrl-A/Ctrl-E/F1
+"                0.0.9  | Marslo | Add the function about remove a paird parentheses, brackets, braces
+"                0.0.10 | Marslo | Add the configuration about rainbow_parentheses
+"                0.0.11 | Marslo | Add three bundles: woainvzu/EnhCommentify.vim && woainvzu/Marslo.vim && tpope/vim-rails
+"                0.0.12 | Marslo | Add function GetVundle() to get vundle automaticly
+"                0.0.13 | Marslo | Add Alpha setting for vim tweak
+"                0.0.14 | Marslo | Change woainvu repos to Marslo
+"                0.0.15 | Marslo | Add Remember curosr position function
+"                0.0.16 | Marslo | Modification for startup faster
+"                0.0.17 | Marslo | Remove autopairs functions. Replaced by auto-pairs
 " =============================================================================
 
 set nocompatible
 
+syntax enable
+syntax on
+filetype plugin on
+
 " At Menu
 " source $VIMRUNTIME/delmenu.vim
 " source $VIMRUNTIME/menu.vim
+source $VIMRUNTIME/vimrc_example.vim
+source $VIMRUNTIME/mswin.vim
 
 runtime macros/matchit.vim
 behave mswin
+
 
 set diffopt=filler,context:3
 set history=500
@@ -53,27 +64,14 @@ endif
 " Remove the Welcome interface
 " set shortmess=atI
 
+
 " ====================================== For Property =====================================
 " Set mapleader
 let mapleader=","
 let g:mapleader=","
 
-" set paste
-set go+=a
 
-set tags=tags;
-set autochdir
 
-" document format
-set fileformat=unix
-" :%s/\r\+$//e
-
-" Code format
-set fileencodings=utf-8,ucs-bom,gbk,cp936,gb2312,gb18030
-set termencoding=utf-8
-set encoding=utf-8
-set fileencoding=utf-8
-let &termencoding=&encoding
 
 " Vim Bundle
 filetype off
@@ -146,14 +144,20 @@ Bundle 'Marslo/MarsloVimOthers'
 
 " Others
 " Bundle 'oblitum/rainbow'            Replaced by 'luochen1990/rainbow'
-" Bundle 'snipMate'                   Replaced by 'Marslo/snipmate.vim.git'
+" Bundle 'kien/rainbow_parentheses.vim'       Replaced by oblitum/rainbow
 " Bundle 'mattn/emmet-vim'
 " Bundle 'Tagbar'                     Replaced by 'majutsushi/tagbar'
-" Bundle 'AuthorInfo'                 Replaced by 'dantezhu/authorinfo'
 " Bundle 'colorsupport.vim'
 " Bundle 'hdima/python-syntax.git'    Replaced by'Marslo/python-syntax'
+" Bundle 'ruby-matchit'
 " Bundle 'vantares/ruby-syntaxchecker.vim'
-" Bundle 'semmons99/vim-ruby-matchit'
+" Bundle 'dirkwallenstein/vim-excess-lines'
+" Bundle 'xolox/vim-shell'
+" Bundle 'xolox/vim-misc'
+" Bundle 'xolox/vim-easytags'
+" Bundle 'dbarsam/vim-vimtweak'
+" Bundle 'python.vim'
+" Bundle 'gorodinskiy/vim-coloresque'
 " Bundle 'ap/vim-css-color'
 " Bundle 'JulesWang/css.vim'
 
@@ -228,6 +232,33 @@ func! GetVim()
       execute 'silent !git clone git@github.com:b4winckler/vim.git "' . expand('~/.vim/vimsrc') . '"'
     end
   endif
+endfunc
+
+set diffexpr=MyDiff()
+func! MyDiff()
+  let opt = '-a --binary '
+  if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
+  if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
+  let arg1 = v:fname_in
+  if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
+  let arg2 = v:fname_new
+  if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
+  let mp = &makeprg
+  let mp = &makeprg
+  let arg3 = v:fname_out
+  if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
+  let eq = ''
+  if $VIMRUNTIME =~ ' '
+    if &sh =~ '\<cmd'
+      let cmd = '""' . $VIMRUNTIME . '\diff"'
+      let eq = '"'
+    else
+      let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
+    endif
+  else
+    let cmd = $VIMRUNTIME . '\diff'
+  endif
+  silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
 endfunc
 
 " ====================================== For Programming =====================================
@@ -348,9 +379,8 @@ endfunction
 
 " Programming configs for Ruby and Rails
 " map ecq :echo system("ruby -e 'print $:.join(%q{,})'")<CR>
-let g:ruby_path=$RUBY_BIN
-let g:solarized_termcolors=256
 
+let g:ruby_path=$RUBY_BIN
 if has("autocmd")
   autocmd FileType ruby set omnifunc=rubycomplete#Complete
   autocmd FileType ruby let g:rubycomplete_buffer_loading=1
@@ -401,8 +431,8 @@ endif
 " ====================================== For Inteface =====================================
 if has('gui_running')
   " The initialize size
-  set lines=32
-  set columns=108
+  set lines=38
+  set columns=122
 
   " Make vim maximize while it startup
   func! MaximizeWindow()
@@ -415,9 +445,11 @@ if has('gui_running')
   set guioptions-=r                           " Hide the side scroll bar
   set guioptions-=m                           " Hide the Menu
   set cpoptions+=n
+
+  if !filereadable("$VIM\vim74\vimtweak.dll")
+    au GUIENTER * call libcallnr("vimtweak.dll","SetAlpha",243)
+  endif
 endif
-
-
 
 " Set color is 256
 if 'xterm-256color' == $TERM
@@ -430,7 +462,6 @@ if has('gui_running') || 'xterm-256color' == $TERM
 else
   colorscheme marslo16
 endif
-
 
 if has('win32') || has('win95') || has('win64')
   nmap <leader>v :e $VIM/_vimrc<CR>
@@ -448,19 +479,36 @@ else
   set clipboard=unnamedplus
 endif
 
+set iskeyword+=.
+set autochdir
+
+" Tags
+" set tags=tags
+set tags=.\tags
+set tags+=C:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\tags
+set tags+=C:\Marslo\Job\Summa\TEX\SVN\viis-lab-scripts\tags
+set tags+=C:\Marslo\Job\Summa\TEX\SVN\tags
+
+" Code format
+set fileencodings=utf-8,ucs-bom,gbk,cp936,gb2312,gb18030
+set termencoding=utf-8
+set encoding=utf-8
+set fileencoding=utf-8
+let &termencoding=&encoding
+
+" Mouse Settings
+" set mouse=a
+set selection=exclusive
+set selectmode=mouse,key
 set nobackup noswapfile nowritebackup
 
 " ruler: Show Line and colum number; number: line number
 set ruler number
 set report=0
 
-syntax enable
-syntax on
-filetype plugin on
-
 set autoread                                " Set auto read when a file is changed by outside
 set showmatch                               " Show matching bracets
-set wrap                                    " Wrap lines
+set nowrap                                  " Wrap lines
 
 " Tab width
 " set textwidth=150
@@ -484,17 +532,11 @@ set statusline+=\ \ %c%V,%l/%L                          " current Column, curren
 set statusline+=\ \ %p%%\
 
 " At Console
-" language messages utf-8
+language messages utf-8
 set showcmd                                 " Show (partial) command in status line
-
-au BufRead,BufNewFile * setfiletype txt     " Highlight the txt file
-au BufRead,BufNewFile *.t set ft=perl       " Perl test file as Perl code
 
 set modifiable
 set write
-
-set incsearch hlsearch ignorecase smartcase     " Search
-set magic                                       " Regular Expression
 " E21\: Cannot make changes, 'modifiable' is off:     $delete
 set linespace=0
 set wildmenu
@@ -507,7 +549,7 @@ set wildignore+=*.swp,*.zip,*.exe
 " turn off error beep/flash
 set noerrorbells novisualbell
 set t_vb=
-" set list listchars=tab:\ \ ,trail:.,extends:>,precedes:<,nbsp:.
+
 set list listchars=tab:\ \ ,trail:·,extends:»,precedes:«,nbsp:·
 
 " Cursor format
@@ -523,6 +565,18 @@ set sidescrolloff=5
 
 " Fix context menu messing
 set imcmdline
+" Fold
+set foldenable                              " Enable Fold
+" set foldmethod=manual
+set foldcolumn=1
+set foldexpr=1                              " Shown line number after fold
+set foldlevel=100                           " Not fold while VIM set up
+set viewoptions=folds
+set backspace=indent,eol,start                  " make backspace h, l, etc wrap to
+" set whichwrap+=<,>,h,l
+
+set incsearch hlsearch ignorecase smartcase     " Search
+set magic                                       " Regular Expression
 
 " Disable <F1> to open help file
 noremap <F1> <ESC>
@@ -543,12 +597,7 @@ inoremap <M-f> <ESC><Space>Wi
 inoremap <M-b> <Esc>Bi
 inoremap <M-d> <ESC>cW
 
-" map <C-c> "+y
-" map <C-v> "+p
-map gl <CR>
-
-" set path+=/home/marslo/Study
-
+" ====================================== For Function =====================================
 " CtrlP
 " let g:ctrlp_user_command = 'dir %s /-n /b /s /a-d'
 let g:ctrlp_map = '<c-p>'
@@ -576,10 +625,6 @@ let g:gundo_preview_height = 20
 let g:gundo_right = 0
 let g:gundo_preview_bottom = 0
 
-" ====================================== For Function =====================================
-set backspace=indent,eol,start                  " make backspace h, l, etc wrap to
-" set whichwrap+=<,>,h,l
-
 " nmap <leader>s :ConqueTermSplit
 if has('win32') || has('win95') || has('win64')
   nmap <leader>tv :ConqueTermSplit cmd <CR>
@@ -591,7 +636,6 @@ nmap zdb :%s/\s\+$//<CR>
 nmap zhh :%s/^\s\+//<CR>
 nmap zmm :g/^/ s//\=line('.').' '/<CR>
 nmap zws :g/^\s*$/d<CR>
-
 
 " WinManager
 " let g:AutoOpenWinManager=1
@@ -659,6 +703,11 @@ augroup resCur
   autocmd BufWinEnter * call ResCur()
 augroup END
 
+augroup vimrc
+  au BufReadPre * setlocal foldmethod=indent
+  au BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
+augroup END
+
 " Block comment in vimrc
 if 0
   augroup resCur
@@ -688,8 +737,16 @@ if 0
       endif
     endfunction
   endif
-endif
 
+  " MiniBufExplorer
+  let g:miniBufExplMapCTabSwitchBufs=1
+  let g:miniBufExplMapWindowNavArrows=1
+  let g:miniBufExplorerMoreThanOne=0              " Mult-files openning at one minibufexplorer
+  let g:miniBufExplMapWindowNavVim=1              " Using <HJKL> to change the buffer
+  let g:miniBufExplTabWra=1
+  let g:miniBufExplModSelTarget=1                 " Use other explorers like TagList set it at 1
+  let g:miniBufExplUseSingleClick=1               " Single Click could switch the buffers
+endif
 
 " Rainbow Parentheses Improved (http://www.vim.org/scripts/script.php?script_id=4176)
 let g:rainbow_active = 1
@@ -710,14 +767,12 @@ let g:indentLine_color_gui = "#282828"
 let g:indentLine_color_term = 8
 let g:indentLine_indentLevel = 20
 let g:indentLine_showFirstIndentLevel = 1
+" let g:indentLine_loaded = 1
 if has('gui_running') || 'xterm-256color' == $TERM
   let g:indentLine_char = '¦'
 elseif has('win32')
   let g:indentLine_char = '|'
 endif
-" let g:indentLine_loaded = 1
-
-" nnoremap <silent> <C-F6> :let old_reg=@"<CR>:let @"=substitute(expand("%:p"), "/", "\\", "g")<CR>:silent!!cmd /cstart <C-R><C-R>"<CR><CR>:let @"=old_reg<CR>
 
 " Supper Tab
 set completeopt=longest,menuone
@@ -727,19 +782,11 @@ let SuperTabMappingForward = '<c-p>'
 let SuperTabMappingTabLiteral = '<Tab>'
 let SuperTabClosePreviewOnPopupClose = 1
 
-" Fold
-set foldenable                              " Enable Fold
-" set foldmethod=manual
-set foldcolumn=1
-set foldexpr=1                              " Shown line number after fold
-set foldlevel=100                           " Not fold while VIM set up
+
 " Load view automatic
 " au BufWinLeave * silent mkview
 autocmd BufWinLeave * silent! mkview
 autocmd BufWinEnter * silent! loadview
-set viewoptions=folds
-
-augroup vimrc
-  au BufReadPre * setlocal foldmethod=indent
-  au BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
-augroup END
+autocmd BufEnter c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\* :setlocal tags+=c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\.tags
+au BufRead,BufNewFile * setfiletype txt     " Highlight the txt file
+au BufRead,BufNewFile *.t set ft=perl       " Perl test file as Perl code
