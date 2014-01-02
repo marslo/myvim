@@ -152,6 +152,7 @@ Bundle 'Marslo/MarsloVimOthers'
 " Bundle 'gui2term.py'
 
 " Others
+" Bundle 'luochen1990/rainbow'        Replaced by 'oblitum/rainbow'
 " Bundle 'snipMate'                   Replaced by 'Marslo/snipmate.vim.git'
 " Bundle 'mattn/emmet-vim'
 " Bundle 'Tagbar'                     Replaced by 'majutsushi/tagbar'
@@ -696,6 +697,11 @@ if has('gui_running') || 'xterm-256color' == $TERM
 else
   let g:rainbow_ctermfgs = ['lightblue', 'lightgreen', 'yellow', 'red', 'magenta']
 endif
+let g:rainbow_load_separately = [
+    \ [ '*' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
+    \ [ '*.{html,htm,erb}' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
+    \ ]
+
 
 " IndentLine
 let g:indentLine_color_gui = "#282828"
