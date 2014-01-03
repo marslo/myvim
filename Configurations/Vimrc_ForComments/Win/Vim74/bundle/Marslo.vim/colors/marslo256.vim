@@ -133,6 +133,9 @@ hi Operator             guifg=#FF8C00
 " hi link Operator        Statement
 " hi link Statement       Statement
 
+" For vim-ruby
+hi rubyIdentifier       guifg=#FF5F5F
+
 " ===========================================================
 " color terminal definitions
 "                       *cterm-colors*
@@ -180,8 +183,8 @@ hi DiffAdded            ctermbg=93
 hi DiffRemoved          ctermbg=129
 hi DiffChange	          cterm=bold          ctermbg=99          ctermfg=255
 hi DiffText	            cterm=NONE          ctermbg=196
-hi Pmenu                ctermbg=darkred
-hi PmenuSel             ctermfg=lightgreen
+hi Pmenu                ctermfg=208         ctermbg=NONE
+hi PmenuSel             ctermfg=154
 hi Identifier	          ctermfg=149
 hi Cursor               cterm=underline     term=underline
 hi MatchParen           cterm=inverse       term=inverse
@@ -221,5 +224,14 @@ hi treeOpenable         ctermfg=150
 hi treePart             ctermfg=244
 hi treeDirSlash         ctermfg=244
 hi treeLink             ctermfg=182
+
+hi Boolean              ctermfg=196
+hi Function             ctermfg=105
+hi Structure            ctermfg=202
+hi Define               ctermfg=179
+hi Conditional          ctermfg=190
+hi Operator             ctermfg=208
+
+hi rubyIdentifier       ctermfg=9
 
 "vim: sw=4
