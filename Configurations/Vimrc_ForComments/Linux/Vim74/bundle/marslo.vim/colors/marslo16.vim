@@ -165,8 +165,10 @@ hi WarningMsg	          ctermfg=yellow      ctermbg=black
 hi WildMenu	            ctermfg=0           ctermbg=3
 hi Folded	              ctermfg=darkgrey    ctermbg=NONE
 hi FoldColumn	          ctermfg=darkgrey    ctermbg=NONE
-hi DiffAdd	            ctermbg=4
-hi DiffChange	          ctermbg=2
+" hi DiffAdd	            ctermbg=4
+hi DiffAdd	            cterm=NONE          ctermbg=56          ctermfg=255
+" hi DiffChange	          ctermbg=2
+hi DiffDelete	          cterm=NONE          ctermbg=239
 hi DiffDelete	          cterm=NONE          ctermfg=4 ctermbg=6
 hi DiffText	            cterm=NONE          ctermbg=1
 " The color setting for complete opt

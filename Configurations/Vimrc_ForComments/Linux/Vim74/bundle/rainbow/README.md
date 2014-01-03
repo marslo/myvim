@@ -1,67 +1,106 @@
-#Rainbow Parentheses Improved
+Rainbow Parentheses Improved 
+===
+>	help you read complex code by showing diff level of parentheses in diff color !! 
 
-This is a fork of [Rainbow Parentheses Improved](http://www.vim.org/scripts/script.php?script_id=4176) by [luo chen](http://www.vim.org/account/profile.php?user_id=53618).
+Description [(这里有中文版)](https://github.com/luochen1990/rainbow/blob/master/README_zh.md)
+-------------------------------------------------------------------------------------------------------- 
 
-I've applied some minor corrections and modifications:
+As everyone knows, the most complex codes were composed of a mass of different kinds of parentheses(typically: lisp). 
+This plugin will help you read these codes by showing different levels of parentheses in different colors. 
+**See the effect [here](http://vim.wikia.com/wiki/Script:4176)**.
+you can also find this plugin in **www.vim.org [here](http://www.vim.org/scripts/script.php?script_id=4176)**.
 
-* Operators outside any braces get the last color of the rainbow. Previously, it was being ignored for highlighting.
-* Simplified/corrected logic to define highlighting precedence for braces as higher than for operators. So if you got a brace that's also an operator and you got to the situation that it can match both roles, it'll assume the brace role.
-* Changed default highlighted operators (now most punctuation) and highlighted braces (added `<` and `>` for C++).
-* Removed optional highlighting for operators. Now hard enabled.
-* Changed loading autocommand for the events "syntax" and "colorscheme" so that the rainbow gets loaded only when there's syntax being applied and aways after switching colorschemes.
-* Changed default colors. Default rainbow colors copied from [gruvbox colorscheme](https://github.com/morhetz/gruvbox/blob/master/colors/gruvbox.vim#L366) (good for dark and light backgrounds).
+### lisp
+![lisp](https://raw.github.com/luochen1990/rainbow/master/demo/lisp.png)
+### coffee
+![coffee](https://raw.github.com/luochen1990/rainbow/master/demo/coffee.png)
+### cpp
+![cpp](https://raw.github.com/luochen1990/rainbow/master/demo/cpp.png)
+### python
+![python](https://raw.github.com/luochen1990/rainbow/master/demo/python.png)
+### html
+![html](https://raw.github.com/luochen1990/rainbow/master/demo/html.png)
 
-Angle brackets are a hard case to deal with. To distinguish "less than" from "bracket for open template argument list" it's assumed that "less than" will always be surrounded by spaces. If not, it'll be treated as an open template's angle bracket (although, still some checking applies for the `template` or `operator` keyword, for example).
+### What is improved ? 
 
-This fork is optimized for C++ highlighting.
+- smoother and faster. (linear time complexity) 
+- the code is shorter and easier to be read now. (shorter than 100 lines) 
+- no limit of parentheses levels. 
+- separately edit guifgs and ctermfgs (the colors used to highlight) 
+- now you can design your own parentheses  such as 'begin' and 'end' . (you can also design  what kinds of parentheses to use for different filetypes. ) 
+- you can also configure seprately for different type of files. 
+- now you can even decide to let some operators (like + - * / , ==) hilighted with the parentheses together.
+- now json style configuration used, more understandable and more readable, easily for advanced configuration.
+- the last , but not the least , the chinese statement is added as you see. 
 
-###Simple Configuration
+### Get Old Versions: 
+- http://www.vim.org/scripts/script.php?script_id=1561 
+- http://www.vim.org/scripts/script.php?script_id=3772 
 
-Put this on your `.vimrc` for loading it for specific file types:
+### Old Versions' Author: 
+- Martin Krischik (krischik@users.sourceforge.net) 
+- John Gilmore 
+- Luc Hermitte (hermitte@free.fr) 
+- anonym 
 
-```vim
-au FileType c,cpp,objc,objcpp call rainbow#load()
-```
-or just this to enable it globally:
+### This Versions' Author: 
+- Luo Chen (luochen1990@gmail.com) 
 
-```vim
-let g:rainbow_active = 1
-```
+Install & Simple Configuration:
+-------------------------------------------------------------------------------------------------------- 
 
-###Advanced Configuration
-An advanced configuration allows you to define what parentheses to use
-for each type of file. You can also determine the colors of your
-parentheses by this way (read file vim73/rgb.txt for all named colors).
+- first, put `rainbow.vim`(this file) to dir `vimfiles/plugin` or `~/.vim/plugin`
+- second, add the follow sentences to your `.vimrc` or `_vimrc` :
+	
+	```vim
+	let g:rainbow_active = 1
+	```
 
-e.g. this is an advanced config (add these sentences to your `.vimrc`):
+- third, restart your vim and enjoy coding.
 
-```vim
-let g:rainbow_active = 1
 
-let g:rainbow_load_separately = [
-    \ [ '*' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
-    \ [ '*.tex' , [['(', ')'], ['\[', '\]']] ],
-    \ [ '*.cpp' , [['(', ')'], ['\[', '\]'], ['{', '}']] ],
-    \ [ '*.{html,htm}' , [['(', ')'], ['\[', '\]'], ['{', '}'], ['<\a[^>]*>', '</[^>]*>']] ],
-    \ ]
+Advanced Configuration：
+-------------------------------------------------------------------------------------------------------- 
 
-let g:rainbow_guifgs = ['RoyalBlue3', 'DarkOrange3', 'DarkOrchid3', 'FireBrick']
-let g:rainbow_ctermfgs = ['lightblue', 'lightgreen', 'yellow', 'red', 'magenta']
-```
+- there is an example for advanced configuration(also default one), add it to your vimrc and edit it as you wish(just keep the format).
 
-###User Command
-```
-:RainbowToggle  --you can use it to toggle this plugin.
-:RainbowLoad    --you can use it to load/reload this plugin.
-```
-I recommend [VAM](https://github.com/MarcWeber/vim-addon-manager) or [Vundle](https://github.com/gmarik/vundle) for plugin management.
+	```vim
+	let g:rainbow_conf = {
+	\	'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
+	\	'ctermfgs': ['darkgray', 'darkblue', 'darkmagenta', 'darkcyan'],
+	\	'operators': '_,_',
+	\	'parentheses': [['(',')'], ['\[','\]'], ['{','}']],
+	\	'separately': {
+	\		'*': {},
+	\		'lisp': {
+	\			'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick', 'darkorchid3'],
+	\			'ctermfgs': ['darkgray', 'darkblue', 'darkmagenta', 'darkcyan', 'darkred', 'darkgreen'],
+	\		},
+	\		'html': {
+	\			'parentheses': [['(',')'], ['\[','\]'], ['{','}'], ['<\a[^>]*[^/]>\|<\a>','</[^>]*>']],
+	\		},
+	\		'tex': {
+	\			'operators': '',
+	\			'parentheses': [['(',')'], ['\[','\]']],
+	\		},
+	\	}
+	\}
+	```
 
-Here's a sample of a dark [gruvbox](https://github.com/morhetz/gruvbox) vim session:
+- 'guifgs': colors for gui interface, will be used in order.
+- 'ctermfgs': colors for terms
+- 'operators': describe the operators you want to highlight(read the vim help :syn-pattern)
+- 'parentheses': describe what will be processed as parentheses, a pair of parentheses was described by two re pattern
+- 'separately': configure for specific filetypes(decided by &ft), '\*' for filetypes without configuration
 
-<a href="http://i.imgur.com/J67VbFM.png">![Dark VIM Session](http://i.imgur.com/J67VbFM.png)</a>
 
-and here's a slightly lighter [dark solarized](https://github.com/flazz/vim-colorschemes/blob/master/colors/solarized.vim) session:
+User Command:
+-------------------------------------------------------------------------------------------------------- 
 
-<a href="http://i.imgur.com/j4g6L92.png">![Lighter VIM Session](http://i.imgur.com/j4g6L92.png)</a>
+- **:RainbowToggle**		--you can use it to toggle this plugin.
 
-I thank Luo for being supportive and accepting the operator highlighting idea.
+-------------------------------------------------------------------------------------------------------- 
+**Rate this script if you like it, 
+and i'll appreciate it and improve this plugin for you because of your support ! 
+just goto [this page](http://www.vim.org/scripts/script.php?script_id=4176) and choose `Life Changing` and click `rate`**
+ 
