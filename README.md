@@ -2,8 +2,8 @@ MyVimConfig
 ===========
 - Author: Marslo
 - Email: marslo.jiao@gmail.com
-- Version: 0.0.5
-- LastChange: 2013-11-21 18:59:56
+- Version: 0.0.6
+- LastChange: 2014-01-03 14:49:26
 
 -----------------------------
 
@@ -121,11 +121,10 @@ Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
 - Soluction:
     <pre><code>$ sudo apt-get update && sudo apt-get install build-essential</code></pre>
 
-
 # Configuration
 ### Usage
 - Windows User:
-    - Copy **_vimrc** from into `C:\Program Files\Vim`.
+    - Copy **vimrc** from `VimConfig\Configurations\vimrc` into `C:\Program Files\Vim`, and rename **vimrc** to **_vimrc**
     - Get [Vundle](https://github.com/gmarik/vundle.git) automatically
         - Open Vim and execute (Ignore warning and errors)
             <pre><code>:call GetVundle()
@@ -135,8 +134,8 @@ Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
         </code></pre>
 
 - Linux User:
-    - Copy **.vimrc** into `$HOME`
-    <pre><code>$ cp .vimrc ~/
+    - Copy **vimrc** from `VimConfig/Configurations/vimrc` into `$HOME`, and rename to **.vimrc**
+    <pre><code>$ cp vimrc ~/.vimrc
     </code></pre>
     - Get [Vundle](https://github.com/gmarik/vundle.git) automatically
         <pre><code>$ cat .vimrc | grep "set rtp"
@@ -149,7 +148,6 @@ Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
     - Get the other plugins
         <pre><code>:BundleInstall!
         </code></pre>
-
 
 -----------------------------
 
@@ -243,7 +241,7 @@ Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
 - [vim-ruby](https://github.com/vim-ruby/vim-ruby)
 
 #### Theme and colors
-- [Rainbow Parentheses Improved](https://github.com/oblitum/rainbow) | [Another Version](https://github.com/luochen1990/rainbow)
+- [Rainbow Parentheses Improved](https://github.com/luochen1990/rainbow) | [Another Version](https://github.com/oblitum/rainbow)
 - [vim-css3-syntax](https://github.com/hail2u/vim-css3-syntax)
 - [colorsel.vim](https://github.com/vim-scripts/colorsel.vim)
 - [css.vim](https://github.com/JulesWang/css.vim)
@@ -267,7 +265,7 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
 
 ###使用方法
 - Windows用户
-    - 复制 **Configurations\Win\Vim74_Vundle\_vimrc** 到 `C:\Program Files (x86)\Vim`
+    - 复制 **Configurations\vimrc** 到 `C:\Program Files (x86)\Vim`, 且重命名为`_vimrc`
     - 自动获取 [Vundle](https://github.com/gmarik/vundle.git)
         - 打开vim(忽略错误或警告)
             <pre><code>:call GetVundle()
@@ -277,8 +275,8 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
         </code></pre>
 
 - Linux 用户:
-    - 复制 **Configurations\Linux\Vim74_vundle\.vimrc** 到 `$HOME`
-        <pre><code>$ cp Linux/Vim74_vundle/.vimrc ~/
+    - 复制 **Configurations/vimrc** 到 `$HOME`, 且重命名为`.vimrc`
+        <pre><code>$ cp Configurateions/vimrc ~/.vimrc
         </code></pre>
     - 自动获取 [Vundle](https://github.com/gmarik/vundle.git)
         - 打开Gvim且运行 (忽略错误或警告）：
