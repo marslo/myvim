@@ -33,20 +33,18 @@ if has('win32') || has('win64')
   source $VIMRUNTIME/vimrc_example.vim
   source $VIMRUNTIME/mswin.vim
   set viminfo=%,<800,'10,/50,:100,h,f0
-  set lines=38                                                      " The initialize size
-  set columns=122
-  set wrap                                                          " Wrap lines
+  set wrap                                                         " Wrap lines
+  language messages utf-8                                          " At Console
   set tags=.\tags
   set tags+=C:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\tags
   set tags+=C:\Marslo\Job\Summa\TEX\SVN\viis-lab-scripts\tags
   set tags+=C:\Marslo\Job\Summa\TEX\SVN\tags
   autocmd BufEnter c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\* :setlocal tags+=c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\.tags
 else
-  set viminfo=%,<800,'10,/50,:100,h,f0,n~/.vim/cache/.viminfo
-  set lines=32                                                      " The initialize size
-  set columns=108
   set nowrap                                                        " NoWrap lines
   set tags=tags
+  set fileformat=unix
+  set viminfo=%,<800,'10,/50,:100,h,f0,n~/.vim/cache/.viminfo
 endif
 
 " ====================================== For Property =====================================
@@ -200,7 +198,7 @@ function! GotoFile()
 endfunction
 nmap gf :call GotoFile()<CR>
 
-function! UpdateTags()
+function! UpdateTags()                                              " Update tags file automatic
   silent !ctags -R --fields=+ianS --extra=+q
 endfunction
 nmap <F12> :call UpdateTags()<CR>
@@ -277,9 +275,14 @@ if has('gui_running')
   set go=                                                           " Hide everything (go = guioptions)
   set cpoptions+=n
   if has('win32') || has('win64')
+    set lines=38                                                    " The initialize size
+    set columns=122
     if !filereadable("$VIM\vim74\vimtweak.dll")
       au GUIENTER * call libcallnr("vimtweak.dll","SetAlpha",243)
     endif
+  else
+    set lines=32                                                    " The initialize size
+    set columns=108
   endif
 endif
 
@@ -335,7 +338,6 @@ set statusline+=\ \ %-{strftime(\"%H:%M\ %d/%m/%Y\")}               " Current Ti
 set statusline+=\ \ %b[A],0x%B                                      " ASCII code, Hex mode
 set statusline+=\ \ %c%V,%l/%L                                      " current Column, current Line/All Line
 set statusline+=\ \ %p%%\
-language messages utf-8                                             " At Console
 set showcmd                                                         " Show (partial) command in status line
 set modifiable
 set write
