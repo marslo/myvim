@@ -4,8 +4,8 @@
 "        Author: Marslo
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
-"       Version: 0.0.18
-"    LastChange: 2014-01-02 16:55:08
+"       Version: 0.0.19
+"    LastChange: 2014-01-03 11:26:40
 "       History:
 "                0.0.3  | Marslo | Add the Autoload and Fast Edit difference between win32 and non-win32
 "                0.0.4  | Marslo | Add CheckRubySyntax() function for checking and run ruby script
@@ -24,20 +24,31 @@
 "                0.0.16 | Marslo | Modification for startup faster
 "                0.0.17 | Marslo | Remove autopairs functions. Replaced by auto-pairs
 "                0.0.18 | Marslo | Delete redundancy configures from Windows vimrc
+"                0.0.19 | Marslo | Merge Linux configus and Windows. There are only one vimrc from now on.
 " =============================================================================
 
 set nocompatible
 syntax enable on
 filetype plugin on
-source $VIMRUNTIME/vimrc_example.vim
-source $VIMRUNTIME/mswin.vim
-runtime macros/matchit.vim
-behave mswin
-set diffopt=filler,context:3
 set history=500
+set diffopt=filler,context:3
+runtime macros/matchit.vim
 if has('win32') || has('win64')
+  behave mswin
+  source $VIMRUNTIME/vimrc_example.vim
+  source $VIMRUNTIME/mswin.vim
   set viminfo=%,<800,'10,/50,:100,h,f0
+  set wrap                                                         " Wrap lines
+  language messages utf-8                                          " At Console
+  set tags=.\tags
+  set tags+=C:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\tags
+  set tags+=C:\Marslo\Job\Summa\TEX\SVN\viis-lab-scripts\tags
+  set tags+=C:\Marslo\Job\Summa\TEX\SVN\tags
+  autocmd BufEnter c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\* :setlocal tags+=c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\.tags
 else
+  set nowrap                                                        " NoWrap lines
+  set tags=tags
+  set fileformat=unix
   set viminfo=%,<800,'10,/50,:100,h,f0,n~/.vim/cache/.viminfo
 endif
 
@@ -159,33 +170,6 @@ func! GetVim()                                                      " Get vim fr
   endif
 endfunc
 
-set diffexpr=MyDiff()
-func! MyDiff()
-  let opt = '-a --binary '
-  if &diffopt =~ 'icase' | let opt = opt . '-i ' | endif
-  if &diffopt =~ 'iwhite' | let opt = opt . '-b ' | endif
-  let arg1 = v:fname_in
-  if arg1 =~ ' ' | let arg1 = '"' . arg1 . '"' | endif
-  let arg2 = v:fname_new
-  if arg2 =~ ' ' | let arg2 = '"' . arg2 . '"' | endif
-  let mp = &makeprg
-  let mp = &makeprg
-  let arg3 = v:fname_out
-  if arg3 =~ ' ' | let arg3 = '"' . arg3 . '"' | endif
-  let eq = ''
-  if $VIMRUNTIME =~ ' '
-    if &sh =~ '\<cmd'
-      let cmd = '""' . $VIMRUNTIME . '\diff"'
-      let eq = '"'
-    else
-      let cmd = substitute($VIMRUNTIME, ' ', '" ', '') . '\diff"'
-    endif
-  else
-    let cmd = $VIMRUNTIME . '\diff'
-  endif
-  silent execute '!' . cmd . ' ' . opt . arg1 . ' ' . arg2 . ' > ' . arg3 . eq
-endfunc
-
 " ====================================== For Programming =====================================
 func! RunResult()
   let mp = &makeprg
@@ -219,7 +203,7 @@ function! GotoFile()
 endfunction
 nmap gf :call GotoFile()<CR>
 
-function! UpdateTags()
+function! UpdateTags()                                              " Update tags file automatic
   silent !ctags -R --fields=+ianS --extra=+q
 endfunction
 nmap <F12> :call UpdateTags()<CR>
@@ -290,15 +274,20 @@ endfunc
 
 " ====================================== For Inteface =====================================
 if has('gui_running')
-  set lines=38                                                      " The initialize size
-  set columns=122
   func! MaximizeWindow()                                            " Make vim maximize while it startup
     silent !wmctrl -r :ACTIVE: -b add,maximized_vert,maximized_horz
   endfunc
-  set go=                                                           " Hide everything
+  set go=                                                           " Hide everything (go = guioptions)
   set cpoptions+=n
-  if !filereadable("$VIM\vim74\vimtweak.dll")
-    au GUIENTER * call libcallnr("vimtweak.dll","SetAlpha",243)
+  if has('win32') || has('win64')
+    set lines=38                                                    " The initialize size
+    set columns=122
+    if !filereadable("$VIM\vim74\vimtweak.dll")
+      au GUIENTER * call libcallnr("vimtweak.dll","SetAlpha",243)
+    endif
+  else
+    set lines=32                                                    " The initialize size
+    set columns=108
   endif
 endif
 
@@ -327,66 +316,61 @@ endif
 
 set iskeyword+=.
 set autochdir
-set tags=.\tags
-set tags+=C:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\tags
-set tags+=C:\Marslo\Job\Summa\TEX\SVN\viis-lab-scripts\tags
-set tags+=C:\Marslo\Job\Summa\TEX\SVN\tags
-set fileencodings=utf-8,ucs-bom,gbk,cp936,gb2312,gb18030      " Code Format
+set fileencodings=utf-8,ucs-bom,gbk,cp936,gb2312,gb18030            " Code Format
 set termencoding=utf-8
 set encoding=utf-8
 set fileencoding=utf-8
 let &termencoding=&encoding
-set selection=exclusive                                       " Mouse Settings
+set selection=exclusive                                             " Mouse Settings
 set selectmode=mouse,key
 set nobackup noswapfile nowritebackup
 set ruler number
 set report=0
-set autoread                                            " Set auto read when a file is changed by outside
-set showmatch                                           " Show matching bracets
-set nowrap                                              " Wrap lines
+set autoread                                                        " Set auto read when a file is changed by outside
+set showmatch                                                       " Show matching bracets
 set autoindent smartindent
-set smarttab expandtab                                  " smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
-set tabstop=2                                           " Tab width
-set softtabstop=2                                       " the width while trigger <Tab> key
-set shiftwidth=2                                        " the tab width by using >> & <<
+set smarttab expandtab                                              " smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
+set tabstop=2                                                       " Tab width
+set softtabstop=2                                                   " the width while trigger <Tab> key
+set shiftwidth=2                                                    " the tab width by using >> & <<
 set lbr
 set tw=0
-set laststatus=2                                        " Set status bar
+set laststatus=2                                                    " Set status bar
 set statusline=%m%r
-set statusline+=%F\ \ %y,%{&fileformat}\                " file path\file name & filetype
-set statusline+=%=                                      " right align
-set statusline+=\ \ %-{strftime(\"%H:%M\ %d/%m/%Y\")}   " Current Time
-set statusline+=\ \ %b[A],0x%B                          " ASCII code, Hex mode
-set statusline+=\ \ %c%V,%l/%L                          " current Column, current Line/All Line
+set statusline+=%F\ \ %y,%{&fileformat}\                            " file path\file name & filetype
+set statusline+=%=                                                  " right align
+set statusline+=\ \ %-{strftime(\"%H:%M\ %d/%m/%Y\")}               " Current Time
+set statusline+=\ \ %b[A],0x%B                                      " ASCII code, Hex mode
+set statusline+=\ \ %c%V,%l/%L                                      " current Column, current Line/All Line
 set statusline+=\ \ %p%%\
-language messages utf-8                                 " At Console
-set showcmd                                             " Show (partial) command in status line
+set showcmd                                                         " Show (partial) command in status line
 set modifiable
 set write
-set incsearch hlsearch ignorecase smartcase     " Search
-set magic                                       " Regular Expression
+set incsearch hlsearch ignorecase smartcase                         " Search
+set magic                                                           " Regular Expression
 set linespace=0
 set wildmenu
-set wildmode=longest,list,full                              " Completion mode that is used for the character
+set wildmode=longest,list,full                                      " Completion mode that is used for the character
 set wildignore+=*.swp,*.zip,*.exe
-set noerrorbells novisualbell                               " turn off error beep/flash
+set noerrorbells novisualbell                                       " turn off error beep/flash
 set t_vb=
 set list listchars=tab:\ \ ,trail:·,extends:»,precedes:«,nbsp:·
-set cursorline                        " Highlight the current line
+set cursorline                                                      " Highlight the current line
 set guicursor=a:hor1
 set guicursor+=i-r-ci-cr-o:hor2-blinkon0
-set scrolloff=3                                             " Scroll settings
+set scrolloff=3                                                     " Scroll settings
 set sidescroll=1
 set sidescrolloff=5
-set imcmdline                                               " Fix context menu messing
-set completeopt=longest,menuone                             " Supper Tab
-set foldenable                                              " Enable Fold
+set imcmdline                                                       " Fix context menu messing
+set completeopt=longest,menuone                                     " Supper Tab
+set foldenable                                                      " Enable Fold
 set foldcolumn=1
-set foldexpr=1                                              " Shown line number after fold
-set foldlevel=100                                           " Not fold while VIM set up
+set foldexpr=1                                                      " Shown line number after fold
+set foldlevel=100                                                   " Not fold while VIM set up
 set viewoptions=folds
-set backspace=indent,eol,start                  " make backspace h, l, etc wrap to
+set backspace=indent,eol,start                                      " make backspace h, l, etc wrap to
 set whichwrap+=<,>,h,l
+set go+=a                                                           " Visual selection automatically copied to the clipboard
 
 noremap <F1> <ESC>
 imap <F1> <ESC>a
@@ -520,7 +504,6 @@ autocmd BufWinLeave * silent! mkview                                " Load view 
 autocmd BufWinEnter * silent! loadview
 autocmd BufRead,BufNewFile * setfiletype txt                        " Highlight the txt file
 autocmd BufRead,BufNewFile *.t set ft=perl                          " Perl test file as Perl code
-autocmd BufEnter c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\* :setlocal tags+=c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\.tags
 
 iabbrev <leader>/* /*********************************
 iabbrev <leader>*/ *********************************/
