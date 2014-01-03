@@ -23,17 +23,30 @@
 " =============================================================================
 
 set nocompatible
-syntax enable
-syntax on
+syntax enable on
 filetype plugin on
-runtime macros/matchit.vim
-behave mswin
-set diffopt=filler,context:3
 set history=500
+set diffopt=filler,context:3
+runtime macros/matchit.vim
 if has('win32') || has('win64')
+  behave mswin
+  source $VIMRUNTIME/vimrc_example.vim
+  source $VIMRUNTIME/mswin.vim
   set viminfo=%,<800,'10,/50,:100,h,f0
+  set lines=38                                                      " The initialize size
+  set columns=122
+  set wrap                                                          " Wrap lines
+  set tags=.\tags
+  set tags+=C:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\tags
+  set tags+=C:\Marslo\Job\Summa\TEX\SVN\viis-lab-scripts\tags
+  set tags+=C:\Marslo\Job\Summa\TEX\SVN\tags
+  autocmd BufEnter c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\* :setlocal tags+=c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\.tags
 else
   set viminfo=%,<800,'10,/50,:100,h,f0,n~/.vim/cache/.viminfo
+  set lines=32                                                      " The initialize size
+  set columns=108
+  set nowrap                                                        " NoWrap lines
+  set tags=tags
 endif
 
 " ====================================== For Property =====================================
@@ -81,7 +94,7 @@ Bundle 'kana/vim-textobj-user'
 Bundle 'ruby-matchit'
 " For Javascript
 Bundle "pangloss/vim-javascript"
-" Bundle 'jelera/vim-javascript-syntax'
+Bundle 'jelera/vim-javascript-syntax'
 " For web design
 Bundle "tpope/vim-surround"
 Bundle 'tpope/vim-repeat'
@@ -258,13 +271,16 @@ endfunc
 
 " ====================================== For Inteface =====================================
 if has('gui_running')
-  set lines=32                                                      " The initialize size
-  set columns=108
   func! MaximizeWindow()                                            " Make vim maximize while it startup
     silent !wmctrl -r :ACTIVE: -b add,maximized_vert,maximized_horz
   endfunc
-  set go=                                                           " Hide everything
+  set go=                                                           " Hide everything (go = guioptions)
   set cpoptions+=n
+  if has('win32') || has('win64')
+    if !filereadable("$VIM\vim74\vimtweak.dll")
+      au GUIENTER * call libcallnr("vimtweak.dll","SetAlpha",243)
+    endif
+  endif
 endif
 
 if 'xterm-256color' == $TERM
@@ -290,65 +306,64 @@ else
   set clipboard=unnamedplus
 endif
 
-set go+=a
-set tags=tags;
+set iskeyword+=.
 set autochdir
-set fileformat=unix
-set fileencodings=utf-8,ucs-bom,gbk,cp936,gb2312,gb18030      " Code Format
+set fileencodings=utf-8,ucs-bom,gbk,cp936,gb2312,gb18030            " Code Format
 set termencoding=utf-8
 set encoding=utf-8
 set fileencoding=utf-8
 let &termencoding=&encoding
-set selection=exclusive                                       " Mouse Settings
+set selection=exclusive                                             " Mouse Settings
 set selectmode=mouse,key
 set nobackup noswapfile nowritebackup
 set ruler number
 set report=0
-set autoread                                            " Set auto read when a file is changed by outside
-set showmatch                                           " Show matching bracets
-set wrap                                                " Wrap lines
+set autoread                                                        " Set auto read when a file is changed by outside
+set showmatch                                                       " Show matching bracets
 set autoindent smartindent
-set smarttab expandtab                                  " smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
-set tabstop=2                                           " Tab width
-set softtabstop=2                                       " the width while trigger <Tab> key
-set shiftwidth=2                                        " the tab width by using >> & <<
+set smarttab expandtab                                              " smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
+set tabstop=2                                                       " Tab width
+set softtabstop=2                                                   " the width while trigger <Tab> key
+set shiftwidth=2                                                    " the tab width by using >> & <<
 set lbr
 set tw=0
-set laststatus=2                                        " Set status bar
+set laststatus=2                                                    " Set status bar
 set statusline=%m%r
-set statusline+=%F\ \ %y,%{&fileformat}\                " file path\file name & filetype
-set statusline+=%=                                      " right align
-set statusline+=\ \ %-{strftime(\"%H:%M\ %d/%m/%Y\")}   " Current Time
-set statusline+=\ \ %b[A],0x%B                          " ASCII code, Hex mode
-set statusline+=\ \ %c%V,%l/%L                          " current Column, current Line/All Line
+set statusline+=%F\ \ %y,%{&fileformat}\                            " file path\file name & filetype
+set statusline+=%=                                                  " right align
+set statusline+=\ \ %-{strftime(\"%H:%M\ %d/%m/%Y\")}               " Current Time
+set statusline+=\ \ %b[A],0x%B                                      " ASCII code, Hex mode
+set statusline+=\ \ %c%V,%l/%L                                      " current Column, current Line/All Line
 set statusline+=\ \ %p%%\
-set showcmd                                             " Show (partial) command in status line
+language messages utf-8                                             " At Console
+set showcmd                                                         " Show (partial) command in status line
 set modifiable
 set write
-set incsearch hlsearch ignorecase smartcase     " Search
-set magic                                       " Regular Expression
+set incsearch hlsearch ignorecase smartcase                         " Search
+set magic                                                           " Regular Expression
 set linespace=0
 set wildmenu
-set wildmode=longest,list,full                              " Completion mode that is used for the character
+set wildmode=longest,list,full                                      " Completion mode that is used for the character
 set wildignore+=*.swp,*.zip,*.exe
-set noerrorbells novisualbell                               " turn off error beep/flash
+set noerrorbells novisualbell                                       " turn off error beep/flash
 set t_vb=
 set list listchars=tab:\ \ ,trail:·,extends:»,precedes:«,nbsp:·
-set cursorline                        " Highlight the current line
+set cursorline                                                      " Highlight the current line
 set guicursor=a:hor1
 set guicursor+=i-r-ci-cr-o:hor2-blinkon0
-set scrolloff=3                                             " Scroll settings
+set scrolloff=3                                                     " Scroll settings
 set sidescroll=1
 set sidescrolloff=5
-set imcmdline                                               " Fix context menu messing
-set completeopt=longest,menuone                             " Supper Tab
-set foldenable                                              " Enable Fold
+set imcmdline                                                       " Fix context menu messing
+set completeopt=longest,menuone                                     " Supper Tab
+set foldenable                                                      " Enable Fold
 set foldcolumn=1
-set foldexpr=1                                              " Shown line number after fold
-set foldlevel=100                                           " Not fold while VIM set up
+set foldexpr=1                                                      " Shown line number after fold
+set foldlevel=100                                                   " Not fold while VIM set up
 set viewoptions=folds
-set backspace=indent,eol,start                  " make backspace h, l, etc wrap to
+set backspace=indent,eol,start                                      " make backspace h, l, etc wrap to
 set whichwrap+=<,>,h,l
+set go+=a                                                           " Visual selection automatically copied to the clipboard
 
 noremap <F1> <ESC>
 imap <F1> <ESC>a
@@ -361,7 +376,6 @@ imap <C-e> <ESC>A
 inoremap <M-f> <ESC><Space>Wi
 inoremap <M-b> <Esc>Bi
 inoremap <M-d> <ESC>cW
-map gl <CR>
 
 " ====================================== For Function =====================================
 let g:ctrlp_map = '<c-p>'                                           " CtrlP
@@ -458,22 +472,16 @@ augroup END
 
 let g:rainbow_active = 1
 let g:rainbow_operators = 1
-if has('gui_running') || 'xterm-256color' == $TERM
-  let g:rainbow_conf = extend({
-  \   'guifgs' : ['#6A5ACD', '#B22222', '#C0FF3E', '#EEC900', '#9A32CD', '#EE7600', '#98fb98', '#686868'],
-  \   'ctermfgs' : ['141', '196', '112', '208', '129', '166', '85', '237'],
-  \}, exists('g:rainbow_conf')? g:rainbow_conf : {})
-else
-  let g:rainbow_conf = extend({
-  \   'ctermfgs' = ['lightblue', 'lightgreen', 'yellow', 'red', 'magenta'],
-  \}, exists('g:rainbow_conf')? g:rainbow_conf : {})
-endif
+let g:rainbow_conf = {
+\   'guifgs' : ['#6A5ACD', '#B22222', '#C0FF3E', '#EEC900', '#9A32CD', '#EE7600', '#98fb98', '#686868'],
+\   'ctermfgs' : 'xterm-256color' == $TERM ? ['141', '196', '112', '208', '129', '166', '85', '237'] : ['lightblue', 'lightgreen', 'yellow', 'red', 'magenta'],
+\   'parentheses': [['(',')'], ['\[','\]'], ['{','}']],
+\}
 
 let g:indentLine_color_gui = "#282828"
 let g:indentLine_color_term = 8
 let g:indentLine_indentLevel = 20
 let g:indentLine_showFirstIndentLevel = 1
-let g:indentLine_loaded = 1
 if has('gui_running') || 'xterm-256color' == $TERM
   let g:indentLine_char = '¦'
 elseif has('win32')
@@ -489,3 +497,10 @@ autocmd BufWinLeave * silent! mkview                                " Load view 
 autocmd BufWinEnter * silent! loadview
 autocmd BufRead,BufNewFile * setfiletype txt                        " Highlight the txt file
 autocmd BufRead,BufNewFile *.t set ft=perl                          " Perl test file as Perl code
+
+iabbrev <leader>/* /*********************************
+iabbrev <leader>*/ *********************************/
+iabbrev <leader>#- #------------------
+inoremap <leader>tt <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
+inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
+inoremap <leader>fe <C-R>=expand("%:t")<CR>

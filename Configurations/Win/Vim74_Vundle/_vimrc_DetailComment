@@ -31,15 +31,8 @@ syntax enable
 syntax on
 filetype plugin on
 
-" At Menu
-" source $VIMRUNTIME/delmenu.vim
-" source $VIMRUNTIME/menu.vim
-source $VIMRUNTIME/vimrc_example.vim
-source $VIMRUNTIME/mswin.vim
-
 runtime macros/matchit.vim
 behave mswin
-
 
 set diffopt=filler,context:3
 set history=500
@@ -48,9 +41,29 @@ set history=500
 " set viminfo='20,<50,s10
 " Inspired from https://groups.google.com/forum/#!topic/vim_use/ImK21wi_JXg
 if has('win32') || has('win64')
+  " At Menu
+  " source $VIMRUNTIME/delmenu.vim
+  " source $VIMRUNTIME/menu.vim
+  source $VIMRUNTIME/vimrc_example.vim
+  source $VIMRUNTIME/mswin.vim
   set viminfo=%,<800,'10,/50,:100,h,f0
+  " The initialize size
+  set lines=38
+  set columns=122
+  set wrap                                                          " Wrap lines
+" Tags
+" set tags=tags
+  set tags=.\tags
+  set tags+=C:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\tags
+  set tags+=C:\Marslo\Job\Summa\TEX\SVN\viis-lab-scripts\tags
+  set tags+=C:\Marslo\Job\Summa\TEX\SVN\tags
+  autocmd BufEnter c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\* :setlocal tags+=c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\.tags
 else
   set viminfo=%,<800,'10,/50,:100,h,f0,n~/.vim/cache/.viminfo
+  set lines=32                                                      " The initialize size
+  set columns=108
+  set nowrap                                                        " NoWrap lines
+  set tags=tags
 endif
 "             | |    |   |   |    | |  + viminfo file path
 "             | |    |   |   |    | + file marks 0-9,A-Z 0=NOT stored
@@ -69,9 +82,6 @@ endif
 " Set mapleader
 let mapleader=","
 let g:mapleader=","
-
-
-
 
 " Vim Bundle
 filetype off
@@ -423,9 +433,7 @@ endif
 
 " ====================================== For Inteface =====================================
 if has('gui_running')
-  " The initialize size
-  set lines=38
-  set columns=122
+
 
   " Make vim maximize while it startup
   func! MaximizeWindow()
@@ -475,12 +483,7 @@ endif
 set iskeyword+=.
 set autochdir
 
-" Tags
-" set tags=tags
-set tags=.\tags
-set tags+=C:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\tags
-set tags+=C:\Marslo\Job\Summa\TEX\SVN\viis-lab-scripts\tags
-set tags+=C:\Marslo\Job\Summa\TEX\SVN\tags
+
 
 " Code format
 set fileencodings=utf-8,ucs-bom,gbk,cp936,gb2312,gb18030
@@ -501,7 +504,7 @@ set report=0
 
 set autoread                                            " Set auto read when a file is changed by outside
 set showmatch                                           " Show matching bracets
-set nowrap                                              " Wrap lines
+
 
 " Tab width
 " set textwidth=150
@@ -744,16 +747,11 @@ endif
 " Rainbow Parentheses Improved (http://www.vim.org/scripts/script.php?script_id=4176)
 let g:rainbow_active = 1
 let g:rainbow_operators = 1
-if has('gui_running') || 'xterm-256color' == $TERM
-  let g:rainbow_conf = extend({
-  \   'guifgs' : ['#6A5ACD', '#B22222', '#C0FF3E', '#EEC900', '#9A32CD', '#EE7600', '#98fb98', '#686868'],
-  \   'ctermfgs' : ['141', '196', '112', '208', '129', '166', '85', '237'],
-  \}, exists('g:rainbow_conf')? g:rainbow_conf : {})
-else
-  let g:rainbow_conf = extend({
-  \   'ctermfgs' = ['lightblue', 'lightgreen', 'yellow', 'red', 'magenta'],
-  \}, exists('g:rainbow_conf')? g:rainbow_conf : {})
-endif
+let g:rainbow_conf = {
+\   'guifgs' : ['#6A5ACD', '#B22222', '#C0FF3E', '#EEC900', '#9A32CD', '#EE7600', '#98fb98', '#686868'],
+\   'ctermfgs' : 'xterm-256color' == $TERM ? ['141', '196', '112', '208', '129', '166', '85', '237'] : ['lightblue', 'lightgreen', 'yellow', 'red', 'magenta'],
+\   'parentheses': [['(',')'], ['\[','\]'], ['{','}']],
+\}
 
 " IndentLine
 let g:indentLine_color_gui = "#282828"
@@ -780,9 +778,9 @@ let SuperTabClosePreviewOnPopupClose = 1
 " au BufWinLeave * silent mkview
 autocmd BufWinLeave * silent! mkview
 autocmd BufWinEnter * silent! loadview
-autocmd BufEnter c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\* :setlocal tags+=c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\.tags
-au BufRead,BufNewFile * setfiletype txt     " Highlight the txt file
-au BufRead,BufNewFile *.t set ft=perl       " Perl test file as Perl code
+
+autocmd BufRead,BufNewFile * setfiletype txt                        " Highlight the txt file
+autocmd BufRead,BufNewFile *.t set ft=perl                          " Perl test file as Perl code
 
 iabbrev <leader>/* /*********************************
 iabbrev <leader>*/ *********************************/
