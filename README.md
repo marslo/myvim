@@ -28,6 +28,8 @@ MyVimConfig
 ![Screenshot_Ubuntu](https://github.com/Marslo/VimConfig/blob/master/Screenshots/Screenshots_Ubuntu.png?raw=true)
 ### Windows
 ![Screenshot_Windows](https://github.com/Marslo/VimConfig/blob/master/Screenshots/screenshot_gvim.png?raw=true)
+### PuTTy
+![Screenshot_PuTTy](https://github.com/Marslo/VimConfig/blob/master/Screenshots/screenshot_PuTTy.png?raw=true)
 
 ## Compile VIM/GVIM by source code on Linux(Ubuntu)
 ### 1. Prepare environment:
