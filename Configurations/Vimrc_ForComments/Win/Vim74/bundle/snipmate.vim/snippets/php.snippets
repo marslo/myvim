@@ -1,0 +1,439 @@
+snippet php
+	<?php
+		${1}
+	?>
+snippet ph
+	<?
+		${1}
+	?>
+snippet phpil
+	<?php ${1} ?>
+snippet ec
+	echo '${1:string}'${2};
+snippet br
+	echo '<br/>';
+	${1}
+snippet '
+	'${1:string}';
+snippet "
+	"${1:string}";
+snippet pr
+	print_r (${1:array});
+snippet inc
+	include '${1:file}';${2}
+snippet inc1
+	include_once '${1:file}';${2}
+snippet req
+	require '${1:file}';${2}
+snippet req1
+	require_once '${1:file}';${2}
+# $GLOBALS['...']
+snippet globals
+	$GLOBALS['${1:variable}']${2: = }${3:something}${4:;}${5}
+snippet G
+	$GLOBALS['${1:variable}']
+snippet $_ COOKIE['...']
+	$_COOKIE['${1:variable}']${2}
+snippet $_ ENV['...']
+	$_ENV['${1:variable}']${2}
+snippet $_ FILES['...']
+	$_FILES['${1:variable}']${2}
+snippet $_ Get['...']
+	$_GET['${1:variable}']${2}
+snippet $_ POST['...']
+	$_POST['${1:variable}']${2}
+snippet $_ REQUEST['...']
+	$_REQUEST['${1:variable}']${2}
+snippet $_ SERVER['...']
+	$_SERVER['${1:variable}']${2}
+snippet $_ SESSION['...']
+	$_SESSION['${1:variable}']${2}
+# Start Docblock
+snippet /*
+	/**
+	 * ${1}
+	 */
+# Class - post doc
+snippet doc_cp
+	/**
+	 * ${1:undocumented class}
+	 *
+	 * @package ${2:default}
+	 * @subpackage ${3:default}
+	 * @author ${4:`g:snips_author`}
+	 */${5}
+# Class Variable - post doc
+snippet doc_vp
+	/**
+	 * ${1:undocumented class variable}
+	 *
+	 * @var ${2:string}
+	 */${3}
+# Class Variable
+snippet doc_v
+	/**
+	 * ${3:undocumented class variable}
+	 *
+	 * @var ${4:string}
+	 */
+	${1:var} $${2};${5}
+# Class
+snippet doc_c
+	/**
+	 * ${3:undocumented class}
+	 *
+	 * @package ${4:default}
+	 * @subpackage ${5:default}
+	 * @author ${6:`g:snips_author`}
+	 */
+	${1:}class ${2:}
+	{
+		${7}
+	} // END $1class $2
+# Constant Definition - post doc
+snippet doc_dp
+	/**
+	 * ${1:undocumented constant}
+	 */
+	 ${2}
+# Constant Definition
+snippet doc_d
+	/**
+	 * ${3:undocumented constant}
+	 */
+	define(${1}, ${2});${4}
+# Function - post doc
+snippet doc_fp
+	/**
+	 * ${1:undocumented function}
+	 *
+	 * @return ${2:void}
+	 * @author ${3:`g:snips_author`}
+	 */${4}
+# Function signature
+snippet doc_s
+	/**
+	 * ${4:undocumented function}
+	 *
+	 * @return ${5:void}
+	 * @author ${6:`g:snips_author`}
+	 */
+	${1}function ${2}(${3});${7}
+# Function
+snippet doc_f
+	/**
+	 * ${4:undocumented function}
+	 *
+	 * @return ${5:void}
+	 * @author ${6:`g:snips_author`}
+	 */
+	${1}function ${2}(${3})
+	{
+		${7}
+	}
+# Header
+snippet doc_h
+	/**
+	 * ${1}
+	 *
+	 * @author ${2:`g:snips_author`}
+	 * @version ${3:$Id$}
+	 * @copyright ${4:$2}, `strftime('%d %B, %Y')`
+	 * @package ${5:default}
+	 */
+	
+# Interface
+snippet doc_i
+	/**
+	 * ${2:undocumented class}
+	 *
+	 * @package ${3:default}
+	 * @author ${4:`g:snips_author`}
+	 */
+	interface ${1:}
+	{${5}
+	} // END interface $1
+# class ...
+snippet class
+	/**
+	 * ${1}
+	 */
+	class ${2:ClassName}
+	{
+		${3}
+		function ${4:__construct}(${5:argument})
+		{
+			${6:// code...}
+		}
+	}
+# define(...)
+snippet def
+	define('${1}'${2});${3}
+# defined(...)
+snippet def?
+	${1}defined('${2}')${3}
+snippet wh
+	while (${1:/* condition */}) 
+	{
+		${2:// code...}
+	}
+# do ... while
+snippet do
+	do 
+	{
+		${2:// code... }
+	} while (${1:/* condition */});
+snippet if
+	if (${1:/* condition */}) 
+	{
+		${2:// code...}
+	}
+snippet ife
+	if (${1:/* condition */}) 
+	{
+		${2:// code...}
+	} else {
+		${3:// code...}
+	}
+	${4}
+snippet else
+	else 
+	{
+		${1:// code...}
+	}
+snippet elseif
+	elseif (${1:/* condition */}) 
+	{
+		${2:// code...}
+	}
+# Tertiary conditional
+snippet t
+	$${1:retVal} = (${2:condition}) ? ${3:a} : ${4:b};${5}
+snippet switch
+	switch ($${1:variable}) 
+	{
+		case '${2:value}':
+			${3:// code...}
+			break;
+		${5}
+		default:
+			${4:// code...}
+			break;
+	}
+snippet case
+	case '${1:value}':
+		${2:// code...}
+		break;${3}
+snippet for
+	for ($${2:i} = 0; $$2 < ${1:count}; $$2${3:++}) 
+	{
+		${4: // code...}
+	}
+snippet foreach
+	foreach ($${1:variable} as $${2:value}) 
+	{
+		${3:// code...}
+	}
+snippet foreachk
+	foreach ($${1:variable} as $${2:key} => $${3:value}) 
+	{
+		${4:// code...}
+	}
+snippet fun
+	${1:public }function ${2:FunctionName}(${3})
+	{
+		${4:// code...}
+	}
+# $... = array (...)
+snippet array
+	$${1:arrayName} = array('${2}' => ${3});${4}
+snippet try
+	try 
+	{
+		${2}
+	} 
+	catch (${1:Exception} $e) 
+	{
+
+	}
+# lambda with closure
+snippet lambda
+	${1:static }function (${2:args}) use (${3:&$x, $y /*put vars in scope (closure) */}) 
+	{
+		${4}
+	};
+# pre_dump();
+snippet pd
+	echo '<pre>'; var_dump(${1}); echo '</pre>';
+# pre_dump(); die();
+snippet pdd
+	echo '<pre>'; var_dump(${1}); echo '</pre>'; die(${2:});
+snippet vd
+	var_dump(${1});
+snippet vdd
+	var_dump(${1}); die(${2:});
+snippet http_redirect
+	header ("HTTP/1.1 301 Moved Permanently"); 
+	header ("Location: ".URL); 
+	exit();
+# Getters & Setters
+snippet getset
+	/**
+	 * Gets the value of ${1:}
+	 *
+	 * @return ${2}
+	 */
+	function get$1()
+	{
+		return $this->_$1;
+	}
+
+	/**
+	 * Sets the value of $1
+	 *
+	 * @param mixed $$1 ${3}
+	 */
+	function set$1($$1)
+	{
+		$this->_$1 = $$1;
+	}
+
+# HTML
+snippet nbs
+	&nbsp;
+snippet a
+	<a href="${1:#}">${2:$1}</a>${3}
+snippet a.
+	<a class="${1}" href="${2:#}">${3:$1}</a>${4}
+snippet a#
+	<a id="${1}" href="${2:#}">${3:$1}</a>${4}
+snippet a:ext
+	<a href="http://${1:example.com}">${2:$1}</a>${3}
+snippet b
+	<b>${1}</b>${2}
+snippet body
+	<body>
+		${1}
+	</body>
+snippet div
+	<div>
+		${1}
+	</div>
+	${2}
+snippet div.
+	<div class="${1}">
+		${2}
+	</div>
+	${3}
+snippet div#
+	<div id="${1}">
+		${2}
+	</div>
+	${3}
+snippet form
+	<form action="${1}" method="${2:get}" accept-charset="utf-8">
+		${3}
+	</form>
+	${4}
+snippet form.
+	<form class="${1}" action="${2}" method="${3:get}" accept-charset="utf-8">
+		${4}
+	</form>
+	${5}
+snippet form#
+	<form id="${1}" action="${2}" method="${3:get}" accept-charset="utf-8">
+		${4}
+	</form>
+	${5}
+snippet h1
+	<h1>${1}</h1>${2}
+snippet h1.
+	<h1 class="${1}">${2}</h1>${3}
+snippet h1#
+	<h1 id="${1}">${2}</h1>${3}
+snippet h2
+	<h2>${1}</h2>${2}
+snippet h2.
+	<h2 class="${1}">${2}</h2>${3}
+snippet h2#
+	<h2 id="${1}">${2}</h2>${3}
+snippet h3
+	<h3>${1}</h3>${2}
+snippet h3.
+	<h3 class="${1}">${2}</h2>${3}
+snippet h3#
+	<h3 id="${1}">${2}</h2>${3}
+snippet h4
+	<h4>${1}</h4>${2}
+snippet h4.
+	<h4 class="${1}">${2}</h4>${3}
+snippet h4#
+	<h4 id="${1}">${2}</h4>${3}
+snippet h5
+	<h5>${1}</h5>${2}
+snippet h5.
+	<h5 class="${1}">${2}</h5>${3}
+snippet h5#
+	<h5 id="${1}">${2}</h5>${3}
+snippet h6
+	<h6>${1}</h6>${2}
+snippet h6.
+	<h6 class="${1}">${2}</h6>${3}
+snippet h6#
+	<h6 id="${1}">${2}</h6>${3}
+snippet head
+	<head>
+		<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+		<title>${1:`substitute(Filename('', 'Page Title'), '^.', '\u&', '')`}</title>${2}
+	</head>
+snippet html
+	<html>
+	${1}
+	</html>
+snippet img
+	<img src="${1}" alt="${2}" />${3}
+snippet img.
+	<img class="${1}" src="${2}" alt="${3}" />${4}
+snippet img#
+	<img id="${1}" src="${2}" alt="${3}" />${4}
+snippet input
+	<input type="${1:text/submit/hidden/button/image}" name="${2}" id="${3:$2}" value="${4}" />${5}
+snippet input.
+	<input class="${1}" type="${2:text/submit/hidden/button/image}" name="${3}" id="${4:$3}" value="${5}" />${6}
+snippet input:text
+	<input type="text" name="${1}" id="${2:$1}" value="${3}" />${4}
+snippet input:submit
+	<input type="submit" name="${1}" id="${2:$1}" value="${3}" />${4}
+snippet input:hidden
+	<input type="hidden" name="${1}" id="${2:$1}" value="${3}" />${4}
+snippet input:button
+	<input type="button" name="${1}" id="${2:$1}" value="${3}" />${4}
+snippet li
+	<li>${1}</li>${2}
+snippet li.
+	<li class="${1}">${2}</li>${3}
+snippet script
+	<script type="text/javascript" charset="utf-8">
+		${1}
+	</script>${2}
+snippet scriptsrc
+	<script src="${1}.js" type="text/javascript" charset="utf-8"></script>
+snippet section
+	<section>
+		${1}
+	</section>${2}
+snippet section.
+	<section class="${1}">
+		${2}
+	</section>${3}
+snippet section#
+	<section id="${1}">
+		${2}
+	</section>${3}
+snippet style
+	<style type="text/css" media="${1:all}">
+		${2}
+	</style>
+snippet textarea
+	<textarea name="${1}" id=${2:$1} rows="${3:8}" cols="${4:40}">${5}</textarea>${6}

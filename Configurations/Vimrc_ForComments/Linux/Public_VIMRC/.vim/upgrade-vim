@@ -1,0 +1,18 @@
+#!/bin/bash
+
+VIM_SRC=$(dirname $(readlink -f $0))/../mjsrc/vim
+echo $VIM_SRC
+
+if [ ! -d "$VIM_SRC" ]; then
+  echo "Bad VIM source path. Exit."
+  exit 1
+fi
+
+pushd $VIM_SRC
+
+git pull
+./configure --prefix=/home/auto/lijiao/tools --with-features=huge > vim-build.log
+make -j3 >> vim-build.log
+make install >> vim-build.log
+
+popd

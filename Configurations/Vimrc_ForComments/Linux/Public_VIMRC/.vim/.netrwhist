@@ -1,0 +1,7 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =5
+let g:netrw_dirhist_1='/home/marslo'
+let g:netrw_dirhist_2='/home/marslo/Study'
+let g:netrw_dirhist_3='/home/marslo/Study/Ruby/Mechanize/Others'
+let g:netrw_dirhist_4='/home/marslo/.ssh'
+let g:netrw_dirhist_5='/home/marslo/Study/Others/Git/PythonIDLE_config_Marslo/.git'

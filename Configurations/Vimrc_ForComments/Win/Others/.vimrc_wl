@@ -1,0 +1,157 @@
+" set default 'runtimepath' (without ~/.vim folders)
+let &runtimepath = printf('%s/vimfiles,%s,%s/vimfiles/after', $VIM, $VIMRUNTIME, $VIM)
+
+" what is the name of the directory containing this file?
+let s:portable = expand('<sfile>:p:h')
+
+" add the directory to 'runtimepath'
+let &runtimepath = printf('%s,%s,%s/after', s:portable, &runtimepath, s:portable) 
+
+set nocompatible
+filetype off                   " required!
+let $VIMHOME = s:portable
+let &rtp .= ',' . $VIMHOME . "/bundle/vundle"
+call vundle#rc('$VIMHOME/bundle')
+Bundle 'gmarik/vundle'
+
+Bundle 'flazz/vim-colorschemes'
+Bundle 'kien/ctrlp.vim'
+Bundle 'ervandew/supertab'
+Bundle 'scrooloose/nerdtree'
+Bundle 'vim-scripts/mru.vim'
+Bundle 'vim-ruby/vim-ruby'
+Bundle 'vim-scripts/taglist.vim'
+
+
+filetype plugin indent on
+colorscheme xoria256
+
+syntax on
+set fileencodings=cp936,gb18030,gbk,gb2312,utf-8,ucs-bom,latin-1
+set fileencoding=utf-8
+set encoding=utf-8
+set t_Co=256
+
+set smartindent autoindent cindent
+set number ruler
+set incsearch hlsearch
+set noerrorbells novisualbell
+set showmatch
+set nobackup nowb noswapfile
+"set mousehide mouse=a
+set clipboard+=unnamed
+set shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+set autoread
+
+set backspace=2
+set backspace=indent,eol,start
+if has("gui_running")
+  let $LINES = 30
+  let $COLUMNS = 80
+  function! SetWindowSize(width, height)
+    let &lines = a:height
+    let &columns = a:width
+  endfunc
+  nnoremap <F11> :call SetWindowSize($COLUMNS, $LINES)<cr>
+
+	set guioptions-=T
+	set guioptions-=m
+	set guioptions-=r
+	set guioptions-=R
+	set guioptions-=l
+	set guioptions-=L
+	if has('win32') || has('win64')
+		set guifont=Consolas:h13
+	else
+		set guifont=Monaco\ 12
+	endif
+endif
+
+" ctags
+set tags=./tags; " search tags in parent directories
+
+" easlier grep
+function! FindProjectRoot(lookFor)
+    let pathMaker='%:p'
+    while(len(expand(pathMaker))>len(expand(pathMaker.':h')))
+        let pathMaker=pathMaker.':h'
+        let fileToCheck=expand(pathMaker).'/'.a:lookFor
+        if filereadable(fileToCheck)||isdirectory(fileToCheck)
+            return expand(pathMaker)
+        endif
+    endwhile
+    return 0
+endfunction
+
+map <F4> :execute "noautocmd vimgrep /" . expand("<cword>") . "/j " . FindProjectRoot('.project') . "/**" <Bar> cw<CR>
+map <F5> :execute "noautocmd vimgrep /" . expand("<cword>") . "/j " . FindProjectRoot('.project') . "/**/*" <Bar> cw<C-Left><C-Left><Left><Left>
+map <F6> :execute "noautocmd vimgrep //j " . FindProjectRoot('.project') . "/**/*" <Bar> cw<C-Left><C-Left><C-Left><C-Left><C-Left><C-Left><C-Left><C-Left><Right>
+
+" easier window navigation
+nmap <silent> <A-Up> :wincmd k<CR>
+nmap <silent> <A-Down> :wincmd j<CR>
+nmap <silent> <A-Left> :wincmd h<CR>
+nmap <silent> <A-Right> :wincmd l<CR>
+
+" folding
+"set foldmethod=syntax
+inoremap <F9> <C-O>za
+nnoremap <F9> za
+onoremap <F9> <C-C>za
+vnoremap <F9> zf
+
+" toggle relative number
+function! NumberToggle()
+  if(&relativenumber == 1)
+    set number
+  else
+    set relativenumber
+  endif
+endfunc
+
+nnoremap <C-n> :call NumberToggle()<cr>
+
+"++++++++++++++++++++
+" Plugin Settings
+"++++++++++++++++++++
+
+" ctrlp 
+let g:ctrlp_map = '<c-p>'                 " map the short-cut to <c-p>
+let g:ctrlp_cmd = 'CtrlP'                 " ctrlp in find file mode
+let g:ctrlp_working_path_mode = 'ra'      " search parents as well (stop searching smartly)
+let g:ctrlp_root_markers = ['.ctrlp']     " stop search if these files present
+let g:ctrlp_use_caching = 1               " use caching
+let g:ctrlp_clear_cache_on_exit = 0       " cross session caching
+let g:ctrlp_cache_dir = $VIMHOME . '/cache/ctrlp'
+" ignore non-sense files
+let g:ctrlp_custom_ignore = {
+	\ 'dir':  '\v[\/]\.(git|hg|svn)$',
+	\ 'file': '\v(\.exe|\.so|\.dll|\.rpm|\.tar|\.gz|\.bz2\.zip|ctags|tags|etags)$',
+	\ 'link': 'some_bad_symbolic_links',
+	\ }
+
+" supertab
+set completeopt=longest,menuone 
+let g:SuperTabDefaultCompletionType = "context"
+
+" nerdtree
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif " close nerdtree if it's the only window left
+
+" MRU 
+let MRU_File = $VIMHOME . '/mru_files'
+let MRU_Max_Entries=256
+let MRU_Exclude_Files='^/tmp/.*'
+let MRU_Exclude_Files='^/temp/.*'
+let MRU_Exclude_Files='^/media/.*'
+let MRU_Exclude_Files='^/mnt/.*'
+
+" vim-ruby
+autocmd FileType ruby compiler ruby
+let g:rubycomplete_buffer_loading = 1
+let g:rubycomplete_classes_in_global = 1
+let g:rubycomplete_rails = 1
+
+" tag-list
+nmap <silent> <leader>t :TlistToggle<CR>
+
+
