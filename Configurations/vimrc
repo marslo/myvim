@@ -1,25 +1,30 @@
 " =============================================================================
-"       FileName: .vimrc
-"           Desc:
-"         Author: Marslo
-"          Email: marslo.jiao@gmail.com
-"        Created: 2010-10
-"        Version: 0.1.15
-"     LastChange: 2014-01-02 17:10:35
-"        History: 0.0.3 | Marslo | Add the Autoload and Fast Edit difference between win32 and non-win32
-"                 0.0.4 | Marslo | Add CheckRubySyntax() function for checking and run ruby script
-"                 0.0.5 | Marslo | Add the function of highlight txt file
-"                       | Marslo | Add the function of Automatic paire signs (), [], {}, '', etc
-"                 0.0.6 | Marslo | Remove a pair of parentheses, brackets, or braces
-"                 0.0.7 | Marslo | Modification about autoPair(): if there are char behind the ( or [ or { it wont pair
-"                 0.0.8 | Marslo | Add the function of OpenCMD(), GotoFile(), FontSize_Enlarge(), FontSize_Reduce() and UpdateTagsFile()
-"                 0.0.9 | Marslo | Add three bundles: woainvzu/EnhCommentify.vim && woainvzu/Marslo.vim && tpope/vim-rails
-"                 0.0.10 | Marslo | Add function of GetVundle() and GetVim() for git clone automaticlly"
-"                 0.0.11 | Marslo | Change repository woainvzu to Marslo
-"                 0.0.12 | Marslo | Modification for startup faster
-"                 0.0.13 | Marslo | Remove autopairs functions. Replaced by auto-pairs
-"                 0.0.14 | Marslo | Add viminfo settings
-"                 0.0.15 | Marslo | Delete the redundant configure
+"      FileName: _vimrc
+"          Desc:
+"        Author: Marslo
+"         Email: marslo.jiao@gmail.com
+"       Created: 2010-10
+"       Version: 0.0.19
+"    LastChange: 2014-01-03 11:26:40
+"       History:
+"                0.0.3  | Marslo | Add the Autoload and Fast Edit difference between win32 and non-win32
+"                0.0.4  | Marslo | Add CheckRubySyntax() function for checking and run ruby script
+"                0.0.5  | Marslo | Add the function of highlight txt file
+"                                  Add the function of Automatic paire signs (), [], {}, '', etc
+"                0.0.6  | Marslo | Add bundle plugin for manager plugins automatic
+"                0.0.7  | Marslo | Add pyflakes plugin for python syntax checking
+"                0.0.8  | Marslo | Remap the shortcut key: Ctrl-A/Ctrl-E/F1
+"                0.0.9  | Marslo | Add the function about remove a paird parentheses, brackets, braces
+"                0.0.10 | Marslo | Add the configuration about rainbow_parentheses
+"                0.0.11 | Marslo | Add three bundles: woainvzu/EnhCommentify.vim && woainvzu/Marslo.vim && tpope/vim-rails
+"                0.0.12 | Marslo | Add function GetVundle() to get vundle automaticly
+"                0.0.13 | Marslo | Add Alpha setting for vim tweak
+"                0.0.14 | Marslo | Change woainvu repos to Marslo
+"                0.0.15 | Marslo | Add Remember curosr position function
+"                0.0.16 | Marslo | Modification for startup faster
+"                0.0.17 | Marslo | Remove autopairs functions. Replaced by auto-pairs
+"                0.0.18 | Marslo | Delete redundancy configures from Windows vimrc
+"                0.0.19 | Marslo | Merge Linux configus and Windows. There are only one vimrc from now on.
 " =============================================================================
 
 set nocompatible
@@ -67,7 +72,6 @@ Bundle 'kien/ctrlp.vim.git'
 Bundle 'sjl/gundo.vim.git'
 Bundle 'majutsushi/tagbar'
 Bundle 'dantezhu/authorinfo'
-Bundle 'plasticboy/vim-markdown.git'
 Bundle 'Marslo/EnhCommentify.vim'
 Bundle 'tpope/vim-pathogen'
 Bundle 'gregsexton/MatchTag'
@@ -96,13 +100,14 @@ Bundle 'jelera/vim-javascript-syntax'
 " For web design
 Bundle "tpope/vim-surround"
 Bundle 'tpope/vim-repeat'
-" Colors and themes
+" Colors and themes and syntax
 Bundle 'luochen1990/rainbow'
 Bundle 'txt.vim'
 Bundle 'hail2u/vim-css3-syntax'
 Bundle 'Marslo/vim-coloresque'
 Bundle 'Marslo/marslo.vim'
 Bundle 'Marslo/MarsloVimOthers'
+Bundle 'plasticboy/vim-markdown.git'
 " For fun
 " Bundle 'TeTrIs.vim'
 " Bundle 'matrix.vim--Yang'
@@ -499,6 +504,7 @@ autocmd BufWinLeave * silent! mkview                                " Load view 
 autocmd BufWinEnter * silent! loadview
 autocmd BufRead,BufNewFile * setfiletype txt                        " Highlight the txt file
 autocmd BufRead,BufNewFile *.t set ft=perl                          " Perl test file as Perl code
+autocmd FileType javascript syntax clear jsFuncBlock
 
 iabbrev <leader>/* /*********************************
 iabbrev <leader>*/ *********************************/

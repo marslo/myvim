@@ -29,10 +29,9 @@ set nocompatible
 syntax enable on
 filetype plugin on
 
-runtime macros/matchit.vim
-
-set diffopt=filler,context:3
 set history=500
+set diffopt=filler,context:3
+runtime macros/matchit.vim
 
 " Make vim open faster :help slow-start
 " set viminfo='20,<50,s10
@@ -98,7 +97,6 @@ Bundle 'kien/ctrlp.vim.git'
 Bundle 'sjl/gundo.vim.git'
 Bundle 'majutsushi/tagbar'
 Bundle 'dantezhu/authorinfo'
-Bundle 'plasticboy/vim-markdown.git'
 Bundle 'Marslo/EnhCommentify.vim'
 Bundle 'tpope/vim-pathogen'
 Bundle 'gregsexton/MatchTag'
@@ -134,13 +132,14 @@ Bundle 'jelera/vim-javascript-syntax'
 Bundle "tpope/vim-surround"
 Bundle 'tpope/vim-repeat'
 
-" Colors and themes
+" Colors and themes and syntax
 Bundle 'luochen1990/rainbow'
 Bundle 'txt.vim'
 Bundle 'hail2u/vim-css3-syntax'
 Bundle 'Marslo/vim-coloresque'
 Bundle 'Marslo/marslo.vim'
 Bundle 'Marslo/MarsloVimOthers'
+Bundle 'plasticboy/vim-markdown.git'
 
 " For fun
 " Bundle 'TeTrIs.vim'
@@ -557,7 +556,7 @@ set viewoptions=folds
 
 set backspace=indent,eol,start                                      " make backspace h, l, etc wrap to
 set whichwrap+=<,>,h,l
-
+set go+=a                                                           " Visual selection automatically copied to the clipboard
 
 " Disable <F1> to open help file
 noremap <F1> <ESC>
@@ -764,6 +763,7 @@ autocmd BufWinLeave * silent! mkview
 autocmd BufWinEnter * silent! loadview
 autocmd BufRead,BufNewFile * setfiletype txt                        " Highlight the txt file
 autocmd BufRead,BufNewFile *.t set ft=perl                          " Perl test file as Perl code
+autocmd FileType javascript syntax clear jsFuncBlock
 
 iabbrev <leader>/* /*********************************
 iabbrev <leader>*/ *********************************/
