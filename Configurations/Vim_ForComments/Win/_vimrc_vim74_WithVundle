@@ -44,8 +44,8 @@ if has('win32') || has('win64')
   source $VIMRUNTIME/vimrc_example.vim
   source $VIMRUNTIME/mswin.vim
   set viminfo=%,<800,'10,/50,:100,h,f0
-  set wrap                                                         " Wrap lines
-  language messages utf-8                                          " At Console
+  set wrap                                                          " Wrap lines
+  language messages utf-8                                           " At Console
   " Tags
   set tags=.\tags
   set tags+=C:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\tags
@@ -475,7 +475,7 @@ set autochdir
 
 set fileencodings=utf-8,ucs-bom,gbk,cp936,gb2312,gb18030            " Code Format
 set termencoding=utf-8
-set encoding=utf-8
+set encoding=utf-8                                                  " Input Chinese (=cp936)
 set fileencoding=utf-8
 let &termencoding=&encoding
 
@@ -499,8 +499,7 @@ set smarttab expandtab                                              " smarttab: 
 set tabstop=2                                                       " Tab width
 set softtabstop=2                                                   " the width while trigger <Tab> key
 set shiftwidth=2                                                    " the tab width by using >> & <<
-" autocmd FileType ruby,eruby,yaml,html,css,scss,javascript set ai sw=2 sts=2 et
-set lbr
+set lbr                                                             " LineBreak
 set tw=0
 
 set laststatus=2                                                    " Set status bar
@@ -557,11 +556,12 @@ set viewoptions=folds
 set backspace=indent,eol,start                                      " make backspace h, l, etc wrap to
 set whichwrap+=<,>,h,l
 set go+=a                                                           " Visual selection automatically copied to the clipboard
+set hidden                                                          " Switch between buffers with unsaved change
 
 " Disable <F1> to open help file
 noremap <F1> <ESC>
 imap <F1> <ESC>a
-
+map ,bd :bd<CR>
 " Set the Ctrl-K/Ctrl-J switch the Top/Bottom window
 map <C-k> <C-w>k
 map <C-j> <C-w>j
@@ -756,10 +756,7 @@ let SuperTabMappingForward = '<c-p>'
 let SuperTabMappingTabLiteral = '<Tab>'
 let SuperTabClosePreviewOnPopupClose = 1
 
-
-" Load view automatic
-" au BufWinLeave * silent mkview
-autocmd BufWinLeave * silent! mkview
+autocmd BufWinLeave * silent! mkview                                " Load view automatic
 autocmd BufWinEnter * silent! loadview
 autocmd BufRead,BufNewFile * setfiletype txt                        " Highlight the txt file
 autocmd BufRead,BufNewFile *.t set ft=perl                          " Perl test file as Perl code

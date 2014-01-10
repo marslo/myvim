@@ -318,7 +318,7 @@ set iskeyword+=.
 set autochdir
 set fileencodings=utf-8,ucs-bom,gbk,cp936,gb2312,gb18030            " Code Format
 set termencoding=utf-8
-set encoding=utf-8
+set encoding=utf-8                                                  " Input Chinese (=cp936)
 set fileencoding=utf-8
 let &termencoding=&encoding
 set selection=exclusive                                             " Mouse Settings
@@ -333,7 +333,7 @@ set smarttab expandtab                                              " smarttab: 
 set tabstop=2                                                       " Tab width
 set softtabstop=2                                                   " the width while trigger <Tab> key
 set shiftwidth=2                                                    " the tab width by using >> & <<
-set lbr
+set lbr                                                             " LineBreak
 set tw=0
 set laststatus=2                                                    " Set status bar
 set statusline=%m%r
