@@ -108,6 +108,7 @@ Bundle 'Marslo/vim-coloresque'
 Bundle 'Marslo/marslo.vim'
 Bundle 'Marslo/MarsloVimOthers'
 Bundle 'plasticboy/vim-markdown.git'
+" Bundle 'cakebaker/scss-syntax.vim'
 " For fun
 " Bundle 'TeTrIs.vim'
 " Bundle 'matrix.vim--Yang'
