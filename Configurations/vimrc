@@ -171,7 +171,6 @@ func! GetVim()                                                      " Get vim fr
   endif
 endfunc
 
-" ====================================== For Programming =====================================
 func! RunResult()
   let mp = &makeprg
   let ef = &errorformat
