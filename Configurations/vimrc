@@ -38,7 +38,7 @@ if has('win32') || has('win64')
   source $VIMRUNTIME/vimrc_example.vim
   source $VIMRUNTIME/mswin.vim
   set viminfo=%,<800,'10,/50,:100,h,f0
-  set wrap                                                          " Wrap lines
+  set nowrap                                                        " NoWrap lines
   language messages utf-8                                           " At Console
   set tags=.\tags
   set tags+=C:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\tags
@@ -46,7 +46,7 @@ if has('win32') || has('win64')
   set tags+=C:\Marslo\Job\Summa\TEX\SVN\tags
   autocmd BufEnter c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\* :setlocal tags+=c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\.tags
 else
-  set nowrap                                                        " NoWrap lines
+  set wrap                                                          " Wrap lines
   set tags=tags
   set fileformat=unix
   set viminfo=%,<800,'10,/50,:100,h,f0,n~/.vim/cache/.viminfo
