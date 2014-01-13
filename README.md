@@ -243,12 +243,10 @@ Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
 - [vim-ruby](https://github.com/vim-ruby/vim-ruby)
 
 #### Theme and colors
-- [Rainbow Parentheses Improved](https://github.com/luochen1990/rainbow) | [Another Version](https://github.com/oblitum/rainbow)
-- [vim-css3-syntax](https://github.com/hail2u/vim-css3-syntax)
-- [colorsel.vim](https://github.com/vim-scripts/colorsel.vim)
+- [Rainbow Parentheses Improved](https://github.com/luochen1990/rainbow)  | [Vim](http://www.vim.org/scripts/script.php?script_id=4176) | [Another Version](https://github.com/oblitum/rainbow)
+- [vim-css3-syntax](https://github.com/hail2u/vim-css3-syntax) | [Bug-Cannot work](https://github.com/hail2u/vim-css3-syntax/issues/20)
 - [css.vim](https://github.com/JulesWang/css.vim)
-- [vim-colorsque](https://github.com/gorodinskiy/vim-coloresque)
-- [gui2term.py](http://www.vim.org/scripts/script.php?script_id=2778)
+- [scss-syntax.vim](https://github.com/cakebaker/scss-syntax.vim)
 
 #### Not be used
 - perl-support.vim
@@ -257,7 +255,9 @@ Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
 - [vim-css-color](https://github.com/ap/vim-css-color)          # Cannot work for vim74, using **vim-colorsque** instead
 - [emmet.vim](https://github.com/mattn/emmet-vim)
 - [ruby-matchit](https://github.com/vim-scripts/ruby-matchit)
-- [Rainbow Parentheses](https://github.com/kien/rainbow_parentheses.vim)  # Replaced by [Rainbow Parentheses Improved](http://www.vim.org/scripts/script.php?script_id=4176)
+- [Rainbow Parentheses](https://github.com/kien/rainbow_parentheses.vim)  # Replaced by [Rainbow Parentheses Improved](https://github.com/luochen1990/rainbow)
+- [gui2term.py](http://www.vim.org/scripts/script.php?script_id=2778)
+- [colorsel.vim](https://github.com/vim-scripts/colorsel.vim)
 
 +++++++++++++++++++++++++++++++++++++++++++
 
@@ -366,7 +366,7 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
 #### 我修改后的增强版
 - [marslo.vim](https://github.com/Marslo/marslo.vim)
 - [EnhancedCommentify](https://github.com/hrp/EnhancedCommentify) | [Marslo增强版](https://github.com/Marslo/EnhCommentify.vim)
-- [snipMate](http://www.vim.org/scripts/script.php?script_id=2540) | [Github](https://github.com/garbas/vim-snipmate) | [Marslo](https://github.com/Marslo/snipmate.vim)
+- [snipMate](http://www.vim.org/scripts/script.php?script_id=2540) | [原Github地址](https://github.com/garbas/vim-snipmate) | [Marslo](https://github.com/Marslo/snipmate.vim)
 - [python-syntax](https://github.com/hdima/python-syntax) | [Marslo增强版](https://github.com/Marslo/python-syntax)
 - [vim-coloresque](https://github.com/gorodinskiy/vim-coloresque) | [Marslo增强版](https://github.com/Marslo/vim-coloresque)
 
@@ -381,18 +381,18 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
 #### 主题以及颜色
 - [Rainbow Parentheses Improved](https://github.com/oblitum/rainbow) | [Another Version](https://github.com/luochen1990/rainbow)
 - [vim-css3-syntax](https://github.com/hail2u/vim-css3-syntax)
-- [colorsel.vim](https://github.com/vim-scripts/colorsel.vim)
 - [css.vim](https://github.com/JulesWang/css.vim)
-- [vim-colorsque](https://github.com/gorodinskiy/vim-coloresque)
-- [gui2term.py](http://www.vim.org/scripts/script.php?script_id=2778)
+- [scss-syntax.vim](https://github.com/cakebaker/scss-syntax.vim)
 
 #### 未被使用的（曾被使用）
 - perl-support.vim
 - [tlib](https://github.com/tomtom/tlib_vim)
 - [vim-addon-mw-utils](https://github.com/MarcWeber/vim-addon-mw-utils)
-- [vim-css-color](https://github.com/ap/vim-css-color)                      # 不支持Vim74， 使用**vim-colorsque**替代
+- [vim-css-color](https://github.com/ap/vim-css-color)                      # 不支持Vim74， 使用[vim-colorsque](https://github.com/Marslo/vim-coloresque) 替代
 - [emmet.vim](https://github.com/mattn/emmet-vim)
-- [Rainbow Parentheses](https://github.com/kien/rainbow_parentheses.vim)    # 已经替换成 [Rainbow Parentheses Improved](http://www.vim.org/scripts/script.php?script_id=4176)
+- [Rainbow Parentheses](https://github.com/kien/rainbow_parentheses.vim)    # 已经替换成 [Rainbow Parentheses Improved](http://www.vim.org/scripts/script.php?script_id=4176) | [Github repo](https://github.com/luochen1990/rainbow)
+- [colorsel.vim](https://github.com/vim-scripts/colorsel.vim)
+- [gui2term.py](http://www.vim.org/scripts/script.php?script_id=2778)
 
 +++++++++++++++++++++++++++++++++++++++++++
 
