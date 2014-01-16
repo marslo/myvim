@@ -485,6 +485,14 @@ let g:rainbow_conf = {
 \   'guifgs' : ['#6A5ACD', '#B22222', '#C0FF3E', '#EEC900', '#9A32CD', '#EE7600', '#98fb98', '#686868'],
 \   'ctermfgs' : 'xterm-256color' == $TERM ? ['141', '196', '112', '208', '129', '166', '85', '237'] : ['lightblue', 'lightgreen', 'yellow', 'red', 'magenta'],
 \   'parentheses': [['(',')'], ['\[','\]'], ['{','}']],
+\   'separately': {
+\     'css': {
+\       'parentheses': [['(',')'], ['\[','\]']],
+\     },
+\     'scss': {
+\       'parentheses': [['(',')'], ['\[','\]']],
+\     }
+\   }
 \}
 
 let g:indentLine_color_gui = "#282828"
@@ -501,6 +509,8 @@ let SuperTabDefaultCompletionType = '<c-p>'
 let SuperTabMappingForward = '<c-p>'
 let SuperTabMappingTabLiteral = '<Tab>'
 let SuperTabClosePreviewOnPopupClose = 1
+
+match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
 
 autocmd BufWinLeave * silent! mkview                                " Load view automatic
 autocmd BufWinEnter * silent! loadview
