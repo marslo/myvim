@@ -8,11 +8,11 @@ MyVimConfig
 -----------------------------
 
 ## Content
-- [Compile vim/gvim by source code](https://github.com/Marslo/VimConfig#compile-vimgvim-by-source-code-on-linuxubuntu)
-    - [Precondiction](https://github.com/Marslo/VimConfig#1-prepare-environment)
-    - [Compile and Install](https://github.com/Marslo/VimConfig#2-compile-and-install)
-    - [Make compiled vim as default text editor](https://github.com/Marslo/VimConfig#3-make-the-compiled-gvim-as-the-default-text-editor-in-ubunut)
-    - [Q&A](https://github.com/Marslo/VimConfig#4-qa)
+- [Screenshot](https://github.com/Marslo/VimConfig#screenshots)
+    - [Linux Terminal <html>](https://github.com/Marslo/VimConfig#linux-termainl)
+    - [Linux Gvim <css>](https://github.com/Marslo/VimConfig#linux-gvim)
+    - [Windows Gvim <Python>](https://github.com/Marslo/VimConfig#windows)
+    - [PuTTy <vim>](https://github.com/Marslo/VimConfig#putty)
 - [Configuration](https://github.com/Marslo/VimConfig#compile-vimgvim-by-source-code-on-linuxubuntu)
     - English Version
         - [Usage](https://github.com/Marslo/VimConfig#usage)
@@ -22,108 +22,21 @@ MyVimConfig
         - [使用方法](https://github.com/Marslo/VimConfig#使用方法)
         - [快捷键](https://github.com/Marslo/VimConfig#快捷键)
         - [插件列表](https://github.com/Marslo/VimConfig#插件列表)
+- [Compile vim/gvim by source code](https://github.com/Marslo/VimConfig#compile-vimgvim-by-source-code-on-linuxubuntu)
+    - [Precondiction](https://github.com/Marslo/VimConfig#1-prepare-environment)
+    - [Compile and Install](https://github.com/Marslo/VimConfig#2-compile-and-install)
+    - [Make compiled vim as default text editor](https://github.com/Marslo/VimConfig#3-make-the-compiled-gvim-as-the-default-text-editor-in-ubunut)
+    - [Q&A](https://github.com/Marslo/VimConfig#4-qa)
 
 ## ScreenShots:
-#### Linux (Termainl):
+#### Linux (Termainl <html>) :
 ![Screenshot_Terminal](https://github.com/Marslo/VimConfig/blob/master/Screenshots/Screenhost_Linux_Terminal.png?raw=true)
-#### Linux (Gvim):
+#### Linux (Gvim <css>):
 ![Screenshot_Gvim](https://github.com/Marslo/VimConfig/blob/master/Screenshots/Screenhost_Linux_Gvim.png?raw=true)
-#### Windows
+#### Windows (<python>)
 ![Screenshot_Windows](https://github.com/Marslo/VimConfig/blob/master/Screenshots/screenshot_gvim.png?raw=true)
-#### PuTTy
+#### PuTTy (<vimrc>)
 ![Screenshot_PuTTy](https://github.com/Marslo/VimConfig/blob/master/Screenshots/screenshot_PuTTy.png?raw=true)
-
-## Compile VIM/GVIM by source code on Linux(Ubuntu)
-### 1. Prepare environment:
-#### 1.1. Downaload vim source code:
-Download source from [git](https://github.com/b4winckler/vim.git):
-<pre><code>$ git clone https://github.com/b4winckler/vim.git
-</code></pre>
-#### 1.2. Install Necessary libs for GUI:
-- libatk1.0-dev
-- libbonoboui2-dev
-- libcairo2-dev
-- libgnome2-dev
-- libgnomeui-dev
-- libgtk2.0-dev
-- libncurses5-dev
-- libxpm-dev
-- libx11-dev
-- libxt-dev
-
-##### Install necessary libs by the command as below:
-<pre><code>$ sudo apt-get install libncurses5-dev libgnome2-dev libgnomeui-dev libgtk2.0-dev libatk1.0-dev libbonoboui2-dev libcairo2-dev libx11-dev libxpm-dev libxt-dev
-</code></pre>
-
-### 2. Compile and Install:
-#### 2.1 Arugs:
-- Installation directories:
-    - `--prefix=PREFIX`:        install architecture-independent files in PREFIX
-                                Default directory: [/usr/local]
-- Optional Features:
-    - `--enable-gui=OPTS`:     X11 GUI default=auto OPTS=auto/no/gtk2/gnome2/motif/athena/neXtaw/photon/carbon
-    - `--enable-gnome-check`:  If GTK GUI, check for GNOME default=no
-    - `--enable-fontset`:      Include X fontset output support
-    - `--enable-xim`:          Include XIM input support
-    - `--enable-cscope`:       Include cscope interface
-    - `--enable-pythoninterp=OPTS`:  Include Python interpreter. default=no OPTS=no/yes/dynamic
-    - `--enable-python3interp=OPTS`: Include Python3 interpreter. default=no OPTS=no/yes/dynamic
-    - `--enable-rubyinterp=OPTS`:    Include Ruby interpreter.  default=no OPTS=no/yes/dynamic
-    - `--enable-multibyte`:          Include multibyte editing support
-- Optional Packages:
-    - `--with-x`:                use the X Window System
-    - `--with-compiledby=NAME`:  name to show in :version message
-    - `--with-features=TYPE`:    tiny, small, normal, big or huge (default: normal)
-
-#### 2.2. Commands
-<pre><code>$ cd vim
-$ ./configure --with-x --enable-gui=gnome2 --enable-cscope --enable-multibyte --enable-xim --enable-fontset --with-features=huge --enable-pythoninterp=yes --enable-rubyinterp=yes --enable-python3interp=yes --prefix=/home/marslo/Tools/Software/vim74/ --with-compiledby=Marslo --enable-gnome-check
-$ make
-$ sudo make install
-</code></pre>
-
-#### 2.3. Set the PATH
-<pre><code>$ cat >> ~/.bashrc << EOF
-> export PATH=/home/marslo/Tools/Software/vim74/:$PATH
-> EOF
-$ vim --version
-VIM - Vi IMproved 7.4 (2013 Aug 10, compiled Sep 25 2013 15:31:13)
-Included patches: 1-35
-Compiled by Marslo
-Huge version with GTK2-GNOME GUI.  Features included (+) or not (-):
-....
-</code></pre>
-
-### 3. Make the compiled Gvim as the default text editor in Ubunut:
-- Copy `applications/gvim.desktop` and `application/defaults.list` to `/usr/share/applications/`
-<pre><code>$ cp /usr/share/applications/defaults.list /usr/share/applications/defaults_bak.list`
-$ cp applications/gvim.desktop /usr/share/applications/
-$ cp -f applications/defaults.list /usr/share/applications/
-</code></pre>
-- Make gvim.desktop can find the gvim icon (it will be shown as bellow):
-<pre><code>$ cat gvim.desktop
-...
-Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
-...
-</code></pre>
-- An fully [gvim.desktop](http://mirrors2.kernel.org/slackware/slackware-14.0/source/ap/vim/gvim.desktop)
-
-
-### 4. Q&A
-4.1 ncurses:
-- Problem:
-    <pre><code>You need to install a terminal library; for example ncurses.
-    Or specify the name of the library with --with-tlib.
-    </code></pre>
-- Soluction:
-    <pre></code>$ sudo apt-get install libncurses5-dev
-    </code></pre>
-
-4.2 C compiler
-- Problem:
-    <pre><code>no acceptable C compiler found in $PATH</code></pre>
-- Soluction:
-    <pre><code>$ sudo apt-get update && sudo apt-get install build-essential</code></pre>
 
 # Configuration
 ### Usage
@@ -151,6 +64,24 @@ Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
             </code></pre>
     - Get the other plugins
         <pre><code>:BundleInstall!
+        </code></pre>
+
+- Offline User:
+    - For **vimrc** file
+        - Windows User:
+            - Copy **vimrc** from `VimConfig\configureations\vimrc` to `C:\Program Files (x86)\Vim` (64bit) or `C:\Program Files\Vim` (32bit), and rename to `_vimrc`
+        - Linux User:
+            - Copy **vimrc** from `VimConfig/Configuations/vimrc` into `$HOME`, and rename to `.vimrc`
+            <pre><code>$ cp VimConfig/Configurations/vimrc ~/.vimrc</code></pre>
+            OR
+            - Create Link file to `$HOME/.vimrc`
+            <pre><code>$ ln -s <PATH_OF_VimConfig>/Configrations/vimrc ~/.vimrc</code></pre>
+    - For **bundle** folder
+        - Windows User: Copy **bundle** folder from `VimConfig/Configurations/Offline_Packages/bundle` to `C:\Program Files (x86)\Vim` (64bit) or `C:\Program Files\Vim` (Windows 32bit User)
+        - Linux User: Copy **bundle** folder from `VimConfig/Configureations/Offline_Packages/bundle` to `$HOME/.vim` OR create link file
+        <pre><code>$ cp -r VimConfig/Configureations/Offline_Package/bundle ~/.vim/
+        OR
+        $ ln -s <PATH_OF_VimConfig>/Configrations/Offline_Package/bundle ~/.vim/bundle
         </code></pre>
 
 -----------------------------
@@ -289,7 +220,22 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
     - 获取其他插件
         <pre><code>:BundleInstall!
         </code></pre>
-
+-离线用户 (无法使用git用户)：
+    - 对于**vimrc** 而言：
+        - Windows用户： 复制 **VimConig\Configurations\vimrc** 到 `C:\Program Files (x86)\Vim` (64位) 或 `C:\Program Files\Vim` (32位), 且重命名为`_vimrc`
+        - Linux用户:
+            - 复制 **VimConfig/Configurations/vimrc** 到 `$HOME`, 且重命名为`.vimrc`
+            <pre><code>$ cp VimConfig/Configurations/vimrc ~/.vimrc</code></pre>
+            或
+            - 创建link文件`$HOME/.vimrc`
+            <pre><code>$ ln -s <PATH_OF_VimConfig>/Configrations/vimrc ~/.vimrc</code></pre>
+    - 对于 **bundle** 目录
+        - Windows用户： 复制 `VimConfig/Configurations/Offline_Packages/bundle` 目录到 `C:\Program Files (x86)\Vim` (64位) 或 `C:\Program Files\Vim` (32位)
+        - Linux用户: 复制 `VimConfig/Configureations/Offline_Packages/bundle` 到 `$HOME/.vim` 或创建链接文件
+        <pre><code>$ cp -r VimConfig/Configureations/Offline_Package/bundle ~/.vim/
+        OR
+        $ ln -s <PATH_OF_VimConfig>/Configrations/Offline_Package/bundle ~/.vim/bundle
+        </code></pre>
 -----------------------------
 
 ### 打开vim/gvim默认最大化
@@ -399,3 +345,97 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
 +++++++++++++++++++++++++++++++++++++++++++
 
 默认字体为： Monaco, 下载地址: http://download.csdn.net/detail/jiaoxiaogu/4317959
+
+
+# Compile VIM/GVIM by source code on Linux(Ubuntu)
+### 1. Prepare environment:
+#### 1.1. Downaload vim source code:
+Download source from [git](https://github.com/b4winckler/vim.git):
+<pre><code>$ git clone https://github.com/b4winckler/vim.git
+</code></pre>
+#### 1.2. Install Necessary libs for GUI:
+- libatk1.0-dev
+- libbonoboui2-dev
+- libcairo2-dev
+- libgnome2-dev
+- libgnomeui-dev
+- libgtk2.0-dev
+- libncurses5-dev
+- libxpm-dev
+- libx11-dev
+- libxt-dev
+
+##### Install necessary libs by the command as below:
+<pre><code>$ sudo apt-get install libncurses5-dev libgnome2-dev libgnomeui-dev libgtk2.0-dev libatk1.0-dev libbonoboui2-dev libcairo2-dev libx11-dev libxpm-dev libxt-dev
+</code></pre>
+
+### 2. Compile and Install:
+#### 2.1 Arugs:
+- Installation directories:
+    - `--prefix=PREFIX`:        install architecture-independent files in PREFIX
+                                Default directory: [/usr/local]
+- Optional Features:
+    - `--enable-gui=OPTS`:     X11 GUI default=auto OPTS=auto/no/gtk2/gnome2/motif/athena/neXtaw/photon/carbon
+    - `--enable-gnome-check`:  If GTK GUI, check for GNOME default=no
+    - `--enable-fontset`:      Include X fontset output support
+    - `--enable-xim`:          Include XIM input support
+    - `--enable-cscope`:       Include cscope interface
+    - `--enable-pythoninterp=OPTS`:  Include Python interpreter. default=no OPTS=no/yes/dynamic
+    - `--enable-python3interp=OPTS`: Include Python3 interpreter. default=no OPTS=no/yes/dynamic
+    - `--enable-rubyinterp=OPTS`:    Include Ruby interpreter.  default=no OPTS=no/yes/dynamic
+    - `--enable-multibyte`:          Include multibyte editing support
+- Optional Packages:
+    - `--with-x`:                use the X Window System
+    - `--with-compiledby=NAME`:  name to show in :version message
+    - `--with-features=TYPE`:    tiny, small, normal, big or huge (default: normal)
+
+#### 2.2. Commands
+<pre><code>$ cd vim
+$ ./configure --with-x --enable-gui=gnome2 --enable-cscope --enable-multibyte --enable-xim --enable-fontset --with-features=huge --enable-pythoninterp=yes --enable-rubyinterp=yes --enable-python3interp=yes --prefix=/home/marslo/Tools/Software/vim74/ --with-compiledby=Marslo --enable-gnome-check
+$ make
+$ sudo make install
+</code></pre>
+
+#### 2.3. Set the PATH
+<pre><code>$ cat >> ~/.bashrc << EOF
+> export PATH=/home/marslo/Tools/Software/vim74/:$PATH
+> EOF
+$ vim --version
+VIM - Vi IMproved 7.4 (2013 Aug 10, compiled Sep 25 2013 15:31:13)
+Included patches: 1-35
+Compiled by Marslo
+Huge version with GTK2-GNOME GUI.  Features included (+) or not (-):
+....
+</code></pre>
+
+### 3. Make the compiled Gvim as the default text editor in Ubunut:
+- Copy `applications/gvim.desktop` and `application/defaults.list` to `/usr/share/applications/`
+<pre><code>$ cp /usr/share/applications/defaults.list /usr/share/applications/defaults_bak.list`
+$ cp applications/gvim.desktop /usr/share/applications/
+$ cp -f applications/defaults.list /usr/share/applications/
+</code></pre>
+- Make gvim.desktop can find the gvim icon (it will be shown as bellow):
+<pre><code>$ cat gvim.desktop
+...
+Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
+...
+</code></pre>
+- An fully [gvim.desktop](http://mirrors2.kernel.org/slackware/slackware-14.0/source/ap/vim/gvim.desktop)
+
+
+### 4. Q&A
+4.1 ncurses:
+- Problem:
+    <pre><code>You need to install a terminal library; for example ncurses.
+    Or specify the name of the library with --with-tlib.
+    </code></pre>
+- Soluction:
+    <pre></code>$ sudo apt-get install libncurses5-dev
+    </code></pre>
+
+4.2 C compiler
+- Problem:
+    <pre><code>no acceptable C compiler found in $PATH</code></pre>
+- Soluction:
+    <pre><code>$ sudo apt-get update && sudo apt-get install build-essential</code></pre>
+
