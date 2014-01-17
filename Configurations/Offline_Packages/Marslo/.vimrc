@@ -1,70 +1,42 @@
 " =============================================================================
-"      FileName: _vimrc
-"          Desc:
-"        Author: Marslo
-"         Email: marslo.jiao@gmail.com
-"       Created: 2010-10
-"       Version: 0.0.19
-"    LastChange: 2014-01-03 11:26:40
-"       History:
-"                0.0.3  | Marslo | Add the Autoload and Fast Edit difference between win32 and non-win32
-"                0.0.4  | Marslo | Add CheckRubySyntax() function for checking and run ruby script
-"                0.0.5  | Marslo | Add the function of highlight txt file
-"                                  Add the function of Automatic paire signs (), [], {}, '', etc
-"                0.0.6  | Marslo | Add bundle plugin for manager plugins automatic
-"                0.0.7  | Marslo | Add pyflakes plugin for python syntax checking
-"                0.0.8  | Marslo | Remap the shortcut key: Ctrl-A/Ctrl-E/F1
-"                0.0.9  | Marslo | Add the function about remove a paird parentheses, brackets, braces
-"                0.0.10 | Marslo | Add the configuration about rainbow_parentheses
-"                0.0.11 | Marslo | Add three bundles: woainvzu/EnhCommentify.vim && woainvzu/Marslo.vim && tpope/vim-rails
-"                0.0.12 | Marslo | Add function GetVundle() to get vundle automaticly
-"                0.0.13 | Marslo | Add Alpha setting for vim tweak
-"                0.0.14 | Marslo | Change woainvu repos to Marslo
-"                0.0.15 | Marslo | Add Remember curosr position function
-"                0.0.16 | Marslo | Modification for startup faster
-"                0.0.17 | Marslo | Remove autopairs functions. Replaced by auto-pairs
-"                0.0.18 | Marslo | Delete redundancy configures from Windows vimrc
-"                0.0.19 | Marslo | Merge Linux configus and Windows. There are only one vimrc from now on.
+"       FileName: .vimrc
+"           Desc:
+"         Author: Marslo
+"          Email: li.jiao@tieto.com
+"        Created: 2013-10-16 07:19:00
+"        Version: 0.0.7
+"     LastChange: 2014-01-18 01:59:55
+"        History:
+"                 0.0.1 | Marslo | init
+"                 0.0.4 | Marslo | Add Vim Bundle
+"                 0.0.5 | Marslo | Add GetVundle() and GetVim() and the configuration of WinManager
+"                 0.0.6 | Marslo | Change repositoy woainvzu to Marslo
+"                 0.0.7 | Marslo | Delete redundancy configures
 " =============================================================================
+
+let &runtimepath=printf('%s/vimfiles,%s,%s/vimfiles/after', $VIM, $VIMRUNTIME, $VIM)
+let s:portable = expand('<sfile>:p:h')
+let &runtimepath=printf('%s/.vim,%s/.vim,%s/.vim/after', s:portable, &runtimepath, s:portable)
+" let s:portable = '$HOME/Marslo'
+" let $runtimepath=~s:portable/.vim,usr/local/share/vim/vimfiles,/usr/local/share/vim/vim74,/usr/local/share/vim/vimfiles/after,/home/auto/.vim/after
 
 set nocompatible
 syntax enable on
 filetype plugin on
 set history=500
 set diffopt=filler,context:3
-runtime macros/matchit.vim
-if has('win32') || has('win64')
-  behave mswin
-  source $VIMRUNTIME/vimrc_example.vim
-  source $VIMRUNTIME/mswin.vim
-  set viminfo=%,<800,'10,/50,:100,h,f0
-  set nowrap                                                        " NoWrap lines
-  language messages utf-8                                           " At Console
-  set tags=.\tags
-  set tags+=C:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\tags
-  set tags+=C:\Marslo\Job\Summa\TEX\SVN\viis-lab-scripts\tags
-  set tags+=C:\Marslo\Job\Summa\TEX\SVN\tags
-  autocmd BufEnter c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\* :setlocal tags+=c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\.tags
-else
-  set wrap                                                          " Wrap lines
-  set tags=tags
-  set fileformat=unix
-  set viminfo=%,<800,'10,/50,:100,h,f0,n~/.vim/cache/.viminfo
-endif
+set nowrap                                                        " NoWrap lines
+set tags=.\tags
 
 " ====================================== For Property =====================================
 let mapleader=","
 let g:mapleader=","
 
 " Vim Bundle
+set nocompatible
 filetype off
-if has('win32') || has('win64')
-  set rtp+=$VIM/bundle/vundle
-  call vundle#rc('$VIM/bundle')
-else
-  set rtp+=~/.vim/bundle/vundle
-  call vundle#rc()
-endif
+set rtp+=$HOME/Marslo/.vim/bundle/vundle
+call vundle#rc('$HOME/Marslo/.vim/bundle')
 
 Bundle 'gmarik/vundle'
 Bundle 'Yggdroot/indentLine'
@@ -108,49 +80,14 @@ Bundle 'Marslo/vim-coloresque'
 Bundle 'Marslo/marslo.vim'
 Bundle 'Marslo/MarsloVimOthers'
 Bundle 'plasticboy/vim-markdown.git'
-" Bundle 'cakebaker/scss-syntax.vim'
-" For fun
-" Bundle 'TeTrIs.vim'
-" Bundle 'matrix.vim--Yang'
 filetype plugin indent on
 
 " ====================================== For Programming =====================================
-func! OpenCMD()
-  if has('win32') || has('win95') || has('win64')
-    if 'java' == &filetype
-      let com = '!cmd /c start "C:\Program Files\JPSoft\TCCLE13x64\tcc.exe" /d "' . expand('%:p:h') .'"'
-    else
-      let com = '!cmd /c start C:\Marslo\Tools\Software\System\CommandLine\Console2\Console.exe -d "'. expand('%:p:h') . '"'
-    endif
-  else
-    let com = '!/usr/bin/gnome-terminal --working-directory=' . expand('%:p:h')
-  endif
-  let saveit = ':w!'
-  echo 'Goto "' . expand('%:p:h') . '" in command line'
-  silent execute saveit
-  silent execute com
-endfunc
-nmap cmd :call OpenCMD()<CR>
-
-func! OpenFoler()
-  if has('win32') || has('win95') || has('win64')
-    let folderpath = expand('%:p:h')
-  endif
-  silent execute '!C:\Windows\explorer.exe "' . folderpath . '"'
-endfunc
-map <M-o> :call OpenFoler()<CR>
-
 func! GetVundle()                                                   " GetVundle() inspired by: http://pastebin.com/embed_iframe.php?i=C9fUE0M3
   let vundleAlreadyExists=1
-  if has('win32') || has('win64')
-    let vundle_readme=expand('$VIM\bundle\vundle\README.md')
-    let vbundle='$VIM\bundle'
-    let vvundle=vbundle . '\vundle'
-  else
-    let vundle_readme=expand('~/.vim/bunle/vundle/README.md')
-    let vbundle='~/.vim/bundle'
-    let vvundle=vbundle . '/vundle'
-  endif
+  let vundle_readme=expand('~/Marslo/.vim/bunle/vundle/README.md')
+  let vbundle='~/Marslo/.vim/bundle'
+  let vvundle=vbundle . '/vundle'
   if !filereadable(vundle_readme)
     echo "Installing Vundle..."
     echo ""
@@ -164,9 +101,9 @@ endfunc
 
 func! GetVim()                                                      " Get vim from: git clone git@github.com:b4winckler/vim.git
   if has('unix')
-    let vimgitcfg=expand('~/.vim/src/vim/.git/config')
+    let vimgitcfg=expand('~/Marslo/.vim/src/vim/.git/config')
     if !filereadable(vimgitcfg)
-      execute 'silent !git clone git@github.com:b4winckler/vim.git "' . expand('~/.vim/vimsrc') . '"'
+      execute 'silent !git clone git@github.com:b4winckler/vim.git "' . expand('~/Marslo/.vim/vimsrc') . '"'
     end
   endif
 endfunc
@@ -191,6 +128,7 @@ func! RunResult()
   let &makeprg     = mp
   let &errorformat = ef
 endfunc
+map <F5> :call RunResult()<CR>
 
 function! GotoFile()                                                " Add suffix '.py' if the filetype is python
   if 'python' == &filetype
@@ -208,42 +146,7 @@ function! UpdateTags()                                              " Update tag
 endfunction
 nmap <F12> :call UpdateTags()<CR>
 
-if has('gui_running')
-  function! <SID>FontSize_Reduce()                                  " Reduce the font
-    if has('unix')
-      let pattern = '\<\d\+$'
-    elseif has('win32') || has('win95') || has('win64')
-      let pattern = ':h\zs\d\+\ze:'
-    endif
-    let fontsize = matchstr(&gfn, pattern)
-    echo fontsize
-    let cmd = substitute(&gfn, pattern, string(fontsize - 1), 'g')
-    let &gfn=cmd
-  endfunction
-  nnoremap <A--> :call <SID>FontSize_Reduce()<CR>
-
-  function! <SID>FontSize_Enlarge()                                 " Enlarge the font
-    if has('unix')
-      let pattern = '\<\d\+$'
-    elseif has('win32') || has('win95') || has('win64')
-      let pattern = ':h\zs\d\+\ze:'
-    endif
-    let fontsize = matchstr(&gfn, pattern)
-    let cmd = substitute(&gfn, pattern, string(fontsize + 1), 'g')
-    let &gfn=cmd
-  endfunction
-  nnoremap <A-+> :call <SID>FontSize_Enlarge()<CR>
-endif
-
-function! SynStack()
-  if !exists("*synstack")
-    return
-  endif
-  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-endfunction
-
 " Programming configs for Ruby and Rails
-let g:ruby_path=$RUBY_BIN
 if has("autocmd")
   autocmd FileType ruby set omnifunc=rubycomplete#Complete
   autocmd FileType ruby let g:rubycomplete_buffer_loading=1
@@ -258,42 +161,16 @@ augroup filetypedetect                                              " Inspired f
 augroup end
 
 " Programming configs for Python
-au FileType python syn keyword pythonDecorator print self
 let python_highlight_all = 1                                        " syntax-python
-func! PylintCheck()                                                 " Run pylint
-  let mp = &makeprg
-  let ef = &errorformat
-  let exeFile = '"' . expand("%:t") . '"'
-  setlocal makeprg=pylint\ --reports=n\ --output-format=parseable
-  set efm=%A%f:%l:\ [%t%.%#]\ %m,%Z%p^^,%-C%.%#
-  silent make "%:p"
-  copen
-  let &makeprg     = mp
-  let &errorformat = ef
-endfunc
-
 " ====================================== For Inteface =====================================
-if has('gui_running')
-  func! MaximizeWindow()                                            " Make vim maximize while it startup
-    silent !wmctrl -r :ACTIVE: -b add,maximized_vert,maximized_horz
-  endfunc
-  set go=                                                           " Hide everything (go = guioptions)
-  set cpoptions+=n
-  if has('win32') || has('win64')
-    set lines=38                                                    " The initialize size
-    set columns=122
-    if !filereadable("$VIM\vim74\vimtweak.dll")
-      au GUIENTER * call libcallnr("vimtweak.dll","SetAlpha",243)
-    endif
-  else
-    set lines=32                                                    " The initialize size
-    set columns=108
-  endif
-endif
-
 if 'xterm-256color' == $TERM
   set t_Co=256
+else
+  set t_Co=8
+  set t_Sb=^[[4%dm
+  set t_Sf=^[[3%dm
 endif
+
 if has('gui_running') || 'xterm-256color' == $TERM
   colorscheme marslo256
   let psc_style='cool'
@@ -301,28 +178,11 @@ else
   colorscheme marslo16
 endif
 
-if has('win32') || has('win95') || has('win64')
-  nmap <leader>v :e $VIM/_vimrc<CR>
-  autocmd! bufwritepost $VIM/_vimrc source %                        " autoload _vimrc
-  set guifont=Monaco:h12                                            " Fonts
-  set clipboard+=unnamed                                            " Copy the content to system clipboard by using y/p
-  set clipboard+=unnamedplus
-else
-  nmap <leader>v :e ~/.vimrc<CR>
-  autocmd! bufwritepost ~/.vimrc source %
-  set guifont=Monaco\ 12
-  set clipboard=unnamedplus
-endif
-
-set iskeyword+=.
+autocmd! bufwritepost $HOME/Marslo/.vimrc source %
+nmap <leader>v :e $HOME/Marslo/.vimrc<CR>
+set guifont=Monaco\ 12
 set autochdir
-set fileencodings=utf-8,ucs-bom,gbk,cp936,gb2312,gb18030            " Code Format
-set termencoding=utf-8
 set encoding=utf-8                                                  " Input Chinese (=cp936)
-set fileencoding=utf-8
-let &termencoding=&encoding
-set selection=exclusive                                             " Mouse Settings
-set selectmode=mouse,key
 set nobackup noswapfile nowritebackup
 set ruler number                                                    " ruler: Show Line and colum number; number: line number
 set report=0
@@ -354,7 +214,7 @@ set wildmode=longest,list,full                                      " Completion
 set wildignore+=*.swp,*.zip,*.exe
 set noerrorbells novisualbell                                       " turn off error beep/flash
 set t_vb=
-set list listchars=tab:\ \ ,trail:·,extends:»,precedes:«,nbsp:·
+set list listchars=tab:\ \ ,trail:.,extends:>,precedes:<,nbsp:.
 set cursorline                                                      " Highlight the current line
 set guicursor=a:hor1
 set guicursor+=i-r-ci-cr-o:hor2-blinkon0
@@ -370,14 +230,14 @@ set foldlevel=100                                                   " Not fold w
 set viewoptions=folds
 set backspace=indent,eol,start                                      " make backspace h, l, etc wrap to
 set whichwrap+=<,>,h,l
-set go+=a                                                           " Visual selection automatically copied to the clipboard
-set hidden                                                          " Switch between buffers with unsaved change
 
 noremap <F1> <ESC>
 imap <F1> <ESC>a
 map ,bd :bd<CR>
 map <C-k> <C-w>k
+map <C-h> <C-w>h
 map <C-j> <C-w>j
+map <C-l> <C-w>l
 map <C-a> <ESC>^
 imap <C-a> <ESC>I
 map <C-e> <ESC>$
