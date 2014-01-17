@@ -57,6 +57,7 @@ let mapleader=","
 let g:mapleader=","
 
 " Vim Bundle
+set nocompatible
 filetype off
 if has('win32') || has('win64')
   set rtp+=$VIM/bundle/vundle
@@ -81,7 +82,6 @@ Bundle 'git@github.com:Marslo/snipmate.vim.git'
 Bundle 'git@github.com:vim-scripts/Conque-Shell.git'
 Bundle 'git@github.com:vim-scripts/mru.vim.git'
 Bundle 'git@github.com:vim-scripts/taglist.vim.git'
-Bundle 'git@github.com:vim-scripts/winmanager.git'
 " For Python
 " Bundle 'python-mode'
 Bundle 'git@github.com:vim-scripts/python_fold.git'
@@ -110,6 +110,7 @@ Bundle 'git@github.com:Marslo/MarsloVimOthers.git'
 Bundle 'git@github.com:plasticboy/vim-markdown.git'
 " Bundle 'cakebaker/scss-syntax.vim'
 " For fun
+" Bundle 'git@github.com:vim-scripts/winmanager.git'
 " Bundle 'TeTrIs.vim'
 " Bundle 'matrix.vim--Yang'
 filetype plugin indent on
@@ -404,12 +405,6 @@ let g:ctrlp_custom_ignore = {
     \ 'file': '\v\.(exe|so|dll|rpm|tar|gz|bz2|zip|ctags|tags)|tags|ctags$',
     \ 'link': 'some_bad_symbolic_links',
     \ }
-
-nnoremap <leader>g :GundoToggle<CR>
-let g:gundo_width = 35
-let g:gundo_preview_height = 20
-let g:gundo_right = 0
-let g:gundo_preview_bottom = 0
 
 if has('win32') || has('win95') || has('win64')
   nmap <leader>tv :ConqueTermSplit cmd <CR>

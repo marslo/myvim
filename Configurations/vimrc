@@ -57,6 +57,7 @@ let mapleader=","
 let g:mapleader=","
 
 " Vim Bundle
+set nocompatible
 filetype off
 if has('win32') || has('win64')
   set rtp+=$VIM/bundle/vundle
@@ -69,7 +70,6 @@ endif
 Bundle 'gmarik/vundle'
 Bundle 'Yggdroot/indentLine'
 Bundle 'kien/ctrlp.vim.git'
-Bundle 'sjl/gundo.vim.git'
 Bundle 'majutsushi/tagbar'
 Bundle 'dantezhu/authorinfo'
 Bundle 'Marslo/EnhCommentify.vim'
@@ -110,6 +110,7 @@ Bundle 'Marslo/MarsloVimOthers'
 Bundle 'plasticboy/vim-markdown.git'
 " Bundle 'cakebaker/scss-syntax.vim'
 " For fun
+" Bundle 'sjl/gundo.vim.git'
 " Bundle 'TeTrIs.vim'
 " Bundle 'matrix.vim--Yang'
 filetype plugin indent on
@@ -404,12 +405,6 @@ let g:ctrlp_custom_ignore = {
     \ 'file': '\v\.(exe|so|dll|rpm|tar|gz|bz2|zip|ctags|tags)|tags|ctags$',
     \ 'link': 'some_bad_symbolic_links',
     \ }
-
-nnoremap <leader>g :GundoToggle<CR>
-let g:gundo_width = 35
-let g:gundo_preview_height = 20
-let g:gundo_right = 0
-let g:gundo_preview_bottom = 0
 
 if has('win32') || has('win95') || has('win64')
   nmap <leader>tv :ConqueTermSplit cmd <CR>
