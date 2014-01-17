@@ -66,48 +66,48 @@ else
   call vundle#rc()
 endif
 
-Bundle 'gmarik/vundle'
-Bundle 'Yggdroot/indentLine'
-Bundle 'kien/ctrlp.vim.git'
-Bundle 'sjl/gundo.vim.git'
-Bundle 'majutsushi/tagbar'
-Bundle 'dantezhu/authorinfo'
-Bundle 'Marslo/EnhCommentify.vim'
-Bundle 'tpope/vim-pathogen'
-Bundle 'gregsexton/MatchTag'
-Bundle 'ervandew/supertab'
-Bundle 'Marslo/auto-pairs'
-Bundle 'Marslo/snipmate.vim.git'
-Bundle 'Conque-Shell'
-Bundle 'mru.vim'
-Bundle 'taglist.vim'
-Bundle 'winmanager'
+Bundle 'git@github.com:gmarik/vundle.git'
+Bundle 'git@github.com:Yggdroot/indentLine.git'
+Bundle 'git@github.com:kien/ctrlp.vim.git'
+Bundle 'git@github.com:sjl/gundo.vim.git'
+Bundle 'git@github.com:majutsushi/tagbar.git'
+Bundle 'git@github.com:dantezhu/authorinfo.git'
+Bundle 'git@github.com:Marslo/EnhCommentify.vim.git'
+Bundle 'git@github.com:tpope/vim-pathogen.git'
+Bundle 'git@github.com:gregsexton/MatchTag.git'
+Bundle 'git@github.com:ervandew/supertab.git'
+Bundle 'git@github.com:Marslo/auto-pairs.git'
+Bundle 'git@github.com:Marslo/snipmate.vim.git'
+Bundle 'git@github.com:vim-scripts/Conque-Shell.git'
+Bundle 'git@github.com:vim-scripts/mru.vim.git'
+Bundle 'git@github.com:vim-scripts/taglist.vim.git'
+Bundle 'git@github.com:vim-scripts/winmanager.git'
 " For Python
 " Bundle 'python-mode'
-Bundle 'python_fold'
-Bundle 'pyflakes.vim'
-Bundle 'python_match.vim'
-Bundle 'Marslo/python-syntax'
+Bundle 'git@github.com:vim-scripts/python_fold.git'
+Bundle 'git@github.com:vim-scripts/pyflakes.vim.git'
+Bundle 'git@github.com:vim-scripts/python_match.vim.git'
+Bundle 'git@github.com:Marslo/python-syntax.git'
 " For ruby
-Bundle 'tpope/vim-rails'
-Bundle 'vim-ruby/vim-ruby'
-Bundle 'nelstrom/vim-textobj-rubyblock'
-Bundle 'kana/vim-textobj-user'
-Bundle 'ruby-matchit'
+Bundle 'git@github.com:tpope/vim-rails.git'
+Bundle 'git@github.com:vim-ruby/vim-ruby.git'
+Bundle 'git@github.com:nelstrom/vim-textobj-rubyblock.git'
+Bundle 'git@github.com:kana/vim-textobj-user.git'
+Bundle 'git@github.com:vim-scripts/ruby-matchit.git'
 " For Javascript
-Bundle "pangloss/vim-javascript"
-Bundle 'jelera/vim-javascript-syntax'
+Bundle 'git@github.com:pangloss/vim-javascript.git'
+Bundle 'git@github.com:jelera/vim-javascript-syntax.git'
 " For web design
-Bundle "tpope/vim-surround"
-Bundle 'tpope/vim-repeat'
+Bundle 'git@github.com:tpope/vim-surround.git'
+Bundle 'git@github.com:tpope/vim-repeat.git'
 " Colors and themes and syntax
-Bundle 'luochen1990/rainbow'
-Bundle 'txt.vim'
-Bundle 'hail2u/vim-css3-syntax'
-Bundle 'Marslo/vim-coloresque'
-Bundle 'Marslo/marslo.vim'
-Bundle 'Marslo/MarsloVimOthers'
-Bundle 'plasticboy/vim-markdown.git'
+Bundle 'git@github.com:luochen1990/rainbow.git'
+Bundle 'git@github.com:vim-scripts/txt.vim.git'
+Bundle 'git@github.com:hail2u/vim-css3-syntax.git'
+Bundle 'git@github.com:Marslo/vim-coloresque.git'
+Bundle 'git@github.com:Marslo/marslo.vim.git'
+Bundle 'git@github.com:Marslo/MarsloVimOthers.git'
+Bundle 'git@github.com:plasticboy/vim-markdown.git'
 " Bundle 'cakebaker/scss-syntax.vim'
 " For fun
 " Bundle 'TeTrIs.vim'
@@ -157,7 +157,8 @@ func! GetVundle()                                                   " GetVundle(
     if isdirectory(expand(vbundle)) == 0
       call mkdir(expand(vbundle), 'p')
     endif
-    execute 'silent !git clone https://github.com/gmarik/vundle.git "' . expand(vvundle) . '"'
+    " execute 'silent !git clone https://github.com/gmarik/vundle.git "' . expand(vvundle) . '"'
+    execute 'silent !git clone git@github.com:gmarik/vundle.git "' . expand(vvundle) . '"'
     let vundleAlreadyExists=0
   endif
 endfunc
