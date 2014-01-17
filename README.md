@@ -8,11 +8,6 @@ MyVimConfig
 -----------------------------
 
 ## Content
-- [Screenshot](https://github.com/Marslo/VimConfig#screenshots)
-    - [Linux Terminal <html>](https://github.com/Marslo/VimConfig#linux-termainl)
-    - [Linux Gvim <css>](https://github.com/Marslo/VimConfig#linux-gvim)
-    - [Windows Gvim <Python>](https://github.com/Marslo/VimConfig#windows)
-    - [PuTTy <vim>](https://github.com/Marslo/VimConfig#putty)
 - [Configuration](https://github.com/Marslo/VimConfig#compile-vimgvim-by-source-code-on-linuxubuntu)
     - English Version
         - [Usage](https://github.com/Marslo/VimConfig#usage)
@@ -29,13 +24,13 @@ MyVimConfig
     - [Q&A](https://github.com/Marslo/VimConfig#4-qa)
 
 ## ScreenShots:
-#### Linux (Termainl <html>) :
+#### Linux (Termainl html) :
 ![Screenshot_Terminal](https://github.com/Marslo/VimConfig/blob/master/Screenshots/Screenhost_Linux_Terminal.png?raw=true)
-#### Linux (Gvim <css>):
+#### Linux (Gvim css):
 ![Screenshot_Gvim](https://github.com/Marslo/VimConfig/blob/master/Screenshots/Screenhost_Linux_Gvim.png?raw=true)
-#### Windows (<python>)
+#### Windows (python)
 ![Screenshot_Windows](https://github.com/Marslo/VimConfig/blob/master/Screenshots/screenshot_gvim.png?raw=true)
-#### PuTTy (<vimrc>)
+#### PuTTy (vimrc)
 ![Screenshot_PuTTy](https://github.com/Marslo/VimConfig/blob/master/Screenshots/screenshot_PuTTy.png?raw=true)
 
 # Configuration
