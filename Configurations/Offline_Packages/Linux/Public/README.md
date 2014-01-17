@@ -1,7 +1,7 @@
 Public VIM Settings
 =================
 - Author: Marslo
-- Email: marslo.vida@gmail.com
+- Email: marslo.jiao@gmail.com
 - Created: 2013-10-16 15:03:22
 - Version: 0.0.1
 - LastChange: 2013-10-16 15:03:22
