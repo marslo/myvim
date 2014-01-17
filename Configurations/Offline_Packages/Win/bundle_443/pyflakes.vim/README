@@ -1,0 +1,27 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=2441
+
+IMPORTANT: Your vim must have Python 2.5, at least. Enter ":python import sys; print sys.version" to see which version you have.  The newest version of Vim, 7.3, comes bundled with Python 2.7 support.
+
+pyflakes-vim highlights common Python errors like misspelling a variable name on the fly. It also warns about unused imports, redefined functions, etc.
+
+This plugin is fast enough that it registers itself with vim hooks for leaving insert mode and saving a buffer, so that the warnings are always up to date. See pyflakes.vim if you want to change this behavior.
+
+NOTES:
+ * an improved pyflakes module is INCLUDED with this plugin, so you don't need to install it separately
+ * quickfix entries are created for each error, so you can use commands like :cc to jump to errors.
+ * this plugin uses the SpellBad highlight to show errors. if you'd like to change the color or style of this highlight, you can do something like this in your .vimrc:
+
+      if has("gui_running") 
+          highlight SpellBad term=underline gui=undercurl guisp=Orange 
+      endif 
+
+To stay up on development, you can watch the public repos at
+
+http://github.com/kevinw/pyflakes-vim
+http://github.com/kevinw/pyflakes
+
+KNOWN ISSUES
+
+- The highlighting for syntax errors is often way off, and results in no other errors being detected.
+- In Python 2.5, typing a with statement before you have from __future__ import with results in a vim error
+
