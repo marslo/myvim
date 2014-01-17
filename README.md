@@ -216,7 +216,7 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
         <pre><code>:BundleInstall!
         </code></pre>
 
--离线用户 (无法使用git用户)：
+- 离线用户 (无法使用git用户)：
     - 对于**vimrc** 而言：
         - Windows用户： 复制 **VimConig\Configurations\vimrc** 到 `C:\Program Files (x86)\Vim` (64位) 或 `C:\Program Files\Vim` (32位), 且重命名为`_vimrc`
         - Linux用户:
