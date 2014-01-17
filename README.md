@@ -24,11 +24,13 @@ MyVimConfig
         - [插件列表](https://github.com/Marslo/VimConfig#插件列表)
 
 ## ScreenShots:
-### Ubuntu(Ubuntu):
-![Screenshot_Ubuntu](https://github.com/Marslo/VimConfig/blob/master/Screenshots/Screenshots_Ubuntu.png?raw=true)
-### Windows
+#### Linux (Termainl):
+![Screenshot_Terminal](https://github.com/Marslo/VimConfig/blob/master/Screenshots/Screenhost_Linux_Terminal.png?raw=true)
+#### Linux (Gvim):
+![Screenshot_Gvim](https://github.com/Marslo/VimConfig/blob/master/Screenshots/Screenhost_Linux_Gvim.png?raw=true)
+#### Windows
 ![Screenshot_Windows](https://github.com/Marslo/VimConfig/blob/master/Screenshots/screenshot_gvim.png?raw=true)
-### PuTTy
+#### PuTTy
 ![Screenshot_PuTTy](https://github.com/Marslo/VimConfig/blob/master/Screenshots/screenshot_PuTTy.png?raw=true)
 
 ## Compile VIM/GVIM by source code on Linux(Ubuntu)
