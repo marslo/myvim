@@ -5,12 +5,12 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.19
-"    LastChange: 2014-01-18 05:01:44
+"    LastChange: 2014-01-19 16:35:07
 " =============================================================================
 
 set nocompatible
 syntax enable on
-filetype plugin on
+filetype plugin indent on
 set history=500
 set diffopt=filler,context:3
 runtime macros/matchit.vim
@@ -125,33 +125,40 @@ map <M-o> :call OpenFoler()<CR>
 func! GetVundle()                                                   " GetVundle() inspired by: http://pastebin.com/embed_iframe.php?i=C9fUE0M3
   let vundleAlreadyExists=1
   if has('win32') || has('win64')
-    let vundle_readme=expand('$VIM\bundle\vundle\README.md')
-    let vbundle='$VIM\bundle'
-    let vvundle=vbundle . '\vundle'
+    let bud='$VIM\bundle'
+    let vud=bud . '\vundle'
+    let vudcfg=expand(vud . '\.git\config')
   else
-    let vundle_readme=expand('~/.vim/bunle/vundle/README.md')
-    let vbundle='~/.vim/bundle'
-    let vvundle=vbundle . '/vundle'
+    let bud='~/.vim/bundle'
+    let vud=bud . '/vundle'
+    let vudcfg=expand(vud . '/.git/config')
   endif
-  if !filereadable(vundle_readme)
+  if filereadable(vudcfg)
+    echo "Vundle has existed at " . expand(vud)
+  else
     echo "Installing Vundle..."
     echo ""
-    if isdirectory(expand(vbundle)) == 0
-      call mkdir(expand(vbundle), 'p')
+    if isdirectory(expand(bud)) == 0
+      call mkdir(expand(bud), 'p')
     endif
-    execute 'silent !git clone https://github.com/gmarik/vundle.git "' . expand(vvundle) . '"'
+    execute 'silent !git clone https://github.com/gmarik/vundle.git "' . expand(vud) . '"'
     let vundleAlreadyExists=0
   endif
 endfunc
+command! GetVundle :call GetVundle()
 
 func! GetVim()                                                      " Get vim from: git clone git@github.com:b4winckler/vim.git
   if has('unix')
-    let vimgitcfg=expand('~/.vim/src/vim/.git/config')
-    if !filereadable(vimgitcfg)
-      execute 'silent !git clone git@github.com:b4winckler/vim.git "' . expand('~/.vim/vimsrc') . '"'
+    let vimsrc='~/.vim/vimsrc'
+    let vimgitcfg=expand(vimsrc . '/.git/config')
+    if filereadable(vimgitcfg)
+      echo 'vimsrc has exists at ' . expand(vimsrc)
+    else
+      execute 'silent !git clone git@github.com:b4winckler/vim.git "' . expand(vimsrc) . '"'
     end
   endif
 endfunc
+command! GetVim :call GetVim()
 
 func! RunResult()
   let mp = &makeprg
