@@ -4,8 +4,8 @@
 "        Author: Marslo
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
-"       Version: 0.0.19
-"    LastChange: 2014-01-18 05:01:22
+"       Version: 0.0.20
+"    LastChange: 2014-01-19 18:47:13
 " =============================================================================
 
 set nocompatible
@@ -63,6 +63,8 @@ Bundle 'git@github.com:Marslo/snipmate.vim.git'
 Bundle 'git@github.com:vim-scripts/Conque-Shell.git'
 Bundle 'git@github.com:vim-scripts/mru.vim.git'
 Bundle 'git@github.com:vim-scripts/taglist.vim.git'
+" For MySelf
+Bundle 'git@github.com:Marslo/MarsloFunc.git'
 " For Python
 " Bundle 'python-mode'
 Bundle 'git@github.com:vim-scripts/python_fold.git'
@@ -96,141 +98,19 @@ Bundle 'git@github.com:plasticboy/vim-markdown.git'
 " Bundle 'matrix.vim--Yang'
 filetype plugin indent on
 
-" ====================================== For Programming =====================================
-func! OpenCMD()
-  if has('win32') || has('win95') || has('win64')
-    if 'java' == &filetype
-      let com = '!cmd /c start "C:\Program Files\JPSoft\TCCLE13x64\tcc.exe" /d "' . expand('%:p:h') .'"'
-    else
-      let com = '!cmd /c start C:\Marslo\Tools\Software\System\CommandLine\Console2\Console.exe -d "'. expand('%:p:h') . '"'
-    endif
-  else
-    let com = '!/usr/bin/gnome-terminal --working-directory=' . expand('%:p:h')
-  endif
-  let saveit = ':w!'
-  echo 'Goto "' . expand('%:p:h') . '" in command line'
-  silent execute saveit
-  silent execute com
-endfunc
-nmap cmd :call OpenCMD()<CR>
-
-func! OpenFoler()
-  if has('win32') || has('win95') || has('win64')
-    let folderpath = expand('%:p:h')
-  endif
-  silent execute '!C:\Windows\explorer.exe "' . folderpath . '"'
-endfunc
-map <M-o> :call OpenFoler()<CR>
-
-func! GetVundle()                                                   " GetVundle() inspired by: http://pastebin.com/embed_iframe.php?i=C9fUE0M3
-  let vundleAlreadyExists=1
-  if has('win32') || has('win64')
-    let bud='$VIM\bundle'
-    let vud=bud . '\vundle'
-    let vudcfg=expand(vud . '\.git\config')
-  else
-    let bud='~/.vim/bundle'
-    let vud=bud . '/vundle'
-    let vudcfg=expand(vud . '/.git/config')
-  endif
-  if filereadable(vudcfg)
-    echo "Vundle has existed at " . expand(vud)
-  else
-    echo "Installing Vundle..."
-    echo ""
-    if isdirectory(expand(bud)) == 0
-      call mkdir(expand(bud), 'p')
-    endif
-    execute 'silent !git clone https://github.com/gmarik/vundle.git "' . expand(vud) . '"'
-    let vundleAlreadyExists=0
-  endif
-endfunc
-command! GetVundle :call GetVundle()
-
-func! GetVim()                                                      " Get vim from: git clone git@github.com:b4winckler/vim.git
-  if has('unix')
-    let vimsrc='~/.vim/vimsrc'
-    let vimgitcfg=expand(vimsrc . '/.git/config')
-    if filereadable(vimgitcfg)
-      echo 'vimsrc has exists at ' . expand(vimsrc)
-    else
-      execute 'silent !git clone git@github.com:b4winckler/vim.git "' . expand(vimsrc) . '"'
-    end
-  endif
-endfunc
-command! GetVim :call GetVim()
-
-func! RunResult()
-  let mp = &makeprg
-  let ef = &errorformat
-  let exeFile = expand("%:t")
-  exec "w"
-  if "python" == &filetype
-    setlocal makeprg=python\ -u
-  elseif "perl" == &filetype
-    setlocal makeprg=perl
-  elseif "ruby" == &filetype
-    setlocal makeprg=ruby
-  elseif "autohotkey" == &filetype
-    setlocal makeprg=AutoHotkey
-  endif
-  set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
-  silent make %
-  copen
-  let &makeprg     = mp
-  let &errorformat = ef
-endfunc
-
-function! GotoFile()                                                " Add suffix '.py' if the filetype is python
-  if 'python' == &filetype
-    let com = expand('%:p:h') . '\' . expand('<cfile>') . '.py'
-  else
-    let com = expand('<cfile>')
-  endif
-  silent execute ':e ' . com
-  echo 'Open file "' . com . '" under the cursor'
-endfunction
-nmap gf :call GotoFile()<CR>
-
-function! UpdateTags()                                              " Update tags file automatic
-  silent !ctags -R --fields=+ianS --extra=+q
-endfunction
-nmap <F12> :call UpdateTags()<CR>
-
+" ====================================== For My Function =====================================
+nmap cmd :call marslofunc#OpenCMD()<CR>
+map <M-o> :call marslofunc#OpenFoler()<CR>
+command! GetVundle :call marslofunc#GetVundle()
+command! GetVim :call marslofunc#GetVim()
+nmap gf :call marslofunc#GotoFile()<CR>
+nmap <F12> :call marslofunc#UpdateTags()<CR>
 if has('gui_running')
-  function! <SID>FontSize_Reduce()                                  " Reduce the font
-    if has('unix')
-      let pattern = '\<\d\+$'
-    elseif has('win32') || has('win95') || has('win64')
-      let pattern = ':h\zs\d\+\ze:'
-    endif
-    let fontsize = matchstr(&gfn, pattern)
-    echo fontsize
-    let cmd = substitute(&gfn, pattern, string(fontsize - 1), 'g')
-    let &gfn=cmd
-  endfunction
-  nnoremap <A--> :call <SID>FontSize_Reduce()<CR>
-
-  function! <SID>FontSize_Enlarge()                                 " Enlarge the font
-    if has('unix')
-      let pattern = '\<\d\+$'
-    elseif has('win32') || has('win95') || has('win64')
-      let pattern = ':h\zs\d\+\ze:'
-    endif
-    let fontsize = matchstr(&gfn, pattern)
-    let cmd = substitute(&gfn, pattern, string(fontsize + 1), 'g')
-    let &gfn=cmd
-  endfunction
-  nnoremap <A-+> :call <SID>FontSize_Enlarge()<CR>
+  nnoremap <A--> :call marslofunc#FontSize_Reduce()<CR>
+  nnoremap <A-+> :call marslofunc#FontSize_Enlarge()<CR>
 endif
 
-function! SynStack()
-  if !exists("*synstack")
-    return
-  endif
-  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-endfunction
-
+" ====================================== For Programming =====================================
 " Programming configs for Ruby and Rails
 let g:ruby_path=$RUBY_BIN
 if has("autocmd")
@@ -249,23 +129,9 @@ augroup end
 " Programming configs for Python
 au FileType python syn keyword pythonDecorator print self
 let python_highlight_all = 1                                        " syntax-python
-func! PylintCheck()                                                 " Run pylint
-  let mp = &makeprg
-  let ef = &errorformat
-  let exeFile = '"' . expand("%:t") . '"'
-  setlocal makeprg=pylint\ --reports=n\ --output-format=parseable
-  set efm=%A%f:%l:\ [%t%.%#]\ %m,%Z%p^^,%-C%.%#
-  silent make "%:p"
-  copen
-  let &makeprg     = mp
-  let &errorformat = ef
-endfunc
 
 " ====================================== For Inteface =====================================
 if has('gui_running')
-  func! MaximizeWindow()                                            " Make vim maximize while it startup
-    silent !wmctrl -r :ACTIVE: -b add,maximized_vert,maximized_horz
-  endfunc
   set go=                                                           " Hide everything (go = guioptions)
   set cpoptions+=n
   if has('win32') || has('win64')
@@ -445,17 +311,6 @@ let MRU_Exclude_Files='^/temp/.*'
 let MRU_Exclude_Files='^/media/.*'
 let MRU_Exclude_Files='^/mnt/.*'
 map <C-g> :MRU<CR>
-
-function! ResCur()                                                  " Remember Cursor position in last time, inspired from http://vim.wikia.com/wiki/VimTip80
-  if line("'\"") <= line("$")
-    normal! g`"
-    return 1
-  endif
-endfunction
-augroup resCur
-  autocmd!
-  autocmd BufWinEnter * call ResCur()
-augroup END
 
 augroup vimrc                                                       " For Folding
   au BufReadPre * setlocal foldmethod=indent

@@ -1,17 +1,11 @@
 " =============================================================================
-"       FileName: .vimrc
+"       FileName: vimrc_PublicEnv
 "           Desc:
 "         Author: Marslo
 "          Email: li.jiao@tieto.com
 "        Created: 2013-10-16 07:19:00
-"        Version: 0.0.7
-"     LastChange: 2014-01-18 01:59:55
-"        History:
-"                 0.0.1 | Marslo | init
-"                 0.0.4 | Marslo | Add Vim Bundle
-"                 0.0.5 | Marslo | Add GetVundle() and GetVim() and the configuration of WinManager
-"                 0.0.6 | Marslo | Change repositoy woainvzu to Marslo
-"                 0.0.7 | Marslo | Delete redundancy configures
+"        Version: 0.0.8
+"     LastChange: 2014-01-19 18:47:33
 " =============================================================================
 
 let &runtimepath=printf('%s/vimfiles,%s,%s/vimfiles/after', $VIM, $VIMRUNTIME, $VIM)
@@ -81,82 +75,19 @@ Bundle 'Marslo/MarsloVimOthers'
 Bundle 'plasticboy/vim-markdown.git'
 filetype plugin indent on
 
+" ====================================== For My Function =====================================
+nmap cmd :call marslofunc#OpenCMD()<CR>
+map <M-o> :call marslofunc#OpenFoler()<CR>
+command! GetVundle :call marslofunc#GetVundle()
+command! GetVim :call marslofunc#GetVim()
+nmap gf :call marslofunc#GotoFile()<CR>
+nmap <F12> :call marslofunc#UpdateTags()<CR>
+if has('gui_running')
+  nnoremap <A--> :call marslofunc#FontSize_Reduce()<CR>
+  nnoremap <A-+> :call marslofunc#FontSize_Enlarge()<CR>
+endif
+
 " ====================================== For Programming =====================================
-func! GetVundle()                                                   " GetVundle() inspired by: http://pastebin.com/embed_iframe.php?i=C9fUE0M3
-  let vundleAlreadyExists=1
-  if has('win32') || has('win64')
-    let bud='$VIM\bundle'
-    let vud=bud . '\vundle'
-    let vudcfg=expand(vud . '\.git\config')
-  else
-    let bud='~/.vim/bundle'
-    let vud=bud . '/vundle'
-    let vudcfg=expand(vud . '/.git/config')
-  endif
-  if filereadable(vudcfg)
-    echo "Vundle has existed at " . expand(vud)
-  else
-    echo "Installing Vundle..."
-    echo ""
-    if isdirectory(expand(bud)) == 0
-      call mkdir(expand(bud), 'p')
-    endif
-    execute 'silent !git clone https://github.com/gmarik/vundle.git "' . expand(vud) . '"'
-    let vundleAlreadyExists=0
-  endif
-endfunc
-command! GetVundle :call GetVundle()
-
-func! GetVim()                                                      " Get vim from: git clone git@github.com:b4winckler/vim.git
-  if has('unix')
-    let vimsrc='~/.vim/vimsrc'
-    let vimgitcfg=expand(vimsrc . '/.git/config')
-    if filereadable(vimgitcfg)
-      echo 'vimsrc has exists at ' . expand(vimsrc)
-    else
-      execute 'silent !git clone git@github.com:b4winckler/vim.git "' . expand(vimsrc) . '"'
-    end
-  endif
-endfunc
-command! GetVim :call GetVim()
-
-func! RunResult()
-  let mp = &makeprg
-  let ef = &errorformat
-  let exeFile = expand("%:t")
-  exec "w"
-  if "python" == &filetype
-    setlocal makeprg=python\ -u
-  elseif "perl" == &filetype
-    setlocal makeprg=perl
-  elseif "ruby" == &filetype
-    setlocal makeprg=ruby
-  elseif "autohotkey" == &filetype
-    setlocal makeprg=AutoHotkey
-  endif
-  set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
-  silent make %
-  copen
-  let &makeprg     = mp
-  let &errorformat = ef
-endfunc
-
-function! GotoFile()                                                " Add suffix '.py' if the filetype is python
-  if 'python' == &filetype
-    let com = expand('%:p:h') . '\' . expand('<cfile>') . '.py'
-  else
-    let com = expand('<cfile>')
-  endif
-  silent execute ':e ' . com
-  echo 'Open file "' . com . '" under the cursor'
-endfunction
-nmap gf :call GotoFile()<CR>
-
-function! UpdateTags()                                              " Update tags file automatic
-  silent !ctags -R --fields=+ianS --extra=+q
-endfunction
-nmap <F12> :call UpdateTags()<CR>
-
 " Programming configs for Ruby and Rails
 if has("autocmd")
   autocmd FileType ruby set omnifunc=rubycomplete#Complete
@@ -327,17 +258,6 @@ let MRU_Exclude_Files='^/temp/.*'
 let MRU_Exclude_Files='^/media/.*'
 let MRU_Exclude_Files='^/mnt/.*'
 map <C-g> :MRU<CR>
-
-function! ResCur()                                                  " Remember Cursor position in last time, inspired from http://vim.wikia.com/wiki/VimTip80
-  if line("'\"") <= line("$")
-    normal! g`"
-    return 1
-  endif
-endfunction
-augroup resCur
-  autocmd!
-  autocmd BufWinEnter * call ResCur()
-augroup END
 
 augroup vimrc                                                       " For Folding
   au BufReadPre * setlocal foldmethod=indent

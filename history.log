@@ -1,26 +1,27 @@
 " =============================================================================
-"       FileName: vimrc_PublicEnv
+"       FileName: history.log
 "           Desc: vimrc for public environment (Copy this rc file to ~/Marslo/.vimrc)
 "         Author: Marslo
-"          Email: li.jiao@tieto.com
+"          Email: marslo.jiao@gmail.com
 "        Created: 2013-10-16 07:19:00
-"        Version: 0.0.7
-"     LastChange: 2014-01-18 01:59:55
+"        Version: 0.0.8
+"     LastChange: 2014-01-19 18:35:56
 "        History:
 "                 0.0.1 | Marslo | init
 "                 0.0.4 | Marslo | Add Vim Bundle
 "                 0.0.5 | Marslo | Add GetVundle() and GetVim() and the configuration of WinManager
 "                 0.0.6 | Marslo | Change repositoy woainvzu to Marslo
 "                 0.0.7 | Marslo | Delete redundancy configures
+"                 0.0.8 | Marslo | Move all function to marslofunc.vim: https://github.com/Marslo/MarsloFunc. Inspird from http://stackoverflow.com/questions/21194354/how-can-i-reduce-startup-time-for-vim/21197543#21197543
 " =============================================================================
 
 " =============================================================================
-"      FileName: vimrc
+"      FileName: history.log
 "        Author: Marslo
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
-"       Version: 0.0.19
-"    LastChange: 2014-01-18 05:01:22
+"       Version: 0.0.20
+"    LastChange: 2014-01-19 18:35:56
 "       History:
 "                0.0.3 | Marslo | Add the Autoload and Fast Edit difference between win32 and non-win32
 "                0.0.4 | Marslo | Add CheckRubySyntax() function for checking and run ruby script
@@ -40,4 +41,5 @@
 "                0.0.17 | Marslo | Remove autopairs functions. Replaced by auto-pairs
 "                0.0.18 | Marslo | Delete redundancy configures from Windows vimrc
 "                0.0.19 | Marslo | Merge Linux configus and Windows. There are only one vimrc from now on.
+"                0.0.20 | Marslo | Move all function to marslofunc.vim: https://github.com/Marslo/MarsloFunc. Inspird from http://stackoverflow.com/questions/21194354/how-can-i-reduce-startup-time-for-vim/21197543#21197543
 " =============================================================================
