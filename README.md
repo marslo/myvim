@@ -39,27 +39,22 @@ MyVimConfig
     - Copy **vimrc** from `VimConfig\Configurations\vimrc` into `C:\Program Files\Vim`, and rename **vimrc** to **_vimrc**
     - Get [Vundle](https://github.com/gmarik/vundle.git) automatically
         - Open Vim and execute (Ignore warning and errors)
-            <pre><code>:call GetVundle()
-            </code></pre>
+            <pre><code>:GetVundle</code></pre>
     - Get the other plugins
-        <pre><code>:BundleInstall!
-        </code></pre>
+        <pre><code>:BundleInstall!</code></pre>
 
 - Linux User:
     - Copy **vimrc** from `VimConfig/Configurations/vimrc` into `$HOME`, and rename to **.vimrc**
-    <pre><code>$ cp vimrc ~/.vimrc
-    </code></pre>
+    <pre><code>$ cp vimrc ~/.vimrc</code></pre>
     - Get [Vundle](https://github.com/gmarik/vundle.git) automatically
         <pre><code>$ cat .vimrc | grep "set rtp"
             set rtp+=$VIM/vimfiles/bundle/vundle
             set rtp+=~/.vim/bunle/vundle
         </code></pre>
         - Open Vim and Run (Ignore warnings and errors):
-            <pre><code>:call GetVundle()
-            </code></pre>
+            <pre><code>:GetVundle</code></pre>
     - Get the other plugins
-        <pre><code>:BundleInstall!
-        </code></pre>
+        <pre><code>:BundleInstall!</code></pre>
 
 - Offline User:
     - For **vimrc** file
@@ -198,7 +193,7 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
     - 复制 **Configurations\vimrc** 到 `C:\Program Files (x86)\Vim`, 且重命名为`_vimrc`
     - 自动获取 [Vundle](https://github.com/gmarik/vundle.git)
         - 打开vim(忽略错误或警告)
-            <pre><code>:call GetVundle()
+            <pre><code>:GetVundle
             </code></pre>
     - 获取其他插件
         <pre><code>:BundleInstall!
@@ -210,7 +205,7 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
         </code></pre>
     - 自动获取 [Vundle](https://github.com/gmarik/vundle.git)
         - 打开Gvim且运行 (忽略错误或警告）：
-            <pre><code>:call GetVundle()
+            <pre><code>:GetVundle
             </code></pre>
     - 获取其他插件
         <pre><code>:BundleInstall!
