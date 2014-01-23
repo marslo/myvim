@@ -47,6 +47,9 @@ Bundle 'Conque-Shell'
 Bundle 'mru.vim'
 Bundle 'taglist.vim'
 Bundle 'winmanager'
+Bundle 'winmanager.git'
+" For MySelf
+Bundle 'Marslo/MarsloFunc.git'
 " For Python
 " Bundle 'python-mode'
 Bundle 'python_fold'
@@ -188,6 +191,11 @@ inoremap <M-f> <ESC><Space>Wi
 inoremap <M-b> <Esc>Bi
 inoremap <M-d> <ESC>cW
 
+nmap zdb :%s/\s\+$//<CR>
+nmap zhh :%s/^\s\+//<CR>
+nmap zmm :g/^/ s//\=line('.').' '/<CR>
+nmap zws :g/^\s*$/d<CR>
+
 " ====================================== For Function =====================================
 let g:ctrlp_map = '<c-p>'                                           " CtrlP
 let g:ctrlp_working_path_mode = 'ra'                                " Search parents as well (stop searching sartly)
@@ -212,11 +220,6 @@ if has('win32') || has('win95') || has('win64')
 else
   nmap <leader>tv :ConqueTermSplit bash <CR>
 endif
-
-nmap zdb :%s/\s\+$//<CR>
-nmap zhh :%s/^\s\+//<CR>
-nmap zmm :g/^/ s//\=line('.').' '/<CR>
-nmap zws :g/^\s*$/d<CR>
 
 let g:winManagerWidth = 20
 let g:winManagerWindowLayout='FileExplorer|TagList'

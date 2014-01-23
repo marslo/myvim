@@ -5,7 +5,7 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.20
-"    LastChange: 2014-01-19 18:47:13
+"    LastChange: 2014-01-23 18:14:42
 " =============================================================================
 
 set nocompatible
@@ -63,6 +63,7 @@ Bundle 'git@github.com:Marslo/snipmate.vim.git'
 Bundle 'git@github.com:vim-scripts/Conque-Shell.git'
 Bundle 'git@github.com:vim-scripts/mru.vim.git'
 Bundle 'git@github.com:vim-scripts/taglist.vim.git'
+Bundle 'git@github.com:vim-scripts/winmanager.git'
 " For MySelf
 Bundle 'git@github.com:Marslo/MarsloFunc.git'
 " For Python
@@ -93,7 +94,6 @@ Bundle 'git@github.com:Marslo/MarsloVimOthers.git'
 Bundle 'git@github.com:plasticboy/vim-markdown.git'
 " Bundle 'cakebaker/scss-syntax.vim'
 " For fun
-" Bundle 'git@github.com:vim-scripts/winmanager.git'
 " Bundle 'TeTrIs.vim'
 " Bundle 'matrix.vim--Yang'
 filetype plugin indent on
@@ -241,6 +241,11 @@ inoremap <M-f> <ESC><Space>Wi
 inoremap <M-b> <Esc>Bi
 inoremap <M-d> <ESC>cW
 
+nmap zdb :%s/\s\+$//<CR>
+nmap zhh :%s/^\s\+//<CR>
+nmap zmm :g/^/ s//\=line('.').' '/<CR>
+nmap zws :g/^\s*$/d<CR>
+
 " ====================================== For Function =====================================
 let g:ctrlp_map = '<c-p>'                                           " CtrlP
 let g:ctrlp_working_path_mode = 'ra'                                " Search parents as well (stop searching sartly)
@@ -265,11 +270,6 @@ if has('win32') || has('win95') || has('win64')
 else
   nmap <leader>tv :ConqueTermSplit bash <CR>
 endif
-
-nmap zdb :%s/\s\+$//<CR>
-nmap zhh :%s/^\s\+//<CR>
-nmap zmm :g/^/ s//\=line('.').' '/<CR>
-nmap zws :g/^\s*$/d<CR>
 
 let g:winManagerWidth = 20
 let g:winManagerWindowLayout='FileExplorer|TagList'
