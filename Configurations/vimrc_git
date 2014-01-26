@@ -100,9 +100,33 @@ Bundle 'git@github.com:plasticboy/vim-markdown.git'
 filetype plugin indent on
 
 " ====================================== For My Function =====================================
+function! GetVundle()                                                   " GetVundle() inspired by: http://pastebin.com/embed_iframe.php?i=C9fUE0M3
+  let vundleAlreadyExists=1
+  if has('win32') || has('win64')
+    let bud='$VIM\bundle'
+    let vud=bud . '\vundle'
+    let vudcfg=expand(vud . '\.git\config')
+  else
+    let bud='~/.vim/bundle'
+    let vud=bud . '/vundle'
+    let vudcfg=expand(vud . '/.git/config')
+  endif
+  if filereadable(vudcfg)
+    echo "Vundle has existed at " . expand(vud)
+  else
+    echo "Installing Vundle..."
+    echo ""
+    if isdirectory(expand(bud)) == 0
+      call mkdir(expand(bud), 'p')
+    endif
+    execute 'silent !git clone https://github.com/gmarik/vundle.git "' . expand(vud) . '"'
+    let vundleAlreadyExists=0
+  endif
+endfunction
+command! GetVundle :call GetVundle()
+
 nmap cmd :call marslofunc#OpenCMD()<CR>
 map <M-o> :call marslofunc#OpenFoler()<CR>
-command! GetVundle :call marslofunc#GetVundle()
 command! GetVim :call marslofunc#GetVim()
 nmap gf :call marslofunc#GotoFile()<CR>
 nmap <F12> :call marslofunc#UpdateTags()<CR>
