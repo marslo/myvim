@@ -431,3 +431,9 @@ Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
 - Soluction:
     <pre><code>$ sudo apt-get update && sudo apt-get install build-essential</code></pre>
 
+4.3 [Git clone https problem](http://stackoverflow.com/questions/10928215/git-push-error-fatal-unable-to-find-remote-helper-for-https/12012504#12012504)
+- Problem: 
+    <pre><code>"fatal: Unable to find remote helper for 'http'"</code></pre>
+- Soluction:
+    <pre><code>sudo apt-get install libcurl4-openssl-dev</code></pre>
+
