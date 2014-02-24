@@ -5,7 +5,7 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.20
-"    LastChange: 2014-01-19 18:47:02
+"    LastChange: 2014-02-24 19:42:20
 " =============================================================================
 
 set nocompatible
@@ -64,8 +64,10 @@ Bundle 'Conque-Shell'
 Bundle 'mru.vim'
 Bundle 'taglist.vim'
 Bundle 'winmanager'
-" For Myself
+" For MySelf
 Bundle 'Marslo/MarsloFunc'
+" For Groovy
+Bundle 'groovy.vim--Ruley'
 " For Python
 " Bundle 'python-mode'
 Bundle 'python_fold'

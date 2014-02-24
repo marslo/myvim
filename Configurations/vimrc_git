@@ -5,7 +5,7 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.20
-"    LastChange: 2014-01-23 18:14:42
+"    LastChange: 2014-02-24 19:38:14
 " =============================================================================
 
 set nocompatible
@@ -14,7 +14,6 @@ filetype plugin indent on
 set history=500
 set diffopt=filler,context:3
 runtime macros/matchit.vim
-set tags=.\tags
 if has('win32') || has('win64')
   behave mswin
   source $VIMRUNTIME/vimrc_example.vim
@@ -22,6 +21,7 @@ if has('win32') || has('win64')
   set viminfo=%,<800,'10,/50,:100,h,f0
   set nowrap                                                        " NoWrap lines
   language messages utf-8                                           " At Console
+  set tags=.\tags
   set tags+=C:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\tags
   set tags+=C:\Marslo\Job\Summa\TEX\SVN\viis-lab-scripts\tags
   set tags+=C:\Marslo\Job\Summa\TEX\SVN\tags
@@ -67,6 +67,9 @@ Bundle 'git@github.com:vim-scripts/taglist.vim.git'
 Bundle 'git@github.com:vim-scripts/winmanager.git'
 " For MySelf
 Bundle 'git@github.com:Marslo/MarsloFunc.git'
+" For Groovy
+Bundle 'git@github.com:vim-scripts/groovy.vim--Ruley.git'
+" Bundle 'git@github.com:mwaisgold/groovy-vim-files.git'
 " For Python
 " Bundle 'python-mode'
 Bundle 'git@github.com:vim-scripts/python_fold.git'
@@ -263,7 +266,7 @@ imap <C-a> <ESC>I
 map <C-e> <ESC>$
 imap <C-e> <ESC>A
 inoremap <M-f> <ESC><Space>Wi
-inoremap <M-b> <Esc>Bi
+inoremap <M-b> <ESC>Bi
 inoremap <M-d> <ESC>cW
 
 nmap zdb :%s/\s\+$//<CR>

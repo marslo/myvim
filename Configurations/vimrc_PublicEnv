@@ -5,7 +5,7 @@
 "          Email: li.jiao@tieto.com
 "        Created: 2013-10-16 07:19:00
 "        Version: 0.0.8
-"     LastChange: 2014-01-19 18:47:33
+"     LastChange: 2014-02-24 19:42:26
 " =============================================================================
 
 let &runtimepath=printf('%s/vimfiles,%s,%s/vimfiles/after', $VIM, $VIMRUNTIME, $VIM)
@@ -50,6 +50,8 @@ Bundle 'winmanager'
 Bundle 'winmanager.git'
 " For MySelf
 Bundle 'Marslo/MarsloFunc.git'
+" For Groovy
+Bundle 'groovy.vim--Ruley'
 " For Python
 " Bundle 'python-mode'
 Bundle 'python_fold'
