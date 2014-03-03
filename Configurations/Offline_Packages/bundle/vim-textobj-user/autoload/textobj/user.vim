@@ -1,6 +1,6 @@
 " textobj-user - Support for user-defined text objects
-" Version: 0.4.1
-" Copyright (C) 2007-2013 Kana Natsuno <http://whileimautomaton.net/>
+" Version: 0.5.0
+" Copyright (C) 2007-2014 Kana Natsuno <http://whileimautomaton.net/>
 " License: MIT license  {{{
 "     Permission is hereby granted, free of charge, to any person obtaining
 "     a copy of this software and associated documentation files (the
@@ -181,6 +181,41 @@ endfunction
 
 
 
+function! textobj#user#map(plugin_name, obj_specs, ...)  "{{{2
+  if a:0 == 0
+    " It seems to be directly called by user - a:obj_specs are not normalized.
+    call s:normalize(a:obj_specs)
+  endif
+  let banged_p = a:0 == 0 || a:1
+  for [obj_name, specs] in items(a:obj_specs)
+    for [spec_name, spec_info] in items(specs)
+      let rhs = s:interface_mapping_name(a:plugin_name, obj_name, spec_name)
+      if s:is_non_ui_property_name(spec_name)
+        " ignore
+      elseif spec_name =~# '^move-[npNP]$'
+        for lhs in spec_info
+          call s:map(banged_p, lhs, rhs)
+        endfor
+      elseif spec_name =~# '^select\(\|-[ai]\)$'
+        for lhs in spec_info
+          call s:objmap(banged_p, lhs, rhs)
+        endfor
+      else
+        throw printf('Unknown property: %s given to %s',
+        \            string(spec_name),
+        \            string(obj_name))
+      endif
+
+      unlet spec_info  " to avoid E706.
+    endfor
+  endfor
+
+  call s:define_failsafe_key_mappings(a:plugin_name, a:obj_specs)
+endfunction
+
+
+
+
 function! textobj#user#plugin(plugin_name, obj_specs)  "{{{2
   if a:plugin_name =~# '\L'
     throw '{plugin} contains non-lowercase alphabet: ' . string(a:plugin_name)
@@ -320,12 +355,16 @@ function s:plugin.new(plugin_name, obj_specs)
 endfunction
 
 function s:plugin.normalize()
-  call self.normalize_property_names()
-  call self.normalize_property_values()
+  call s:normalize(self.obj_specs)
 endfunction
 
-function s:plugin.normalize_property_names()
-  for spec in values(self.obj_specs)
+function s:normalize(obj_specs)
+  call s:normalize_property_names(a:obj_specs)
+  call s:normalize_property_values(a:obj_specs)
+endfunction
+
+function s:normalize_property_names(obj_specs)
+  for spec in values(a:obj_specs)
     for old_prop_name in keys(spec)
       if old_prop_name =~ '^\*.*\*$'
         let new_prop_name = substitute(old_prop_name, '^\*\(.*\)\*$', '\1', '')
@@ -336,8 +375,8 @@ function s:plugin.normalize_property_names()
   endfor
 endfunction
 
-function s:plugin.normalize_property_values()
-  for [obj_name, specs] in items(self.obj_specs)
+function s:normalize_property_values(obj_specs)
+  for [obj_name, specs] in items(a:obj_specs)
     for [spec_name, spec_info] in items(specs)
       if s:is_ui_property_name(spec_name)
         if type(spec_info) == type('')
@@ -368,38 +407,27 @@ endfunction
 
 
 function! s:plugin.define_default_key_mappings(banged_p)  "{{{3
-  for [obj_name, specs] in items(self.obj_specs)
-    for [spec_name, spec_info] in items(specs)
-      let rhs = self.interface_mapping_name(obj_name, spec_name)
-      if s:is_non_ui_property_name(spec_name)
-        " ignore
-      elseif spec_name =~# '^move-[npNP]$'
-        for lhs in spec_info
-          call s:map(a:banged_p, lhs, rhs)
-        endfor
-      elseif spec_name =~# '^select\(\|-[ai]\)$'
-        for lhs in spec_info
-          call s:objmap(a:banged_p, lhs, rhs)
-        endfor
-      else
-        throw printf('Unknown property: %s given to %s',
-        \            string(spec_name),
-        \            string(obj_name))
-      endif
-
-      unlet spec_info  " to avoid E706.
-    endfor
-  endfor
+  call textobj#user#map(self.name, self.obj_specs, a:banged_p)
 endfunction
 
 
 function! s:plugin.define_interface_key_mappings()  "{{{3
-  let RHS_PATTERN = ':<C-u>call g:__textobj_' . self.name . '.%s'
-  \                 . '("%s", "%s", "<mode>")<Return>'
-  let RHS_FUNCTION = ':<C-u>call <SID>select_function_wrapper('
-  \                  .   'g:__textobj_' . self.name . '.obj_specs["%s"]["%s"],'
-  \                  .   '"<mode>"'
-  \                  . ')<Return>'
+  let RHS_PATTERN =
+  \   ':<C-u>call g:__textobj_' . self.name . '.%s('
+  \ .   '"%s",'
+  \ .   '"%s",'
+  \ .   '"<mode>"'
+  \ . ')<Return>'
+  let RHS_SELECT_FUNCTION =
+  \   ':<C-u>call <SID>select_function_wrapper('
+  \ .   'g:__textobj_' . self.name . '.obj_specs["%s"]["%s"],'
+  \ .   '"<mode>"'
+  \ . ')<Return>'
+  let RHS_MOVE_FUNCTION =
+  \   ':<C-u>call <SID>move_function_wrapper('
+  \ .   'g:__textobj_' . self.name . '.obj_specs["%s"]["%s"],'
+  \ .   '"%s"'
+  \ . ')<Return>'
 
   for [obj_name, specs] in items(self.obj_specs)
     for spec_name in filter(keys(specs), 's:is_ui_property_name(v:val)')
@@ -409,7 +437,11 @@ function! s:plugin.define_interface_key_mappings()  "{{{3
       " rhs
       let _ = spec_name . '-function'
       if has_key(specs, _)
-        let rhs = printf(RHS_FUNCTION, obj_name, _)
+        if spec_name =~# '^select'
+          let rhs = printf(RHS_SELECT_FUNCTION, obj_name, _)
+        else
+          let rhs = printf(RHS_MOVE_FUNCTION, obj_name, _, spec_name)
+        endif
       elseif has_key(specs, 'pattern')
         if spec_name =~# '^move-[npNP]$'
           let flags = ''
@@ -444,8 +476,13 @@ endfunction
 
 
 function! s:plugin.interface_mapping_name(obj_name, spec_name)  "{{{3
+  return s:interface_mapping_name(self.name, a:obj_name, a:spec_name)
+endfunction
+
+
+function! s:interface_mapping_name(plugin_name, obj_name, spec_name)  "{{{3
   let _ = printf('<Plug>(textobj-%s-%s-%s)',
-  \              self.name,
+  \              a:plugin_name,
   \              a:obj_name,
   \              substitute(a:spec_name, '^\(move\|select\)', '', ''))
   let _ = substitute(_, '-\+', '-', 'g')
@@ -518,6 +555,24 @@ function! s:select_function_wrapper(function_name, previous_mode)
     \   s:gpos_to_spos(end_position),
     \   motion_type
     \ )
+  endif
+endfunction
+
+
+
+
+" "move-function" wrapper  "{{{3
+function! s:move_function_wrapper(function_name, spec_name)
+  let ORIG_POS = s:gpos_to_spos(getpos('.'))
+
+  let _ = function(a:function_name)()
+  if _ is 0
+    call cursor(ORIG_POS)
+  else
+    " FIXME: Support motion_type.  But unlike selecting a text object, the
+    " motion_type must be known before calling a user-given function.
+    let [motion_type, start_position, end_position] = _
+    call setpos('.', a:spec_name =~# '[np]$' ? start_position : end_position)
   endif
 endfunction
 
@@ -633,6 +688,30 @@ let s:non_ui_property_names = [
 
 function! s:is_non_ui_property_name(name)
   return 0 <= index(s:non_ui_property_names, a:name)
+endfunction
+
+
+function! s:define_failsafe_key_mappings(plugin_name, obj_specs)
+  for [obj_name, specs] in items(a:obj_specs)
+    for [spec_name, spec_info] in items(specs)
+      if !s:is_non_ui_property_name(spec_name)
+        let lhs = s:interface_mapping_name(a:plugin_name, obj_name, spec_name)
+        if maparg(lhs, 'v') == ''
+          let rhs = printf('<SID>fail(%s)',
+          \                string(substitute(lhs, '<', '<LT>', 'g')))
+          let mapf = spec_name =~# '^move-[npNP]$'
+          \          ? 's:noremap'
+          \          : 's:objnoremap'
+          call {mapf}(0, '<expr>' . lhs, rhs)
+        endif
+      endif
+      unlet spec_info  " to avoid E706.
+    endfor
+  endfor
+endfunction
+
+function! s:fail(interface_key_mapping_lhs)
+  throw printf('Text object %s is not defined', a:interface_key_mapping_lhs)
 endfunction
 
 

@@ -746,8 +746,12 @@ function! s:readable_calculate_file_type() dict abort
     let r = "test-functional"
   elseif f =~ '\<test/integration/.*_test\.rb$'
     let r = "test-integration"
+  elseif f =~ '\<test/lib/.*_test\.rb$'
+    let r = "test-lib"
   elseif f =~ '\<test/\w*s/.*_test\.rb$'
     let r = s:sub(f,'.*<test/(\w*)s/.*','test-\1')
+  elseif f =~ '\<test/.*_test\.rb'
+    let r = "test"
   elseif f =~ '\<spec/lib/.*_spec\.rb$'
     let r = 'spec-lib'
   elseif f =~ '\<lib/.*\.rb$'
@@ -770,8 +774,6 @@ function! s:readable_calculate_file_type() dict abort
     endif
   elseif f =~ '\<\%(test\|spec\)/\%(factories\|fabricators\)\>'
     let r = "fixtures-replacement"
-  elseif f =~ '\<test/.*_test\.rb'
-    let r = "test"
   elseif f =~ '\<spec/.*_spec\.rb'
     let r = "spec"
   elseif f =~ '\<spec/support/.*\.rb'
@@ -839,6 +841,18 @@ function! s:app_default_locale() dict abort
   return self.cache.get('default_locale')
 endfunction
 
+function! s:app_stylesheet_suffix() dict abort
+  if self.cache.needs('stylesheet_suffix')
+    let default = self.has_gem('sass-rails') ? '.css.scss' : '.css'
+    let candidates = map(filter(
+          \ s:readfile(self.path('config/application.rb')),
+          \ 'v:val =~ "^ *config.sass.preferred_syntax *= *:[A-Za-z-]\\+ *$"'
+          \ ), '".css.".matchstr(v:val,"[A-Za-z-]\\+\\ze *$")')
+    call self.cache.set('stylesheet_suffix', get(candidates, 0, default))
+  endif
+  return self.cache.get('stylesheet_suffix')
+endfunction
+
 function! s:app_has(feature) dict
   let map = {
         \'test': 'test/',
@@ -865,7 +879,7 @@ function! s:app_test_suites() dict
   return filter(['test','spec'],'self.has(v:val)')
 endfunction
 
-call s:add_methods('app',['default_locale','environments','file','has','test_suites'])
+call s:add_methods('app',['default_locale','environments','file','has','stylesheet_suffix','test_suites'])
 call s:add_methods('file',['path','name','lines','getline'])
 call s:add_methods('buffer',['app','number','path','name','lines','getline','type_name'])
 call s:add_methods('readable',['app','relative','absolute','spec','calculate_file_type','type_name','line_count'])
@@ -2620,7 +2634,7 @@ function! s:CommandEdit(cmd, name, projections, ...)
   endif
 endfunction
 
-function! s:LegacyCommandEdit(cmd,name,target,prefix,suffix)
+function! s:LegacyCommandEdit(cmd, target, prefix, suffix)
   let cmd = s:findcmdfor(a:cmd)
   if a:target == ""
     return s:error("E471: Argument required")
@@ -2865,17 +2879,19 @@ endfunction
 function! s:stylesheetEdit(cmd,...)
   let name = a:0 ? a:1 : s:controller(1)
   if rails#app().has('sass') && rails#app().has_file('public/stylesheets/sass/'.name.'.sass')
-    return s:LegacyCommandEdit(a:cmd,"stylesheet",name,"public/stylesheets/sass/",".sass")
+    return s:LegacyCommandEdit(a:cmd,name,"public/stylesheets/sass/",".sass")
   elseif rails#app().has('sass') && rails#app().has_file('public/stylesheets/sass/'.name.'.scss')
-    return s:LegacyCommandEdit(a:cmd,"stylesheet",name,"public/stylesheets/sass/",".scss")
+    return s:LegacyCommandEdit(a:cmd,name,"public/stylesheets/sass/",".scss")
   elseif rails#app().has('lesscss') && rails#app().has_file('app/stylesheets/'.name.'.less')
-    return s:LegacyCommandEdit(a:cmd,"stylesheet",name,"app/stylesheets/",".less")
+    return s:LegacyCommandEdit(a:cmd,name,"app/stylesheets/",".less")
   else
     let types = rails#app().relglob('app/assets/stylesheets/'.name,'.*','')
     if !empty(types)
-      return s:LegacyCommandEdit(a:cmd,'stylesheet',name,'app/assets/stylesheets/',types[0])
+      return s:LegacyCommandEdit(a:cmd,name,'app/assets/stylesheets/',types[0])
+    elseif !isdirectory(rails#app().path('app/assets/stylesheets'))
+      return s:LegacyCommandEdit(a:cmd,name,'public/stylesheets/','.css')
     else
-      return s:LegacyCommandEdit(a:cmd,'stylesheet',name,'public/stylesheets/','.css')
+      return s:LegacyCommandEdit(a:cmd,name,'app/assets/stylesheets/',rails#app().stylesheet_suffix())
     endif
   endif
 endfunction
@@ -2883,15 +2899,19 @@ endfunction
 function! s:javascriptEdit(cmd,...)
   let name = a:0 ? a:1 : s:controller(1)
   if rails#app().has('coffee') && rails#app().has_file('app/scripts/'.name.'.coffee')
-    return s:LegacyCommandEdit(a:cmd,'javascript',name,'app/scripts/','.coffee')
+    return s:LegacyCommandEdit(a:cmd,name,'app/scripts/','.coffee')
   elseif rails#app().has('coffee') && rails#app().has_file('app/scripts/'.name.'.js')
-    return s:LegacyCommandEdit(a:cmd,'javascript',name,'app/scripts/','.js')
+    return s:LegacyCommandEdit(a:cmd,name,'app/scripts/','.js')
   else
     let types = rails#app().relglob('app/assets/javascripts/'.name,'.*','')
     if !empty(types)
-      return s:LegacyCommandEdit(a:cmd,'javascript',name,'app/assets/javascripts/',types[0])
+      return s:LegacyCommandEdit(a:cmd,name,'app/assets/javascripts/',types[0])
+    elseif !isdirectory(rails#app().path('app/assets/javascripts'))
+      return s:LegacyCommandEdit(a:cmd,name,'public/javascripts/','.js')
+    elseif rails#app().has_gem('coffee-rails')
+      return s:LegacyCommandEdit(a:cmd,name,'app/assets/javascripts/','.js.coffee')
     else
-      return s:LegacyCommandEdit(a:cmd,'javascript',name,'public/javascripts/','.js')
+      return s:LegacyCommandEdit(a:cmd,name,'app/assets/javascripts/','.js')
     endif
   endif
 endfunction
@@ -3219,7 +3239,9 @@ function! s:readable_alternate_candidates(...) dict abort
     return ['db/schema.rb', 'db/'.s:environment().'_structure.sql']
   elseif self.type_name('test')
     let app_file = s:sub(s:sub(f, '<test/', 'app/'), '_test\.rb$', '.rb')
-    if app_file =~# '\<app/unit/helpers/'
+    if app_file =~# '\<app/lib/'
+      return [s:sub(app_file,'<app/lib/','lib/')]
+    elseif app_file =~# '\<app/unit/helpers/'
       return [s:sub(app_file,'<app/unit/helpers/','app/helpers/')]
     elseif app_file =~# '\<app/functional/.*_controller\.rb'
       return [s:sub(app_file,'<app/functional/','app/controllers/')]
@@ -3448,6 +3470,8 @@ function! s:invertrange(beg,end)
       let add = s:migspc(line).'change_column'.s:mextargs(line,2).s:mkeep(line)
     elseif line =~ '\<change_column_default\>'
       let add = s:migspc(line).'change_column_default'.s:mextargs(line,2).s:mkeep(line)
+    elseif line =~ '\<change_column_null\>'
+      let add = s:migspc(line).'change_column_null'.s:mextargs(line,2).s:mkeep(line)
     elseif line =~ '\.update_all(\(["'."'".']\).*\1)$' || line =~ '\.update_all \(["'."'".']\).*\1$'
       " .update_all('a = b') => .update_all('b = a')
       let pre = matchstr(line,'^.*\.update_all[( ][}'."'".'"]')
@@ -3623,7 +3647,7 @@ function! s:BufSyntax()
   if !exists("g:rails_no_syntax")
     let buffer = rails#buffer()
     let javascript_functions = "$ jQuery"
-    let classes = s:gsub(join(rails#app().user_classes(),' '),'::',' ')
+    let classes = join(rails#app().user_classes(),'\|')
     if &syntax == 'ruby'
       let keywords = split(join(buffer.projected('keywords'), ' '))
       let special = filter(copy(keywords), 'v:val =~# ''^\h\k*[?!]$''')
@@ -3634,8 +3658,8 @@ function! s:BufSyntax()
       if !empty(regular)
         exe 'syn keyword rubyRailsMethod '.join(regular, ' ')
       endif
-      if classes != ''
-        exe "syn keyword rubyRailsUserClass ".classes." containedin=rubyClassDeclaration,rubyModuleDeclaration,rubyClass,rubyModule"
+      if !empty(classes)
+        exe 'syn match rubyRailsUserClass +\<\%('.classes.'\)\>+ containedin=rubyClassDeclaration,rubyModuleDeclaration,rubyClass,rubyModule'
       endif
       if buffer.type_name() == ''
         syn keyword rubyRailsMethod params request response session headers cookies flash
@@ -3680,7 +3704,7 @@ function! s:BufSyntax()
       endif
       if buffer.type_name('db-migration','db-schema')
         syn keyword rubyRailsMigrationMethod create_table change_table drop_table rename_table create_join_table drop_join_table
-        syn keyword rubyRailsMigrationMethod add_column rename_column change_column change_column_default remove_column remove_columns
+        syn keyword rubyRailsMigrationMethod add_column rename_column change_column change_column_default change_column_null remove_column remove_columns
         syn keyword rubyRailsMigrationMethod add_timestamps remove_timestamps
         syn keyword rubyRailsMigrationMethod add_reference remove_reference add_belongs_to remove_belongs_to
         syn keyword rubyRailsMigrationMethod add_index remove_index rename_index
@@ -3754,8 +3778,8 @@ function! s:BufSyntax()
 
     elseif &syntax =~# '^eruby\>' || &syntax == 'haml'
       syn case match
-      if classes != ''
-        exe 'syn keyword '.&syntax.'RailsUserClass '.classes.' contained containedin=@'.&syntax.'RailsRegions'
+      if !empty(classes)
+        exe 'syn match '.&syntax.'RailsUserClass +\<\%('.classes.'\)\>+ containedin=@'.&syntax.'RailsRegions'
       endif
       if &syntax == 'haml'
         exe 'syn cluster hamlRailsRegions contains=hamlRubyCodeIncluded,hamlRubyCode,hamlRubyHash,@hamlEmbeddedRuby,rubyInterpolation'
@@ -4532,10 +4556,11 @@ augroup railsPluginAuto
   autocmd User BufEnterRails call s:BufDatabase(-1)
   autocmd User dbextPreConnection call s:BufDatabase(1)
   autocmd BufWritePost */config/database.yml      call rails#cache_clear("dbext_settings")
-  autocmd BufWritePost */config/editor.json       call rails#cache_clear("config")
+  autocmd BufWritePost */config/projections.json  call rails#cache_clear("projections")
   autocmd BufWritePost */test/test_helper.rb      call rails#cache_clear("user_assertions")
   autocmd BufWritePost */config/routes.rb         call rails#cache_clear("named_routes")
   autocmd BufWritePost */config/application.rb    call rails#cache_clear("default_locale")
+  autocmd BufWritePost */config/application.rb    call rails#cache_clear("stylesheet_suffix")
   autocmd BufWritePost */config/environments/*.rb call rails#cache_clear("environments")
   autocmd BufWritePost */tasks/**.rake            call rails#cache_clear("rake_tasks")
   autocmd BufWritePost */generators/**            call rails#cache_clear("generators")

@@ -5,7 +5,7 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.20
-"    LastChange: 2014-02-24 19:38:14
+"    LastChange: 2014-03-03 17:15:54
 " =============================================================================
 
 set nocompatible
@@ -65,7 +65,9 @@ Bundle 'git@github.com:vim-scripts/Conque-Shell.git'
 Bundle 'git@github.com:vim-scripts/mru.vim.git'
 Bundle 'git@github.com:vim-scripts/taglist.vim.git'
 Bundle 'git@github.com:vim-scripts/winmanager.git'
-" For MySelf
+" For Moving faster
+Bundle 'git@github.com:rhysd/accelerated-jk.git'
+" For Loading my function after vim start (reduce vim start time)
 Bundle 'git@github.com:Marslo/MarsloFunc.git'
 " For Groovy
 Bundle 'git@github.com:vim-scripts/groovy.vim--Ruley.git'
@@ -268,6 +270,9 @@ imap <C-e> <ESC>A
 inoremap <M-f> <ESC><Space>Wi
 inoremap <M-b> <ESC>Bi
 inoremap <M-d> <ESC>cW
+nnoremap Y y$
+nnoremap <Del> "_x
+xnoremap <Del> "_d
 
 nmap zdb :%s/\s\+$//<CR>
 nmap zhh :%s/^\s\+//<CR>
@@ -380,6 +385,9 @@ let SuperTabMappingTabLiteral = '<Tab>'
 let SuperTabClosePreviewOnPopupClose = 1
 
 match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
+
+nmap j <Plug>(accelerated_jk_gj)
+nmap k <Plug>(accelerated_jk_gk)
 
 autocmd BufWinLeave * silent! mkview                                " Load view automatic
 autocmd BufWinEnter * silent! loadview

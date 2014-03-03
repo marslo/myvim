@@ -48,8 +48,10 @@ Bundle 'mru.vim'
 Bundle 'taglist.vim'
 Bundle 'winmanager'
 Bundle 'winmanager.git'
-" For MySelf
-Bundle 'Marslo/MarsloFunc.git'
+" For Moving faster
+Bundle 'rhysd/accelerated-jk'
+" For Loading my function after vim start (reduce vim start time)
+Bundle 'Marslo/MarsloFunc'
 " For Groovy
 Bundle 'groovy.vim--Ruley'
 " For Python

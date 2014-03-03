@@ -5,7 +5,7 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.20
-"    LastChange: 2014-02-24 19:42:20
+"    LastChange: 2014-03-03 17:15:54
 " =============================================================================
 
 set nocompatible
@@ -64,7 +64,9 @@ Bundle 'Conque-Shell'
 Bundle 'mru.vim'
 Bundle 'taglist.vim'
 Bundle 'winmanager'
-" For MySelf
+" For Moving faster
+Bundle 'rhysd/accelerated-jk'
+" For Loading my function after vim start (reduce vim start time)
 Bundle 'Marslo/MarsloFunc'
 " For Groovy
 Bundle 'groovy.vim--Ruley'
@@ -265,8 +267,11 @@ imap <C-a> <ESC>I
 map <C-e> <ESC>$
 imap <C-e> <ESC>A
 inoremap <M-f> <ESC><Space>Wi
-inoremap <M-b> <Esc>Bi
+inoremap <M-b> <ESC>Bi
 inoremap <M-d> <ESC>cW
+nnoremap Y y$
+nnoremap <Del> "_x
+xnoremap <Del> "_d
 
 nmap zdb :%s/\s\+$//<CR>
 nmap zhh :%s/^\s\+//<CR>
@@ -379,6 +384,9 @@ let SuperTabMappingTabLiteral = '<Tab>'
 let SuperTabClosePreviewOnPopupClose = 1
 
 match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
+
+nmap j <Plug>(accelerated_jk_gj)
+nmap k <Plug>(accelerated_jk_gk)
 
 autocmd BufWinLeave * silent! mkview                                " Load view automatic
 autocmd BufWinEnter * silent! loadview

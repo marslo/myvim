@@ -2,6 +2,16 @@ marslo.vim
 ==========
 The vim color configurate by Marslo, including 256 and 16
 
+## Screenshot:
+- Windows (Gvim [Python]):
+![windows](https://github.com/Marslo/marslo.vim/blob/master/Screenshots/my256colors.png?raw=true)
+- Linux (Terminal [HTML])
+![Linux Termianl](https://github.com/Marslo/VimConfig/blob/master/Screenshots/Screenhost_Linux_Terminal.png?raw=true)
+- Linux (Gvim  [CSS])
+![Linux Gvim](https://github.com/Marslo/VimConfig/blob/master/Screenshots/Screenhost_Linux_Gvim.png?raw=true)
+- PuTTy (vimrc)
+![PuTTy](https://github.com/Marslo/VimConfig/blob/master/Screenshots/screenshot_PuTTy.png?raw=true)
+
 ## Context
 - [Usage](https://github.com/Marslo/marslo.vim#usage)
   - [Installation](https://github.com/Marslo/marslo.vim#installation):
@@ -119,11 +129,6 @@ The vim color configurate by Marslo, including 256 and 16
       colorscheme marslo16
     endif
     </code></pre>
-
-## Screenshot:
-- Windows:
-![windows](https://github.com/Marslo/marslo.vim/blob/master/Screenshots/my256colors.png?raw=true)
-- Linux:
 
 ## Documents about vim color:
 - [rgb.txt](http://fugal.net/vim/rgbtxt.html) | [Name with RGB hexadecimal number](https://github.com/Marslo/MarsloVimOthers/blob/master/AboutGvimColors/rgb/myrgb.txt)

@@ -17,6 +17,7 @@ g:tagbar_compact	tagbar.txt	/*g:tagbar_compact*
 g:tagbar_ctags_bin	tagbar.txt	/*g:tagbar_ctags_bin*
 g:tagbar_expand	tagbar.txt	/*g:tagbar_expand*
 g:tagbar_foldlevel	tagbar.txt	/*g:tagbar_foldlevel*
+g:tagbar_hide_nonpublic	tagbar.txt	/*g:tagbar_hide_nonpublic*
 g:tagbar_iconchars	tagbar.txt	/*g:tagbar_iconchars*
 g:tagbar_indent	tagbar.txt	/*g:tagbar_indent*
 g:tagbar_left	tagbar.txt	/*g:tagbar_left*
@@ -29,6 +30,7 @@ g:tagbar_status_func	tagbar.txt	/*g:tagbar_status_func*
 g:tagbar_systemenc	tagbar.txt	/*g:tagbar_systemenc*
 g:tagbar_updateonsave_maxlines	tagbar.txt	/*g:tagbar_updateonsave_maxlines*
 g:tagbar_width	tagbar.txt	/*g:tagbar_width*
+g:tagbar_zoomwidth	tagbar.txt	/*g:tagbar_zoomwidth*
 tagbar	tagbar.txt	/*tagbar*
 tagbar-autoopen	tagbar.txt	/*tagbar-autoopen*
 tagbar-commands	tagbar.txt	/*tagbar-commands*

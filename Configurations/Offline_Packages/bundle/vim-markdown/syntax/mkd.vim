@@ -15,7 +15,10 @@ if version < 600
   so <sfile>:p:h/html.vim
 else
   runtime! syntax/html.vim
-  unlet b:current_syntax
+
+  if exists('b:current_syntax')
+    unlet b:current_syntax
+  endif
 endif
 
 if version < 600
@@ -66,7 +69,7 @@ syn match  mkdLineBreak    /  \+$/
 syn region mkdBlockquote   start=/^\s*>/                   end=/$/ contains=mkdLineBreak,mkdLineContinue,@Spell
 syn region mkdCode         start=/\(\([^\\]\|^\)\\\)\@<!`/ end=/\(\([^\\]\|^\)\\\)\@<!`/
 syn region mkdCode         start=/\s*``[^`]*/              end=/[^`]*``\s*/
-syn region mkdCode         start=/^```\s*[0-9A-Za-z_-]*\s*$/          end=/^```\s*$/
+syn region mkdCode         start=/^\s*```\s*[0-9A-Za-z_-]*\s*$/          end=/^\s*```\s*$/
 syn region mkdCode         start="<pre[^>]*>"              end="</pre>"
 syn region mkdCode         start="<code[^>]*>"             end="</code>"
 syn region mkdFootnote     start="\[^"                     end="\]"
@@ -74,7 +77,7 @@ syn match  mkdCode         /^\s*\n\(\(\s\{8,}[^ ]\|\t\t\+[^\t]\).*\n\)\+/
 syn match  mkdIndentCode   /^\s*\n\(\(\s\{4,}[^ ]\|\t\+[^\t]\).*\n\)\+/ contained
 syn match  mkdListItem     "^\s*[-*+]\s\+"
 syn match  mkdListItem     "^\s*\d\+\.\s\+"
-syn region mkdNonListItemBlock start="\n\(\_^\_$\|\s\{4,}[^ ]\|\t+[^\t]\)\@!" end="^\(\s*\([-*+]\|\d\+\.\)\s\+\)\@=" contains=@mkdNonListItem
+syn region mkdNonListItemBlock start="\n\(\_^\_$\|\s\{4,}[^ ]\|\t+[^\t]\)\@!" end="^\(\s*\([-*+]\|\d\+\.\)\s\+\)\@=" contains=@mkdNonListItem,@Spell
 syn match  mkdRule         /^\s*\*\s\{0,1}\*\s\{0,1}\*$/
 syn match  mkdRule         /^\s*-\s\{0,1}-\s\{0,1}-$/
 syn match  mkdRule         /^\s*_\s\{0,1}_\s\{0,1}_$/
