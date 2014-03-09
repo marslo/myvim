@@ -39,7 +39,6 @@ let mapleader=","
 let g:mapleader=","
 
 " Vim Bundle
-set nocompatible
 filetype off
 if has('win32') || has('win64')
   set rtp+=$VIM/bundle/vundle

@@ -27,7 +27,6 @@ let mapleader=","
 let g:mapleader=","
 
 " Vim Bundle
-set nocompatible
 filetype off
 set rtp+=$HOME/Marslo/.vim/bundle/vundle
 call vundle#rc('$HOME/Marslo/.vim/bundle')
