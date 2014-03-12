@@ -15,11 +15,12 @@ let &runtimepath=printf('%s/.vim,%s/.vim,%s/.vim/after', s:portable, &runtimepat
 " let $runtimepath=~s:portable/.vim,usr/local/share/vim/vimfiles,/usr/local/share/vim/vim74,/usr/local/share/vim/vimfiles/after,/home/auto/.vim/after
 
 set nocompatible
+set viminfo=%,<100,'10,/50,:100,h,f0,n~/.vim/cache/.viminfo
 syntax enable on
 filetype plugin indent on
 set history=500
 set diffopt=filler,context:3
-set nowrap                                                        " NoWrap lines
+set wrap                                                        " NoWrap lines
 set tags=.\tags
 
 " ====================================== For Property =====================================
@@ -28,8 +29,8 @@ let g:mapleader=","
 
 " Vim Bundle
 filetype off
-set rtp+=$HOME/Marslo/.vim/bundle/vundle
-call vundle#rc('$HOME/Marslo/.vim/bundle')
+set rtp+=~/.vim/bundle/vundle
+call vundle#rc()
 
 Bundle 'gmarik/vundle'
 Bundle 'Yggdroot/indentLine'
@@ -84,15 +85,9 @@ filetype plugin indent on
 " ====================================== For My Function =====================================
 function! GetVundle()                                                   " GetVundle() inspired by: http://pastebin.com/embed_iframe.php?i=C9fUE0M3
   let vundleAlreadyExists=1
-  if has('win32') || has('win64')
-    let bud='$VIM\bundle'
-    let vud=bud . '\vundle'
-    let vudcfg=expand(vud . '\.git\config')
-  else
-    let bud='~/.vim/bundle'
-    let vud=bud . '/vundle'
-    let vudcfg=expand(vud . '/.git/config')
-  endif
+  let bud='~/.vim/bundle'
+  let vud=bud . '/vundle'
+  let vudcfg=expand(vud . '/.git/config')
   if filereadable(vudcfg)
     echo "Vundle has existed at " . expand(vud)
   else
@@ -153,8 +148,13 @@ endif
 autocmd! bufwritepost $HOME/Marslo/.vimrc source %
 nmap <leader>v :e $HOME/Marslo/.vimrc<CR>
 set guifont=Monaco\ 12
+set clipboard=unnamedplus
+
+set iskeyword+=.
 set autochdir
 set encoding=utf-8                                                  " Input Chinese (=cp936)
+set selection=exclusive                                             " Mouse Settings
+set selectmode=mouse,key
 set nobackup noswapfile nowritebackup
 set ruler number                                                    " ruler: Show Line and colum number; number: line number
 set report=0
@@ -186,7 +186,7 @@ set wildmode=longest,list,full                                      " Completion
 set wildignore+=*.swp,*.zip,*.exe
 set noerrorbells novisualbell                                       " turn off error beep/flash
 set t_vb=
-set list listchars=tab:\ \ ,trail:.,extends:>,precedes:<,nbsp:.
+set list listchars=tab:\ \ ,trail:·,extends:»,precedes:«,nbsp:·
 set cursorline                                                      " Highlight the current line
 set guicursor=a:hor1
 set guicursor+=i-r-ci-cr-o:hor2-blinkon0
@@ -202,14 +202,13 @@ set foldlevel=100                                                   " Not fold w
 set viewoptions=folds
 set backspace=indent,eol,start                                      " make backspace h, l, etc wrap to
 set whichwrap+=<,>,h,l
+set cryptmethod=blowfish
 
 noremap <F1> <ESC>
 imap <F1> <ESC>a
 map ,bd :bd<CR>
 map <C-k> <C-w>k
-map <C-h> <C-w>h
 map <C-j> <C-w>j
-map <C-l> <C-w>l
 map <C-a> <ESC>^
 imap <C-a> <ESC>I
 map <C-e> <ESC>$
@@ -217,6 +216,9 @@ imap <C-e> <ESC>A
 inoremap <M-f> <ESC><Space>Wi
 inoremap <M-b> <Esc>Bi
 inoremap <M-d> <ESC>cW
+nnoremap Y y$
+nnoremap <Del> "_x
+xnoremap <Del> "_d
 
 nmap zdb :%s/\s\+$//<CR>
 nmap zhh :%s/^\s\+//<CR>
@@ -231,22 +233,14 @@ let g:ctrlp_max_depth = 100
 let g:ctrl_root_makers = ['.ctrlp']                                 " Stop search if these files present
 let g:ctrlp_use_caching = 1
 let g:ctrlp_clear_cache_on_exit = 0                                 " Cross session caching
-if has('win32') || has('win95') || has('win64')
-  let g:ctrlp_cache_dir = $VIM . '/cache/ctrlp'
-else
-  let g:ctrlp_cache_dir = '$HOME/.vim/cache/ctrlp'
-endif
+let g:ctrlp_cache_dir = '$HOME/.vim/cache/ctrlp'
 let g:ctrlp_custom_ignore = {
     \ 'dir':  '\v[\/]\.(git|hg|svn)$',
     \ 'file': '\v\.(exe|so|dll|rpm|tar|gz|bz2|zip|ctags|tags)|tags|ctags$',
     \ 'link': 'some_bad_symbolic_links',
     \ }
 
-if has('win32') || has('win95') || has('win64')
-  nmap <leader>tv :ConqueTermSplit cmd <CR>
-else
-  nmap <leader>tv :ConqueTermSplit bash <CR>
-endif
+nmap <leader>tv :ConqueTermSplit bash <CR>
 
 let g:winManagerWidth = 20
 let g:winManagerWindowLayout='FileExplorer|TagList'
@@ -317,9 +311,9 @@ let g:indentLine_color_gui = "#282828"
 let g:indentLine_color_term = 8
 let g:indentLine_indentLevel = 20
 let g:indentLine_showFirstIndentLevel = 1
-if has('gui_running') || 'xterm-256color' == $TERM
+if 'xterm-256color' == $TERM
   let g:indentLine_char = '¦'
-elseif has('win32')
+else
   let g:indentLine_char = '|'
 endif
 

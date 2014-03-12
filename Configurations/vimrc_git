@@ -14,6 +14,7 @@ filetype plugin indent on
 set history=500
 set diffopt=filler,context:3
 runtime macros/matchit.vim
+set tags=.\tags
 if has('win32') || has('win64')
   behave mswin
   source $VIMRUNTIME/vimrc_example.vim
@@ -21,7 +22,6 @@ if has('win32') || has('win64')
   set viminfo=%,<800,'10,/50,:100,h,f0
   set nowrap                                                        " NoWrap lines
   language messages utf-8                                           " At Console
-  set tags=.\tags
   set tags+=C:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\tags
   set tags+=C:\Marslo\Job\Summa\TEX\SVN\viis-lab-scripts\tags
   set tags+=C:\Marslo\Job\Summa\TEX\SVN\tags
@@ -256,6 +256,7 @@ set backspace=indent,eol,start                                      " make backs
 set whichwrap+=<,>,h,l
 set go+=a                                                           " Visual selection automatically copied to the clipboard
 set hidden                                                          " Switch between buffers with unsaved change
+set cryptmethod=blowfish
 
 noremap <F1> <ESC>
 imap <F1> <ESC>a
