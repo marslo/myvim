@@ -54,10 +54,11 @@ Bundle 'rhysd/accelerated-jk'
 Bundle 'Marslo/MarsloFunc'
 " For Groovy
 Bundle 'groovy.vim--Ruley'
+Bundle 'mwaisgold/groovy-vim-files'
 " For Python
 " Bundle 'python-mode'
 Bundle 'python_fold'
-Bundle 'pyflakes.vim'
+Bundle 'kevinw/pyflakes-vim'
 Bundle 'python_match.vim'
 Bundle 'Marslo/python-syntax'
 " For ruby

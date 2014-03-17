@@ -16,7 +16,8 @@ set diffopt=filler,context:3
 runtime macros/matchit.vim
 set tags=.\tags
 if has('win32') || has('win64')
-  behave mswin
+  let skip_loading_mswin=1
+  " behave mswin
   source $VIMRUNTIME/vimrc_example.vim
   source $VIMRUNTIME/mswin.vim
   set viminfo=%,<800,'10,/50,:100,h,f0
@@ -74,7 +75,7 @@ Bundle 'git@github.com:vim-scripts/groovy.vim--Ruley.git'
 " For Python
 " Bundle 'python-mode'
 Bundle 'git@github.com:vim-scripts/python_fold.git'
-Bundle 'git@github.com:vim-scripts/pyflakes.vim.git'
+Bundle 'git@github.com:kevinw/pyflakes-vim.git'
 Bundle 'git@github.com:vim-scripts/python_match.vim.git'
 Bundle 'git@github.com:Marslo/python-syntax.git'
 " For ruby
@@ -123,7 +124,7 @@ function! GetVundle()                                                   " GetVun
     if isdirectory(expand(bud)) == 0
       call mkdir(expand(bud), 'p')
     endif
-    execute 'silent !git clone https://github.com/gmarik/vundle.git "' . expand(vud) . '"'
+    execute 'silent !git clone git@github.com:gmarik/Vundle.vim.git "' . expand(vud) . '"'
     let vundleAlreadyExists=0
   endif
 endfunction
@@ -391,7 +392,7 @@ nmap k <Plug>(accelerated_jk_gk)
 
 autocmd BufWinLeave * silent! mkview                                " Load view automatic
 autocmd BufWinEnter * silent! loadview
-autocmd BufRead,BufNewFile * setfiletype txt                        " Highlight the txt file
+autocmd BufRead,BufNewFile *.txt setfiletype txt                        " Highlight the txt file
 autocmd BufRead,BufNewFile *.t set ft=perl                          " Perl test file as Perl code
 autocmd FileType javascript syntax clear jsFuncBlock
 
