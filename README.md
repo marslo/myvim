@@ -17,14 +17,15 @@ MyVimConfig
         - [使用方法](https://github.com/Marslo/VimConfig#使用方法)
         - [快捷键](https://github.com/Marslo/VimConfig#快捷键)
         - [插件列表](https://github.com/Marslo/VimConfig#插件列表)
-- [Compile or Build Vim/Gvim by source]()
-    - [In Linux(Ubuntu)](https://github.com/Marslo/VimConfig#compile-vimgvim-by-source-code-on-linuxubuntu)
+- [Compile or Build Vim/Gvim by source](https://github.com/Marslo/VimConfig#compile-vimgvim-by-source-code)
+    - [In Linux(Ubuntu)](https://github.com/Marslo/VimConfig#in-linuxubuntu)
         - [Precondiction](https://github.com/Marslo/VimConfig#1-prepare-environment)
         - [Compile and Install](https://github.com/Marslo/VimConfig#2-compile-and-install)
         - [Make compiled vim as default text editor](https://github.com/Marslo/VimConfig#3-make-the-compiled-gvim-as-the-default-text-editor-in-ubunut)
         - [Q&A](https://github.com/Marslo/VimConfig#4-qa)
-    - [In Windows (By Cygwin)]()
-        - [Configure]
+    - [In Windows (By Cygwin)](https://github.com/Marslo/VimConfig#in-linuxubuntu)
+        - [Options in Cygwin](https://github.com/Marslo/VimConfig#mandatory-cygwin-options)
+        - [Compile Command](https://github.com/Marslo/VimConfig#command)
 
 ## ScreenShots:
 #### Linux (Termainl html) :
