@@ -5,7 +5,7 @@
 "          Email: li.jiao@tieto.com
 "        Created: 2013-10-16 07:19:00
 "        Version: 0.0.8
-"     LastChange: 2014-02-24 19:42:26
+"    LastChange: 2014-03-25 16:37:26
 " =============================================================================
 
 let &runtimepath=printf('%s/vimfiles,%s,%s/vimfiles/after', $VIM, $VIMRUNTIME, $VIM)
@@ -58,7 +58,8 @@ Bundle 'mwaisgold/groovy-vim-files'
 " For Python
 " Bundle 'python-mode'
 Bundle 'python_fold'
-Bundle 'kevinw/pyflakes-vim'
+" Bundle 'kevinw/pyflakes-vim'
+Bundle 'pyflakes/pyflakes'
 Bundle 'python_match.vim'
 Bundle 'Marslo/python-syntax'
 " For ruby
@@ -156,7 +157,7 @@ set autochdir
 set encoding=utf-8                                                  " Input Chinese (=cp936)
 set selection=exclusive                                             " Mouse Settings
 set selectmode=mouse,key
-set nobackup noswapfile nowritebackup
+set nobackup noswapfile nowritebackup noundofile
 set ruler number                                                    " ruler: Show Line and colum number; number: line number
 set report=0
 set autoread                                                        " Set auto read when a file is changed by outside
@@ -203,7 +204,7 @@ set foldlevel=100                                                   " Not fold w
 set viewoptions=folds
 set backspace=indent,eol,start                                      " make backspace h, l, etc wrap to
 set whichwrap+=<,>,h,l
-set cryptmethod=blowfish
+" set cryptmethod=blowfish
 
 noremap <F1> <ESC>
 imap <F1> <ESC>a

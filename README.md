@@ -17,11 +17,14 @@ MyVimConfig
         - [使用方法](https://github.com/Marslo/VimConfig#使用方法)
         - [快捷键](https://github.com/Marslo/VimConfig#快捷键)
         - [插件列表](https://github.com/Marslo/VimConfig#插件列表)
-- [Compile vim/gvim by source code](https://github.com/Marslo/VimConfig#compile-vimgvim-by-source-code-on-linuxubuntu)
-    - [Precondiction](https://github.com/Marslo/VimConfig#1-prepare-environment)
-    - [Compile and Install](https://github.com/Marslo/VimConfig#2-compile-and-install)
-    - [Make compiled vim as default text editor](https://github.com/Marslo/VimConfig#3-make-the-compiled-gvim-as-the-default-text-editor-in-ubunut)
-    - [Q&A](https://github.com/Marslo/VimConfig#4-qa)
+- [Compile or Build Vim/Gvim by source]()
+    - [In Linux(Ubuntu)](https://github.com/Marslo/VimConfig#compile-vimgvim-by-source-code-on-linuxubuntu)
+        - [Precondiction](https://github.com/Marslo/VimConfig#1-prepare-environment)
+        - [Compile and Install](https://github.com/Marslo/VimConfig#2-compile-and-install)
+        - [Make compiled vim as default text editor](https://github.com/Marslo/VimConfig#3-make-the-compiled-gvim-as-the-default-text-editor-in-ubunut)
+        - [Q&A](https://github.com/Marslo/VimConfig#4-qa)
+    - [In Windows (By Cygwin)]()
+        - [Configure]
 
 ## ScreenShots:
 #### Linux (Termainl html) :
@@ -338,8 +341,8 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
 
 默认字体为： Monaco, 下载地址: http://download.csdn.net/detail/jiaoxiaogu/4317959
 
-
-# Compile VIM/GVIM by source code on Linux(Ubuntu)
+# Compile VIM/GVIM by source code
+## In Linux(Ubuntu)
 ### 1. Prepare environment:
 #### 1.1. Downaload vim source code:
 Download source from [git](https://github.com/b4winckler/vim.git):
@@ -437,3 +440,17 @@ Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
 - Soluction:
     <pre><code>sudo apt-get install libcurl4-openssl-dev</code></pre>
 
+## In Windws (By Cygwin)
+### Mandatory Cygwin options
+- Dev stuff:
+    - gcc / gcc-g++
+    - make
+    - [ncurses](https://stackoverflow.com/questions/9959243/building-vim-from-source-in-cygwin)
+
+### Command:
+- For GVIM:
+    <pre><code>$ make -f Make_cyg.mak PYTHON=/cygdrive/c/Marslo/MyProgram/Python27 DYNAMIC_PYTHON=yes PYTHON_VER=27 PYTHON3=/cygdrive/c/Marslo/MyProgram/Python34 DYNAMIC_PYTHON3=yes PYTHON3_VER=34 FEATURES=huge IME=yes USERNAME=Marslo.Jiao USERDOMAIN=China GUI=yes
+    </code></pre>
+- For VIM:
+    <pre><code>$  make -f Make_cyg.mak PYTHON=/cygdrive/c/Marslo/MyProgram/Python27 DYNAMIC_PYTHON=yes PYTHON_VER=27 PYTHON3=/cygdrive/c/Marslo/MyProgram/Python34 DYNAMIC_PYTHON3=yes PYTHON3_VER=34 FEATURES=huge IME=yes USERNAME=Marslo.Jiao USERDOMAIN=China GUI=no
+    </code></pre>

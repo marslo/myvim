@@ -5,7 +5,7 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.20
-"    LastChange: 2014-03-03 17:15:54
+"    LastChange: 2014-03-25 16:37:26
 " =============================================================================
 
 set nocompatible
@@ -75,7 +75,8 @@ Bundle 'git@github.com:vim-scripts/groovy.vim--Ruley.git'
 " For Python
 " Bundle 'python-mode'
 Bundle 'git@github.com:vim-scripts/python_fold.git'
-Bundle 'git@github.com:kevinw/pyflakes-vim.git'
+" Bundle 'git@github.com:kevinw/pyflakes-vim.git'
+Bundle 'git@github.com:pyflakes/pyflakes.git'
 Bundle 'git@github.com:vim-scripts/python_match.vim.git'
 Bundle 'git@github.com:Marslo/python-syntax.git'
 " For ruby
@@ -208,7 +209,7 @@ set fileencoding=utf-8
 let &termencoding=&encoding
 set selection=exclusive                                             " Mouse Settings
 set selectmode=mouse,key
-set nobackup noswapfile nowritebackup
+set nobackup noswapfile nowritebackup noundofile
 set ruler number                                                    " ruler: Show Line and colum number; number: line number
 set report=0
 set autoread                                                        " Set auto read when a file is changed by outside
@@ -257,7 +258,7 @@ set backspace=indent,eol,start                                      " make backs
 set whichwrap+=<,>,h,l
 set go+=a                                                           " Visual selection automatically copied to the clipboard
 set hidden                                                          " Switch between buffers with unsaved change
-set cryptmethod=blowfish
+" set cryptmethod=blowfish
 
 noremap <F1> <ESC>
 imap <F1> <ESC>a
@@ -387,8 +388,8 @@ let SuperTabClosePreviewOnPopupClose = 1
 
 match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
 
-nmap j <Plug>(accelerated_jk_gj)
-nmap k <Plug>(accelerated_jk_gk)
+" nmap j <Plug>(accelerated_jk_gj)
+" nmap k <Plug>(accelerated_jk_gk)
 
 autocmd BufWinLeave * silent! mkview                                " Load view automatic
 autocmd BufWinEnter * silent! loadview
