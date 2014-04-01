@@ -258,6 +258,7 @@ set backspace=indent,eol,start                                      " make backs
 set whichwrap+=<,>,h,l
 set go+=a                                                           " Visual selection automatically copied to the clipboard
 set hidden                                                          " Switch between buffers with unsaved change
+set synmaxcol=128
 " set cryptmethod=blowfish
 
 noremap <F1> <ESC>
