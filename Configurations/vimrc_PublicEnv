@@ -356,10 +356,10 @@ if version > 703
   autocmd InsertLeave * set relativenumber
   autocmd CmdwinEnter * set norelativenumber
   autocmd CmdwinLeave * set relativenumber
+  autocmd CmdwinEnter * let b:ei_save = &eventignore | set eventignore=CursorHold,InsertEnter
+  autocmd CmdwinLeave * let &eventignore = b:ei_save
 endif
 
-autocmd CmdwinEnter * let b:ei_save = &eventignore | set eventignore=CursorHold,InsertEnter
-autocmd CmdwinLeave * let &eventignore = b:ei_save
 iabbrev <leader>/* /*********************************
 iabbrev <leader>*/ *********************************/
 iabbrev <leader>#- #------------------
