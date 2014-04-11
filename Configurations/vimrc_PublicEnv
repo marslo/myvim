@@ -336,18 +336,23 @@ let SuperTabClosePreviewOnPopupClose = 1
 
 match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
 
-autocmd BufWinLeave * silent! mkview                                " Load view automatic
+autocmd BufWinLeave * silent! mkview
 autocmd BufWinEnter * silent! loadview
-autocmd BufRead,BufNewFile * setfiletype txt                        " Highlight the txt file
-autocmd BufRead,BufNewFile *.t set ft=perl                          " Perl test file as Perl code
+autocmd BufRead,BufNewFile *.txt setfiletype txt
+autocmd BufRead,BufNewFile *.t set ft=perl
 autocmd FileType javascript syntax clear jsFuncBlock
 
-autocmd FocusLost * :set norelativenumber
-autocmd FocusGained * :set relativenumber
-autocmd InsertEnter * :set norelativenumber
-autocmd InsertLeave * :set relativenumber
-autocmd CursorMoved * :set relativenumber
+if version > 703
+  " autocmd FocusLost * set norelativenumber
+  autocmd FocusGained * set relativenumber
+  autocmd InsertEnter * set norelativenumber
+  autocmd InsertLeave * set relativenumber
+  autocmd CmdwinEnter * set norelativenumber
+  autocmd CmdwinLeave * set relativenumber
+endif
 
+autocmd CmdwinEnter * let b:ei_save = &eventignore | set eventignore=CursorHold,InsertEnter
+autocmd CmdwinLeave * let &eventignore = b:ei_save
 iabbrev <leader>/* /*********************************
 iabbrev <leader>*/ *********************************/
 iabbrev <leader>#- #------------------
