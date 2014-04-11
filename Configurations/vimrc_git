@@ -4,8 +4,8 @@
 "        Author: Marslo
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
-"       Version: 0.0.20
-"    LastChange: 2014-03-25 16:37:26
+"       Version: 0.0.21
+"    LastChange: 2014-04-11 16:02:30
 " =============================================================================
 
 set nocompatible
@@ -166,8 +166,8 @@ if has('gui_running')
   set go=                                                           " Hide everything (go = guioptions)
   set cpoptions+=n
   if has('win32') || has('win64')
-    set lines=38                                                    " The initialize size
-    set columns=122
+    set lines=30                                                    " The initialize size
+    set columns=128
     if !filereadable("$VIM\vim74\vimtweak.dll")
       au GUIENTER * call libcallnr("vimtweak.dll","SetAlpha",243)
     endif
@@ -190,7 +190,7 @@ endif
 if has('win32') || has('win95') || has('win64')
   nmap <leader>v :e $VIM/_vimrc<CR>
   autocmd! bufwritepost $VIM/_vimrc source %                        " autoload _vimrc
-  set guifont=Monaco:h12                                            " Fonts
+  set guifont=Monaco:h13                                            " Fonts
   set clipboard+=unnamed                                            " Copy the content to system clipboard by using y/p
   set clipboard+=unnamedplus
 else
@@ -213,13 +213,14 @@ set nobackup noswapfile nowritebackup noundofile
 set ruler number                                                    " ruler: Show Line and colum number; number: line number
 set report=0
 set autoread                                                        " Set auto read when a file is changed by outside
-set showmatch                                                       " Show matching bracets
+set showmatch                                                       " Show matching bracets (shortly jump to the other bracets)
+set matchtime=2                                                     " The shortly time
+set tabstop=2                                                       " Tab width
+set softtabstop=2                                                   " Width for backspace
+set shiftwidth=2                                                    " the tab width by using >> & <<
 set autoindent smartindent
 set smarttab expandtab                                              " smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
-set tabstop=2                                                       " Tab width
-set softtabstop=2                                                   " the width while trigger <Tab> key
-set shiftwidth=2                                                    " the tab width by using >> & <<
-set lbr                                                             " LineBreak
+set linebreak
 set tw=0
 set laststatus=2                                                    " Set status bar
 set statusline=%m%r
@@ -258,7 +259,11 @@ set backspace=indent,eol,start                                      " make backs
 set whichwrap+=<,>,h,l
 set go+=a                                                           " Visual selection automatically copied to the clipboard
 set hidden                                                          " Switch between buffers with unsaved change
+set equalalways
+set formatoptions=tcrqn
+set formatoptions+=B                                                " Remove the backspace for combine lines (Only for chinese)
 set synmaxcol=128
+" set matchpairs+=<:>
 " set cryptmethod=blowfish
 
 noremap <F1> <ESC>
@@ -271,16 +276,18 @@ imap <C-a> <ESC>I
 map <C-e> <ESC>$
 imap <C-e> <ESC>A
 inoremap <M-f> <ESC><Space>Wi
-inoremap <M-b> <ESC>Bi
+inoremap <M-b> <Esc>Bi
 inoremap <M-d> <ESC>cW
 nnoremap Y y$
 nnoremap <Del> "_x
 xnoremap <Del> "_d
+nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
 
 nmap zdb :%s/\s\+$//<CR>
 nmap zhh :%s/^\s\+//<CR>
 nmap zmm :g/^/ s//\=line('.').' '/<CR>
 nmap zws :g/^\s*$/d<CR>
+nmap zdm :%s/<C-v><CR>//ge<CR>
 
 " ====================================== For Function =====================================
 let g:ctrlp_map = '<c-p>'                                           " CtrlP
@@ -394,9 +401,15 @@ match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
 
 autocmd BufWinLeave * silent! mkview                                " Load view automatic
 autocmd BufWinEnter * silent! loadview
-autocmd BufRead,BufNewFile *.txt setfiletype txt                        " Highlight the txt file
+autocmd BufRead,BufNewFile *.txt setfiletype txt                    " Highlight the txt file
 autocmd BufRead,BufNewFile *.t set ft=perl                          " Perl test file as Perl code
 autocmd FileType javascript syntax clear jsFuncBlock
+
+autocmd FocusLost * :set norelativenumber
+autocmd FocusGained * :set relativenumber
+autocmd InsertEnter * :set norelativenumber
+autocmd InsertLeave * :set relativenumber
+autocmd CursorMoved * :set relativenumber
 
 iabbrev <leader>/* /*********************************
 iabbrev <leader>*/ *********************************/

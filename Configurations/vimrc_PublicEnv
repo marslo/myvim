@@ -2,10 +2,10 @@
 "       FileName: vimrc_PublicEnv
 "           Desc:
 "         Author: Marslo
-"          Email: li.jiao@tieto.com
+"         Email: marslo.jiao@gmail.com
 "        Created: 2013-10-16 07:19:00
-"        Version: 0.0.8
-"    LastChange: 2014-03-25 16:37:26
+"        Version: 0.0.9
+"    LastChange: 2014-04-11 16:02:30
 " =============================================================================
 
 let &runtimepath=printf('%s/vimfiles,%s,%s/vimfiles/after', $VIM, $VIMRUNTIME, $VIM)
@@ -162,13 +162,14 @@ set nobackup noswapfile nowritebackup noundofile
 set ruler number                                                    " ruler: Show Line and colum number; number: line number
 set report=0
 set autoread                                                        " Set auto read when a file is changed by outside
-set showmatch                                                       " Show matching bracets
+set showmatch                                                       " Show matching bracets (shortly jump to the other bracets)
+set matchtime=2                                                     " The shortly time
+set tabstop=2                                                       " Tab width
+set softtabstop=2                                                   " Width for backspace
+set shiftwidth=2                                                    " the tab width by using >> & <<
 set autoindent smartindent
 set smarttab expandtab                                              " smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
-set tabstop=2                                                       " Tab width
-set softtabstop=2                                                   " the width while trigger <Tab> key
-set shiftwidth=2                                                    " the tab width by using >> & <<
-set lbr                                                             " LineBreak
+set linebreak
 set tw=0
 set laststatus=2                                                    " Set status bar
 set statusline=%m%r
@@ -205,6 +206,12 @@ set foldlevel=100                                                   " Not fold w
 set viewoptions=folds
 set backspace=indent,eol,start                                      " make backspace h, l, etc wrap to
 set whichwrap+=<,>,h,l
+set hidden                                                          " Switch between buffers with unsaved change
+set equalalways
+set formatoptions=tcrqn
+set formatoptions+=B                                                " Remove the backspace for combine lines (Only for chinese)
+set synmaxcol=128
+" set matchpairs+=<:>
 " set cryptmethod=blowfish
 
 noremap <F1> <ESC>
@@ -217,16 +224,18 @@ imap <C-a> <ESC>I
 map <C-e> <ESC>$
 imap <C-e> <ESC>A
 inoremap <M-f> <ESC><Space>Wi
-inoremap <M-b> <ESC>Bi
+inoremap <M-b> <Esc>Bi
 inoremap <M-d> <ESC>cW
 nnoremap Y y$
 nnoremap <Del> "_x
 xnoremap <Del> "_d
+nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
 
 nmap zdb :%s/\s\+$//<CR>
 nmap zhh :%s/^\s\+//<CR>
 nmap zmm :g/^/ s//\=line('.').' '/<CR>
 nmap zws :g/^\s*$/d<CR>
+nmap zdm :%s/<C-v><CR>//ge<CR>
 
 " ====================================== For Function =====================================
 let g:ctrlp_map = '<c-p>'                                           " CtrlP
@@ -332,6 +341,12 @@ autocmd BufWinEnter * silent! loadview
 autocmd BufRead,BufNewFile * setfiletype txt                        " Highlight the txt file
 autocmd BufRead,BufNewFile *.t set ft=perl                          " Perl test file as Perl code
 autocmd FileType javascript syntax clear jsFuncBlock
+
+autocmd FocusLost * :set norelativenumber
+autocmd FocusGained * :set relativenumber
+autocmd InsertEnter * :set norelativenumber
+autocmd InsertLeave * :set relativenumber
+autocmd CursorMoved * :set relativenumber
 
 iabbrev <leader>/* /*********************************
 iabbrev <leader>*/ *********************************/
