@@ -140,6 +140,8 @@ if has('gui_running')
   nnoremap <A--> :call marslofunc#FontSize_Reduce()<CR>
   nnoremap <A-+> :call marslofunc#FontSize_Enlarge()<CR>
 endif
+" set foldtext=marslofund#MyFoldText()<CR>
+set foldtext=v:folddashes.substitute(getline(v:foldstart),'/\\*\\\|\\*/\\\|{{{\\d\\=','','g')
 
 " ====================================== For Programming =====================================
 " Programming configs for Ruby and Rails
@@ -273,15 +275,20 @@ map <C-k> <C-w>k
 map <C-j> <C-w>j
 map <C-a> <ESC>^
 imap <C-a> <ESC>I
+cnoremap <C-a> <Home>
 map <C-e> <ESC>$
 imap <C-e> <ESC>A
-inoremap <M-f> <ESC><Space>Wi
-inoremap <M-b> <Esc>Bi
-inoremap <M-d> <ESC>cW
+cnoremap <C-e> <End>
+inoremap <A-f> <ESC><Space>Wi
+cnoremap <A-f> <S-Right>
+inoremap <A-b> <ESC>Bi
+cnoremap <A-b> <S-Left>
+inoremap <A-d> <ESC>lcW
 nnoremap Y y$
 nnoremap <Del> "_x
 xnoremap <Del> "_d
-nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
+" nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
+nnoremap <space> za
 
 nmap zdb :%s/\s\+$//<CR>
 nmap zhh :%s/^\s\+//<CR>
