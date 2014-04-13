@@ -109,6 +109,7 @@ map <M-o> :call marslofunc#OpenFoler()<CR>
 command! GetVim :call marslofunc#GetVim()
 nmap gf :call marslofunc#GotoFile()<CR>
 nmap <F12> :call marslofunc#UpdateTags()<CR>
+nmap <F5> :call marslofunc#RunResult()<CR>
 if has('gui_running')
   nnoremap <A--> :call marslofunc#FontSize_Reduce()<CR>
   nnoremap <A-+> :call marslofunc#FontSize_Enlarge()<CR>

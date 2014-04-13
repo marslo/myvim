@@ -13,7 +13,7 @@ syntax enable on
 filetype plugin indent on
 set history=500
 set diffopt=filler,context:3
-runtime macros/matchit.vim
+set wrap                                                        " Wrap lines
 set tags=.\tags
 if has('win32') || has('win64')
   let skip_loading_mswin=1
@@ -136,6 +136,7 @@ map <M-o> :call marslofunc#OpenFoler()<CR>
 command! GetVim :call marslofunc#GetVim()
 nmap gf :call marslofunc#GotoFile()<CR>
 nmap <F12> :call marslofunc#UpdateTags()<CR>
+nmap <F5> :call marslofunc#RunResult()<CR>
 if has('gui_running')
   nnoremap <A--> :call marslofunc#FontSize_Reduce()<CR>
   nnoremap <A-+> :call marslofunc#FontSize_Enlarge()<CR>
@@ -174,8 +175,8 @@ if has('gui_running')
       au GUIENTER * call libcallnr("vimtweak.dll","SetAlpha",243)
     endif
   else
-    set lines=32                                                    " The initialize size
-    set columns=108
+    set lines=29                                                    " The initialize size
+    set columns=129
   endif
 endif
 
@@ -198,7 +199,7 @@ if has('win32') || has('win95') || has('win64')
 else
   nmap <leader>v :e ~/.vimrc<CR>
   autocmd! bufwritepost ~/.vimrc source %
-  set guifont=Monaco\ 12
+  set guifont=Monaco\ 13
   set clipboard=unnamedplus
 endif
 
