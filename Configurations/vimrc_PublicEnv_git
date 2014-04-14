@@ -20,8 +20,10 @@ syntax enable on
 filetype plugin indent on
 set history=500
 set diffopt=filler,context:3
-set wrap                                                        " Wrap lines
+set wrap                                                            " Wrap lines
 set tags=.\tags
+set fileformat=unix
+set clipboard=unnamedplus
 
 " ====================================== For Property =====================================
 let mapleader=","
@@ -89,7 +91,7 @@ Bundle 'git@github.com:plasticboy/vim-markdown.git'
 filetype plugin indent on
 
 " ====================================== For My Function =====================================
-function! GetVundle()                                                   " GetVundle() inspired by: http://pastebin.com/embed_iframe.php?i=C9fUE0M3
+function! GetVundle()                                               " GetVundle() inspired by: http://pastebin.com/embed_iframe.php?i=C9fUE0M3
   let vundleAlreadyExists=1
   let bud='~/.vim/bundle'
   let vud=bud . '/vundle'
@@ -150,14 +152,11 @@ endif
 
 autocmd! bufwritepost $HOME/Marslo/.vimrc source %
 nmap <leader>v :e $HOME/Marslo/.vimrc<CR>
-set clipboard=unnamedplus
 
 set iskeyword+=.
 set autochdir
 set encoding=utf-8                                                  " Input Chinese (=cp936)
-set selection=exclusive                                             " Mouse Settings
-set selectmode=mouse,key
-set nobackup noswapfile nowritebackup noundofile
+set nobackup noswapfile nowritebackup
 set ruler number                                                    " ruler: Show Line and colum number; number: line number
 set report=0
 set autoread                                                        " Set auto read when a file is changed by outside
@@ -211,6 +210,10 @@ set formatoptions+=B                                                " Remove the
 set synmaxcol=128
 " set matchpairs+=<:>
 " set cryptmethod=blowfish
+
+if version > 740
+  set noundofile
+endif
 
 noremap <F1> <ESC>
 imap <F1> <ESC>a
@@ -323,12 +326,15 @@ let g:rainbow_conf = {
 \}
 
 let g:indentLine_color_gui = "#282828"
-let g:indentLine_color_term = 8
+let g:indentLine_color_term = 239
 let g:indentLine_indentLevel = 20
 let g:indentLine_showFirstIndentLevel = 1
+let g:indentLine_color_tty = 0
+" let g:indentLine_faster = 1
 if 'xterm-256color' == $TERM
   let g:indentLine_char = '¦'
 else
+  let g:indentLine_color_term = 8
   let g:indentLine_char = '|'
 endif
 

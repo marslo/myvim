@@ -184,6 +184,9 @@ if has('gui_running') || 'xterm-256color' == $TERM
   colorscheme marslo256
   let psc_style='cool'
 else
+  set t_Co=8
+  set t_Sb=^[[4%dm
+  set t_Sf=^[[3%dm
   colorscheme marslo16
 endif
 
@@ -209,7 +212,7 @@ set fileencoding=utf-8
 let &termencoding=&encoding
 set selection=exclusive                                             " Mouse Settings
 set selectmode=mouse,key
-set nobackup noswapfile nowritebackup noundofile
+set nobackup noswapfile nowritebackup
 set ruler number                                                    " ruler: Show Line and colum number; number: line number
 set report=0
 set autoread                                                        " Set auto read when a file is changed by outside
@@ -265,6 +268,10 @@ set formatoptions+=B                                                " Remove the
 set synmaxcol=128
 " set matchpairs+=<:>
 " set cryptmethod=blowfish
+
+if version > 740
+  set noundofile
+endif
 
 noremap <F1> <ESC>
 imap <F1> <ESC>a
@@ -385,12 +392,15 @@ let g:rainbow_conf = {
 \}
 
 let g:indentLine_color_gui = "#282828"
-let g:indentLine_color_term = 8
+let g:indentLine_color_term = 239
 let g:indentLine_indentLevel = 20
 let g:indentLine_showFirstIndentLevel = 1
+let g:indentLine_color_tty = 0
+" let g:indentLine_faster = 1
 if has('gui_running') || 'xterm-256color' == $TERM
   let g:indentLine_char = '¦'
 elseif has('win32')
+  let g:indentLine_color_term = 8
   let g:indentLine_char = '|'
 endif
 
