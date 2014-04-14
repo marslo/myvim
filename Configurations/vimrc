@@ -226,13 +226,8 @@ set smarttab expandtab                                              " smarttab: 
 set linebreak
 set tw=0
 set laststatus=2                                                    " Set status bar
-set statusline=%m%r
-set statusline+=%F\ \ %y,%{&fileformat}\                            " file path\file name & filetype
-set statusline+=%=                                                  " right align
-set statusline+=\ \ %-{strftime(\"%H:%M\ %d/%m/%Y\")}               " Current Time
-set statusline+=\ \ %b[A],0x%B                                      " ASCII code, Hex mode
-set statusline+=\ \ %c%V,%l/%L                                      " current Column, current Line/All Line
-set statusline+=\ \ %p%%\
+set statusline=%1*%m%r%*%F\ %y,%{&fileformat}
+set statusline+=%=\ %-{strftime(\"%H:%M\ %d/%m/%Y\")}\ %b[A],0x%B\ %c%V,%l/%L\ %1*--%n--%*\ %p%%
 set showcmd                                                         " Show (partial) command in status line
 set modifiable
 set write
@@ -368,7 +363,7 @@ let MRU_Exclude_Files='^/tmp/.*'
 let MRU_Exclude_Files='^/temp/.*'
 let MRU_Exclude_Files='^/media/.*'
 let MRU_Exclude_Files='^/mnt/.*'
-map <C-g> :MRU<CR>
+map <A-g> :MRU<CR>
 
 augroup vimrc
   au BufReadPre * setlocal foldmethod=indent
