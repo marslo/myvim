@@ -176,7 +176,7 @@ set linebreak
 set tw=0
 set laststatus=2                                                    " Set status bar
 set statusline=%1*%m%r%*%F\ %y,%{&fileformat}
-set statusline+=%=\ %-{strftime(\"%H:%M\ %d/%m/%Y\")}\ %b[A],0x%B\ %c%V,%l/%L\ %1*--%n--%*\ %p%%
+set statusline+=%=\ %-{strftime(\"%H:%M\ %d/%m/%Y\")}\ %b[A],0x%B\ %c%V,%l/%L\ %1*--%n%%--%*\ %p%%
 set showcmd                                                         " Show (partial) command in status line
 set modifiable
 set write
