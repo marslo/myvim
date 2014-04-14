@@ -14,7 +14,6 @@ filetype plugin indent on
 set history=500
 set diffopt=filler,context:3
 runtime macros/matchit.vim
-set wrap                                                            " Wrap lines
 set tags=.\tags
 if has('win32') || has('win64')
   let skip_loading_mswin=1
@@ -26,6 +25,7 @@ if has('win32') || has('win64')
   language messages utf-8                                           " At Console
   autocmd BufEnter c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\* :setlocal tags+=c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\.tags
 else
+  set wrap                                                          " Wrap lines
   set tags=tags
   set fileformat=unix
   set viminfo=%,<800,'10,/50,:100,h,f0,n~/.vim/cache/.viminfo
@@ -266,6 +266,7 @@ set equalalways
 set formatoptions=tcrqn
 set formatoptions+=B                                                " Remove the backspace for combine lines (Only for chinese)
 set synmaxcol=128
+set matchpairs+=<:>
 " set matchpairs+=<:>
 " set cryptmethod=blowfish
 
@@ -275,6 +276,8 @@ endif
 
 noremap <F1> <ESC>
 imap <F1> <ESC>a
+map j gj
+map k gk
 map ,bd :bd<CR>
 map <C-k> <C-w>k
 map <C-j> <C-w>j

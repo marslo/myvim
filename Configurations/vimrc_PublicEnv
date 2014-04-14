@@ -15,15 +15,15 @@ let &runtimepath=printf('%s/.vim,%s/.vim,%s/.vim/after', s:portable, &runtimepat
 " let $runtimepath=~s:portable/.vim,usr/local/share/vim/vimfiles,/usr/local/share/vim/vim74,/usr/local/share/vim/vimfiles/after,/home/auto/.vim/after
 
 set nocompatible
-set viminfo=%,<100,'10,/50,:100,h,f0,n~/.vim/cache/.viminfo
 syntax enable on
 filetype plugin indent on
 set history=500
 set diffopt=filler,context:3
 runtime macros/matchit.vim
 set wrap                                                            " Wrap lines
-set tags=.\tags
+set tags=./tags
 set fileformat=unix
+set viminfo=%,<800,'10,/50,:100,h,f0,n~/.vim/cache/.viminfo
 set clipboard=unnamedplus
 
 " ====================================== For Property =====================================
@@ -147,12 +147,16 @@ else
   colorscheme marslo16
 endif
 
-autocmd! bufwritepost $HOME/Marslo/.vimrc source %
 nmap <leader>v :e $HOME/Marslo/.vimrc<CR>
+autocmd! bufwritepost $HOME/Marslo/.vimrc source %
 
 set iskeyword+=.
 set autochdir
+set fileencodings=utf-8,ucs-bom,gbk,cp936,gb2312,gb18030            " Code Format
+set termencoding=utf-8
 set encoding=utf-8                                                  " Input Chinese (=cp936)
+set fileencoding=utf-8
+let &termencoding=&encoding
 set nobackup noswapfile nowritebackup
 set ruler number                                                    " ruler: Show Line and colum number; number: line number
 set report=0
@@ -205,6 +209,7 @@ set equalalways
 set formatoptions=tcrqn
 set formatoptions+=B                                                " Remove the backspace for combine lines (Only for chinese)
 set synmaxcol=128
+set matchpairs+=<:>
 " set matchpairs+=<:>
 " set cryptmethod=blowfish
 
@@ -214,6 +219,8 @@ endif
 
 noremap <F1> <ESC>
 imap <F1> <ESC>a
+map j gj
+map k gk
 map ,bd :bd<CR>
 map <C-k> <C-w>k
 map <C-j> <C-w>j
