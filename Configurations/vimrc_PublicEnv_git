@@ -20,6 +20,7 @@ syntax enable on
 filetype plugin indent on
 set history=500
 set diffopt=filler,context:3
+runtime macros/matchit.vim
 set wrap                                                            " Wrap lines
 set tags=.\tags
 set fileformat=unix

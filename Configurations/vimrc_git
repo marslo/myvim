@@ -14,6 +14,7 @@ syntax enable on
 filetype plugin indent on
 set history=500
 set diffopt=filler,context:3
+runtime macros/matchit.vim
 set wrap                                                            " Wrap lines
 set tags=.\tags
 if has('win32') || has('win64')
@@ -26,7 +27,6 @@ if has('win32') || has('win64')
   language messages utf-8                                           " At Console
   autocmd BufEnter c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\* :setlocal tags+=c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\.tags
 else
-  set wrap                                                          " Wrap lines
   set tags=tags
   set fileformat=unix
   set viminfo=%,<800,'10,/50,:100,h,f0,n~/.vim/cache/.viminfo
@@ -185,6 +185,9 @@ if has('gui_running') || 'xterm-256color' == $TERM
   colorscheme marslo256
   let psc_style='cool'
 else
+  set t_Co=8
+  set t_Sb=^[[4%dm
+  set t_Sf=^[[3%dm
   colorscheme marslo16
 endif
 
@@ -210,7 +213,7 @@ set fileencoding=utf-8
 let &termencoding=&encoding
 set selection=exclusive                                             " Mouse Settings
 set selectmode=mouse,key
-set nobackup noswapfile nowritebackup noundofile
+set nobackup noswapfile nowritebackup
 set ruler number                                                    " ruler: Show Line and colum number; number: line number
 set report=0
 set autoread                                                        " Set auto read when a file is changed by outside
@@ -266,6 +269,10 @@ set formatoptions+=B                                                " Remove the
 set synmaxcol=128
 " set matchpairs+=<:>
 " set cryptmethod=blowfish
+
+if version > 740
+  set noundofile
+endif
 
 noremap <F1> <ESC>
 imap <F1> <ESC>a

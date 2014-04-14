@@ -13,6 +13,7 @@ syntax enable on
 filetype plugin indent on
 set history=500
 set diffopt=filler,context:3
+runtime macros/matchit.vim
 set wrap                                                            " Wrap lines
 set tags=.\tags
 if has('win32') || has('win64')
@@ -25,7 +26,6 @@ if has('win32') || has('win64')
   language messages utf-8                                           " At Console
   autocmd BufEnter c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\* :setlocal tags+=c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\.tags
 else
-  set wrap                                                          " Wrap lines
   set tags=tags
   set fileformat=unix
   set viminfo=%,<800,'10,/50,:100,h,f0,n~/.vim/cache/.viminfo
