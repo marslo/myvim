@@ -14,7 +14,7 @@ syntax enable on
 filetype plugin indent on
 set history=500
 set diffopt=filler,context:3
-set wrap                                                        " Wrap lines
+set wrap                                                            " Wrap lines
 set tags=.\tags
 if has('win32') || has('win64')
   let skip_loading_mswin=1
@@ -24,9 +24,6 @@ if has('win32') || has('win64')
   set viminfo=%,<800,'10,/50,:100,h,f0
   set nowrap                                                        " NoWrap lines
   language messages utf-8                                           " At Console
-  set tags+=C:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\tags
-  set tags+=C:\Marslo\Job\Summa\TEX\SVN\viis-lab-scripts\tags
-  set tags+=C:\Marslo\Job\Summa\TEX\SVN\tags
   autocmd BufEnter c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\* :setlocal tags+=c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\.tags
 else
   set wrap                                                          " Wrap lines
@@ -152,14 +149,14 @@ if has("autocmd")
   autocmd FileType ruby set omnifunc=rubycomplete#Complete
   autocmd FileType ruby let g:rubycomplete_buffer_loading=1
   autocmd FileType ruby let g:rubycomplete_classes_in_global=1
+  augroup filetypedetect                                            " Inspired from :h new-filetype
+    au BufNewFile,BufRead *.r.erb set filetype=r.ruby
+  augroup end
 endif
 autocmd FileType ruby compiler ruby
 let g:rubycomplete_buffer_loading = 1
 let g:rubycomplete_classes_in_global = 1
 let g:rubycomplete_rails = 1
-augroup filetypedetect                                              " Inspired from :h new-filetype
-  au BufNewFile,BufRead *.r.erb set filetype=r.ruby
-augroup end
 
 " Programming configs for Python
 au FileType python syn keyword pythonDecorator print self
@@ -364,7 +361,7 @@ let MRU_Exclude_Files='^/media/.*'
 let MRU_Exclude_Files='^/mnt/.*'
 map <C-g> :MRU<CR>
 
-augroup vimrc                                                       " For Folding
+augroup vimrc
   au BufReadPre * setlocal foldmethod=indent
   au BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
 augroup END

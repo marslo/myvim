@@ -49,7 +49,7 @@ Bundle 'git@github.com:vim-scripts/mru.vim.git'
 Bundle 'git@github.com:vim-scripts/taglist.vim.git'
 Bundle 'git@github.com:vim-scripts/winmanager.git'
 " For Moving faster
-Bundle 'rhysd/accelerated-jk'
+Bundle 'git@github.com:rhysd/accelerated-jk.git'
 " For Loading my function after vim start (reduce vim start time)
 Bundle 'git@github.com:Marslo/MarsloFunc.git'
 " For Groovy
@@ -114,10 +114,7 @@ command! GetVim :call marslofunc#GetVim()
 nmap gf :call marslofunc#GotoFile()<CR>
 nmap <F12> :call marslofunc#UpdateTags()<CR>
 nmap <F5> :call marslofunc#RunResult()<CR>
-if has('gui_running')
-  nnoremap <A--> :call marslofunc#FontSize_Reduce()<CR>
-  nnoremap <A-+> :call marslofunc#FontSize_Enlarge()<CR>
-endif
+
 " set foldtext=marslofund#MyFoldText()<CR>
 set foldtext=v:folddashes.substitute(getline(v:foldstart),'/\\*\\\|\\*/\\\|{{{\\d\\=','','g')
 
@@ -127,36 +124,32 @@ if has("autocmd")
   autocmd FileType ruby set omnifunc=rubycomplete#Complete
   autocmd FileType ruby let g:rubycomplete_buffer_loading=1
   autocmd FileType ruby let g:rubycomplete_classes_in_global=1
+  augroup filetypedetect                                            " Inspired from :h new-filetype
+    au BufNewFile,BufRead *.r.erb set filetype=r.ruby
+  augroup end
 endif
 autocmd FileType ruby compiler ruby
 let g:rubycomplete_buffer_loading = 1
 let g:rubycomplete_classes_in_global = 1
 let g:rubycomplete_rails = 1
-augroup filetypedetect                                              " Inspired from :h new-filetype
-  au BufNewFile,BufRead *.r.erb set filetype=r.ruby
-augroup end
 
 " Programming configs for Python
 let python_highlight_all = 1                                        " syntax-python
+
 " ====================================== For Inteface =====================================
 if 'xterm-256color' == $TERM
   set t_Co=256
+  colorscheme marslo256
+  let psc_style='cool'
 else
   set t_Co=8
   set t_Sb=^[[4%dm
   set t_Sf=^[[3%dm
-endif
-
-if has('gui_running') || 'xterm-256color' == $TERM
-  colorscheme marslo256
-  let psc_style='cool'
-else
   colorscheme marslo16
 endif
 
 autocmd! bufwritepost $HOME/Marslo/.vimrc source %
 nmap <leader>v :e $HOME/Marslo/.vimrc<CR>
-set guifont=Monaco\ 13
 set clipboard=unnamedplus
 
 set iskeyword+=.
@@ -198,8 +191,6 @@ set noerrorbells novisualbell                                       " turn off e
 set t_vb=
 set list listchars=tab:\ \ ,trail:·,extends:»,precedes:«,nbsp:·
 set cursorline                                                      " Highlight the current line
-set guicursor=a:hor1
-set guicursor+=i-r-ci-cr-o:hor2-blinkon0
 set scrolloff=3                                                     " Scroll settings
 set sidescroll=1
 set sidescrolloff=5
@@ -307,7 +298,7 @@ let MRU_Exclude_Files='^/media/.*'
 let MRU_Exclude_Files='^/mnt/.*'
 map <C-g> :MRU<CR>
 
-augroup vimrc                                                       " For Folding
+augroup vimrc
   au BufReadPre * setlocal foldmethod=indent
   au BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
 augroup END
