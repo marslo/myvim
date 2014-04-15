@@ -21,10 +21,10 @@ set history=500
 set diffopt=filler,context:3
 runtime macros/matchit.vim
 set wrap                                                            " Wrap lines
-set tags=./tags
 set fileformat=unix
 set viminfo=%,<800,'10,/50,:100,h,f0,n~/.vim/cache/.viminfo
-set clipboard=unnamedplus
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip
+set tags=./tags
 
 " ====================================== For Property =====================================
 let mapleader=","
@@ -47,8 +47,8 @@ Bundle 'git@github.com:gregsexton/MatchTag.git'
 Bundle 'git@github.com:ervandew/supertab.git'
 Bundle 'git@github.com:Marslo/auto-pairs.git'
 Bundle 'git@github.com:Marslo/snipmate.vim.git'
-Bundle 'git@github.com:vim-scripts/Conque-Shell.git'
 Bundle 'git@github.com:yegappan/mru.git'
+Bundle 'git@github.com:vim-scripts/Conque-Shell.git'
 Bundle 'git@github.com:vim-scripts/taglist.vim.git'
 Bundle 'git@github.com:vim-scripts/winmanager.git'
 " For Moving faster
@@ -116,8 +116,7 @@ map <M-o> :call marslofunc#OpenFoler()<CR>
 command! GetVim :call marslofunc#GetVim()
 nmap gf :call marslofunc#GotoFile()<CR>
 nmap <F12> :call marslofunc#UpdateTags()<CR>
-nmap <F5> :call marslofunc#RunResult()<CR>
-
+nmap <C-F5> :call marslofunc#RunResult()<CR>
 " set foldtext=marslofund#MyFoldText()<CR>
 set foldtext=v:folddashes.substitute(getline(v:foldstart),'/\\*\\\|\\*/\\\|{{{\\d\\=','','g')
 
@@ -175,8 +174,8 @@ set smarttab expandtab                                              " smarttab: 
 set linebreak
 set tw=0
 set laststatus=2                                                    " Set status bar
-set statusline=%2*%m%r%*%F\ %y,%{&fileformat}
-set statusline+=%=\ %-{strftime(\"%H:%M\ %d/%m/%Y\")}\ %b[A],0x%B\ %c%V,%l/%L\ %1*--%n%%--%*\ %p%%
+set statusline=%#User2#%m%r%*\ %F\ %y,%{&fileformat}
+set statusline+=%=\ %-{strftime(\"%H:%M\ %d/%m/%Y\")}\ %b[A],0x%B\ %c%V,%l/%L\ %1*--%n%%--%*\ %p%%\ |
 set showcmd                                                         " Show (partial) command in status line
 set modifiable
 set write
@@ -185,7 +184,6 @@ set magic                                                           " Regular Ex
 set linespace=0
 set wildmenu
 set wildmode=longest,list,full                                      " Completion mode that is used for the character
-set wildignore+=*.swp,*.zip,*.exe
 set noerrorbells novisualbell                                       " turn off error beep/flash
 set t_vb=
 set list listchars=tab:\ \ ,trail:·,extends:»,precedes:«,nbsp:·
@@ -209,7 +207,6 @@ set formatoptions=tcrqn
 set formatoptions+=B                                                " Remove the backspace for combine lines (Only for chinese)
 set synmaxcol=128
 set matchpairs+=<:>
-" set matchpairs+=<:>
 " set cryptmethod=blowfish
 
 if version > 740
