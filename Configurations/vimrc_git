@@ -5,7 +5,7 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.21
-"    LastChange: 2014-04-11 16:02:30
+"    LastChange: 2014-04-14 14:58:30
 " =============================================================================
 
 set nocompatible
@@ -14,7 +14,6 @@ filetype plugin indent on
 set history=500
 set diffopt=filler,context:3
 runtime macros/matchit.vim
-set tags=.\tags
 
 if has('win32') || has('win64')
   let skip_loading_mswin=1
@@ -22,16 +21,19 @@ if has('win32') || has('win64')
   source $VIMRUNTIME/vimrc_example.vim
   source $VIMRUNTIME/mswin.vim
   language messages utf-8                                           " At Console
-  set viminfo=%,<800,'10,/50,:100,h,f0
   set nowrap                                                        " NoWrap lines
+  set viminfo=%,<800,'10,/50,:100,h,f0
   set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe,*.rar
+  set tags=.\tags
   autocmd BufEnter c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\* :setlocal tags+=c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\.tags
 else
-  set wrap                                                          " Wrap lines
   set fileformat=unix
+  set wrap                                                          " Wrap lines
   set viminfo=%,<800,'10,/50,:100,h,f0,n~/.vim/cache/.viminfo
   set wildignore+=*/tmp/*,*.so,*.swp,*.zip
-set tags=./tags
+  set tags=tags
+  set tags+=/home/marslo/Study/Codes/Rails/sdt
+endif
 
 " ====================================== For Property =====================================
 let mapleader=","
@@ -358,11 +360,8 @@ let g:vimrc_email='marslo.jiao@gmail.com'
 
 let MRU_Auto_Close = 1                                              " Most Recently Used(MRU)
 let MRU_Max_Entries = 10
-let MRU_Exclude_Files='^/tmp/.*'
-let MRU_Exclude_Files='^/temp/.*'
-let MRU_Exclude_Files='^/media/.*'
-let MRU_Exclude_Files='^/mnt/.*'
-map <A-g> :MRU<CR>
+let MRU_Exclude_Files='^/tmp/.*\|^/temp/.*\|^/media/.*\|^/mnt/.*'
+map <leader>re :MRU<CR>
 
 noremap <Leader>u :GundoToggle<CR>
 

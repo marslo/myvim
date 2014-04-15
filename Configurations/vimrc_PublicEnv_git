@@ -92,7 +92,7 @@ Bundle 'git@github.com:plasticboy/vim-markdown.git'
 filetype plugin indent on
 
 " ====================================== For My Function =====================================
-function! GetVundle()                                               " GetVundle() inspired by: http://pastebin.com/embed_iframe.php?i=C9fUE0M3
+function! GetVundle()                                                   " GetVundle() inspired by: http://pastebin.com/embed_iframe.php?i=C9fUE0M3
   let vundleAlreadyExists=1
   let bud='~/.vim/bundle'
   let vud=bud . '/vundle'
@@ -295,11 +295,10 @@ let g:vimrc_email='marslo.jiao@gmail.com'
 
 let MRU_Auto_Close = 1                                              " Most Recently Used(MRU)
 let MRU_Max_Entries = 10
-let MRU_Exclude_Files='^/tmp/.*'
-let MRU_Exclude_Files='^/temp/.*'
-let MRU_Exclude_Files='^/media/.*'
-let MRU_Exclude_Files='^/mnt/.*'
-map <A-g> :MRU<CR>
+let MRU_Exclude_Files='^/tmp/.*\|^/temp/.*\|^/media/.*\|^/mnt/.*'
+map <leader>re :MRU<CR>
+
+noremap <Leader>u :GundoToggle<CR>
 
 augroup vimrc
   au BufReadPre * setlocal foldmethod=indent
