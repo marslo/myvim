@@ -204,8 +204,8 @@ set formatoptions=tcrqn
 set formatoptions+=B                                                " Remove the backspace for combine lines (Only for chinese)
 set synmaxcol=128
 set matchpairs+=<:>
-set binary
 set noendofline
+" set binary
 " set cryptmethod=blowfish
 
 if version > 740
