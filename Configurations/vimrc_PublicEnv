@@ -65,6 +65,7 @@ Bundle 'python_fold'
 Bundle 'pyflakes/pyflakes'
 Bundle 'python_match.vim'
 Bundle 'Marslo/python-syntax'
+Bundle 'tarmack/vim-python-ftplugin'
 " For ruby
 Bundle 'tpope/vim-rails'
 Bundle 'vim-ruby/vim-ruby'
@@ -125,13 +126,18 @@ if has("autocmd")
   augroup filetypedetect                                            " Inspired from :h new-filetype
     au BufNewFile,BufRead *.r.erb set filetype=r.ruby
   augroup end
+  autocmd FileType ruby compiler ruby
 endif
-autocmd FileType ruby compiler ruby
 let g:rubycomplete_buffer_loading = 1
 let g:rubycomplete_classes_in_global = 1
 let g:rubycomplete_rails = 1
 
 " Programming configs for Python
+if has("autocmd")
+  au FileType python syn keyword pythonDecorator print self
+  au FileType python set tabstop=2 softtabstop=2 shiftwidth=2
+  au FileTYpe python set isk-=.
+endif
 let python_highlight_all = 1                                        " syntax-python
 
 " ====================================== For Inteface =====================================
@@ -202,9 +208,9 @@ set hidden                                                          " Switch bet
 set equalalways
 set formatoptions=tcrqn
 set formatoptions+=B                                                " Remove the backspace for combine lines (Only for chinese)
-set synmaxcol=128
 set matchpairs+=<:>
 set noendofline
+" set synmaxcol=128
 " set binary
 " set cryptmethod=blowfish
 
