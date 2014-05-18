@@ -1,9 +1,9 @@
-MyVimConfig
+My Vim Config
 ===========
 - Author: Marslo
 - Email: marslo.jiao@gmail.com
 - Version: 0.0.6
-- LastChange: 2014-01-03 14:49:26
+- LastChange: 2014-05-14 16:30:55
 
 -----------------------------
 
@@ -28,11 +28,11 @@ MyVimConfig
         - [Compile Command](https://github.com/Marslo/VimConfig#command)
 
 ## ScreenShots:
-#### Linux (Termainl html) :
+#### Linux Terminal (html) :
 ![Screenshot_Terminal](https://github.com/Marslo/VimConfig/blob/master/Screenshots/Screenhost_Linux_Terminal.png?raw=true)
-#### Linux (Gvim css):
+#### Linux Gvim (css):
 ![Screenshot_Gvim](https://github.com/Marslo/VimConfig/blob/master/Screenshots/Screenhost_Linux_Gvim.png?raw=true)
-#### Windows (python)
+#### Windows Gvim (python)
 ![Screenshot_Windows](https://github.com/Marslo/VimConfig/blob/master/Screenshots/screenshot_gvim.png?raw=true)
 #### PuTTy (vimrc)
 ![Screenshot_PuTTy](https://github.com/Marslo/VimConfig/blob/master/Screenshots/screenshot_PuTTy.png?raw=true)

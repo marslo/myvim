@@ -1,4 +1,4 @@
-[Desktop Entry]  
+[Desktop Entry]
 Name=Gvim
 Exec=/home/marslo/Tools/Software/vim74/bin/gvim -f %F
 Icon=/home/marslo/.local/share/applications/gvim.png
@@ -7,7 +7,7 @@ X-MultipleArgs=false
 Type=Application
 Categories=Application;Development;
 Encoding=UTF-8
-StartupNotify=true 
+StartupNotify=true
 Name=GVim Editor
 
 
