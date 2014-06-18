@@ -220,8 +220,10 @@ endif
 
 noremap <F1> <ESC>
 imap <F1> <ESC>a
-map j gj
-map k gk
+nnoremap j gj
+nnoremap gj j
+nnoremap k gk
+nnoremap gk k
 map ,bd :bd<CR>
 map <C-k> <C-w>k
 map <C-j> <C-w>j
@@ -337,9 +339,12 @@ let g:indentLine_color_tty = 0
 " let g:indentLine_faster = 1
 if 'xterm-256color' == $TERM
   let g:indentLine_char = '¦'
-else
+elseif has('win32')
   let g:indentLine_color_term = 8
   let g:indentLine_char = '|'
+else
+  let g:indentLine_color_tty_dark = 0
+  let g:indentLine_char = '¦'
 endif
 
 let SuperTabDefaultCompletionType = '<c-p>'
