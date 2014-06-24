@@ -81,6 +81,14 @@
         display: currentColor;
       }
 
+      @supports (display: auto) or
+        (display: auto) not
+        (display: auto) {
+        .conditional {
+          display: auto;
+        }
+      }
+
       .compositing {
         mix-blend-mode: multiply;
         isolation: screen;
@@ -106,16 +114,21 @@
         display: last;
       }
 
-      .counter-styles {
-        negative: disclosure-open;
-        prefix: disclosure-closed;
-        suffix: simp-chinese-informal;
-        range: simp-chinese-formal;
-        pad: trad-chinese-informal;
-        fallback: trad-chinese-formal;
-        symbols: ethiopic-numeric;
-        additive-symbols: symbols("*" "\2020" "\2021" "\A7");
-        speak-as: auto;
+      @counter-style counter-style {
+        system: cyclic;
+        negative: symbolic;
+        prefix: numeric;
+        suffix: additive;
+        range: override;
+        pad: cjk-decimal;
+        fallback: disclosure-open;
+        symbols: disclosure-closed;
+        additive-symbols: simp-chinese-informal;
+        speak-as: simp-chinese-formal;
+        display: trad-chinese-informal;
+        display: trad-chinese-formal;
+        display: ethiopic-numeric;
+        display: symbols("*" "\2020" "\2021" "\A7");
       }
 
       .display {
@@ -131,14 +144,14 @@
       }
 
       .flexbox {
-        order: flex;
-        flex: row;
-        flex-basis: wrap;
-        flex-direction: inline-flex;
-        flex-flow: row-reverse;
-        flex-grow: column-reverse;
+        flex-direction: flex;
+        flex-wrap: inline-flex;
+        flex-flow: row;
+        order: row-reverse;
+        flex: column-reverse;
+        flex-grow: wrap;
         flex-shrink: wrap-reverse;
-        flex-wrap: auto;
+        flex-basis: auto;
       }
 
       .fonts {
@@ -179,15 +192,20 @@
         display: proportional-width;
       }
 
-      .gcpm {
-        bleed: target-counter(attr(href, url), page, decimal);
-        marks: target-text(attr(href), content());
-        bookmark-label: open;
-        bookmark-level: closed;
-        bookmark-state: target-text(attr(href), content());
-        bookmark-target: crop;
-        float-offset: cross;
-        string-set: auto;
+
+      .gcpm::footnote-call,
+      .gcpm::footnote-marker {
+        string-set: string(heading, first);
+        running: running(heading);
+        footnote-display: element(header);
+        footnote-policy: footnote;
+        bookmark-label: line;
+        bookmark-level: leader('.');
+        bookmark-state: target-counter(attr(href url), page);
+        display: target-counters(lack-of-example);
+        display: target-text(attr(href url));
+        display: open;
+        display: closed;
       }
 
       .grid-layout {
@@ -236,6 +254,14 @@
         display: same;
       }
 
+      .line-grid {
+        line-grid: create;
+        line-snap: half-border;
+        line-slack: rounddown(1em);
+        box-snap: roundup(1em);
+        display: 10gd;
+      }
+
       .linebox {
         alignment-adjust: central;
         alignment-baseline: mathematical;
@@ -273,29 +299,25 @@
       }
 
       .masking {
-        mask-image: alpha;
-        mask-source-type: luminance;
-        mask-repeat: no-clip;
-        mask-position: nonzero;
-        mask-clip: evenodd;
-        mask-origin: auto;
-        mask-size: auto;
-        mask: auto;
+        clip-path: fill-box;
+        clip-rule: stroke-box;
+        mask-image: view-box;
+        mask-mode: nonzero;
+        mask-repeat: evenodd;
+        mask-position: alpha;
+        mask-clip: luminance;
+        mask-origin: no-clip;
+        mask-size: add;
+        mask-composite: subtract;
+        mask: intersect;
+        mask-border-source: exclude;
+        mask-border-mode: auto;
+        mask-border-slice: auto;
+        mask-border-width: auto;
+        mask-border-outset: auto;
+        mask-border-repeat: auto;
+        mask-border: auto;
         mask-type: auto;
-        mask-box-image-source: auto;
-        mask-box-image-slice: auto;
-        mask-box-image-width: auto;
-        mask-box-image-outset: auto;
-        mask-box-image-repeat: auto;
-        mask-box-image: auto;
-        clip-path: auto;
-        clip-rule: auto;
-      }
-
-      @media screen and (min-width: 999px) {
-        .mediaqueries {
-          display: auto;
-        }
       }
 
       .multicol {
@@ -342,6 +364,22 @@
         ruby-merge: ruby-text-container;
         ruby-align: inter-character;
         ruby-position: ruby-base-container;
+      }
+
+      @scope .scoping {
+        div {
+          display: auto;
+        }
+      }
+
+      .scoping:scope-context div,
+      .scoping:host,
+      .scping:host(.foo),
+      .scoping:host-context,
+      .scoping::shadow,
+      .scoping::content,
+      .scoping /deep/ span {
+        display: auto;
       }
 
       .selectors3:target,
@@ -429,14 +467,6 @@
         display: 10st;
         display: moderate;
         display: reduced;
-      }
-
-      @supports (display: auto) or
-        (display: auto) not
-        (display: auto) {
-        .supports {
-          display: auto;
-        }
       }
 
       .text {
@@ -535,6 +565,10 @@
         var-foo: var(foo);
       }
 
+      .will-change {
+        will-change: scroll-position;
+      }
+
       .writing-modes {
         text-orientation: before;
         text-combine-horizontal: after;
@@ -582,9 +616,6 @@
       output,
       progress,
       meter,
-      details,
-      summary,
-      dialog,
       template,
       canvas {
         display: auto;

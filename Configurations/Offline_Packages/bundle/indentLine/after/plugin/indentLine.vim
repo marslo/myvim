@@ -1,7 +1,4 @@
-
 " Script Name: indentLine.vim
-" Version:     1.0.5
-" Last Change: April 1, 2013
 " Author:      Yggdroot <archofortune@gmail.com>
 "
 " Description: To show the indention levels with thin vertical lines
@@ -14,8 +11,8 @@ endif
 let g:indentLine_loaded = 1
 
 
-let g:indentLine_char = get(g:,'indentLine_char',(&encoding is# "utf-8" ? '¦' : '|'))
-let g:indentLine_first_char = get(g:,'indentLine_first_char',(&encoding is# "utf-8" ? '¦' : '|'))
+let g:indentLine_char = get(g:,'indentLine_char',(&encoding is# "utf-8" && &term isnot# "linux" ? '¦' : '|'))
+let g:indentLine_first_char = get(g:,'indentLine_first_char',(&encoding is# "utf-8" && &term isnot# "linux"  ? '¦' : '|'))
 let g:indentLine_indentLevel = get(g:,'indentLine_indentLevel',10)
 let g:indentLine_enabled = get(g:,'indentLine_enabled',1)
 let g:indentLine_fileType = get(g:,'indentLine_fileType',[])
@@ -54,6 +51,15 @@ function! s:InitColor()
 
     execute "highlight Conceal ctermfg=" . term_color . " ctermbg=NONE"
     execute "highlight Conceal guifg=" . gui_color .  " guibg=NONE"
+
+    if &term is# "linux"
+        if &background is# "light"
+            let tty_color = exists("g:indentLine_color_tty_light") ? g:indentLine_color_tty_light : 4
+        else
+            let tty_color = exists("g:indentLine_color_tty_dark") ? g:indentLine_color_tty_dark : 2
+        endif
+        execute "highlight Conceal cterm=bold ctermfg=" . tty_color .  " ctermbg=NONE"
+    endif
 endfunction
 
 "{{{1 function! s:SetIndentLine()
@@ -89,6 +95,17 @@ function! s:ResetWidth(...)
     call s:SetIndentLine()
 endfunction
 
+"{{{1 function! s:IndentLinesEnable()
+function! s:IndentLinesEnable()
+    call s:SetIndentLine()
+endfunction
+
+"{{{1 function! s:IndentLinesDisable()
+function! s:IndentLinesDisable()
+    let b:indentLine_enabled = 0
+    syntax clear IndentLine
+endfunction
+
 "{{{1 function! s:IndentLinesToggle()
 function! s:IndentLinesToggle()
     if ! exists("b:indentLine_enabled")
@@ -96,48 +113,51 @@ function! s:IndentLinesToggle()
     endif
 
     if b:indentLine_enabled
-        let b:indentLine_enabled = 0
-        syntax clear IndentLine
+        call s:IndentLinesDisable()
     else
-        call s:SetIndentLine()
+        call s:IndentLinesEnable()
     endif
 endfunction
 
 "{{{1 function! s:Setup()
 function! s:Setup()
+    if index(g:indentLine_fileTypeExclude, &filetype) isnot -1
+        return
+    endif
+
+    if len(g:indentLine_fileType) isnot 0 && index(g:indentLine_fileType, &filetype) is -1
+        return
+    end
+
+    for name in g:indentLine_bufNameExclude
+        if matchstr(bufname(''), name) is bufname('')
+            return
+        endif
+    endfor
+
+    if ! exists("b:indentLine_bufNr")
+        let b:indentLine_bufNr = bufnr('%')
+        let g:indentLine_bufNr = bufnr('%')
+    elseif g:indentLine_bufNr != bufnr('%') && &hidden
+        let g:indentLine_bufNr = bufnr('%')
+        return
+    endif
+
     if ! exists("g:indentLine_noConcealCursor")
         setlocal concealcursor=inc
     endif
     setlocal conceallevel=2
 
-    if !&hidden || !exists("b:indentLine_set")
-        let b:indentLine_set = 1
+    if &filetype is# ""
+        call s:InitColor()
+    endif
 
-        if &filetype is# ""
-            call s:InitColor()
-        endif
+    if ! exists("b:indentLine_enabled")
+        let b:indentLine_enabled = g:indentLine_enabled
+    endif
 
-        if index(g:indentLine_fileTypeExclude, &filetype) isnot -1
-            return
-        endif
-
-        if len(g:indentLine_fileType) isnot 0 && index(g:indentLine_fileType, &filetype) is -1
-            return
-        end
-
-        for name in g:indentLine_bufNameExclude
-            if matchstr(bufname(''), name) is bufname('')
-                return
-            endif
-        endfor
-
-        if ! exists("b:indentLine_enabled")
-            let b:indentLine_enabled = g:indentLine_enabled
-        endif
-
-        if b:indentLine_enabled
-            call s:SetIndentLine()
-        endif
+    if b:indentLine_enabled
+        call s:SetIndentLine()
     endif
 endfunction
 
@@ -145,11 +165,14 @@ endfunction
 augroup indentLine
     autocmd!
     autocmd BufWinEnter * call <SID>Setup()
-    autocmd BufRead,BufNewFile,ColorScheme,Syntax * call <SID>InitColor()
+    autocmd BufRead,BufNewFile,ColorScheme * call <SID>InitColor()
 augroup END
 
 "{{{1 commands
 command! -nargs=? IndentLinesReset call <SID>ResetWidth(<f-args>)
 command! IndentLinesToggle call <SID>IndentLinesToggle()
+command! IndentLinesEnable call <SID>IndentLinesEnable()
+command! IndentLinesDisable call <SID>IndentLinesDisable()
 
 " vim:et:ts=4:sw=4:fdm=marker:fmr={{{,}}}
+

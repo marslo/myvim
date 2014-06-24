@@ -2,6 +2,8 @@ g:indentLine_bufNameExclude	indentLine.txt	/*g:indentLine_bufNameExclude*
 g:indentLine_char	indentLine.txt	/*g:indentLine_char*
 g:indentLine_color_gui	indentLine.txt	/*g:indentLine_color_gui*
 g:indentLine_color_term	indentLine.txt	/*g:indentLine_color_term*
+g:indentLine_color_tty_dark	indentLine.txt	/*g:indentLine_color_tty_dark*
+g:indentLine_color_tty_light	indentLine.txt	/*g:indentLine_color_tty_light*
 g:indentLine_enabled	indentLine.txt	/*g:indentLine_enabled*
 g:indentLine_faster	indentLine.txt	/*g:indentLine_faster*
 g:indentLine_fileType	indentLine.txt	/*g:indentLine_fileType*

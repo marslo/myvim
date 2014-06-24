@@ -53,11 +53,11 @@ snippet elif
 snippet wh
 	while (${1}) ${2}
 snippet for
-	for (${1}; ${2}; ${3}) ${4}
+	for (${1}; ${2}; ${3})
 snippet fore
-	for (${1} : ${2}) ${3}
+	for (${1} : ${2})
 snippet sw
-	switch (${1}) ${2}
+	switch (${1})
 snippet cs
 	case ${1}:
 		${2}
@@ -66,10 +66,13 @@ snippet tc
 	public class ${1:`Filename()`} extends ${2:TestCase}
 snippet te
 	public void test${1:Name}() throws Exception ${2}
-snippet cl
+snippet class
 	class ${1:`Filename("", "untitled")`}
-	{
-		${2}
+	{${2}
+	}
+snippet pc
+	public class ${1:`Filename("", "untitled")`}
+	{${2}
 	}
 snippet in
 	interface ${1:`Filename("", "untitled")`} ${2:extends Parent}${3}

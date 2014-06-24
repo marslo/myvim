@@ -9,12 +9,36 @@
 "                 0.0.1 | Marslo | Inspired from http://stackoverflow.com/a/21197543/2940319
 " =============================================================================
 
+" function! marslofunc#callit()
+  " let tcc='~/.vimrc'
+  " if 0 == marslofunc#ValidFile(tcc)
+    " echo tcc . ' cannot be found'
+  " else
+    " echo tcc . ' can be found'
+  " endif
+" endfunction
+
+function! marslofunc#ValidFile()
+  " echo a:thepath
+  " if filereadable(a:thepath)
+  if filereadable('~/.vimrc')
+    echo '1'
+    " return 1
+  else
+    echo '0'
+    " return 0
+  endif
+endfunction
+
 function! marslofunc#OpenCMD()
   if has('win32') || has('win95') || has('win64')
+    let tcc='C:\Program Files\JPSoft\TCCLE13x64\tcc.exe'
+    let console2='!cmd /c start C:\Marslo\Tools\Softwares\Windows\Console\Console2\Console.exe'
+
     if 'java' == &filetype
       let com = '!cmd /c start "C:\Program Files\JPSoft\TCCLE13x64\tcc.exe" /d "' . expand('%:p:h') .'"'
     else
-      let com = '!cmd /c start C:\Marslo\Tools\Softwares\Windows\Console\Console2\Console.exe -d "'. expand('%:p:h') . '"'
+      let com = '!cmd /c start C:\Marslo\Tools\Softwares\Windows\Console\Console2\Console.exe -d "' . expand('%:p:h') . '"'
     endif
   else
     let com = '!/usr/bin/gnome-terminal --working-directory=' . expand('%:p:h')
@@ -28,7 +52,7 @@ endfunction
 function! marslofunc#OpenFoler()
   let folderpath = expand('%:p:h')
   if has('win32') || has('win95') || has('win64')
-    silent execute '!C:\Windows\explorer.exe "' . folderpath . '"'
+    silent execute '!C:\Windows\SysWOW64\explorer.exe "' . folderpath . '"'
   else
     silent execute '!nautilus "' . folderpath . '"'
   endif
@@ -161,3 +185,18 @@ endfunc
 func! MaximizeWindow()                                            " Make vim maximize while it startup
   silent !wmctrl -r :ACTIVE: -b add,maximized_vert,maximized_horz
 endfunc
+
+function! marslofunc#MyFoldText()
+  let line = getline(v:foldstart)
+  let sub = substitute(line, '/\*\|\*/\|{{{\d\=', '', 'g')
+  return v:folddashes . sub
+endfunction
+
+" Inspired from Practical Vim [P213]
+" Search for the Current Selection
+function! marslofunc#VSetSearch()
+  let temp = @s
+  norm! gv"sy
+  let @/ = '\V' . substitute(escape(@s, '/|'), '\n', '\\n', 'g')
+  let @s = temp
+endfunction

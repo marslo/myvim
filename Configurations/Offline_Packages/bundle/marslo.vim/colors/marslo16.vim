@@ -14,12 +14,12 @@
 
 set background=dark
 if version > 580
-    " no guarantees for version 5.8 and below, but this makes it stop
-    " complaining
-    hi clear
-    if exists("syntax_on")
-        syntax reset
-    endif
+  " no guarantees for version 5.8 and below, but this makes it stop
+  " complaining
+  hi clear
+  if exists("syntax_on")
+    syntax reset
+  endif
 endif
 let g:colors_name="marslo16"
 
@@ -43,6 +43,8 @@ hi SpecialKey	          guifg=yellowgreen
 " Status line for each split windows
 hi StatusLine	          guibg=gray15        guifg=black         gui=none
 hi StatusLineNC	        guibg=gray18        guifg=grey50        gui=none
+hi User1                guibg=gray15        guifg=#9876AA
+hi User2                guibg=gray15        guifg=#A5C25C
 " hi Title	            guifg=indianred
 hi Title	              guifg=gray28
 hi Visual	              guifg=khaki         guibg=olivedrab     gui=none
@@ -86,12 +88,12 @@ hi PreProc	            guifg=OrangeRed3    gui=NONE
 " hi Type		            guifg=#afdf66       gui=NONE
 " hi Type		            guifg=#4169E1       gui=NONE
 " hi Type		            guifg=#EE3E3E       gui=NONE
-" hi Type		            guifg=#B2F432       gui=NONE
+hi Type		            guifg=#B2F432       gui=NONE
 " hi Type		            guifg=#D0E141       gui=NONE
 " hi Type		            guifg=#1E90FF       gui=NONE
 " hi Type		            guifg=#a4c148       gui=NONE
 " hi Type		            guifg=#6495ED       gui=NONE
-hi Type		              guifg=#5F87FF       gui=NONE
+" hi Type		              guifg=#5F87FF       gui=NONE
 hi Underlined	          gui=NONE
 " HTML
 hi htmlTag              guifg=#484848
@@ -101,7 +103,8 @@ hi htmlValue            guifg=#D7D7AF
 hi htmlTitle            guifg=#D7D700         gui=NONE
 hi htmlTagName          guifg=#5F87FF
 hi htmlString           guifg=#87d75f
-
+" For css3 -webkit- -moz-
+hi VendorPrefix         guifg=#FF4500         gui=NONE
 " For syntax-python
 hi Boolean              guifg=#EE3E3E
 " hi Boolean              guifg=#4155EE
@@ -123,6 +126,9 @@ hi Operator             guifg=#FF8C00
 " hi link StorageClass    Statement
 " hi link Operator        Statement
 " hi link Statement       Statement
+
+" For vim-ruby
+hi rubyIdentifier       guifg=#FF5F5F
 
 " ===========================================================
 " color terminal definitions
@@ -192,4 +198,6 @@ hi Underlined	          cterm=underline     ctermfg=5
 hi Ignore	              cterm=NONE          ctermfg=7       ctermfg=darkgrey
 hi Error	              cterm=NONE          ctermfg=7       ctermbg=1
 
+hi User1                ctermfg=Magenta     ctermbg=black
+hi User2                ctermfg=lightgreen  ctermbg=black
 "vim: sw=4

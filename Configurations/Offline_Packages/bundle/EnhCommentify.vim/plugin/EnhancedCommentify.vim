@@ -773,7 +773,7 @@ function s:GetFileTypeSettings(ft)
 		\ 'xkb\|groovy\)$'
 	let b:ECcommentOpen = '//'
 	let b:ECcommentClose = ''
-    elseif fileType =~ '^\(vim\|abel\)$'
+    elseif fileType =~ '^\(vim\|vimperator\|abel\)$'
 	let b:ECcommentOpen = '"'
 	let b:ECcommentClose = ''
     elseif fileType =~ '^\(lisp\|scheme\|scsh\|amiga\|asm\|asm68k\|bindzone\|'.

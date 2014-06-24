@@ -9,26 +9,25 @@
 "          Email: marslo.jiao@gmail.com
 "        Created: 2012-05-29
 "        Version: 0.1.9
-"     LastChange: 2013-12-30 19:51:11
-"               Good Color: #A5C25C
+"     LastChange: 2014-03-31 10:57:02
 " =============================================================================
 
 
 set background=dark
 " set background=dark
 if 256 != &t_Co && ! has("gui_running")
-    echomsg ""
-    echomsg "Error: Please use GUI or an 256-color terminal (:set t_Co=256 && export TERM='xterm-256color')"
-    echomsg ""
+  echomsg ""
+  echomsg "Error: Please use GUI or an 256-color terminal (:set t_Co=256 && export TERM='xterm-256color')"
+  echomsg ""
 endif
 
 if version > 580
-    " no guarantees for version 5.8 and below, but this makes it stop
-    " complaining
-    hi clear
-    if exists("syntax_on")
-        syntax reset
-    endif
+  " no guarantees for version 5.8 and below, but this makes it stop
+  " complaining
+  hi clear
+  if exists("syntax_on")
+    syntax reset
+  endif
 endif
 
 let g:colors_name="marslo256"
@@ -53,6 +52,8 @@ hi SpecialKey	          guifg=yellowgreen
 " Status line for each split windows
 hi StatusLine	          guibg=gray15        guifg=black         gui=none
 hi StatusLineNC	        guibg=gray18        guifg=grey50        gui=none
+hi User1                guibg=gray15        guifg=#9876AA
+hi User2                guibg=gray15        guifg=#A5C25C
 " hi Title	            guifg=indianred
 hi Title	              guifg=gray28
 hi Visual	              guifg=khaki         guibg=olivedrab     gui=none
@@ -236,5 +237,7 @@ hi Conditional          ctermfg=190
 hi Operator             ctermfg=208
 
 hi rubyIdentifier       ctermfg=9
+hi User1                ctermfg=135         ctermbg=black
+hi User2                ctermfg=193         ctermbg=black
 
-"vim: sw=4
+"vim: sw=2
