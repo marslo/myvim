@@ -67,6 +67,7 @@ Bundle 'git@github.com:vim-scripts/taglist.vim.git'
 Bundle 'git@github.com:vim-scripts/winmanager.git'
 " For Moving faster
 Bundle 'git@github.com:rhysd/accelerated-jk.git'
+" Bundle 'git@github.com:yonchu/accelerated-smooth-scroll'
 " For Loading my function after vim start (reduce vim start time)
 Bundle 'git@github.com:Marslo/MarsloFunc.git'
 " For Groovy
@@ -79,6 +80,7 @@ Bundle 'git@github.com:vim-scripts/python_fold.git'
 Bundle 'git@github.com:pyflakes/pyflakes.git'
 Bundle 'git@github.com:vim-scripts/python_match.vim.git'
 Bundle 'git@github.com:Marslo/python-syntax.git'
+Bundle 'git@github.com:tarmack/vim-python-ftplugin'
 " For ruby
 Bundle 'git@github.com:tpope/vim-rails.git'
 Bundle 'git@github.com:vim-ruby/vim-ruby.git'
@@ -99,7 +101,7 @@ Bundle 'git@github.com:Marslo/vim-coloresque.git'
 Bundle 'git@github.com:Marslo/marslo.vim.git'
 Bundle 'git@github.com:Marslo/MarsloVimOthers.git'
 Bundle 'git@github.com:plasticboy/vim-markdown.git'
-" Bundle 'cakebaker/scss-syntax.vim'
+" Bundle 'git@github.com:cakebaker/scss-syntax.vim'
 " For fun
 " Bundle 'TeTrIs.vim'
 " Bundle 'matrix.vim--Yang'
@@ -131,17 +133,28 @@ function! GetVundle()                                                   " GetVun
 endfunction
 command! GetVundle :call GetVundle()
 
-nmap cmd :call marslofunc#OpenCMD()<CR>
-map <M-o> :call marslofunc#OpenFoler()<CR>
-command! GetVim :call marslofunc#GetVim()
-nmap gf :call marslofunc#GotoFile()<CR>
-nmap <F12> :call marslofunc#UpdateTags()<CR>
-nmap <C-F5> :call marslofunc#RunResult()<CR>
-nmap <leader>ti :call marslofunc#callit()<CR>
-if has('gui_running')
-  nnoremap <A--> :call marslofunc#FontSize_Reduce()<CR>
-  nnoremap <A-+> :call marslofunc#FontSize_Enlarge()<CR>
+
+if has('win32') || has('win64')
+  let marslofuncfolder='$VIM\bundle\MarsloFunc'
+else
+  let marslofuncfolder='~\.vim\bundle\MarsloFunc'
 endif
+if isdirectory(marslofuncfolder)
+  command! GetVim :call marslofunc#GetVim()
+  nmap cmd :call marslofunc#OpenCMD()<CR>
+  nmap gf :call marslofunc#GotoFile()<CR>
+  xnoremap * :<C-u>call marslofunc#VSetSearch()<CR>/<C-R>=@/<CR><CR>
+  xnoremap # :<C-u>call marslofunc#VSetSearch()<CR>?<C-R>=@/<CR><CR>
+  map <M-o> :call marslofunc#OpenFoler()<CR>
+  nmap <F12> :call marslofunc#UpdateTags()<CR>
+  nmap <C-F5> :call marslofunc#RunResult()<CR>
+  nmap <leader>ti :call marslofunc#callit()<CR>
+  if has('gui_running')
+    nnoremap <A--> :call marslofunc#FontSize_Reduce()<CR>
+    nnoremap <A-+> :call marslofunc#FontSize_Enlarge()<CR>
+  endif
+endif
+
 " set foldtext=marslofund#MyFoldText()<CR>
 set foldtext=v:folddashes.substitute(getline(v:foldstart),'/\\*\\\|\\*/\\\|{{{\\d\\=','','g')
 
@@ -284,6 +297,8 @@ nnoremap j gj
 nnoremap gj j
 nnoremap k gk
 nnoremap gk k
+nnoremap n nzzzv
+nnoremap N Nzzzv
 map ,bd :bd<CR>
 map <C-k> <C-w>k
 map <C-j> <C-w>j
@@ -303,12 +318,15 @@ nnoremap <Del> "_x
 xnoremap <Del> "_d
 " nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
 nnoremap <space> za
+nnoremap & :&&<CR>
+xnoremap & :&&<CR>
 
 nmap zdb :%s/\s\+$//<CR>
 nmap zhh :%s/^\s\+//<CR>
 nmap zmm :g/^/ s//\=line('.').' '/<CR>
 nmap zws :g/^\s*$/d<CR>
 nmap zdm :%s/<C-v><CR>//ge<CR>
+nmap zng :%s///gn<CR>
 
 " ====================================== For Function =====================================
 let g:ctrlp_map = '<c-p>'                                           " CtrlP
@@ -412,6 +430,7 @@ elseif has('win32')
   let g:indentLine_char = '|'
 else
   let g:indentLine_color_tty_dark = 0
+  let g:indentLine_char = '¦'
 endif
 
 let SuperTabDefaultCompletionType = '<c-p>'
@@ -421,8 +440,13 @@ let SuperTabClosePreviewOnPopupClose = 1
 
 match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
 
-" nmap j <Plug>(accelerated_jk_gj)
-" nmap k <Plug>(accelerated_jk_gk)
+" if isdirectory($HOME . "/.vim/bundle/accelerated-jk")
+  " nmap j <Plug>(accelerated_jk_gj)
+  " nmap k <Plug>(accelerated_jk_gk)
+" endif
+
+" let g:accelerated_jk_acceleration_limit = 500
+" let g:accelerated_jk_acceleration_table = [10, 20, 30, 40, 50]
 
 autocmd BufWinLeave * silent! mkview
 autocmd BufWinEnter * silent! loadview
@@ -447,5 +471,6 @@ iabbrev <leader>#- #------------------
 inoremap <leader>tt <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
 inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
 inoremap <leader>fe <C-R>=expand("%:t")<CR>
+inoremap <leader>w <C-O>:w<CR>
 
 " vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab
