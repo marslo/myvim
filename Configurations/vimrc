@@ -4,8 +4,8 @@
 "        Author: Marslo
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
-"       Version: 0.0.21
-"    LastChange: 2014-05-18 18:09:41
+"       Version: 0.0.22
+"    LastChange: 2014-06-24 19:32:00
 " =============================================================================
 
 set nocompatible
@@ -137,10 +137,10 @@ command! GetVundle :call GetVundle()
 if has('win32') || has('win64')
   let marslofuncfolder='$VIM\bundle\MarsloFunc'
 else
-  let marslofuncfolder='~\.vim\bundle\MarsloFunc'
+  let marslofuncfolder=$HOME . '/.vim/bundle/MarsloFunc'
 endif
 if isdirectory(marslofuncfolder)
-  command! GetVim :call marslofunc#GetVim()
+  command! GetVim :call marslofunc#GetVim()<CR>
   nmap cmd :call marslofunc#OpenCMD()<CR>
   nmap gf :call marslofunc#GotoFile()<CR>
   xnoremap * :<C-u>call marslofunc#VSetSearch()<CR>/<C-R>=@/<CR><CR>
@@ -153,6 +153,14 @@ if isdirectory(marslofuncfolder)
     nnoremap <A--> :call marslofunc#FontSize_Reduce()<CR>
     nnoremap <A-+> :call marslofunc#FontSize_Enlarge()<CR>
   endif
+
+  augroup resCur
+    autocmd!
+      autocmd BufWinEnter * call marslofunc#ResCur()
+  augroup END
+
+  " command! DiffSaved :call marslofunc#DiffWithSaved()<CR>
+  " nnoremap <leader>df :call marslofunc#DiffWithSaved()<CR>
 endif
 
 " set foldtext=marslofund#MyFoldText()<CR>
@@ -320,13 +328,14 @@ xnoremap <Del> "_d
 nnoremap <space> za
 nnoremap & :&&<CR>
 xnoremap & :&&<CR>
+vmap s <Plug>VSurround
 
-nmap zdb :%s/\s\+$//<CR>
-nmap zhh :%s/^\s\+//<CR>
-nmap zmm :g/^/ s//\=line('.').' '/<CR>
-nmap zws :g/^\s*$/d<CR>
-nmap zdm :%s/<C-v><CR>//ge<CR>
-nmap zng :%s///gn<CR>
+nnoremap zdb :%s/\s\+$//<CR>
+nnoremap zhh :%s/^\s\+//<CR>
+nnoremap zmm :g/^/ s//\=line('.').' '/<CR>
+nnoremap zws :g/^\s*$/d<CR>
+nnoremap zdm :%s/<C-v><CR>//ge<CR>
+nnoremap zng :%s///gn<CR>
 
 " ====================================== For Function =====================================
 let g:ctrlp_map = '<c-p>'                                           " CtrlP
@@ -385,6 +394,7 @@ let g:EnhCommentifyUseSyntax='Yes'
 map <leader>aid :AuthorInfoDetect<CR>
 let g:vimrc_author='Marslo'
 let g:vimrc_email='marslo.jiao@gmail.com'
+au BufWritePre, FileWritePre * :AuthorInfoDetect<CR>
 
 let MRU_Auto_Close = 1                                              " Most Recently Used(MRU)
 let MRU_Max_Entries = 10
@@ -392,11 +402,6 @@ let MRU_Exclude_Files='^/tmp/.*\|^/temp/.*\|^/media/.*\|^/mnt/.*'
 map <leader>re :MRU<CR>
 
 noremap <Leader>u :GundoToggle<CR>
-
-augroup resCur
-  autocmd!
-    autocmd BufWinEnter * call marslofunc#ResCur()
-augroup END
 
 augroup vimrc
   au BufReadPre * setlocal foldmethod=indent
