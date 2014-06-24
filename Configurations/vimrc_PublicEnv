@@ -263,6 +263,10 @@ nnoremap <space> za
 nnoremap & :&&<CR>
 xnoremap & :&&<CR>
 vmap s <Plug>VSurround
+inoremap <leader>tt <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
+inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
+inoremap <leader>fe <C-R>=expand("%:t")<CR>
+inoremap <leader>w <C-O>:w<CR>
 
 nnoremap zdb :%s/\s\+$//<CR>
 nnoremap zhh :%s/^\s\+//<CR>
@@ -401,9 +405,5 @@ endif
 iabbrev <leader>/* /*********************************
 iabbrev <leader>*/ *********************************/
 iabbrev <leader>#- #------------------
-inoremap <leader>tt <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
-inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
-inoremap <leader>fe <C-R>=expand("%:t")<CR>
-inoremap <leader>w <C-O>:w<CR>
 
 " vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab
