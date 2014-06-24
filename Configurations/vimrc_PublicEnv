@@ -319,6 +319,11 @@ map <leader>re :MRU<CR>
 
 noremap <Leader>u :GundoToggle<CR>
 
+augroup resCur
+  autocmd!
+    autocmd BufWinEnter * call marslofunc#ResCur()
+augroup END
+
 augroup vimrc
   au BufReadPre * setlocal foldmethod=indent
   au BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
