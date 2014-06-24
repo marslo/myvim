@@ -1,11 +1,11 @@
 " =============================================================================
-"      FileName: _vimrc
+"      FileName: vimrc_git
 "          Desc: Vundle for git port 22 (ssh way)
 "        Author: Marslo
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.22
-"    LastChange: 2014-06-24 19:32:00
+"    LastChange: 2014-06-24 20:17:47
 " =============================================================================
 
 set nocompatible

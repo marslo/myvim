@@ -5,7 +5,7 @@
 "          Email: marslo.jiao@gmail.com
 "        Created: 2013-10-16 07:19:00
 "        Version: 0.0.9
-"     LastChange: 2014-01-19 18:35:56
+"     LastChange: 2014-06-24 20:14:53
 "        History:
 "                 0.0.1 | Marslo | init
 "                 0.0.4 | Marslo | Add Vim Bundle
@@ -14,7 +14,8 @@
 "                 0.0.7 | Marslo | Delete redundancy configures
 "                 0.0.8 | Marslo | Move all function to marslofunc.vim: https://github.com/Marslo/MarsloFunc. Inspird from http://stackoverflow.com/questions/21194354/how-can-i-reduce-startup-time-for-vim/21197543#21197543
 "                 0.0.9 | Marslo | Add the configurations for relativenumber in different situations, and change the GUI font to h13
-" =============================================================================
+"                 0.0.10 | Marslo | Add multi-shorcuts by xnormap, vmap, nnoremap, etc. Re-add the functionf for remember cursor position
+=============================================================================
 
 " =============================================================================
 "      FileName: history.log
@@ -22,7 +23,7 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.21
-"    LastChange: 2014-04-11 16:02:30
+"    LastChange: 2014-06-24 20:14:53
 "       History:
 "                0.0.3 | Marslo | Add the Autoload and Fast Edit difference between win32 and non-win32
 "                0.0.4 | Marslo | Add CheckRubySyntax() function for checking and run ruby script
@@ -44,4 +45,5 @@
 "                0.0.19 | Marslo | Merge Linux configus and Windows. There are only one vimrc from now on.
 "                0.0.20 | Marslo | Move all function to marslofunc.vim: https://github.com/Marslo/MarsloFunc. Inspird from http://stackoverflow.com/questions/21194354/how-can-i-reduce-startup-time-for-vim/21197543#21197543
 "                0.0.21 | Marslo | Add the configurations for relativenumber in different situations, and change the GUI font to h13
+"                0.0.22 | Marslo | Add multi-shorcuts by xnormap, vmap, nnoremap, etc. Re-add the functionf for remember cursor position
 " =============================================================================
