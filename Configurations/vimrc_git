@@ -5,7 +5,7 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.22
-"    LastChange: 2014-06-24 20:17:47
+"    LastChange: 2014-07-09 10:40:39
 " =============================================================================
 
 set nocompatible
@@ -140,7 +140,7 @@ else
   let marslofuncfolder=$HOME . '/.vim/bundle/MarsloFunc'
 endif
 if isdirectory(marslofuncfolder)
-  command! GetVim :call marslofunc#GetVim()
+  command! GetVim :call marslofunc#GetVim()<CR>
   nmap cmd :call marslofunc#OpenCMD()<CR>
   nmap gf :call marslofunc#GotoFile()<CR>
   xnoremap * :<C-u>call marslofunc#VSetSearch()<CR>/<C-R>=@/<CR><CR>
@@ -162,7 +162,6 @@ if isdirectory(marslofuncfolder)
   " command! DiffSaved :call marslofunc#DiffWithSaved()<CR>
   " nnoremap <leader>df :call marslofunc#DiffWithSaved()<CR>
 endif
-
 " set foldtext=marslofund#MyFoldText()<CR>
 set foldtext=v:folddashes.substitute(getline(v:foldstart),'/\\*\\\|\\*/\\\|{{{\\d\\=','','g')
 
@@ -196,7 +195,7 @@ if has('gui_running')
   set cpoptions+=n
   if has('win32') || has('win64')
     set lines=30                                                    " The initialize size
-    set columns=136
+    set columns=123
     if !filereadable("$VIM\vim74\vimtweak.dll")
       au GUIENTER * call libcallnr("vimtweak.dll","SetAlpha",243)
     endif
@@ -341,6 +340,21 @@ nnoremap zws :g/^\s*$/d<CR>
 nnoremap zdm :%s/<C-v><CR>//ge<CR>
 nnoremap zng :%s///gn<CR>
 
+if version > 703
+  " autocmd FocusLost * set norelativenumber
+  autocmd FocusGained * set relativenumber
+  autocmd InsertEnter * set norelativenumber
+  autocmd InsertLeave * set relativenumber
+  autocmd CmdwinEnter * set norelativenumber
+  autocmd CmdwinLeave * set relativenumber
+  autocmd CmdwinEnter * let b:ei_save = &eventignore | set eventignore=CursorHold,InsertEnter
+  autocmd CmdwinLeave * let &eventignore = b:ei_save
+endif
+
+iabbrev <leader>/* /*********************************
+iabbrev <leader>*/ *********************************/
+iabbrev <leader>#- #------------------
+
 " ====================================== For Function =====================================
 let g:ctrlp_map = '<c-p>'                                           " CtrlP
 let g:ctrlp_working_path_mode = 'ra'                                " Search parents as well (stop searching sartly)
@@ -388,6 +402,7 @@ let g:tagbar_expand=1
 let g:tagbar_singleclick=1
 let g:tagbar_iconchars=['+', '-']
 let g:tagbar_autoshowtag=1
+let g:tagbar_show_linenumbers=0
 
 let g:EnhCommentifyAlignRight='Yes'
 let g:EnhCommentifyRespectIndent='yes'
@@ -472,20 +487,5 @@ autocmd BufWinEnter * silent! loadview
 autocmd BufRead,BufNewFile *.txt setfiletype txt
 autocmd BufRead,BufNewFile *.t set ft=perl
 autocmd FileType javascript syntax clear jsFuncBlock
-
-if version > 703
-  " autocmd FocusLost * set norelativenumber
-  autocmd FocusGained * set relativenumber
-  autocmd InsertEnter * set norelativenumber
-  autocmd InsertLeave * set relativenumber
-  autocmd CmdwinEnter * set norelativenumber
-  autocmd CmdwinLeave * set relativenumber
-  autocmd CmdwinEnter * let b:ei_save = &eventignore | set eventignore=CursorHold,InsertEnter
-  autocmd CmdwinLeave * let &eventignore = b:ei_save
-endif
-
-iabbrev <leader>/* /*********************************
-iabbrev <leader>*/ *********************************/
-iabbrev <leader>#- #------------------
 
 " vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab

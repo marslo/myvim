@@ -5,7 +5,7 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.22
-"    LastChange: 2014-06-24 20:17:42
+"    LastChange: 2014-07-09 10:40:33
 " =============================================================================
 
 set nocompatible
@@ -341,6 +341,21 @@ nnoremap zws :g/^\s*$/d<CR>
 nnoremap zdm :%s/<C-v><CR>//ge<CR>
 nnoremap zng :%s///gn<CR>
 
+if version > 703
+  " autocmd FocusLost * set norelativenumber
+  autocmd FocusGained * set relativenumber
+  autocmd InsertEnter * set norelativenumber
+  autocmd InsertLeave * set relativenumber
+  autocmd CmdwinEnter * set norelativenumber
+  autocmd CmdwinLeave * set relativenumber
+  autocmd CmdwinEnter * let b:ei_save = &eventignore | set eventignore=CursorHold,InsertEnter
+  autocmd CmdwinLeave * let &eventignore = b:ei_save
+endif
+
+iabbrev <leader>/* /*********************************
+iabbrev <leader>*/ *********************************/
+iabbrev <leader>#- #------------------
+
 " ====================================== For Function =====================================
 let g:ctrlp_map = '<c-p>'                                           " CtrlP
 let g:ctrlp_working_path_mode = 'ra'                                " Search parents as well (stop searching sartly)
@@ -388,6 +403,7 @@ let g:tagbar_expand=1
 let g:tagbar_singleclick=1
 let g:tagbar_iconchars=['+', '-']
 let g:tagbar_autoshowtag=1
+let g:tagbar_show_linenumbers=0
 
 let g:EnhCommentifyAlignRight='Yes'
 let g:EnhCommentifyRespectIndent='yes'
@@ -472,20 +488,5 @@ autocmd BufWinEnter * silent! loadview
 autocmd BufRead,BufNewFile *.txt setfiletype txt
 autocmd BufRead,BufNewFile *.t set ft=perl
 autocmd FileType javascript syntax clear jsFuncBlock
-
-if version > 703
-  " autocmd FocusLost * set norelativenumber
-  autocmd FocusGained * set relativenumber
-  autocmd InsertEnter * set norelativenumber
-  autocmd InsertLeave * set relativenumber
-  autocmd CmdwinEnter * set norelativenumber
-  autocmd CmdwinLeave * set relativenumber
-  autocmd CmdwinEnter * let b:ei_save = &eventignore | set eventignore=CursorHold,InsertEnter
-  autocmd CmdwinLeave * let &eventignore = b:ei_save
-endif
-
-iabbrev <leader>/* /*********************************
-iabbrev <leader>*/ *********************************/
-iabbrev <leader>#- #------------------
 
 " vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab
