@@ -85,9 +85,8 @@ My Vim Config
 - lwmctr must be installed for linux User. Download from: http://download.csdn.net/detail/jiaoxiaogu/4317843
 
 ### Shortcuts
-- `F5`: Run Python, Ruby and Perl by one key! (The result could be shown in the Quickfix window)
-- `F3`: Open the tagbar
-- `<leader>aid`: Add the personal information
+- <kbd>F5</kbd>: Run Python, Ruby and Perl by one key! (The result could be shown in the Quickfix window)
+- <kbd><leader>aid</kbd>: Add the personal information
 
 +++++++++++++++++++++++++++++++++++++++++++
 
@@ -111,15 +110,16 @@ My Vim Config
 +++++++++++++++++++++++++++++++++++++++++++
 
 - Plugin shortcuts:
-    - `tl`:     Show the taglist
-    - `wm`:     Show winmanager
-    - `<leader>v`:     Open the configure file (_vimrc in windows and .vimrc in Linux)
-    - `<leader>te`:    Open the Tetris
-    - `<leader>tv`:     Open bash in the vim/gvim against Liunxu and open command line against Windows (Yes! That's true)
-    - `pyli`:   Static Code Analysis for python
-    - `ctrl + g`:     Open the most recently used files
-    - `<leader>v`: Comments/Uncomments
-    - `gl`: Enter
+    - `<leader>tl`: Show the taglist
+    - `<leader>mm`: Show winmanager
+    - `<leader>ta`: Show Tagbar
+    - `<leader>v`:  Open the configure file (_vimrc in windows and .vimrc in Linux)
+    - `<leader>te`: Open the Tetris
+    - `<leader>tv`: Open bash in the vim/gvim against Liunxu and open command line against Windows (Yes! That's true)
+    - `<leader>`u: Open Gundo window
+    - `pyli`: Static Code Analysis for python
+    - `<leader>re`: Open the most recently used files
+    - `<leader>x`: Comments/Uncomments
 
 +++++++++++++++++++++++++++++++++++++++++++
 
@@ -134,7 +134,7 @@ My Vim Config
 
 +++++++++++++++++++++++++++++++++++++++++++
 
-- Partten shortcuts:
+- Patten shortcuts:
     - `zdb`: Delete the backspace at the each of each line
     - `zmm`: Insert the line number
     - `zws`: Delete the blank line
@@ -246,8 +246,7 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
 
 ### 快捷键
 - `F5`: 一键运行Python, Ruby 和 Perl。(运行结果将显示在Quickfix窗口中)
-- `F3`: 打开tagbar
-- `<leader>aid`: 自动添加用户信息
+-
 
 +++++++++++++++++++++++++++++++++++++++++++
 
@@ -272,19 +271,32 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
 +++++++++++++++++++++++++++++++++++++++++++
 
 - 插件快捷键
-    - `tl`: 显示taglist
-    - `mm`: 显示winmanager(附带taglist信息)
+  - `<leader>tl`: Show the taglist
+    - `<leader>mm`: Show winmanager
+    - `<leader>ta`: Show Tagbar
+    - `<leader>v`:  Open the configure file (_vimrc in windows and .vimrc in Linux)
+    - `<leader>te`: Open the Tetris
+    - `<leader>tv`: Open bash in the vim/gvim against Liunxu and open command line against Windows (Yes! That's true)
+    - `<leader>`u: Open Gundo window
+    - `pyli`: Static Code Analysis for python
+    - `<leader>re`: Open the most recently used files
+    - `<leader>x`: Comments/Uncomments
+
+    - `<leader>aid`: 自动添加用户信息
+    - `<leader>tl`: 显示taglist
+    - `<leader>mm`: 显示winmanager(附带taglist信息)
+    - `<leader>ta`: 显示Tagbar
     - `<leader>v`: 打开配置文件(_vimrc/.vimrc)
     - `<leader>te`: 打开俄罗斯方块游戏(练习hjkl快捷键)
     - `<leader>tv`: 在vim/gvim中运行bash(是的，你没看错！)
     - `pyli`: Python静态代码分析(规范代码，远离砍手砍脚)
     - `ctrl + g`: 打开最近文件列表（10个）
-    - `<leader>v`: 注释/反注释
+    - `<leader>x`: 注释/反注释
 
 +++++++++++++++++++++++++++++++++++++++++++
 
 - Emacs 风格快捷键
-    - `Ctrl + a`: 光标移动到行首 [Normal模式 && 插入模式]
+    - <kbd>Ctrl</kbd> + <kbd>a</kbd>: 光标移动到行首 [Normal模式 && 插入模式]
     - `Ctrl + e`: 光标移动到行尾 [Normal模式 && 插入模式]
     - `Alt + b`: 光标向前跳动一个单词 [插入模式]
     - `Alt + f`: 光标向前跳动一个单词 [插入模式]
