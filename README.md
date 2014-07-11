@@ -86,7 +86,7 @@ My Vim Config
 
 ### Shortcuts
 - <kbd>F5</kbd>: Run Python, Ruby and Perl by one key! (The result could be shown in the Quickfix window)
-- <kbd><leader>aid</kbd>: Add the personal information
+- <kbd>\<leader\>aid</kbd>: Add the personal information
 
 +++++++++++++++++++++++++++++++++++++++++++
 
