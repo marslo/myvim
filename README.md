@@ -138,7 +138,7 @@ My Vim Config
     - `zdb`: Delete the backspace at the each of each line
     - `zmm`: Insert the line number
     - `zws`: Delete the blank line
-    - `zdm`: Delete `` (<C-v><CR>)
+    - `zdm`: Delete `^M` (<C-v><CR>)
     - `zng`: Show the number of searched words in last time
     - `zhh`: Delete all white space in the font of the line
 
@@ -298,7 +298,7 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
     - `zdb`: 删除行尾空格
     - `zmm`: 插入文档行号
     - `zws`: 删除空行
-    - `zdm`: 删除``
+    - `zdm`: 删除`^M`
     - `zng`: 显示最后一次搜索内容的个数
     - `zhh`: 删除行前的空白（缩进，空格，等）
 
