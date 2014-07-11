@@ -5,7 +5,7 @@
 "         Email: marslo.jiao@gmail.com
 "        Created: 2013-10-16 07:19:00
 "        Version: 0.0.9
-"    LastChange: 2014-07-09 10:40:44
+"    LastChange: 2014-07-11 14:56:09
 " =============================================================================
 
 let &runtimepath=printf('%s/vimfiles,%s,%s/vimfiles/after', $VIM, $VIMRUNTIME, $VIM)
@@ -89,11 +89,12 @@ Bundle 'plasticboy/vim-markdown.git'
 filetype plugin indent on
 
 " ====================================== For My Function =====================================
+let bud='~/.vim/bundle'
+let vud=bud . '/vundle'
+let vudcfg=expand(vud . '/.git/config')
+
 function! GetVundle()                                                   " GetVundle() inspired by: http://pastebin.com/embed_iframe.php?i=C9fUE0M3
   let vundleAlreadyExists=1
-  let bud='~/.vim/bundle'
-  let vud=bud . '/vundle'
-  let vudcfg=expand(vud . '/.git/config')
   if filereadable(vudcfg)
     echo "Vundle has existed at " . expand(vud)
   else
@@ -108,8 +109,7 @@ function! GetVundle()                                                   " GetVun
 endfunction
 command! GetVundle :call GetVundle()
 
-let marslofuncfolder='~\.vim\bundle\MarsloFunc'
-if isdirectory(marslofuncfolder)
+if isdirectory(expand(bud . '\MarsloFunc'))
   command! GetVim :call marslofunc#GetVim()<CR>
   nmap cmd :call marslofunc#OpenCMD()<CR>
   nmap gf :call marslofunc#GotoFile()<CR>
@@ -127,10 +127,11 @@ if isdirectory(marslofuncfolder)
 
   " command! DiffSaved :call marslofunc#DiffWithSaved()<CR>
   " nnoremap <leader>df :call marslofunc#DiffWithSaved()<CR>
-endif
 
-" set foldtext=marslofund#MyFoldText()<CR>
-set foldtext=v:folddashes.substitute(getline(v:foldstart),'/\\*\\\|\\*/\\\|{{{\\d\\=','','g')
+  " set foldtext=marslofund#MyFoldText()<CR>
+  set foldtext=v:folddashes.substitute(getline(v:foldstart),'/\\*\\\|\\*/\\\|{{{\\d\\=','','g')
+
+endif
 
 " ====================================== For Programming =====================================
 " Programming configs for Ruby and Rails
@@ -154,7 +155,16 @@ if has("autocmd")
   au FileTYpe python set isk-=.
 endif
 let python_highlight_all = 1                                        " syntax-python
+if !has('python')
+  let g:pymode = 0
+endif
 
+if isdirectory(expand(bud . '\python-mode'))
+  let g:pymode_lint_checker = ['pyflakes']
+  let g:pymode_trim_whitespace = 0
+  let g:pymode_options = 0
+  let g:pymode_rope = 0
+endif
 " ====================================== For Inteface =====================================
 if 'xterm-256color' == $TERM
   set t_Co=256
@@ -178,7 +188,7 @@ set encoding=utf-8                                                  " Input Chin
 set fileencoding=utf-8
 let &termencoding=&encoding
 set nobackup noswapfile nowritebackup
-set ruler number                                                    " ruler: Show Line and colum number; number: line number
+set number                                                          " number: line number
 set report=0
 set autoread                                                        " Set auto read when a file is changed by outside
 set showmatch                                                       " Show matching bracets (shortly jump to the other bracets)
@@ -191,10 +201,6 @@ set smartindent
 set smarttab						                                            " smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
 set linebreak
 set tw=0
-set laststatus=2                                                    " Set status bar
-set statusline=%#User2#%m%r%*\ %F\ %y,%{&fileformat}
-set statusline+=%=\ %-{strftime(\"%H:%M\ %d/%m/%Y\")}\ %b[A],0x%B\ %c%V,%l/%L\ %1*--%n%%--%*\ %p%%\ |
-set showcmd                                                         " Show (partial) command in status line
 set modifiable
 set write
 set incsearch hlsearch ignorecase smartcase                         " Search
@@ -225,11 +231,20 @@ set formatoptions=tcrqn
 set formatoptions+=B                                                " Remove the backspace for combine lines (Only for chinese)
 set matchpairs+=<:>
 set noendofline
+if has('cmdline_info')
+  set ruler                                                         " ruler: Show Line and colum number
+  set showcmd                                                       " Show (partial) command in status line
+endif
+if has('statusline')
+  set laststatus=2                                                  " Set status bar
+  set statusline=%#User2#%m%r%*\ %F\ %y,%{&fileformat}
+  set statusline+=%=\ %-{strftime(\"%H:%M\ %d/%m/%Y\")}\ %b[A],0x%B\ %c%V,%l/%L\ %1*--%n%%--%*\ %p%%\ |
+endif
 " set synmaxcol=128
 " set binary
 " set cryptmethod=blowfish
 
-if version > 740
+if has('persistent_undo')
   set noundofile
 endif
 
@@ -255,6 +270,7 @@ cnoremap <A-f> <S-Right>
 inoremap <A-b> <ESC>Bi
 cnoremap <A-b> <S-Left>
 inoremap <A-d> <ESC>lcW
+inoremap <C-d> <Del>
 nnoremap Y y$
 nnoremap <Del> "_x
 xnoremap <Del> "_d
@@ -401,7 +417,7 @@ let g:AutoPairsShortcutBackInsert = '<M-b>'
 
 match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
 
-" if isdirectory($HOME . "/.vim/bundle/accelerated-jk")
+" if isdirectory(bud . '\accelerated-jk')
   " nmap j <Plug>(accelerated_jk_gj)
   " nmap k <Plug>(accelerated_jk_gk)
 " endif
