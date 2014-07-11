@@ -3,7 +3,7 @@ My Vim Config
 - Author: Marslo
 - Email: marslo.jiao@gmail.com
 - Version: 0.0.6
-- LastChange: 2014-05-14 16:30:55
+- LastChange: 2014-07-11 17:28:38
 
 -----------------------------
 
