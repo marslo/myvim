@@ -92,55 +92,55 @@ My Vim Config
 
 - Auto Pair
 - Auto compare code
-    -  `<leader>fn`: insert current file name
-    -  `<leader>fe`: insert current file name by suffix
-    -  `<leader>tt`:  insert the current time
+    -  <kbd>\<leader\>fn</kbd>: insert current file name
+    -  <kbd>\<leader\>fe</kbd>: insert current file name by suffix
+    -  <kbd>\<leader\>tt</kbd>:  insert the current time
 - Save and load the fold information automatic
 
 +++++++++++++++++++++++++++++++++++++++++++
 
 - Specified function shortcuts:
-    - `<F12>`: Re-build tags file
-    - `gf`: Open file which under the cursor (Add the .py suffix while the filetype == python)
-    - `Alt + -`: Reduce the font
-    - `Alt + +`: Enlarge the font
-    - `cmd`: Open command line and cd into the current file path
-    - `Alt + o`: Open the current file browser
+    - <kbd><F12></kbd>: Re-build tags file
+    - <kbd>gf</kbd>: Open file which under the cursor (Add the .py suffix while the filetype == python)
+    - <kbd>Alt</kbd> + <kbd>-</kbd>: Reduce the font
+    - <kbd>Alt</kbd> + <kbd>+</kbd>: Enlarge the font
+    - <kbd>cmd</kbd>: Open command line and cd into the current file path
+    - <kbd>Alt</kbd> + <kbd>o</kbd>: Open the current file browser
 
 +++++++++++++++++++++++++++++++++++++++++++
 
 - Plugin shortcuts:
-    - `<leader>tl`: Show the taglist
-    - `<leader>mm`: Show winmanager
-    - `<leader>ta`: Show Tagbar
-    - `<leader>v`:  Open the configure file (_vimrc in windows and .vimrc in Linux)
-    - `<leader>te`: Open the Tetris
-    - `<leader>tv`: Open bash in the vim/gvim against Liunxu and open command line against Windows (Yes! That's true)
-    - `<leader>`u: Open Gundo window
-    - `pyli`: Static Code Analysis for python
-    - `<leader>re`: Open the most recently used files
-    - `<leader>x`: Comments/Uncomments
+    - <kbd>\<leader\>tl</kbd>: Show the taglist
+    - <kbd>\<leader\>mm</kbd>: Show winmanager
+    - <kbd>\<leader\>ta</kbd>: Show Tagbar
+    - <kbd>\<leader\>v</kbd>:  Open the configure file (_vimrc in windows and .vimrc in Linux)
+    - <kbd>\<leader\>te</kbd>: Open the Tetris
+    - <kbd>\<leader\>tv</kbd>: Open bash in the vim/gvim against Liunxu and open command line against Windows (Yes! That's true)
+    - <kbd>\<leader\>u</kbd>: Open Gundo window
+    - <kbd>pyli</kbd>: Static Code Analysis for python
+    - <kbd>\<leader\>re</kbd>: Open the most recently used files
+    - <kbd>\<leader\>x</kbd>: Comments/Uncomments
 
 +++++++++++++++++++++++++++++++++++++++++++
 
 - Emacs-style shortcuts:
-    - `Ctrl + a`: Go to begin of the line  [Normal Mode && Insert Mode]
-    - `Ctrl + e`: Go to end of the line [Normal Mode && Insert Mode]
-    - `Alt + b`: Backward a word [Insert Mode]
-    - `Alt + f`: Forward a word  [Insert Mode]
-    - `Alt + d`: Delete a word (backward) [Insert Mode]
-    - `Ctrl + w`: Delete a word (foreward) [Insert Mode]
-    - `Ctrl + d`: Delete a char (backward) [Insert Mode] == [Delete]
+    - <kbd>Ctrl</kbd> + <kbd>a</kbd>: Go to begin of the line  [Normal Mode && Insert Mode]
+    - <kbd>Ctrl</kbd> + <kbd>e</kbd>: Go to end of the line [Normal Mode && Insert Mode]
+    - <kbd>Alt</kbd> + <kbd>b</kbd>: Backward a word [Insert Mode]
+    - <kbd>Alt</kbd> + <kbd>f</kbd>: Forward a word  [Insert Mode]
+    - <kbd>Alt</kbd> + <kbd>d</kbd>: Delete a word (backward) [Insert Mode]
+    - <kbd>Ctrl</kbd> + <kbd>w</kbd>: Delete a word (foreward) [Insert Mode]
+    - <kbd>Ctrl</kbd> + <kbd>d</kbd>: Delete a char (backward) [Insert Mode] == [Delete]
 
 +++++++++++++++++++++++++++++++++++++++++++
 
 - Patten shortcuts:
-    - `zdb`: Delete the backspace at the each of each line
-    - `zmm`: Insert the line number
-    - `zws`: Delete the blank line
-    - `zdm`: Delete `^M` (<C-v><CR>)
-    - `zng`: Show the number of searched words in last time
-    - `zhh`: Delete all white space in the font of the line
+    - <kbd>zdb</kbd>: Delete the backspace at the each of each line
+    - <kbd>zmm</kbd>: Insert the line number
+    - <kbd>zws</kbd>: Delete the blank line
+    - <kbd>zdm</kbd>: Delete `^M` (<C-v><CR>)
+    - <kbd>zng</kbd>: Show the number of searched words in last time
+    - <kbd>zhh</kbd>: Delete all white space in the font of the line
 
 ### Plugins:
 - [AuthorInfo](https://github.com/dantezhu/authorinfo)
@@ -253,20 +253,20 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
 ### 主题请看Screenshot
 - 自动配对
 - 自动添加信息：
-    - `<leader>fn`: 添加当前文件名(无后缀，方便Java添加类名)
-    - `<leader>fe`: 添加当前文件名(有后缀，方便添加注释)
-    - `<leader>tt`: 添加当前时间
+    - <kbd><leader>fn</kbd>: 添加当前文件名(无后缀，方便Java添加类名)
+    - <kbd><leader>fe</kbd>: 添加当前文件名(有后缀，方便添加注释)
+    - <kbd><leader>tt</kbd>: 添加当前时间
 - 自动保存和加载折叠信息
 
 +++++++++++++++++++++++++++++++++++++++++++
 
 - 自定义函数快捷键
-    - `<F12>`: 重新生成tags文件
-    - `gf`: 打开光标下的单词为文件名 （若是python文件，则自动添加.py为后缀）
-    - `Alt + -`: 缩小字体
-    - `Alt + +`: 增大字体
-    - `cmd`: 打开命令行，且自动cd到当前文件目录（Linux打开的为Terminal，Windows打开的为command line）
-    - `Alt + o`: 打开文件浏览器， 且自动进入当前文档的目录 （Linux打开为Nautilus, Windows打开为Explorer）
+    - <kbd><F12></kbd>: 重新生成tags文件
+    - <kbd>gf</kbd>: 打开光标下的单词为文件名 （若是python文件，则自动添加.py为后缀）
+    - <kbd>Alt</kbd> + <kbd>-</kbd>: 缩小字体
+    - <kbd>Alt</kbd> + <kbd>+</kbd>: 增大字体
+    - <kbd>cmd</kbd>: 打开命令行，且自动cd到当前文件目录（Linux打开的为Terminal，Windows打开的为command line）
+    - <kbd>Alt</kbd> + <kbd>o</kbd>: 打开文件浏览器， 且自动进入当前文档的目录 （Linux打开为Nautilus, Windows打开为Explorer）
 
 +++++++++++++++++++++++++++++++++++++++++++
 
@@ -282,37 +282,38 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
     - `<leader>re`: Open the most recently used files
     - `<leader>x`: Comments/Uncomments
 
-    - `<leader>aid`: 自动添加用户信息
-    - `<leader>tl`: 显示taglist
-    - `<leader>mm`: 显示winmanager(附带taglist信息)
-    - `<leader>ta`: 显示Tagbar
-    - `<leader>v`: 打开配置文件(_vimrc/.vimrc)
-    - `<leader>te`: 打开俄罗斯方块游戏(练习hjkl快捷键)
-    - `<leader>tv`: 在vim/gvim中运行bash(是的，你没看错！)
-    - `pyli`: Python静态代码分析(规范代码，远离砍手砍脚)
-    - `ctrl + g`: 打开最近文件列表（10个）
-    - `<leader>x`: 注释/反注释
+    - <kbd>\<leader\>aid</kbd>: 自动添加用户信息
+    - <kbd>\<leader\>tl</kbd>: 显示taglist
+    - <kbd>\<leader\>mm</kbd>: 显示winmanager(附带taglist信息)
+    - <kbd>\<leader\>ta</kbd>: 显示Tagbar
+    - <kbd>\<leader\>v</kbd>: 打开配置文件(_vimrc/.vimrc)
+    - <kbd>\<leader\>te</kbd>: 打开俄罗斯方块游戏(练习hjkl快捷键)
+    - <kbd>\<leader\>tv</kbd>: 在vim/gvim中运行bash(是的，你没看错！)
+    - <kbd>\<leader\>
+    - <kbd>pyli</kbd>: Python静态代码分析(规范代码，远离砍手砍脚)
+    - <kbd>\<leader>re</kbd>: 打开最近文件列表（10个）
+    - <kbd>\<leader\>x</kbd>: 注释/反注释
 
 +++++++++++++++++++++++++++++++++++++++++++
 
 - Emacs 风格快捷键
     - <kbd>Ctrl</kbd> + <kbd>a</kbd>: 光标移动到行首 [Normal模式 && 插入模式]
-    - `Ctrl + e`: 光标移动到行尾 [Normal模式 && 插入模式]
-    - `Alt + b`: 光标向前跳动一个单词 [插入模式]
-    - `Alt + f`: 光标向前跳动一个单词 [插入模式]
-    - `Alt + d`: 向前删除一个单词 [插入模式]
-    - `Ctrl + w`: 向后删除一个单词 [插入模式]
-    - `Ctrl + d`: 向后删除一个字符 [插入模式]
+    - <kbd>Ctrl</kbd> + <kbd>e</kbd>: 光标移动到行尾 [Normal模式 && 插入模式]
+    - <kbd>Alt</kbd> + <kbd>b</kbd>: 光标向前跳动一个单词 [插入模式]
+    - <kbd>Alt</kbd> + <kbd>f</kbd>: 光标向前跳动一个单词 [插入模式]
+    - <kbd>Alt</kbd> + <kbd>d</kbd>: 向前删除一个单词 [插入模式]
+    - <kbd>Ctrl</kbd> + <kbd>w</kbd>: 向后删除一个单词 [插入模式]
+    - <kbd>Ctrl</kbd> + <kbd>d</kbd>: 向后删除一个字符 [插入模式]
 
 +++++++++++++++++++++++++++++++++++++++++++
 
 - 正则表达式快捷键
-    - `zdb`: 删除行尾空格
-    - `zmm`: 插入文档行号
-    - `zws`: 删除空行
-    - `zdm`: 删除`^M`
-    - `zng`: 显示最后一次搜索内容的个数
-    - `zhh`: 删除行前的空白（缩进，空格，等）
+    - <kbd>zdb</kbd>: 删除行尾空格
+    - <kbd>zmm</kbd>: 插入文档行号
+    - <kbd>zws</kbd>: 删除空行
+    - <kbd>zdm</kbd>: 删除`^M`
+    - <kbd>zng</kbd>: 显示最后一次搜索内容的个数
+    - <kbd>zhh</kbd>: 删除行前的空白（缩进，空格，等）
 
 
 ### 插件列表：
