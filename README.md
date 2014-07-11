@@ -246,7 +246,6 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
 
 ### 快捷键
 - `F5`: 一键运行Python, Ruby 和 Perl。(运行结果将显示在Quickfix窗口中)
--
 
 +++++++++++++++++++++++++++++++++++++++++++
 
@@ -278,7 +277,7 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
     - <kbd>\<leader\>v</kbd>: 打开配置文件(_vimrc/.vimrc)
     - <kbd>\<leader\>te</kbd>: 打开俄罗斯方块游戏(练习hjkl快捷键)
     - <kbd>\<leader\>tv</kbd>: 在vim/gvim中运行bash(是的，你没看错！)
-    - <kbd>\<leader\>
+    - <kbd>\<leader\>u</kbd>: 打开Gundo窗口
     - <kbd>pyli</kbd>: Python静态代码分析(规范代码，远离砍手砍脚)
     - <kbd>\<leader>re</kbd>: 打开最近文件列表（10个）
     - <kbd>\<leader\>x</kbd>: 注释/反注释
