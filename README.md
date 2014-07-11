@@ -130,12 +130,17 @@ My Vim Config
     - `Alt + f`: Forward a word  [Insert Mode]
     - `Alt + d`: Delete a word (backward) [Insert Mode]
     - `Ctrl + w`: Delete a word (foreward) [Insert Mode]
+    - `Ctrl + d`: Delete a char (backward) [Insert Mode] == [Delete]
 
 +++++++++++++++++++++++++++++++++++++++++++
 
 - Partten shortcuts:
     - `zdb`: Delete the backspace at the each of each line
     - `zmm`: Insert the line number
+    - `zws`: Delete the blank line
+    - `zdm`: Delete `` (<C-v><CR>)
+    - `zng`: Show the number of searched words in last time
+    - `zhh`: Delete all white space in the font of the line
 
 ### Plugins:
 - [AuthorInfo](https://github.com/dantezhu/authorinfo)
@@ -164,6 +169,7 @@ My Vim Config
 #### For Python
 - [pyflakes.vim](https://github.com/vim-scripts/pyflakes.vim)
 - [python_fold.vim](https://github.com/vim-scripts/python_fold)
+- [python-mode](https://github.com/klen/python-mode)
 
 #### For Ruby and RoR
 - [vim-rails](https://github.com/tpope/vim-rails)
@@ -284,12 +290,18 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
     - `Alt + f`: 光标向前跳动一个单词 [插入模式]
     - `Alt + d`: 向前删除一个单词 [插入模式]
     - `Ctrl + w`: 向后删除一个单词 [插入模式]
+    - `Ctrl + d`: 向后删除一个字符 [插入模式]
 
 +++++++++++++++++++++++++++++++++++++++++++
 
 - 正则表达式快捷键
     - `zdb`: 删除行尾空格
     - `zmm`: 插入文档行号
+    - `zws`: 删除空行
+    - `zdm`: 删除``
+    - `zng`: 显示最后一次搜索内容的个数
+    - `zhh`: 删除行前的空白（缩进，空格，等）
+
 
 ### 插件列表：
 - [AuthorInfo](https://github.com/dantezhu/authorinfo)
@@ -317,6 +329,7 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
 #### Python插件
 - [pyflakes.vim](https://github.com/vim-scripts/pyflakes.vim)
 - [python_fold.vim](https://github.com/vim-scripts/python_fold)
+- [python-mode](https://github.com/klen/python-mode)
 
 #### Ruby和RoR插件
 - [vim-rails](https://github.com/tpope/vim-rails)
