@@ -100,7 +100,7 @@ My Vim Config
 +++++++++++++++++++++++++++++++++++++++++++
 
 - Specified function shortcuts:
-    - <kbd><F12></kbd>: Re-build tags file
+    - <kbd>F12</kbd>: Re-build tags file
     - <kbd>gf</kbd>: Open file which under the cursor (Add the .py suffix while the filetype == python)
     - <kbd>Alt</kbd> + <kbd>-</kbd>: Reduce the font
     - <kbd>Alt</kbd> + <kbd>+</kbd>: Enlarge the font
@@ -261,7 +261,7 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
 +++++++++++++++++++++++++++++++++++++++++++
 
 - 自定义函数快捷键
-    - <kbd><F12></kbd>: 重新生成tags文件
+    - <kbd>F12</kbd>: 重新生成tags文件
     - <kbd>gf</kbd>: 打开光标下的单词为文件名 （若是python文件，则自动添加.py为后缀）
     - <kbd>Alt</kbd> + <kbd>-</kbd>: 缩小字体
     - <kbd>Alt</kbd> + <kbd>+</kbd>: 增大字体
@@ -271,17 +271,6 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
 +++++++++++++++++++++++++++++++++++++++++++
 
 - 插件快捷键
-  - `<leader>tl`: Show the taglist
-    - `<leader>mm`: Show winmanager
-    - `<leader>ta`: Show Tagbar
-    - `<leader>v`:  Open the configure file (_vimrc in windows and .vimrc in Linux)
-    - `<leader>te`: Open the Tetris
-    - `<leader>tv`: Open bash in the vim/gvim against Liunxu and open command line against Windows (Yes! That's true)
-    - `<leader>`u: Open Gundo window
-    - `pyli`: Static Code Analysis for python
-    - `<leader>re`: Open the most recently used files
-    - `<leader>x`: Comments/Uncomments
-
     - <kbd>\<leader\>aid</kbd>: 自动添加用户信息
     - <kbd>\<leader\>tl</kbd>: 显示taglist
     - <kbd>\<leader\>mm</kbd>: 显示winmanager(附带taglist信息)
