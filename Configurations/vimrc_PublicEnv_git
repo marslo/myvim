@@ -169,6 +169,12 @@ if isdirectory(expand(bud . '\python-mode'))
   let g:pymode_options = 0
   let g:pymode_rope = 0
 endif
+
+" Programming configs for Groovy
+if has("autocmd")
+  au FileType groovy set tabstop=2 softtabstop=2 shiftwidth=2
+endif
+
 " ====================================== For Inteface =====================================
 if 'xterm-256color' == $TERM
   set t_Co=256
