@@ -90,6 +90,8 @@ Bundle 'git@github.com:vim-scripts/ruby-matchit.git'
 " For Javascript
 Bundle 'git@github.com:pangloss/vim-javascript.git'
 Bundle 'git@github.com:jelera/vim-javascript-syntax.git'
+" For AngularJS
+Bundle 'git@github.com:burnettk/vim-angular.git'
 " For web design
 Bundle 'git@github.com:tpope/vim-surround.git'
 Bundle 'git@github.com:tpope/vim-repeat.git'

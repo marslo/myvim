@@ -1,19 +1,19 @@
 [Desktop Entry]
-Name=Gvim
-GenericName=Editor
+Name=gvim
+GenericName=Gvim Editor
 Comment=Graphical Version of vim
 Exec=/home/marslo/.vim/tools/bin/gvim --servername gvim %U
-Icon=/home/marslo/.vim/tools/share/vim/vim74/gvim.png
-Version=1.0
+Exec=/home/marslo/.vim/tools/bin/gvim %U
+Icon=/home/marslo/.vim/tools/gvim.png
 Encoding=UTF-8
-Startupnotify=true
 Terminal=false
 Type=Application
-Categories=Application;Development;Programming;System Utilities;TextEditor
 StartupNotify=true
 MimeType=text/plain;
+Categories=Application;Development;Programming;System Utilities;TextEditor
+Version=7.4.383
 
 [Desktop Action Window]
 Name=Open a New Window
 Exec=gvim -f %F
-OnlyShowIn=Unity
+OnlyShowIn=Unity;

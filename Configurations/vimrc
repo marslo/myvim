@@ -88,10 +88,12 @@ Bundle 'nelstrom/vim-textobj-rubyblock'
 Bundle 'kana/vim-textobj-user'
 Bundle 'ruby-matchit'
 " For Javascript
-Bundle "pangloss/vim-javascript"
+Bundle 'pangloss/vim-javascript'
 Bundle 'jelera/vim-javascript-syntax'
+" For AngularJS
+Bundle 'burnettk/vim-angular'
 " For web design
-Bundle "tpope/vim-surround"
+Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-repeat'
 " Colors and themes and syntax
 Bundle 'luochen1990/rainbow'
