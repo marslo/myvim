@@ -72,7 +72,7 @@ Bundle 'rhysd/accelerated-jk'
 Bundle 'Marslo/MarsloFunc'
 " For Groovy
 Bundle 'groovy.vim--Ruley'
-Bundle 'mwaisgold/groovy-vim-files'
+" Bundle 'mwaisgold/groovy-vim-files'
 " For Python
 " Bundle 'python-mode'
 Bundle 'python_fold'
@@ -121,6 +121,16 @@ else
 endif
 
 function! GetVundle()                                                   " GetVundle() inspired by: http://pastebin.com/embed_iframe.php?i=C9fUE0M3
+  if has('win32') || has('win64')
+    let bud=$VIM . '\bundle'
+    let vud=bud . '\vundle'
+    let vudcfg=expand(vud . '\.git\config')
+  else
+    let bud='~/.vim/bundle'
+    let vud=bud . '/vundle'
+    let vudcfg=expand(vud . '/.git/config')
+  endif
+
   let vundleAlreadyExists=1
   if filereadable(vudcfg)
     echo "Vundle has existed at " . expand(vud)
