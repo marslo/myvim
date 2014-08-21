@@ -89,12 +89,11 @@ Bundle 'plasticboy/vim-markdown.git'
 filetype plugin indent on
 
 " ====================================== For My Function =====================================
-let bud='~/.vim/bundle'
-let vud=bud . '/vundle'
-let vudcfg=expand(vud . '/.git/config')
-
 function! GetVundle()                                                   " GetVundle() inspired by: http://pastebin.com/embed_iframe.php?i=C9fUE0M3
   let vundleAlreadyExists=1
+  let bud='~/.vim/bundle'
+  let vud=bud . '/vundle'
+  let vudcfg=expand(vud . '/.git/config')
   if filereadable(vudcfg)
     echo "Vundle has existed at " . expand(vud)
   else
