@@ -464,8 +464,8 @@ Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
 
 ### Command:
 - For GVIM:
-    <pre><code>$ make -f Make_cyg.mak PYTHON=/cygdrive/c/Marslo/MyProgram/Python27 DYNAMIC_PYTHON=yes PYTHON_VER=27 PYTHON3=/cygdrive/c/Marslo/MyProgram/Python34 DYNAMIC_PYTHON3=yes PYTHON3_VER=34 FEATURES=huge IME=yes USERNAME=Marslo.Jiao USERDOMAIN=China GUI=yes
+    <pre><code>$ make -B -f Make_cyg.mak PYTHON=/cygdrive/c/Marslo/MyProgramFiles/Python27 DYNAMIC_PYTHON=yes PYTHON_VER=27 PYTHON3=/cygdrive/c/Marslo/MyProgramFiles/Python34 DYNAMIC_PYTHON3=yes PYTHON3_VER=34 FEATURES=huge IME=yes GIME=yes MBYTE=yes CSCOPE=yes USERNAME=Marslo.Jiao USERDOMAIN=China GUI=yes
     </code></pre>
 - For VIM:
-    <pre><code>$  make -f Make_cyg.mak PYTHON=/cygdrive/c/Marslo/MyProgram/Python27 DYNAMIC_PYTHON=yes PYTHON_VER=27 PYTHON3=/cygdrive/c/Marslo/MyProgram/Python34 DYNAMIC_PYTHON3=yes PYTHON3_VER=34 FEATURES=huge IME=yes USERNAME=Marslo.Jiao USERDOMAIN=China GUI=no
+    <pre><code>$ make -B -f Make_cyg.mak PYTHON=/cygdrive/c/Marslo/MyProgramFiles/Python27 DYNAMIC_PYTHON=yes PYTHON_VER=27 PYTHON3=/cygdrive/c/Marslo/MyProgramFiles/Python34 DYNAMIC_PYTHON3=yes PYTHON3_VER=34 FEATURES=huge IME=yes GIME=yes MBYTE=yes CSCOPE=yes USERNAME=Marslo.Jiao USERDOMAIN=China GUI=no
     </code></pre>
