@@ -11,6 +11,7 @@
 let &runtimepath=printf('%s/vimfiles,%s,%s/vimfiles/after', $VIM, $VIMRUNTIME, $VIM)
 let s:portable = expand('<sfile>:p:h')
 let &runtimepath=printf('%s/.vim,%s/.vim,%s/.vim/after', s:portable, &runtimepath, s:portable)
+let bud=expand('$HOME/.marslo/.vim/bundle')
 " let s:portable = '$HOME/Marslo'
 " let $runtimepath=~s:portable/.vim,usr/local/share/vim/vimfiles,/usr/local/share/vim/vim74,/usr/local/share/vim/vimfiles/after,/home/auto/.vim/after
 
@@ -22,7 +23,7 @@ set diffopt=filler,context:3
 runtime macros/matchit.vim
 set wrap                                                            " Wrap lines
 set fileformat=unix
-set viminfo=%,<800,'10,/50,:100,h,f0,n~/.vim/cache/.viminfo
+set viminfo=%,<800,'10,/50,:100,h,f0,n~/.marslo/.vim/cache/.viminfo
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip
 set tags=./tags
 
@@ -32,8 +33,8 @@ let g:mapleader=","
 
 " Vim Bundle
 filetype off
-set rtp+=~/.vim/bundle/vundle
-call vundle#rc()
+set rtp+=~/.marslo/.vim/bundle/vundle
+call vundle#begin(bud)
 
 Bundle 'gmarik/vundle'
 Bundle 'Yggdroot/indentLine'
@@ -86,12 +87,14 @@ Bundle 'Marslo/vim-coloresque'
 Bundle 'Marslo/marslo.vim'
 Bundle 'Marslo/MarsloVimOthers'
 Bundle 'plasticboy/vim-markdown.git'
+
+call vundle#end()
 filetype plugin indent on
 
 " ====================================== For My Function =====================================
 function! GetVundle()                                                   " GetVundle() inspired by: http://pastebin.com/embed_iframe.php?i=C9fUE0M3
   let vundleAlreadyExists=1
-  let bud='~/.vim/bundle'
+  let bud='~/.marslo/.vim/bundle'
   let vud=bud . '/vundle'
   let vudcfg=expand(vud . '/.git/config')
   if filereadable(vudcfg)
@@ -182,8 +185,8 @@ else
   colorscheme marslo16
 endif
 
-nmap <leader>v :e $HOME/Marslo/.vimrc<CR>
-autocmd! bufwritepost $HOME/Marslo/.vimrc source %
+nmap <leader>v :e $HOME/.marslo/.vimrc<CR>
+autocmd! bufwritepost $HOME/.marslo/.vimrc source %
 
 set iskeyword+=.
 set autochdir
