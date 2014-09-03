@@ -133,8 +133,8 @@ if isdirectory(expand(bud . '\MarsloFunc'))
   " command! DiffSaved :call marslofunc#DiffWithSaved()<CR>
   " nnoremap <leader>df :call marslofunc#DiffWithSaved()<CR>
 
-  " set foldtext=marslofund#MyFoldText()<CR>
   set foldtext=v:folddashes.substitute(getline(v:foldstart),'/\\*\\\|\\*/\\\|{{{\\d\\=','','g')
+  " set foldtext=marslofund#MyFoldText()<CR>
 
 endif
 
@@ -191,7 +191,7 @@ endif
 nmap <leader>v :e $HOME/.marslo/.vimrc<CR>
 autocmd! bufwritepost $HOME/.marslo/.vimrc source %
 
-set iskeyword+=.
+set iskeyword-=.
 set autochdir
 set fileencodings=utf-8,ucs-bom,gbk,cp936,gb2312,gb18030            " Code Format
 set termencoding=utf-8

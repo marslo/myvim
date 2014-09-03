@@ -54,11 +54,12 @@ Bundle 'taglist.vim'
 Bundle 'winmanager'
 " For Moving faster
 Bundle 'rhysd/accelerated-jk'
+" Bundle 'yonchu/accelerated-smooth-scroll'
 " For Loading my function after vim start (reduce vim start time)
 Bundle 'Marslo/MarsloFunc'
 " For Groovy
 Bundle 'groovy.vim--Ruley'
-Bundle 'mwaisgold/groovy-vim-files'
+" Bundle 'mwaisgold/groovy-vim-files'
 " For Python
 " Bundle 'python-mode'
 Bundle 'python_fold'
@@ -74,10 +75,12 @@ Bundle 'nelstrom/vim-textobj-rubyblock'
 Bundle 'kana/vim-textobj-user'
 Bundle 'ruby-matchit'
 " For Javascript
-Bundle "pangloss/vim-javascript"
+Bundle 'pangloss/vim-javascript'
 Bundle 'jelera/vim-javascript-syntax'
+" For AngularJS
+Bundle 'burnettk/vim-angular'
 " For web design
-Bundle "tpope/vim-surround"
+Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-repeat'
 " Colors and themes and syntax
 Bundle 'luochen1990/rainbow'
@@ -130,8 +133,8 @@ if isdirectory(expand(bud . '\MarsloFunc'))
   " command! DiffSaved :call marslofunc#DiffWithSaved()<CR>
   " nnoremap <leader>df :call marslofunc#DiffWithSaved()<CR>
 
-  " set foldtext=marslofund#MyFoldText()<CR>
   set foldtext=v:folddashes.substitute(getline(v:foldstart),'/\\*\\\|\\*/\\\|{{{\\d\\=','','g')
+  " set foldtext=marslofund#MyFoldText()<CR>
 
 endif
 
@@ -188,7 +191,7 @@ endif
 nmap <leader>v :e $HOME/.marslo/.vimrc<CR>
 autocmd! bufwritepost $HOME/.marslo/.vimrc source %
 
-set iskeyword+=.
+set iskeyword-=.
 set autochdir
 set fileencodings=utf-8,ucs-bom,gbk,cp936,gb2312,gb18030            " Code Format
 set termencoding=utf-8
