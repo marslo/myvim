@@ -33,7 +33,7 @@ let g:mapleader=","
 
 " Vim Bundle
 filetype off
-set rtp+=~/.marslo/.vim/bundle/vundle
+let &runtimepath .= ',' . expand(bud . '/vundle')
 call vundle#begin(bud)
 
 Bundle 'gmarik/vundle'
