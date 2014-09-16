@@ -226,7 +226,7 @@ if 'xterm-256color' == $TERM
   set t_Co=256
 endif
 if has('gui_running') || 'xterm-256color' == $TERM
-  colorscheme marslo256
+  colorscheme marslo
   let psc_style='cool'
 else
   set t_Co=8
@@ -237,7 +237,7 @@ endif
 
 if has('win32') || has('win95') || has('win64')
   nmap <leader>v :e $VIM/_vimrc<CR>
-  autocmd! bufwritepost $VIM/_vimrc source %                        " autoload _vimrc
+  autocmd! bufwritepost $VIM/_vimrc silent! source %                        " autoload _vimrc
   set guifont=Monaco:h13                                            " Fonts
   set clipboard+=unnamed                                            " Copy the content to system clipboard by using y/p
   set clipboard+=unnamedplus

@@ -5,7 +5,7 @@
 "         Email: marslo.jiao@gmail.com
 "        Created: 2013-10-16 07:19:00
 "        Version: 0.0.9
-"    LastChange: 2014-09-03 02:04:53
+"    LastChange: 2014-09-16 03:05:15
 " =============================================================================
 
 let &runtimepath=printf('%s/vimfiles,%s,%s/vimfiles/after', $VIM, $VIMRUNTIME, $VIM)
@@ -92,6 +92,7 @@ Bundle 'Marslo/MarsloVimOthers'
 Bundle 'plasticboy/vim-markdown.git'
 
 call vundle#end()
+call pathogen#infect()
 filetype plugin indent on
 
 " ====================================== For My Function =====================================
@@ -179,7 +180,7 @@ endif
 " ====================================== For Inteface =====================================
 if 'xterm-256color' == $TERM
   set t_Co=256
-  colorscheme marslo256
+  colorscheme marslo
   let psc_style='cool'
 else
   set t_Co=8
@@ -189,7 +190,7 @@ else
 endif
 
 nmap <leader>v :e $HOME/.marslo/.vimrc<CR>
-autocmd! bufwritepost $HOME/.marslo/.vimrc source %
+autocmd! bufwritepost $HOME/.marslo/.vimrc silent! source %
 
 set iskeyword-=.
 set autochdir
