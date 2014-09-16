@@ -237,13 +237,13 @@ endif
 
 if has('win32') || has('win95') || has('win64')
   nmap <leader>v :e $VIM/_vimrc<CR>
-  autocmd! bufwritepost $VIM/_vimrc silent! source %                        " autoload _vimrc
+  autocmd! bufwritepost $VIM/_vimrc silent! source %                " autoload _vimrc
   set guifont=Monaco:h13                                            " Fonts
   set clipboard+=unnamed                                            " Copy the content to system clipboard by using y/p
   set clipboard+=unnamedplus
 else
   nmap <leader>v :e ~/.vimrc<CR>
-  autocmd! bufwritepost ~/.vimrc source %
+  autocmd! bufwritepost ~/.vimrc silent! source %
   set guifont=Monaco\ 13
   set clipboard=unnamedplus
 endif
