@@ -9,8 +9,6 @@
 " =============================================================================
 
 set nocompatible
-syntax enable on
-filetype plugin indent on
 set history=500
 set diffopt=filler,context:3
 runtime macros/matchit.vim
@@ -76,7 +74,7 @@ Bundle 'git@github.com:Marslo/MarsloFunc.git'
 Bundle 'git@github.com:vim-scripts/groovy.vim--Ruley.git'
 " Bundle 'git@github.com:mwaisgold/groovy-vim-files.git'
 " For Python
-" Bundle 'python-mode'
+" Bundle 'git@github.com:klen/python-mode.git'
 Bundle 'git@github.com:vim-scripts/python_fold.git'
 " Bundle 'git@github.com:kevinw/pyflakes-vim.git'
 Bundle 'git@github.com:pyflakes/pyflakes.git'
@@ -107,11 +105,13 @@ Bundle 'git@github.com:Marslo/MarsloVimOthers.git'
 Bundle 'git@github.com:plasticboy/vim-markdown.git'
 " Bundle 'git@github.com:cakebaker/scss-syntax.vim'
 " For fun
-" Bundle 'TeTrIs.vim'
-" Bundle 'matrix.vim--Yang'
+" Bundle 'git@github.com:TeTrIs.vim'
+" Bundle 'git@github.com:matrix.vim--Yang'
 
 call vundle#end()
+call pathogen#infect()
 filetype plugin indent on
+syntax enable on
 
 " ====================================== For My Function =====================================
 function! GetVundle()                                                   " GetVundle() inspired by: http://pastebin.com/embed_iframe.php?i=C9fUE0M3
