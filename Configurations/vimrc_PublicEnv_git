@@ -4,8 +4,8 @@
 "         Author: Marslo
 "         Email: marslo.jiao@gmail.com
 "        Created: 2013-10-16 07:19:00
-"        Version: 0.0.9
-"    LastChange: 2014-09-16 04:43:28
+"        Version: 0.0.11
+"    LastChange: 2014-09-18 00:17:46
 " =============================================================================
 
 let &runtimepath=printf('%s/vimfiles,%s,%s/vimfiles/after', $VIM, $VIMRUNTIME, $VIM)

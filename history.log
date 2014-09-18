@@ -15,6 +15,7 @@
 "                 0.0.8 | Marslo | Move all function to marslofunc.vim: https://github.com/Marslo/MarsloFunc. Inspird from http://stackoverflow.com/questions/21194354/how-can-i-reduce-startup-time-for-vim/21197543#21197543
 "                 0.0.9 | Marslo | Add the configurations for relativenumber in different situations, and change the GUI font to h13
 "                 0.0.10 | Marslo | Add multi-shorcuts by xnormap, vmap, nnoremap, etc. Re-add the functionf for remember cursor position
+"                 0.0.11 | Marslo | Fix the issue for "Cannot find color scheme "marslo2456" by synload.vim Line 19 (https://groups.google.com/d/msg/vim_dev/AnoL7ZC4fs8/G_ruYCiep1YJ)
 =============================================================================
 
 " =============================================================================
@@ -46,4 +47,5 @@
 "                0.0.20 | Marslo | Move all function to marslofunc.vim: https://github.com/Marslo/MarsloFunc. Inspird from http://stackoverflow.com/questions/21194354/how-can-i-reduce-startup-time-for-vim/21197543#21197543
 "                0.0.21 | Marslo | Add the configurations for relativenumber in different situations, and change the GUI font to h13
 "                0.0.22 | Marslo | Add multi-shorcuts by xnormap, vmap, nnoremap, etc. Re-add the functionf for remember cursor position
+"                0.0.23 | Marslo | Fix the issue for "Cannot find color scheme "marslo2456" by synload.vim Line 19 (https://groups.google.com/d/msg/vim_dev/AnoL7ZC4fs8/G_ruYCiep1YJ)
 " =============================================================================
