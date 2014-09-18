@@ -1,9 +1,12 @@
 SuperTabChain	supertab.txt	/*SuperTabChain*
 SuperTabSetDefaultCompletionType	supertab.txt	/*SuperTabSetDefaultCompletionType*
+b:SuperTabContextTextMemberPatterns	supertab.txt	/*b:SuperTabContextTextMemberPatterns*
+b:SuperTabContextTextOmniPrecedence	supertab.txt	/*b:SuperTabContextTextOmniPrecedence*
 g:SuperTabClosePreviewOnPopupClose	supertab.txt	/*g:SuperTabClosePreviewOnPopupClose*
 g:SuperTabCompletionContexts	supertab.txt	/*g:SuperTabCompletionContexts*
 g:SuperTabContextDefaultCompletionType	supertab.txt	/*g:SuperTabContextDefaultCompletionType*
 g:SuperTabContextTextFileTypeExclusions	supertab.txt	/*g:SuperTabContextTextFileTypeExclusions*
+g:SuperTabContextTextMemberPatterns	supertab.txt	/*g:SuperTabContextTextMemberPatterns*
 g:SuperTabContextTextOmniPrecedence	supertab.txt	/*g:SuperTabContextTextOmniPrecedence*
 g:SuperTabCrMapping	supertab.txt	/*g:SuperTabCrMapping*
 g:SuperTabDefaultCompletionType	supertab.txt	/*g:SuperTabDefaultCompletionType*

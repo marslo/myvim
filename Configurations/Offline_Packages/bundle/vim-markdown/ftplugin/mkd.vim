@@ -47,12 +47,12 @@
 
 " For each level, contains the regexp that matches at that level only.
 let s:levelRegexpDict = {
-    \ 1: '\v^(#[^#]|.+\n\=+$)',
-    \ 2: '\v^(##[^#]|.+\n-+$)',
-    \ 3: '\v^###[^#]',
-    \ 4: '\v^####[^#]',
-    \ 5: '\v^#####[^#]',
-    \ 6: '\v^######[^#]'
+    \ 1: '\v^(#[^#]@=|.+\n\=+$)',
+    \ 2: '\v^(##[^#]@=|.+\n-+$)',
+    \ 3: '\v^###[^#]@=',
+    \ 4: '\v^####[^#]@=',
+    \ 5: '\v^#####[^#]@=',
+    \ 6: '\v^######[^#]@='
 \ }
 
 " Maches any header level of any type.
@@ -302,27 +302,27 @@ function! s:Markdown_Toc(...)
     endif
 
     try
-        silent vimgrep /\(^\S.*\(\n[=-]\+\)\@=\|^#\+\)/ %
+        silent lvimgrep /\(^\S.*\(\n[=-]\+\n\)\@=\|^#\+\)/ %
     catch /E480/
         echom "Toc: No headers."
         return
     endtry
 
     if l:window_type ==# 'horizontal'
-        copen
+        lopen
     elseif l:window_type ==# 'vertical'
-        vertical copen
+        vertical lopen
         let &winwidth=(&columns/2)
     elseif l:window_type ==# 'tab'
-        tab copen
+        tab lopen
     else
-        copen
+        lopen
     endif
     set modifiable
-    %s/\v^([^|]*\|){2,2} #//
+    %s/\v^([^|]*\|){2,2} #//e
     for i in range(1, line('$'))
-        " this is the quickfix data for the current item
-        let d = getqflist()[i-1]
+        " this is the location-list data for the current item
+        let d = getloclist(0)[i-1]
         " atx headers
         if match(d.text, "^#") > -1
             let l:level = len(matchstr(d.text, '#*', 'g'))-1
@@ -392,8 +392,24 @@ function! s:HeaderDecrease(line1, line2, ...)
     endfor
     let l:numSubstitutions = s:SetexToAtx(a:line1, a:line2)
     for l:level in range(replaceLevels[0], replaceLevels[1], -l:levelDelta)
-        execute 'silent! ' . a:line1 . ',' . (a:line2 - l:numSubstitutions) . 'substitute/' . s:levelRegexpDict[l:level] . '/' . repeat('#', l:level + l:levelDelta) . '\1/g'
+        execute 'silent! ' . a:line1 . ',' . (a:line2 - l:numSubstitutions) . 'substitute/' . s:levelRegexpDict[l:level] . '/' . repeat('#', l:level + l:levelDelta) . '/g'
     endfor
+endfunction
+
+" Format table under cursor.
+" Depends on Tabularize.
+function! s:TableFormat()
+  let l:pos = getpos('.')
+  normal! {
+  " Search instead of `normal! j` because of the table at beginning of file edge case.
+  call search('|')
+  normal! j
+  " Remove everything that is not a pipe othewise well formated tables would grow
+  " because of addition of 2 spaces on the separator line by Tabularize /|.
+  s/[^|]//g
+  Tabularize /|
+  s/ /-/g
+  call setpos('.', l:pos)
 endfunction
 
 call <sid>MapNormVis('<Plug>(Markdown_MoveToNextHeader)', '<sid>Markdown_MoveToNextHeader')
@@ -421,10 +437,11 @@ if !get(g:, 'vim_markdown_no_default_key_mappings', 0)
     vmap <buffer> ]c <Plug>(Markdown_MoveToCurHeader)
 endif
 
+command! -buffer -range=% HeaderDecrease call s:HeaderDecrease(<line1>, <line2>)
+command! -buffer -range=% HeaderIncrease call s:HeaderDecrease(<line1>, <line2>, 1)
+command! -buffer -range=% SetexToAtx call s:SetexToAtx(<line1>, <line2>)
+command! -buffer TableFormat call s:TableFormat()
 command! -buffer Toc call s:Markdown_Toc()
 command! -buffer Toch call s:Markdown_Toc('horizontal')
 command! -buffer Tocv call s:Markdown_Toc('vertical')
 command! -buffer Toct call s:Markdown_Toc('tab')
-command! -buffer -range=% SetexToAtx call s:SetexToAtx(<line1>, <line2>)
-command! -buffer -range=% HeaderDecrease call s:HeaderDecrease(<line1>, <line2>)
-command! -buffer -range=% HeaderIncrease call s:HeaderDecrease(<line1>, <line2>, 1)

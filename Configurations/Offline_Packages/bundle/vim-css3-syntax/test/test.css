@@ -107,9 +107,9 @@
 @counter-style counter-style {
   system: cyclic;
   negative: symbolic;
-  prefix: numeric;
+  prefix: numbers;
   suffix: additive;
-  range: override;
+  range: extends;
   pad: cjk-decimal;
   fallback: disclosure-open;
   symbols: disclosure-closed;
@@ -119,13 +119,16 @@
   display: trad-chinese-formal;
   display: ethiopic-numeric;
   display: symbols("*" "\2020" "\2021" "\A7");
+  display: bullets;
+  display: words;
 }
 
 .display {
   display-inside: block-level;
   display-outside: inline-level;
-  display-extras: inline-list-item;
-  display-box: contents;
+  display-list: contents;
+  display-suppress: inline-list-item;
+  display: show;
 }
 
 .exclusions {
@@ -245,10 +248,10 @@
 
 .line-grid {
   line-grid: create;
-  line-snap: half-border;
-  line-slack: rounddown(1em);
-  box-snap: roundup(1em);
-  display: 10gd;
+  line-snap: block-start;
+  box-snap: block-end;
+  display: first-baseline;
+  display: last-baseline;
 }
 
 .linebox {
@@ -352,9 +355,9 @@
 }
 
 .ruby {
+  ruby-position: ruby-base-container;
   ruby-merge: ruby-text-container;
   ruby-align: inter-character;
-  ruby-position: ruby-base-container;
 }
 
 @scope .scoping {

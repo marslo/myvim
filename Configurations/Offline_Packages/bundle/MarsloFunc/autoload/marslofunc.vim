@@ -89,7 +89,7 @@ function! marslofunc#GetVim()                                                   
     if filereadable(vimgitcfg)
       echo 'vimsrc has exists at ' . expand(vimsrc)
     else
-      execute 'silent !git clone git@github.com:b4winckler/vim.git "' . expand(vimsrc) . '"'
+      execute 'silent !git clone git@github.com:vim-jp/vim.git "' . expand(vimsrc) . '"'
     end
   endif
 endfunction
@@ -200,3 +200,20 @@ function! marslofunc#VSetSearch()
   let @/ = '\V' . substitute(escape(@s, '/|'), '\n', '\\n', 'g')
   let @s = temp
 endfunction
+
+" Remember Cursor position in last time, inspired from http://vim.wikia.com/wiki/VimTip80
+function! marslofunc#ResCur()
+  if line("'\"") <= line("$")
+    normal! g`"
+    return 1
+  endif
+endfunction
+
+" Diff with unsaved file. Inspired from http://ppwwyyxx.com/misc/vim.html
+" function! marslofunc#DiffWithSaved()
+  " let ft = &filetype
+  " diffthis
+  " vnew | r # | normal! 1Gdd
+  " diffthis
+  " exec "setlocal bt=nofile bh=wipe nobl noswf ro ft=" . ft
+" endfunction

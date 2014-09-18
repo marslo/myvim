@@ -8,8 +8,8 @@
 "         Author: Marslo
 "          Email: marslo.jiao@gmail.com
 "        Created: 2012-05-29
-"        Version: 0.1.9
-"     LastChange: 2014-03-31 10:57:02
+"        Version: 0.1.10
+"     LastChange: 2014-07-02 18:18:24
 " =============================================================================
 
 
@@ -30,51 +30,52 @@ if version > 580
   endif
 endif
 
-let g:colors_name="marslo256"
+let g:colors_name="marslo"
+let color_name="marslo"
 
-hi Normal	              guifg=#DDDDDD       guibg=#181818
-hi Cursor	              guibg=#A6E22E       guifg=#A6E22E     gui=underline
+hi Normal	              guifg=#DDDDDD         guibg=#181818
+hi Cursor	              guibg=#A6E22E         guifg=#A6E22E       gui=underline
 " Color for :set cursorline (Highlight the line number only)
-hi LineNr               guifg=#555555       guibg=background
+hi LineNr               guifg=#555555         guibg=background
 hi CursorLine           guibg=background
-hi CursorLineNr         guifg=#A6E22E       guibg=background    gui=NONE
-hi Folded	              guibg=grey15        guifg=grey60
-hi FoldColumn	          guibg=#181818       guifg=#484848
+hi CursorLineNr         guifg=#A6E22E         guibg=background    gui=NONE
+hi Folded	              guibg=grey15          guifg=grey60
+hi FoldColumn	          guibg=#181818         guifg=#484848
 " $,>,backspace,... and other sign
-hi NonText              guifg=#808080       gui=NONE
-hi VertSplit	          guibg=#282828       guifg=grey30        gui=none
-hi IncSearch	          guifg=slategrey     guibg=khaki
+hi NonText              guifg=#808080         gui=NONE
+hi VertSplit	          guibg=#282828         guifg=grey30        gui=none
+hi IncSearch	          guifg=slategrey       guibg=khaki
 hi ModeMsg	            guifg=goldenrod
 hi MoreMsg	            guifg=SeaGreen
 hi Question	            guifg=springgreen
-hi Search	              guibg=peru          guifg=wheat
+hi Search	              guibg=peru            guifg=wheat
 hi SpecialKey	          guifg=yellowgreen
 " Status line for each split windows
-hi StatusLine	          guibg=gray15        guifg=black         gui=none
-hi StatusLineNC	        guibg=gray18        guifg=grey50        gui=none
-hi User1                guibg=gray15        guifg=#9876AA
-hi User2                guibg=gray15        guifg=#A5C25C
-" hi Title	            guifg=indianred
+hi StatusLine	          guibg=gray15          guifg=black         gui=none
+hi StatusLineNC	        guibg=gray18          guifg=grey50        gui=none
+hi User1                guibg=gray15          guifg=#9876AA
+hi User2                guibg=gray15          guifg=#A5C25C
+" hi Title	              guifg=indianred
 hi Title	              guifg=gray28
-hi Visual	              guifg=khaki         guibg=olivedrab     gui=none
+hi Visual	              guifg=khaki           guibg=olivedrab     gui=none
 "hi VisualNOS
 hi WarningMsg	          guifg=salmon
 " The color setting for complete opt
 hi Pmenu                guibg=gray14
-hi PmenuSel             guifg=GreenYellow   guibg=gray14
-hi PmenuSbar            guifg=black         guibg=gray14
+hi PmenuSel             guifg=GreenYellow     guibg=gray14
+hi PmenuSbar            guifg=black           guibg=gray14
 """" Function name(shell) [python: print]
-hi Identifier	          guifg=#4169E1       gui=NONE
+hi Identifier	          guifg=#4169E1         gui=NONE
 hi Ignore	              guifg=grey40
-hi Todo		              guifg=orangered     guibg=yellow2
+hi Todo		              guifg=orangered       guibg=yellow2
 " MiniBufExpl Colors
-hi MBEVisibleActive     guifg=#5DC2D6       guibg=#333333
-hi MBEVisibleNormal     guifg=#A6DB29       guibg=#333333
+hi MBEVisibleActive     guifg=#5DC2D6         guibg=#333333
+hi MBEVisibleNormal     guifg=#A6DB29         guibg=#333333
 " Inspired from http://stackoverflow.com/questions/10746750/set-vim-bracket-highlighting-colors
 " Color for :set showmatch
 hi MatchParen           gui=inverse
 " NERDTree
-" hi Directory            guifg=#87afdf
+" hi Directory          guifg=#87afdf
 hi Directory            guifg=#1E90FF
 hi treeCWD              guifg=#dfaf87
 hi treeClosable         guifg=#df8787
@@ -82,27 +83,27 @@ hi treeOpenable         guifg=#afdf87
 hi treePart             guifg=#808080
 hi treeDirSlash         guifg=#808080
 hi treeLink             guifg=#dfafdf
-hi String               guifg=#9acd00       gui=NONE
-hi Entity               guifg=#fa6513       gui=NONE
-hi Support              guifg=#8fa6cd       gui=NONE
-hi Comment	            guifg=#484848       gui=NONE
+hi String               guifg=#9acd00         gui=NONE
+hi Entity               guifg=#fa6513         gui=NONE
+hi Support              guifg=#8fa6cd         gui=NONE
+hi Comment	            guifg=#484848         gui=NONE
 """" <CR>, <leader>
-hi Special	            guifg=#fdb933       gui=NONE
+hi Special	            guifg=#fdb933         gui=NONE
 """" Strings if nohi String
-hi Constant	            guifg=#A6E22E       gui=NONE
+hi Constant	            guifg=#A6E22E         gui=NONE
 """" Key words (while, if, else, for, in)
-hi Statement	          guifg=#EE801E       gui=NONE
+hi Statement	          guifg=#EE801E         gui=NONE
 """" #! color
-hi PreProc	            guifg=OrangeRed3    gui=NONE
-" hi Type		            guifg=#afdf66       gui=NONE
-" hi Type		            guifg=#4169E1       gui=NONE
-" hi Type		            guifg=#EE3E3E       gui=NONE
-hi Type		            guifg=#B2F432       gui=NONE
-" hi Type		            guifg=#D0E141       gui=NONE
-" hi Type		            guifg=#1E90FF       gui=NONE
-" hi Type		            guifg=#a4c148       gui=NONE
-" hi Type		            guifg=#6495ED       gui=NONE
-" hi Type		              guifg=#5F87FF       gui=NONE
+hi PreProc	            guifg=OrangeRed3      gui=NONE
+" hi Type		              guifg=#afdf66         gui=NONE
+" hi Type		              guifg=#4169E1         gui=NONE
+" hi Type		              guifg=#EE3E3E         gui=NONE
+hi Type		              guifg=#B2F432         gui=NONE
+" hi Type		              guifg=#D0E141         gui=NONE
+" hi Type		              guifg=#1E90FF         gui=NONE
+" hi Type		              guifg=#a4c148         gui=NONE
+" hi Type		              guifg=#6495ED         gui=NONE
+" hi Type		              guifg=#5F87FF         gui=NONE
 hi Underlined	          gui=NONE
 " HTML
 hi htmlTag              guifg=#484848
@@ -123,6 +124,10 @@ hi Define               guifg=#EE2C2C
 hi Conditional          guifg=#AFDF66
 " hi Operator             guifg=#836fff
 hi Operator             guifg=#FF8C00
+hi DiffAdd	            gui=NONE            guibg=#836FFF         guifg=NONE
+hi DiffDelete	          gui=NONE            guibg=#2b2b2b         guifg=#836FFF
+hi DiffChange	          gui=bold            guibg=#2b2b2b         guifg=NONE
+hi DiffText	            gui=bold,underline  guibg=#9B30FF
 " hi link Function        Entity
 " hi link Structure       Support
 " hi link Special         Support
@@ -186,6 +191,7 @@ hi DiffAdded            ctermbg=93
 hi DiffRemoved          ctermbg=129
 hi DiffChange	          cterm=bold          ctermbg=99          ctermfg=255
 hi DiffText	            cterm=NONE          ctermbg=196
+" The color setting for complete opt
 hi Pmenu                ctermfg=208         ctermbg=NONE
 hi PmenuSel             ctermfg=154
 hi Identifier	          ctermfg=149
@@ -240,4 +246,4 @@ hi rubyIdentifier       ctermfg=9
 hi User1                ctermfg=135         ctermbg=black
 hi User2                ctermfg=193         ctermbg=black
 
-"vim: sw=2
+" vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab:sw=2
