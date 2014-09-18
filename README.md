@@ -458,9 +458,15 @@ Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
 ## In Windws (By Cygwin)
 ### Mandatory Cygwin options
 - Dev stuff:
-    - gcc / gcc-g++
-    - make
-    - [ncurses](https://stackoverflow.com/questions/9959243/building-vim-from-source-in-cygwin)
+    - Mandatory
+        - gcc / gcc-g++
+        - make
+        - [ncurses](https://stackoverflow.com/questions/9959243/building-vim-from-source-in-cygwin)
+    - Optional
+        - Flex
+        - bison
+        - gettext / gettext-devel
+        - textinfo
 
 ### Command:
 - For GVIM:
