@@ -59,7 +59,7 @@ Bundle 'Marslo/MarsloFunc'
 Bundle 'groovy.vim--Ruley'
 " Bundle 'mwaisgold/groovy-vim-files'
 " For Python
-" Bundle 'python-mode'
+" Bundle 'klen/python-mode'
 Bundle 'python_fold'
 " Bundle 'kevinw/pyflakes-vim'
 Bundle 'pyflakes/pyflakes'
@@ -90,8 +90,8 @@ Bundle 'Marslo/MarsloVimOthers'
 Bundle 'plasticboy/vim-markdown.git'
 
 " For fun
-" Bundle 'TeTrIs.vim'
-" Bundle 'matrix.vim--Yang'
+Bundle 'TeTrIs.vim'
+Bundle 'matrix.vim--Yang'
 
 call vundle#end()
 call pathogen#infect()
@@ -101,7 +101,8 @@ syntax enable on
 " ====================================== For My Function =====================================
 function! GetVundle()                                                   " GetVundle() inspired by: http://pastebin.com/embed_iframe.php?i=C9fUE0M3
   let vundleAlreadyExists=1
-  let bud='~/.marslo/.vim/bundle'
+  let bud=expand('$HOME/.marslo/.vim/bundle')
+  " let bud='~/.marslo/.vim/bundle'
   let vud=bud . '/vundle'
   let vudcfg=expand(vud . '/.git/config')
   if filereadable(vudcfg)
@@ -118,7 +119,7 @@ function! GetVundle()                                                   " GetVun
 endfunction
 command! GetVundle :call GetVundle()
 
-if isdirectory(expand(bud . '\MarsloFunc'))
+if isdirectory(expand(bud . '/MarsloFunc'))
   command! GetVim :call marslofunc#GetVim()<CR>
   nmap cmd :call marslofunc#OpenCMD()<CR>
   nmap gf :call marslofunc#GotoFile()<CR>
@@ -168,7 +169,7 @@ if !has('python')
   let g:pymode = 0
 endif
 
-if isdirectory(expand(bud . '\python-mode'))
+if isdirectory(expand(bud . '/python-mode'))
   let g:pymode_lint_checker = ['pyflakes']
   let g:pymode_trim_whitespace = 0
   let g:pymode_options = 0
@@ -432,7 +433,7 @@ let g:AutoPairsShortcutBackInsert = '<M-b>'
 
 match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
 
-" if isdirectory(bud . '\accelerated-jk')
+" if isdirectory(bud . '/accelerated-jk')
   " nmap j <Plug>(accelerated_jk_gj)
   " nmap k <Plug>(accelerated_jk_gk)
 " endif

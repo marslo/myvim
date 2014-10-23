@@ -24,7 +24,7 @@ if has('win32') || has('win64')
   set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe,*.rar
   set tags=.\tags
   autocmd BufEnter c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\* :setlocal tags+=c:\Marslo\Job\Summa\TEX\SVN\netact-mpp-lab-scripts\.tags
-  let bud=expand($VIM . '\bundle')
+  let bud=expand($VIM . '\bundle') . '\'
 else
   set fileformat=unix
   set wrap                                                          " Wrap lines
@@ -32,7 +32,7 @@ else
   set wildignore+=*/tmp/*,*.so,*.swp,*.zip
   set tags=tags
   set tags+=/home/marslo/Study/Codes/Rails/sdt
-  let bud=expand('~/.vim/bundle')
+  let bud=expand('~/.vim/bundle') . '/'
 endif
 
 " ====================================== For Property =====================================
@@ -105,8 +105,8 @@ Bundle 'Marslo/MarsloVimOthers'
 Bundle 'plasticboy/vim-markdown.git'
 " Bundle 'cakebaker/scss-syntax.vim'
 " For fun
-" Bundle 'TeTrIs.vim'
-" Bundle 'matrix.vim--Yang'
+Bundle 'TeTrIs.vim'
+Bundle 'matrix.vim--Yang'
 
 call vundle#end()
 call pathogen#infect()
@@ -140,7 +140,7 @@ function! GetVundle()                                                   " GetVun
 endfunction
 command! GetVundle :call GetVundle()
 
-if isdirectory(expand(bud . '\MarsloFunc'))
+if isdirectory(expand(bud . 'MarsloFunc'))
   command! GetVim :call marslofunc#GetVim()<CR>
   nmap cmd :call marslofunc#OpenCMD()<CR>
   nmap gf :call marslofunc#GotoFile()<CR>
@@ -194,7 +194,7 @@ if !has('python')
   let g:pymode = 0
 endif
 
-if isdirectory(expand(bud . '\python-mode'))
+if isdirectory(expand(bud . 'python-mode'))
   let g:pymode_lint_checker = ['pyflakes']
   let g:pymode_trim_whitespace = 0
   let g:pymode_options = 0
