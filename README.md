@@ -47,7 +47,7 @@ My Vim Config
                 :GetVundle
     - Get the other plugins
 
-        :BundleInstall!
+            :BundleInstall!
 
 - Linux User:
     - Copy **vimrc** from `VimConfig/Configurations/vimrc` into `$HOME`, and rename to **.vimrc**
@@ -66,7 +66,7 @@ My Vim Config
 
     - Get the other plugins
 
-        :BundleInstall!
+            :BundleInstall!
 
 - Offline User:
     - For **vimrc** file
@@ -226,13 +226,13 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
         $ cp Configurateions/vimrc ~/.vimrc
 
     - 自动获取 [Vundle](https://github.com/gmarik/vundle.git)
-        - 打开Gvim且运行 (忽略错误或警告）：
+        - 打开Gvim且运行 (忽略错误或警告）
 
                 :GetVundle
 
     - 获取其他插件
 
-        :BundleInstall!
+            :BundleInstall!
 
 - 离线用户 (无法使用git用户)：
     - 对于**vimrc** 而言：
