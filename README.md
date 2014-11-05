@@ -43,40 +43,50 @@ My Vim Config
     - Copy **vimrc** from `VimConfig\Configurations\vimrc` into `C:\Program Files\Vim`, and rename **vimrc** to **_vimrc**
     - Get [Vundle](https://github.com/gmarik/vundle.git) automatically
         - Open Vim and execute (Ignore warning and errors)
-            <pre><code>:GetVundle</code></pre>
+
+                :GetVundle
     - Get the other plugins
-        <pre><code>:BundleInstall!</code></pre>
+
+        :BundleInstall!
 
 - Linux User:
     - Copy **vimrc** from `VimConfig/Configurations/vimrc` into `$HOME`, and rename to **.vimrc**
-    <pre><code>$ cp vimrc ~/.vimrc</code></pre>
+
+        $ cp vimrc ~/.vimrc
+
     - Get [Vundle](https://github.com/gmarik/vundle.git) automatically
-        <pre><code>$ cat .vimrc | grep "set rtp"
+
+        $ cat .vimrc | grep "set rtp"
             set rtp+=$VIM/vimfiles/bundle/vundle
             set rtp+=~/.vim/bunle/vundle
-        </code></pre>
+
         - Open Vim and Run (Ignore warnings and errors):
-            <pre><code>:GetVundle</code></pre>
+
+                :GetVundle
+
     - Get the other plugins
-        <pre><code>:BundleInstall!</code></pre>
+
+        :BundleInstall!
 
 - Offline User:
     - For **vimrc** file
         - Windows User:
             - Copy **vimrc** from `VimConfig\configureations\vimrc` to `C:\Program Files (x86)\Vim` (64bit) or `C:\Program Files\Vim` (32bit), and rename to `_vimrc`
         - Linux User:
-            - Copy **vimrc** from `VimConfig/Configuations/vimrc` into `$HOME`, and rename to `.vimrc`
-            <pre><code>$ cp VimConfig/Configurations/vimrc ~/.vimrc</code></pre>
-            OR
-            - Create Link file to `$HOME/.vimrc`
-            <pre><code>$ ln -s <PATH_OF_VimConfig>/Configrations/vimrc ~/.vimrc</code></pre>
+            - Copy **vimrc** from `VimConfig/Configuations/vimrc` into `$HOME`, and rename to `.vimrc`:
+
+                    $ cp VimConfig/Configurations/vimrc ~/.vimrc
+
+            - OR: Create Link file to `$HOME/.vimrc`:
+
+                    $ ln -s <PATH_OF_VimConfig>/Configrations/vimrc ~/.vimrc
     - For **bundle** folder
         - Windows User: Copy **bundle** folder from `VimConfig/Configurations/Offline_Packages/bundle` to `C:\Program Files (x86)\Vim` (64bit) or `C:\Program Files\Vim` (Windows 32bit User)
         - Linux User: Copy **bundle** folder from `VimConfig/Configureations/Offline_Packages/bundle` to `$HOME/.vim` OR create link file
-        <pre><code>$ cp -r VimConfig/Configureations/Offline_Package/bundle ~/.vim/
-        OR
-        $ ln -s <PATH_OF_VimConfig>/Configrations/Offline_Package/bundle ~/.vim/bundle
-        </code></pre>
+
+                $ cp -r VimConfig/Configureations/Offline_Package/bundle ~/.vim/
+                OR
+                $ ln -s <PATH_OF_VimConfig>/Configrations/Offline_Package/bundle ~/.vim/bundle
 
 -----------------------------
 
@@ -203,40 +213,46 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
     - 复制 **Configurations\vimrc** 到 `C:\Program Files (x86)\Vim`, 且重命名为`_vimrc`
     - 自动获取 [Vundle](https://github.com/gmarik/vundle.git)
         - 打开vim(忽略错误或警告)
-            <pre><code>:GetVundle
-            </code></pre>
+
+            :GetVundle
+
     - 获取其他插件
-        <pre><code>:BundleInstall!
-        </code></pre>
+
+        :BundleInstall!
 
 - Linux 用户:
     - 复制 **Configurations/vimrc** 到 `$HOME`, 且重命名为`.vimrc`
-        <pre><code>$ cp Configurateions/vimrc ~/.vimrc
-        </code></pre>
+
+        $ cp Configurateions/vimrc ~/.vimrc
+
     - 自动获取 [Vundle](https://github.com/gmarik/vundle.git)
         - 打开Gvim且运行 (忽略错误或警告）：
-            <pre><code>:GetVundle
-            </code></pre>
+
+                :GetVundle
+
     - 获取其他插件
-        <pre><code>:BundleInstall!
-        </code></pre>
+
+        :BundleInstall!
 
 - 离线用户 (无法使用git用户)：
     - 对于**vimrc** 而言：
         - Windows用户： 复制 **VimConig\Configurations\vimrc** 到 `C:\Program Files (x86)\Vim` (64位) 或 `C:\Program Files\Vim` (32位), 且重命名为`_vimrc`
         - Linux用户:
             - 复制 **VimConfig/Configurations/vimrc** 到 `$HOME`, 且重命名为`.vimrc`
-            <pre><code>$ cp VimConfig/Configurations/vimrc ~/.vimrc</code></pre>
-            或
-            - 创建link文件`$HOME/.vimrc`
-            <pre><code>$ ln -s <PATH_OF_VimConfig>/Configrations/vimrc ~/.vimrc</code></pre>
+
+                    $ cp VimConfig/Configurations/vimrc ~/.vimrc
+
+            - 或创建link文件`$HOME/.vimrc`
+
+                    $ ln -s <PATH_OF_VimConfig>/Configrations/vimrc ~/.vimrc
+
     - 对于 **bundle** 目录
         - Windows用户： 复制 `VimConfig/Configurations/Offline_Packages/bundle` 目录到 `C:\Program Files (x86)\Vim` (64位) 或 `C:\Program Files\Vim` (32位)
         - Linux用户: 复制 `VimConfig/Configureations/Offline_Packages/bundle` 到 `$HOME/.vim` 或创建链接文件
-        <pre><code>$ cp -r VimConfig/Configureations/Offline_Package/bundle ~/.vim/
-        OR
-        $ ln -s <PATH_OF_VimConfig>/Configrations/Offline_Package/bundle ~/.vim/bundle
-        </code></pre>
+
+                $ cp -r VimConfig/Configureations/Offline_Package/bundle ~/.vim/
+                OR
+                $ ln -s <PATH_OF_VimConfig>/Configrations/Offline_Package/bundle ~/.vim/bundle
 
 -----------------------------
 
@@ -360,9 +376,17 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
 ## In Linux(Ubuntu)
 ### 1. Prepare environment:
 #### 1.1. Downaload vim source code:
-Download source from [git](https://github.com/b4winckler/vim.git):
-<pre><code>$ git clone https://github.com/b4winckler/vim.git
-</code></pre>
+Download source from:
+- [b4winckler](https://github.com/b4winckler/vim.git):
+
+        $ git clone git@github.com:b4winckler/vim.git
+        $ git clone https://github.com/b4winckler/vim.git
+
+- [vim-jp](https://github.com/vim-jp/vim)
+
+        $ git clone git@github.com:vim-jp/vim.git
+        $ git clone https://github.com/vim-jp/vim.git
+
 #### 1.2. Install Necessary libs for GUI:
 - libatk1.0-dev
 - libbonoboui2-dev
@@ -376,8 +400,8 @@ Download source from [git](https://github.com/b4winckler/vim.git):
 - libxt-dev
 
 ##### Install necessary libs by the command as below:
-<pre><code>$ sudo apt-get install libncurses5-dev libgnome2-dev libgnomeui-dev libgtk2.0-dev libatk1.0-dev libbonoboui2-dev libcairo2-dev libx11-dev libxpm-dev libxt-dev
-</code></pre>
+
+    $ sudo apt-get install libncurses5-dev libgnome2-dev libgnomeui-dev libgtk2.0-dev libatk1.0-dev libbonoboui2-dev libcairo2-dev libx11-dev libxpm-dev libxt-dev
 
 ### 2. Compile and Install:
 #### 2.1 Arugs:
@@ -400,60 +424,76 @@ Download source from [git](https://github.com/b4winckler/vim.git):
     - `--with-features=TYPE`:    tiny, small, normal, big or huge (default: normal)
 
 #### 2.2. Commands
-<pre><code>$ cd vim
-$ ./configure --with-x --enable-gui=gnome2 --enable-cscope --enable-multibyte --enable-xim --enable-fontset --with-features=huge --enable-pythoninterp=yes --enable-rubyinterp=yes --enable-python3interp=yes --prefix=/home/marslo/Tools/Software/vim74/ --with-compiledby=Marslo --enable-gnome-check
-$ make
-$ sudo make install
-</code></pre>
+
+    $ cd vim
+    $ ./configure --with-x --enable-gui=gnome2 --enable-cscope --enable-multibyte --enable-xim --enable-fontset --with-features=huge --enable-pythoninterp=yes --enable-rubyinterp=yes --enable-python3interp=yes --prefix=/home/marslo/Tools/Software/vim74/ --with-compiledby=Marslo --enable-gnome-check
+    $ make
+    $ sudo make install
 
 #### 2.3. Set the PATH
-<pre><code>$ cat >> ~/.bashrc << EOF
-> export PATH=/home/marslo/Tools/Software/vim74/:$PATH
-> EOF
-$ vim --version
-VIM - Vi IMproved 7.4 (2013 Aug 10, compiled Sep 25 2013 15:31:13)
-Included patches: 1-35
-Compiled by Marslo
-Huge version with GTK2-GNOME GUI.  Features included (+) or not (-):
-....
-</code></pre>
+
+    $ cat >> ~/.bashrc << EOF
+    > export PATH=/home/marslo/Tools/Software/vim74/:$PATH
+    > EOF
+    $ vim --version
+    VIM - Vi IMproved 7.4 (2013 Aug 10, compiled Sep 25 2013 15:31:13)
+    Included patches: 1-35
+    Compiled by Marslo
+    Huge version with GTK2-GNOME GUI.  Features included (+) or not (-):
+    ....
 
 ### 3. Make the compiled Gvim as the default text editor in Ubunut:
 - Copy `applications/gvim.desktop` and `application/defaults.list` to `/usr/share/applications/`
-<pre><code>$ cp /usr/share/applications/defaults.list /usr/share/applications/defaults_bak.list`
+$ cp /usr/share/applications/defaults.list /usr/share/applications/defaults_bak.list`
 $ cp applications/gvim.desktop /usr/share/applications/
 $ cp -f applications/defaults.list /usr/share/applications/
-</code></pre>
+
 - Make gvim.desktop can find the gvim icon (it will be shown as bellow):
-<pre><code>$ cat gvim.desktop
+$ cat gvim.desktop
 ...
 Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
 ...
-</code></pre>
+
 - An fully [gvim.desktop](http://mirrors2.kernel.org/slackware/slackware-14.0/source/ap/vim/gvim.desktop)
 
 
 ### 4. Q&A
 4.1 ncurses:
 - Problem:
-    <pre><code>You need to install a terminal library; for example ncurses.
-    Or specify the name of the library with --with-tlib.
-    </code></pre>
+
+        no terminal library found
+        You need to install a terminal library; for example ncurses.
+        Or specify the name of the library with --with-tlib.
+
 - Soluction:
-    <pre></code>$ sudo apt-get install libncurses5-dev
-    </code></pre>
+    - For Ubuntu/Debain:
+
+            $ sudo apt-get install libncurses5-dev
+
+    - For RHEL/CentOS:
+
+
+            $ sudo yum install ncurses-devel
+
 
 4.2 C compiler
 - Problem:
-    <pre><code>no acceptable C compiler found in $PATH</code></pre>
+
+        no acceptable C compiler found in $PATH
+
 - Soluction:
-    <pre><code>$ sudo apt-get update && sudo apt-get install build-essential</code></pre>
+    - For Ubuntu/Debain:
+
+            $ sudo apt-get update && sudo apt-get install build-essential
 
 4.3 [Git clone https problem](http://stackoverflow.com/questions/10928215/git-push-error-fatal-unable-to-find-remote-helper-for-https/12012504#12012504)
 - Problem:
-    <pre><code>"fatal: Unable to find remote helper for 'http'"</code></pre>
+
+        "fatal: Unable to find remote helper for 'http'"
 - Soluction:
-    <pre><code>sudo apt-get install libcurl4-openssl-dev</code></pre>
+    - Fur Ubuntu/Debain:
+
+            $ sudo apt-get install libcurl4-openssl-dev
 
 ## In Windws (By Cygwin)
 ### Mandatory Cygwin options
@@ -470,8 +510,8 @@ Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
 
 ### Command:
 - For GVIM:
-    <pre><code>$ make -B -f Make_cyg.mak PYTHON=/cygdrive/c/Marslo/MyProgramFiles/Python27 DYNAMIC_PYTHON=yes PYTHON_VER=27 PYTHON3=/cygdrive/c/Marslo/MyProgramFiles/Python34 DYNAMIC_PYTHON3=yes PYTHON3_VER=34 FEATURES=huge IME=yes GIME=yes MBYTE=yes CSCOPE=yes USERNAME=Marslo.Jiao USERDOMAIN=China GUI=yes
-    </code></pre>
+
+        $ make -B -f Make_cyg.mak PYTHON=/cygdrive/c/Marslo/MyProgramFiles/Python27 DYNAMIC_PYTHON=yes PYTHON_VER=27 PYTHON3=/cygdrive/c/Marslo/MyProgramFiles/Python34 DYNAMIC_PYTHON3=yes PYTHON3_VER=34 FEATURES=huge IME=yes GIME=yes MBYTE=yes CSCOPE=yes USERNAME=Marslo.Jiao USERDOMAIN=China GUI=yes
 - For VIM:
-    <pre><code>$ make -B -f Make_cyg.mak PYTHON=/cygdrive/c/Marslo/MyProgramFiles/Python27 DYNAMIC_PYTHON=yes PYTHON_VER=27 PYTHON3=/cygdrive/c/Marslo/MyProgramFiles/Python34 DYNAMIC_PYTHON3=yes PYTHON3_VER=34 FEATURES=huge IME=yes GIME=yes MBYTE=yes CSCOPE=yes USERNAME=Marslo.Jiao USERDOMAIN=China GUI=no
-    </code></pre>
+
+        $ make -B -f Make_cyg.mak PYTHON=/cygdrive/c/Marslo/MyProgramFiles/Python27 DYNAMIC_PYTHON=yes PYTHON_VER=27 PYTHON3=/cygdrive/c/Marslo/MyProgramFiles/Python34 DYNAMIC_PYTHON3=yes PYTHON3_VER=34 FEATURES=huge IME=yes GIME=yes MBYTE=yes CSCOPE=yes USERNAME=Marslo.Jiao USERDOMAIN=China GUI=no
