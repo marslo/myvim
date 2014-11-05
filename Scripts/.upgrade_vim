@@ -13,7 +13,7 @@ make clean
 git checkout *
 
 git pull
-./configure --prefix=$HOME/.vim/tools/vim74 --enable-pythoninterp=yes --enable-python3interp=yes --enable-rubyinterp=yes --with-features=huge --disable-smack --with-compiledby=xjiaoli@msa > vim-build.log
+./configure --prefix=$HOME/.vim/tools/vim74 --enable-pythoninterp=yes --enable-python3interp=yes --enable-rubyinterp=yes --with-features=huge --disable-smack --with-compiledby=Marslo@Appliance > vim-build.log
 make -j3 >> vim-build.log
 make install >> vim-build.log
 
