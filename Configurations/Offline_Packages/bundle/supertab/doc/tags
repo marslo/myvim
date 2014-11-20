@@ -3,6 +3,7 @@ SuperTabSetDefaultCompletionType	supertab.txt	/*SuperTabSetDefaultCompletionType
 b:SuperTabContextTextMemberPatterns	supertab.txt	/*b:SuperTabContextTextMemberPatterns*
 b:SuperTabContextTextOmniPrecedence	supertab.txt	/*b:SuperTabContextTextOmniPrecedence*
 g:SuperTabClosePreviewOnPopupClose	supertab.txt	/*g:SuperTabClosePreviewOnPopupClose*
+g:SuperTabCompleteCase	supertab.txt	/*g:SuperTabCompleteCase*
 g:SuperTabCompletionContexts	supertab.txt	/*g:SuperTabCompletionContexts*
 g:SuperTabContextDefaultCompletionType	supertab.txt	/*g:SuperTabContextDefaultCompletionType*
 g:SuperTabContextTextFileTypeExclusions	supertab.txt	/*g:SuperTabContextTextFileTypeExclusions*
@@ -20,6 +21,7 @@ g:SuperTabNoCompleteBefore	supertab.txt	/*g:SuperTabNoCompleteBefore*
 g:SuperTabRetainCompletionDuration	supertab.txt	/*g:SuperTabRetainCompletionDuration*
 supertab	supertab.txt	/*supertab*
 supertab-closepreviewonpopupclose	supertab.txt	/*supertab-closepreviewonpopupclose*
+supertab-completecase	supertab.txt	/*supertab-completecase*
 supertab-completionchaining	supertab.txt	/*supertab-completionchaining*
 supertab-completioncontexts	supertab.txt	/*supertab-completioncontexts*
 supertab-contextdefault	supertab.txt	/*supertab-contextdefault*

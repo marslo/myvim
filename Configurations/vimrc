@@ -74,7 +74,7 @@ Bundle 'Marslo/MarsloFunc'
 Bundle 'groovy.vim--Ruley'
 " Bundle 'mwaisgold/groovy-vim-files'
 " For Python
-" Bundle 'klen/python-mode'
+Bundle 'klen/python-mode'
 Bundle 'python_fold'
 " Bundle 'kevinw/pyflakes-vim'
 Bundle 'pyflakes/pyflakes'
@@ -190,6 +190,7 @@ if has("autocmd")
   au FileTYpe python set isk-=.
 endif
 let python_highlight_all = 1                                        " syntax-python
+let g:python_check_syntax = 0
 if !has('python')
   let g:pymode = 0
 endif
@@ -497,7 +498,7 @@ let g:AutoPairsShortcutBackInsert = '<M-b>'
 
 match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
 
-" if isdirectory(bud . '\accelerated-jk')
+" if isdirectory(bud . '/accelerated-jk')
   " nmap j <Plug>(accelerated_jk_gj)
   " nmap k <Plug>(accelerated_jk_gk)
 " endif

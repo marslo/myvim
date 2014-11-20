@@ -9,7 +9,7 @@
 "          Email: marslo.jiao@gmail.com
 "        Created: 2012-05-29
 "        Version: 0.1.10
-"     LastChange: 2014-07-02 18:18:24
+"     LastChange: 2014-10-23 17:47:39
 " =============================================================================
 
 set background=dark
@@ -23,7 +23,7 @@ if version > 580
   endif
 endif
 
-let g:colors_name="marslo256"
+let g:colors_name="marslo16"
 
 hi Normal	              guifg=#DDDDDD         guibg=#181818
 hi Cursor	              guibg=#A6E22E         guifg=#A6E22E       gui=underline
@@ -157,53 +157,54 @@ hi rubyIdentifier       guifg=#FF5F5F
 "    14	    3*	    Yellow,         LightYellow (#FFFFE0)
 "    15	    7*	    White
 
-hi SpecialKey	          ctermfg=darkgreen
+hi SpecialKey	          ctermfg=DarkGreen
 " hi NonText	            cterm=NONE          ctermfg=darkblue
 hi NonText	            cterm=NONE          ctermfg=DarkGray
-hi Directory	          ctermfg=red
-hi ErrorMsg	            cterm=NONE          ctermfg=red         ctermbg=0
-hi IncSearch	          cterm=NONE          ctermfg=yellow      ctermbg=green
-hi Search	              cterm=NONE          ctermfg=grey        ctermbg=blue
-hi MoreMsg	            ctermfg=darkgreen
-hi ModeMsg	            cterm=NONE          ctermfg=brown
-hi Question	            ctermfg=green
-hi StatusLine	          cterm=NONE          ctermfg=darkgray    ctermbg=black
+hi Directory	          ctermfg=Red
+hi ErrorMsg	            cterm=NONE          ctermfg=Red         ctermbg=0
+hi IncSearch	          cterm=NONE          ctermfg=Yellow      ctermbg=Green
+hi Search	              cterm=NONE          ctermfg=Grey        ctermbg=Blue
+hi MoreMsg	            ctermfg=DarkGreen
+hi ModeMsg	            cterm=NONE          ctermfg=Brown
+hi Question	            ctermfg=Green
+hi StatusLine	          cterm=NONE          ctermfg=DarkGray    ctermbg=Black
 hi StatusLineNC         cterm=NONE
 hi VertSplit	          cterm=NONE
 hi Title	              cterm=NONE          ctermfg=5
-hi Visual	              cterm=underline     ctermbg=NONE
-hi VisualNOS	          cterm=underline
-hi WarningMsg	          ctermfg=yellow      ctermbg=black
+hi Visual	              cterm=underline     ctermbg=DarkMagenta
+" hi VisualNOS	          cterm=underline
+hi WarningMsg	          ctermfg=Yellow      ctermbg=Black
 hi WildMenu	            ctermfg=0           ctermbg=3
-hi Folded	              ctermfg=darkgrey    ctermbg=NONE
-hi FoldColumn	          ctermfg=darkgrey    ctermbg=NONE
+hi Folded	              ctermfg=DarkGrey    ctermbg=NONE
+hi FoldColumn	          ctermfg=DarkGrey    ctermbg=NONE
 " hi DiffAdd	            ctermbg=4
-hi DiffAdd	            cterm=NONE          ctermbg=56          ctermfg=255
+hi DiffAdd	            cterm=NONE
 " hi DiffChange	          ctermbg=2
-hi DiffDelete	          cterm=NONE          ctermbg=239
-hi DiffDelete	          cterm=NONE          ctermfg=4 ctermbg=6
+hi DiffDelete	          cterm=NONE
+hi DiffDelete	          cterm=NONE          ctermfg=4           ctermbg=6
 hi DiffText	            cterm=NONE          ctermbg=1
 " The color setting for complete opt
-hi Pmenu                ctermbg=darkred
-hi PmenuSel             ctermfg=lightgreen
+hi Pmenu                ctermbg=DarkRed
+hi PmenuSel             ctermfg=LightGreen
 hi Identifier	          ctermfg=Yellow
 hi Cursor               cterm=underline     term=underline
 hi MatchParen           cterm=inverse       term=inverse
-hi LineNr	              ctermfg=darkgrey    ctermbg=none
+hi LineNr	              ctermfg=DarkGrey    ctermbg=none
 hi CursorLine           cterm=NONE
-hi CursorLineNr         ctermbg=NONE        ctermfg=lightgreen     term=bold
-hi Comment	            ctermfg=darkgrey
-hi Constant	            ctermfg=green
+hi CursorLineNr         ctermbg=NONE        ctermfg=LightGreen     term=bold
+hi Comment	            ctermfg=DarkGrey
+hi Constant	            ctermfg=DarkBlue
 """" Key words (while, if, else, for, in)
-hi Statement	          ctermfg=red
+hi Statement	          ctermfg=DarkGreen
 """" #! color
-hi PreProc	            ctermfg=red
-hi Type		              ctermfg=yellow
-hi Special 	            ctermfg=yellow
+hi PreProc	            ctermfg=Red
+hi Type		              ctermfg=Brown
+hi Special 	            ctermfg=Yellow
 hi Underlined	          cterm=underline     ctermfg=5
-hi Ignore	              cterm=NONE          ctermfg=7       ctermfg=darkgrey
+hi Ignore	              cterm=NONE          ctermfg=7       ctermfg=DarkGrey
 hi Error	              cterm=NONE          ctermfg=7       ctermbg=1
 
-hi User1                ctermfg=Magenta     ctermbg=black
-hi User2                ctermfg=lightgreen  ctermbg=black
+hi User1                ctermfg=Magenta     ctermbg=Black
+hi User2                ctermfg=LightGreen  ctermbg=Black
+
 "vim: sw=4

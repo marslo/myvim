@@ -10,10 +10,10 @@ This plugin will help you read these codes by showing different levels of parent
 you can also find this plugin in **[www.vim.org](http://www.vim.org/scripts/script.php?script_id=4176)**.
 
 #### lisp
-![lisp](https://raw.github.com/luochen1990/rainbow/master/demo/lisp.png)
+![lisp](https://raw.githubusercontent.com/luochen1990/rainbow/demo/lisp.png)
 #### html
-![html](https://raw.github.com/luochen1990/rainbow/master/demo/html.png)
-#### [more](https://github.com/luochen1990/rainbow/blob/master/demo/more.md)
+![html](https://raw.githubusercontent.com/luochen1990/rainbow/demo/html.png)
+#### [more](https://github.com/luochen1990/rainbow/blob/demo/more.md)
 
 ### What is improved ? 
 
@@ -37,7 +37,7 @@ Install:
 ### via Vundle:
 
 ```vim
-Bundle 'luochen1990/rainbow'
+Plugin 'luochen1990/rainbow'
 let g:rainbow_active = 1 "0 if you want to enable it later via :RainbowToggle
 ```
 

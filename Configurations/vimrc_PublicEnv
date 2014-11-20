@@ -24,6 +24,7 @@ set fileformat=unix
 set viminfo=%,<800,'10,/50,:100,h,f0,n~/.marslo/.vim/cache/.viminfo
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip
 set tags=./tags
+  let bud=expand('~/.vim/bundle') . '/'
 
 " ====================================== For Property =====================================
 let mapleader=","
@@ -59,7 +60,7 @@ Bundle 'Marslo/MarsloFunc'
 Bundle 'groovy.vim--Ruley'
 " Bundle 'mwaisgold/groovy-vim-files'
 " For Python
-" Bundle 'klen/python-mode'
+Bundle 'klen/python-mode'
 Bundle 'python_fold'
 " Bundle 'kevinw/pyflakes-vim'
 Bundle 'pyflakes/pyflakes'
@@ -88,7 +89,7 @@ Bundle 'Marslo/vim-coloresque'
 Bundle 'Marslo/marslo.vim'
 Bundle 'Marslo/MarsloVimOthers'
 Bundle 'plasticboy/vim-markdown.git'
-
+" Bundle 'cakebaker/scss-syntax.vim'
 " For fun
 Bundle 'TeTrIs.vim'
 Bundle 'matrix.vim--Yang'
@@ -119,7 +120,7 @@ function! GetVundle()                                                   " GetVun
 endfunction
 command! GetVundle :call GetVundle()
 
-if isdirectory(expand(bud . '/MarsloFunc'))
+if isdirectory(expand(bud . 'MarsloFunc'))
   command! GetVim :call marslofunc#GetVim()<CR>
   nmap cmd :call marslofunc#OpenCMD()<CR>
   nmap gf :call marslofunc#GotoFile()<CR>
@@ -145,6 +146,7 @@ endif
 
 " ====================================== For Programming =====================================
 " Programming configs for Ruby and Rails
+let g:ruby_path=$RUBY_BIN
 if has("autocmd")
   autocmd FileType ruby set omnifunc=rubycomplete#Complete
   autocmd FileType ruby let g:rubycomplete_buffer_loading=1
@@ -165,11 +167,12 @@ if has("autocmd")
   au FileTYpe python set isk-=.
 endif
 let python_highlight_all = 1                                        " syntax-python
+let g:python_check_syntax = 0
 if !has('python')
   let g:pymode = 0
 endif
 
-if isdirectory(expand(bud . '/python-mode'))
+if isdirectory(expand(bud . 'python-mode'))
   let g:pymode_lint_checker = ['pyflakes']
   let g:pymode_trim_whitespace = 0
   let g:pymode_options = 0
