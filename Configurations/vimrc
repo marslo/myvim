@@ -498,7 +498,7 @@ let g:AutoPairsShortcutBackInsert = '<M-b>'
 
 match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
 
-" if isdirectory(bud . '/accelerated-jk')
+" if isdirectory(bud . '\accelerated-jk')
   " nmap j <Plug>(accelerated_jk_gj)
   " nmap k <Plug>(accelerated_jk_gk)
 " endif
