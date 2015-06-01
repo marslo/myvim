@@ -515,3 +515,6 @@ Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
 - For VIM:
 
         $ make -B -f Make_cyg.mak PYTHON=/cygdrive/c/Marslo/MyProgramFiles/Python27 DYNAMIC_PYTHON=yes PYTHON_VER=27 PYTHON3=/cygdrive/c/Marslo/MyProgramFiles/Python34 DYNAMIC_PYTHON3=yes PYTHON3_VER=34 FEATURES=huge IME=yes GIME=yes MBYTE=yes CSCOPE=yes USERNAME=Marslo.Jiao USERDOMAIN=China GUI=no
+- For Linux (RHEL) with python:
+
+        $ LD_LIBRARY_PATH=/usr/local/lib/python2.7 PATH=/usr/local/bin:$PATH ./configure --prefix=$HOME/.marslo/myprograms/vim74 --enable-pythoninterp=yes --with-python-config-dir=/usr/local/lib/python2.7/config/ --enable-rubyinterp=yes --with-features=huge --disable-smack --with-compiledby=marslo@appliance
