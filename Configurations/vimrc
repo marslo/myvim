@@ -193,7 +193,7 @@ let python_highlight_all = 1                                        " syntax-pyt
 
 " Python-mode configuratoin
 if isdirectory(expand(bud . 'python-mode'))
-  let g:pymode = 0                                                  " 1: turn on python-mode plugin
+  let g:pymode = 1                                                  " 1: turn on python-mode plugin
   let g:pymode_warnings = 0                                         " turn off plugin's warnings
   let g:pymode_trim_whitespaces = 1                                 " trim unused white spaces on save
   let g:pymode_lint_on_write = 1
@@ -363,6 +363,7 @@ inoremap <leader>tt <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
 inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
 inoremap <leader>fe <C-R>=expand("%:t")<CR>
 inoremap <leader>w <C-O>:w<CR>
+nnoremap <leader>g :%s///gn<CR>
 
 nnoremap zdb :%s/\s\+$//<CR>
 nnoremap zhh :%s/^\s\+//<CR>
@@ -515,7 +516,7 @@ match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
 
 autocmd BufWinLeave * silent! mkview
 autocmd BufWinEnter * silent! loadview
-autocmd BufRead,BufNewFile *.txt setfiletype txt
+autocmd BufRead,BufNewFile * setfiletype txt
 autocmd BufRead,BufNewFile *.t set ft=perl
 autocmd FileType javascript syntax clear jsFuncBlock
 
