@@ -507,6 +507,10 @@ Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
         - bison
         - gettext / gettext-devel
         - textinfo
+    - Other
+        - wget
+        - curl
+        - tree
 
 ### Command:
 - For GVIM:
