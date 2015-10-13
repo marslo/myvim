@@ -89,6 +89,7 @@ Bundle 'Marslo/vim-coloresque'
 Bundle 'Marslo/marslo.vim'
 Bundle 'Marslo/MarsloVimOthers'
 Bundle 'plasticboy/vim-markdown.git'
+Bundle 'altercation/vim-colors-solarized'
 " Bundle 'cakebaker/scss-syntax.vim'
 " For fun
 Bundle 'TeTrIs.vim'
@@ -275,7 +276,9 @@ nnoremap k gk
 nnoremap gk k
 nnoremap n nzzzv
 nnoremap N Nzzzv
-map ,bd :bd<CR>
+map <leader>bd :bd<CR>
+map <leader>bp :bp<CR>
+map <leader>bn :bn<CR>
 map <C-k> <C-w>k
 map <C-j> <C-w>j
 map <C-a> <ESC>^
@@ -302,6 +305,7 @@ inoremap <leader>tt <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
 inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
 inoremap <leader>fe <C-R>=expand("%:t")<CR>
 inoremap <leader>w <C-O>:w<CR>
+nnoremap <leader>g :%s///gn<CR>
 
 nnoremap zdb :%s/\s\+$//<CR>
 nnoremap zhh :%s/^\s\+//<CR>
