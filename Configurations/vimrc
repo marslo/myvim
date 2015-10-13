@@ -103,6 +103,7 @@ Bundle 'Marslo/vim-coloresque'
 Bundle 'Marslo/marslo.vim'
 Bundle 'Marslo/MarsloVimOthers'
 Bundle 'plasticboy/vim-markdown.git'
+Bundle 'altercation/vim-colors-solarized'
 " Bundle 'cakebaker/scss-syntax.vim'
 " For fun
 Bundle 'TeTrIs.vim'
@@ -211,7 +212,16 @@ endif
 
 " Programming configs for Groovy
 if has("autocmd")
-  au FileType groovy set tabstop=2 softtabstop=2 shiftwidth=2
+  au FileType groovy set tabstop=4 softtabstop=4 shiftwidth=4
+endif
+
+" Programming configs for Makefile
+if has("autocmd")
+  au FileType make set tabstop=4 softtabstop=4 shiftwidth=4
+endif
+
+if has("autocmd")
+  au FileType json set tabstop=4 softtabstop=4 shiftwidth=4
 endif
 
 " ====================================== For Inteface =====================================
@@ -234,6 +244,7 @@ if 'xterm-256color' == $TERM
   set t_Co=256
 endif
 if has('gui_running') || 'xterm-256color' == $TERM
+  set background=dark
   colorscheme marslo
   let psc_style='cool'
 else
@@ -336,7 +347,9 @@ nnoremap k gk
 nnoremap gk k
 nnoremap n nzzzv
 nnoremap N Nzzzv
-map ,bd :bd<CR>
+map <leader>bd :bd<CR>
+map <leader>bp :bp<CR>
+map <leader>bn :bn<CR>
 map <C-k> <C-w>k
 map <C-j> <C-w>j
 map <C-a> <ESC>^
@@ -506,7 +519,7 @@ let g:AutoPairsShortcutBackInsert = '<M-b>'
 
 match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
 
-" if isdirectory(bud . '\accelerated-jk')
+" if isdirectory(bud . '/accelerated-jk')
   " nmap j <Plug>(accelerated_jk_gj)
   " nmap k <Plug>(accelerated_jk_gk)
 " endif
