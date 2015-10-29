@@ -1,11 +1,11 @@
 " =============================================================================
-"      FileName: vimrc
-"          Desc: Vundle for git port 443 (https way)
-"        Author: Marslo
+"      FileName: .vimrc
+"          Desc: Made in Marslo
+"        Author: Marslo Jiao
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
-"       Version: 0.0.23
-"    LastChange: 2014-09-18 00:17:46
+"       Version: 0.0.24
+"    LastChange: 2015-10-29 11:15:18
 " =============================================================================
 
 set nocompatible
@@ -13,26 +13,13 @@ set history=500
 set diffopt=filler,context:3
 runtime macros/matchit.vim
 
-if has('win32') || has('win64')
-  let skip_loading_mswin=1
-  " behave mswin
-  source $VIMRUNTIME/vimrc_example.vim
-  source $VIMRUNTIME/mswin.vim
-  language messages utf-8                                           " At Console
-  set nowrap                                                        " NoWrap lines
-  set viminfo=%,<800,'10,/50,:100,h,f0
-  set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe,*.rar
-  set tags=.\tags
-  let bud=expand($VIM . '\bundle') . '\'
-else
-  set fileformat=unix
-  set wrap                                                          " Wrap lines
-  set viminfo=%,<800,'10,/50,:100,h,f0,n~/.vim/cache/.viminfo
-  set wildignore+=*/tmp/*,*.so,*.swp,*.zip
-  set tags=tags
-  set tags+=/home/marslo/Study/Codes/Rails/sdt
-  let bud=expand('~/.vim/bundle') . '/'
-endif
+set fileformat=unix
+set wrap                                                          " Wrap lines
+set viminfo=%,<800,'10,/50,:100,h,f0,n~/.vim/cache/.viminfo
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip
+set tags=tags
+set tags+=/home/marslo/Study/Codes/Rails/sdt
+let bud=expand('~/.vim/bundle') . '/'
 
 " ====================================== For Property =====================================
 let mapleader=","
@@ -40,13 +27,8 @@ let g:mapleader=","
 
 " Vim Bundle
 filetype off
-if has('win32') || has('win64')
-  set rtp+=$VIM/bundle/vundle
-  call vundle#begin('$VIM/bundle')
-else
-  set rtp+=~/.vim/bundle/vundle
-  call vundle#begin()
-endif
+set rtp+=~/.vim/bundle/vundle
+call vundle#begin()
 
 Bundle 'gmarik/vundle'
 Bundle 'tpope/vim-pathogen'
@@ -117,43 +99,21 @@ if isdirectory(expand(bud . 'MarsloFunc'))
   nmap <F12> :call marslofunc#UpdateTags()<CR>
   nmap <C-F5> :call marslofunc#RunResult()<CR>
   nmap <leader>ti :call marslofunc#callit()<CR>
-  if has('gui_running')
-    nnoremap <A--> :call marslofunc#FontSize_Reduce()<CR>
-    nnoremap <A-+> :call marslofunc#FontSize_Enlarge()<CR>
-  endif
 
-  " augroup resCur
-  "   autocmd!
-  "     autocmd BufWinEnter * call marslofunc#ResCur()
-  " augroup END
+  augroup resCur
+    autocmd!
+      autocmd BufWinEnter * call marslofunc#ResCur()
+  augroup END
 
-  " command! DiffSaved :call marslofunc#DiffWithSaved()<CR>
-  " nnoremap <leader>df :call marslofunc#DiffWithSaved()<CR>
-
-  " set foldtext=v:folddashes.substitute(getline(v:foldstart),'/\\*\\\|\\*/\\\|{{{\\d\\=','','g')
-  " set foldtext=marslofund#MyFoldText()<CR>
+  set foldtext=v:folddashes.substitute(getline(v:foldstart),'/\\*\\\|\\*/\\\|{{{\\d\\=','','g')
+  set foldtext=marslofund#MyFoldText()<CR>
 endif
 
 " ====================================== For Programming =====================================
-" Programming configs for Ruby and Rails
-let g:ruby_path=$RUBY_BIN
-if has("autocmd")
-  autocmd FileType ruby set omnifunc=rubycomplete#Complete
-  autocmd FileType ruby let g:rubycomplete_buffer_loading=1
-  autocmd FileType ruby let g:rubycomplete_classes_in_global=1
-  augroup filetypedetect                                            " Inspired from :h new-filetype
-    au BufNewFile,BufRead *.r.erb set filetype=r.ruby
-  augroup end
-  autocmd FileType ruby compiler ruby
-endif
-let g:rubycomplete_buffer_loading = 1
-let g:rubycomplete_classes_in_global = 1
-let g:rubycomplete_rails = 1
-
 " Programming configs for Python
 if has("autocmd")
   au FileType python syn keyword pythonDecorator print self
-  au FileType python set tabstop=2 softtabstop=2 shiftwidth=2
+  au FileType python set tabstop=4 softtabstop=4 shiftwidth=4
   au FileTYpe python set isk-=.
 endif
 let python_highlight_all = 1                                        " syntax-python
@@ -186,26 +146,12 @@ if has("autocmd")
   au FileType make set tabstop=4 softtabstop=4 shiftwidth=4
 endif
 
+" Programming configs for Json
 if has("autocmd")
   au FileType json set tabstop=4 softtabstop=4 shiftwidth=4
 endif
 
 " ====================================== For Inteface =====================================
-if has('gui_running')
-  set go=                                                           " Hide everything (go = guioptions)
-  set cpoptions+=n
-  if has('win32') || has('win64')
-    set lines=30                                                    " The initialize size
-    set columns=136
-    if !filereadable("$VIM\vim74\vimtweak.dll")
-      au GUIENTER * call libcallnr("vimtweak.dll","SetAlpha",243)
-    endif
-  else
-    set lines=29                                                    " The initialize size
-    set columns=129
-  endif
-endif
-
 if 'xterm-256color' == $TERM
   set t_Co=256
 endif
@@ -220,18 +166,10 @@ else
   colorscheme marslo16
 endif
 
-if has('win32') || has('win95') || has('win64')
-  nmap <leader>v :e $VIM/_vimrc<CR>
-  autocmd! bufwritepost $VIM/_vimrc silent! source %                " autoload _vimrc
-  set guifont=Monaco:h13                                            " Fonts
-  set clipboard+=unnamed                                            " Copy the content to system clipboard by using y/p
-  set clipboard+=unnamedplus
-else
-  nmap <leader>v :e ~/.vimrc<CR>
-  autocmd! bufwritepost ~/.vimrc silent! source %
-  set guifont=Monaco\ 13
-  set clipboard=unnamedplus
-endif
+nmap <leader>v :e ~/.vimrc<CR>
+autocmd! bufwritepost ~/.vimrc silent! source %
+set guifont=Monaco\ 13
+set clipboard=unnamedplus
 
 set iskeyword-=.
 set autochdir
@@ -260,7 +198,7 @@ set modifiable
 set write
 set incsearch hlsearch ignorecase smartcase                         " search
 set magic                                                           " regular expression
-set linespace=0
+set linespace=3
 set wildmenu
 set wildmode=longest,list,full                                      " completion mode that is used for the character
 set noerrorbells novisualbell                                       " turn off error beep/flash
@@ -291,25 +229,6 @@ if has('statusline')
   set laststatus=2                                                  " set status bar
   set statusline=%#user2#%m%r%*\ %f\ %y,%{&fileformat}
   set statusline+=%=\ %-{strftime(\"%h:%m\ %d/%m/%y\")}\ %b[a],0x%b\ %c%v,%l/%l\ %1*--%n%%--%*\ %p%%\ |
-endif
-
-if has('gui_running')
-  set guicursor=a:hor1
-  set guicursor+=i-r-ci-cr-o:hor2-blinkon0
-  set scrolloff=3                                                     " scroll settings
-  set sidescroll=1
-  set sidescrolloff=5
-
-  if version > 703
-    " autocmd FocusLost * set norelativenumber
-    autocmd FocusGained * set relativenumber
-    autocmd InsertEnter * set norelativenumber
-    autocmd InsertLeave * set relativenumber
-    autocmd CmdwinEnter * set norelativenumber
-    autocmd CmdwinLeave * set relativenumber
-    autocmd CmdwinEnter * let b:ei_save = &eventignore | set eventignore=CursorHold,InsertEnter
-    autocmd CmdwinLeave * let &eventignore = b:ei_save
-  endif
 endif
 
 augroup vimrc
@@ -399,10 +318,11 @@ let g:rainbow_conf = {
 \   }
 \}
 
+let g:indentLine_enabled = 1
 let g:indentLine_color_gui = "#282828"
 let g:indentLine_color_term = 239
-let g:indentLine_indentLevel = 20
-let g:indentLine_showFirstIndentLevel = 1
+let g:indentLine_indentLevel = 8
+let g:indentLine_showFirstIndentLevel = 0
 let g:indentLine_color_tty = 0
 " let g:indentLine_faster = 1
 if has('gui_running') || 'xterm-256color' == $TERM
@@ -422,15 +342,11 @@ let SuperTabClosePreviewOnPopupClose = 1
 
 let g:AutoPairs = {'(':')', '[':']', '{':'}', '<':'>',"'":"'",'"':'"', '`':'`'}
 let g:AutoPairsParens = {'(':')', '[':']', '{':'}', '<':'>'}
-let g:AutoPairsFlyMode = 1
+let g:AutoPairsFlyMode = 0
 let g:AutoPairsShortcutBackInsert = '<M-b>'
-
-match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
 
 autocmd BufWinLeave * silent! mkview
 autocmd BufWinEnter * silent! loadview
 autocmd BufRead,BufNewFile * setfiletype txt
-autocmd BufRead,BufNewFile *.t set ft=perl
-autocmd FileType javascript syntax clear jsFuncBlock
 
 " vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab
