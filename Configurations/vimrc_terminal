@@ -9,7 +9,7 @@
 " =============================================================================
 
 set nocompatible
-set history=500
+set history=300
 set diffopt=filler,context:3
 runtime macros/matchit.vim
 
@@ -173,72 +173,62 @@ set clipboard=unnamedplus
 
 set iskeyword-=.
 set autochdir
-set fileencodings=utf-8,ucs-bom,gbk,cp936,gb2312,gb18030            " code format
+set fileencodings=utf-8,ucs-bom,gbk,cp936,gb2312,gb18030            " Code Format
 set termencoding=utf-8
-set encoding=utf-8                                                  " input chinese (=cp936)
+set encoding=utf-8                                                  " Input Chinese (=cp936)
 set fileencoding=utf-8
 let &termencoding=&encoding
-set selection=exclusive                                             " mouse settings
+set selection=exclusive                                             " Mouse Settings
 set selectmode=mouse,key
-set nobackup noswapfile nowritebackup
-set number                                                          " number: line number
+set nobackup noswapfile nowritebackup noundofile noendofline
+set number                                                          " Number: line number
 set report=0
-set autoread                                                        " set auto read when a file is changed by outside
-set showmatch                                                       " show matching bracets (shortly jump to the other bracets)
-set matchtime=1                                                     " the shortly time
-set tabstop=2                                                       " tab width
-set softtabstop=2                                                   " width for backspace
-set shiftwidth=2                                                    " the tab width by using >> & <<
+set tabstop=2                                                       " Tab width
+set autoread                                                        " Set auto read when a file is changed by outside
+set showmatch                                                       " Show matching bracets (shortly jump to the other bracets)
+set matchtime=1                                                     " The shortly time
+set softtabstop=2                                                   " Width for backspace
+set shiftwidth=2                                                    " The tab width by using >> & <<
 set autoindent expandtab
 set smartindent
-set smarttab						                                            " smarttab: the width of <tab> in first line would refer to 'shiftwidth' parameter
+set smarttab						                                            " Smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
 set linebreak
-set tw=0
+set textwidth=80
 set modifiable
 set write
-set incsearch hlsearch ignorecase smartcase                         " search
-set magic                                                           " regular expression
-set linespace=3
+set incsearch hlsearch ignorecase smartcase                         " Search
+set magic                                                           " Regular Expression
+set linespace=0
 set wildmenu
-set wildmode=longest,list,full                                      " completion mode that is used for the character
-set noerrorbells novisualbell                                       " turn off error beep/flash
+set wildmode=longest,list,full                                      " Completion mode that is used for the character
+set noerrorbells novisualbell                                       " Turn off error beep/flash
 set t_vb=
 set list listchars=tab:\ \ ,trail:·,extends:»,precedes:«,nbsp:·
-set cursorline                                                      " highlight the current line
-set imcmdline                                                       " fix context menu messing
-set completeopt=longest,menuone                                     " supper tab
-set foldenable                                                      " enable fold
+set cursorline                                                      " Highlight the current line
+set guicursor=a:hor1
+set guicursor+=i-r-ci-cr-o:hor2-blinkon0
+set scrolloff=3                                                     " Scroll settings
+set sidescroll=1
+set sidescrolloff=5
+set imcmdline                                                       " Fix context menu messing
+set completeopt=longest,menuone                                     " Supper Tab
+set foldenable                                                      " Enable Fold
 set foldcolumn=1
-set foldexpr=1                                                      " shown line number after fold
-set foldlevel=100                                                   " not fold while vim set up
+set foldexpr=1                                                      " Shown line number after fold
+set foldlevel=100                                                   " Not fold while VIM set up
 set viewoptions=folds
-set backspace=indent,eol,start                                      " make backspace h, l, etc wrap to
+set backspace=indent,eol,start                                      " Make backspace h, l, etc wrap to
 set whichwrap+=<,>,h,l
-set go+=a                                                           " visual selection automatically copied to the clipboard
-set hidden                                                          " switch between buffers with unsaved change
+set go+=a                                                           " Visual selection automatically copied to the clipboard
+set hidden                                                          " Switch between buffers with unsaved change
 set equalalways
-set formatoptions=tcrqn
-set formatoptions+=b                                                " remove the backspace for combine lines (only for chinese)
+set formatoptions+=rnmMB                                                " Remove the backspace for combine lines (Only for chinese)
 set matchpairs+=<:>
-set noendofline
-if has('cmdline_info')
-  set ruler                                                         " ruler: show line and colum number
-  set showcmd                                                       " show (partial) command in status line
-endif
-if has('statusline')
-  set laststatus=2                                                  " set status bar
-  set statusline=%#user2#%m%r%*\ %f\ %y,%{&fileformat}
-  set statusline+=%=\ %-{strftime(\"%h:%m\ %d/%m/%y\")}\ %b[a],0x%b\ %c%v,%l/%l\ %1*--%n%%--%*\ %p%%\ |
-endif
-
-augroup vimrc
-  au BufReadPre * setlocal foldmethod=indent
-  au BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
-augroup END
-
-if has('persistent_undo')
-  set noundofile
-endif
+set ruler                                                         " Ruler: Show Line and colum number
+set showcmd                                                       " Show (partial) command in status line
+set laststatus=2                                                  " Set status bar
+set statusline=%#User2#%m%r%*\ %F\ %y,%{&fileformat}
+set statusline+=%=\ %-{strftime(\"%H:%M\ %d/%m/%Y\")}\ %b[A],0x%B\ %c%V,%l/%L\ %1*--%n%%--%*\ %p%%\ |
 
 noremap <F1> <ESC>
 inoremap <F1> <ESC>a
@@ -324,16 +314,8 @@ let g:indentLine_color_term = 239
 let g:indentLine_indentLevel = 8
 let g:indentLine_showFirstIndentLevel = 0
 let g:indentLine_color_tty = 0
-" let g:indentLine_faster = 1
-if has('gui_running') || 'xterm-256color' == $TERM
-  let g:indentLine_char = '¦'
-elseif has('win32')
-  let g:indentLine_color_term = 8
-  let g:indentLine_char = '|'
-else
-  let g:indentLine_color_tty_dark = 0
-  let g:indentLine_char = '¦'
-endif
+let g:indentLine_faster = 1
+let g:indentLine_char = '¦'
 
 let SuperTabDefaultCompletionType = '<c-p>'
 let SuperTabMappingForward = '<c-p>'
@@ -348,5 +330,10 @@ let g:AutoPairsShortcutBackInsert = '<M-b>'
 autocmd BufWinLeave * silent! mkview
 autocmd BufWinEnter * silent! loadview
 autocmd BufRead,BufNewFile * setfiletype txt
+
+augroup vimrc
+  au BufReadPre * setlocal foldmethod=indent
+  au BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
+augroup END
 
 " vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab

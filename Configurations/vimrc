@@ -340,7 +340,7 @@ if has('persistent_undo')
 endif
 
 noremap <F1> <ESC>
-imap <F1> <ESC>a
+inoremap <F1> <ESC>a
 nnoremap j gj
 nnoremap gj j
 nnoremap k gk
@@ -353,10 +353,10 @@ map <leader>bn :bn<CR>
 map <C-k> <C-w>k
 map <C-j> <C-w>j
 map <C-a> <ESC>^
-imap <C-a> <ESC>I
+inoremap <C-a> <ESC>I
 cnoremap <C-a> <Home>
 map <C-e> <ESC>$
-imap <C-e> <ESC>A
+inoremap <C-e> <ESC>A
 cnoremap <C-e> <End>
 inoremap <A-f> <ESC><Space>Wi
 cnoremap <A-f> <S-Right>
