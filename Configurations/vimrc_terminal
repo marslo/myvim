@@ -1,11 +1,11 @@
 " =============================================================================
-"      FileName: .vimrc
+"      FileName: vimrc_terminal
 "          Desc: Made in Marslo
 "        Author: Marslo Jiao
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.24
-"    LastChange: 2015-10-29 11:15:18
+"    LastChange: 2015-11-19 18:13:16
 " =============================================================================
 
 set nocompatible
@@ -40,13 +40,13 @@ Bundle 'Marslo/auto-pairs'
 Bundle 'Marslo/snipmate.vim.git'
 Bundle 'yegappan/mru'
 Bundle 'Marslo/MarsloFunc'
+Bundle 'LargeFile'
 " Python
 Bundle 'klen/python-mode'
 Bundle 'python_fold'
-Bundle 'pyflakes/pyflakes'
-Bundle 'python_match.vim'
 Bundle 'Marslo/python-syntax'
-Bundle 'tarmack/vim-python-ftplugin'
+" Bundle 'python_match.vim'
+" Bundle 'tarmack/vim-python-ftplugin'
 " Web design
 Bundle 'tpope/vim-surround'
 Bundle 'gregsexton/MatchTag'
@@ -115,22 +115,30 @@ if has("autocmd")
   au FileType python syn keyword pythonDecorator print self
   au FileType python set tabstop=4 softtabstop=4 shiftwidth=4
   au FileTYpe python set isk-=.
+  set textwidth=80
 endif
 let python_highlight_all = 1                                        " syntax-python
 
 " Python-mode configuratoin
 if isdirectory(expand(bud . 'python-mode'))
   let g:pymode = 1                                                  " 1: turn on python-mode plugin
+  let pymode_syntax_all = 1
   let g:pymode_warnings = 0                                         " turn off plugin's warnings
+  let g:pymode_folding = 1
+  let g:pymode_options_colorcolumn = 1
   let g:pymode_trim_whitespaces = 1                                 " trim unused white spaces on save
   let g:pymode_lint_on_write = 1
   let g:pymode_lint = 1                                             " turn on code checking
   let g:pymode_lint_checkers = ['pyflakes', 'pep8', 'mccabe']
-  let g:syntastic_python_flake8_args="--ignore=E501,W601"
+  " let g:pymode_lint_ignore = "E503"
   let g:pymode_trim_whitespace = 0
   let g:pymode_options = 0
   let g:pymode_rope = 0
-  let g:python_check_syntax = 0
+  let g:pymode_indent = 0
+  let g:python_check_syntax = 1
+  let g:pymode_syntax_highlight_self = g:pymode_syntax_all
+  let g:pymode_quickfix_minheight = 3
+  let g:pymode_quickfix_maxheight = 6
   if !has('python')
     let g:pymode = 0
   endif
@@ -149,6 +157,11 @@ endif
 " Programming configs for Json
 if has("autocmd")
   au FileType json set tabstop=4 softtabstop=4 shiftwidth=4
+endif
+
+" Programming configs for Shell
+if has("autocmd")
+  au FileType sh set tabstop=4 softtabstop=4 shiftwidth=4
 endif
 
 " ====================================== For Inteface =====================================
@@ -183,10 +196,10 @@ set selectmode=mouse,key
 set nobackup noswapfile nowritebackup noundofile noendofline
 set number                                                          " Number: line number
 set report=0
-set tabstop=2                                                       " Tab width
 set autoread                                                        " Set auto read when a file is changed by outside
 set showmatch                                                       " Show matching bracets (shortly jump to the other bracets)
 set matchtime=1                                                     " The shortly time
+set tabstop=2                                                       " Tab width
 set softtabstop=2                                                   " Width for backspace
 set shiftwidth=2                                                    " The tab width by using >> & <<
 set autoindent expandtab
@@ -222,7 +235,8 @@ set whichwrap+=<,>,h,l
 set go+=a                                                           " Visual selection automatically copied to the clipboard
 set hidden                                                          " Switch between buffers with unsaved change
 set equalalways
-set formatoptions+=rnmMB                                                " Remove the backspace for combine lines (Only for chinese)
+set formatoptions=tcrqn
+set formatoptions+=B                                                " Remove the backspace for combine lines (Only for chinese)
 set matchpairs+=<:>
 set ruler                                                         " Ruler: Show Line and colum number
 set showcmd                                                       " Show (partial) command in status line
@@ -334,6 +348,17 @@ autocmd BufRead,BufNewFile * setfiletype txt
 augroup vimrc
   au BufReadPre * setlocal foldmethod=indent
   au BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
+augroup END
+
+" set colorcolumn=80
+" call matchadd('ColorColumn', '\%81v', 100)
+" match OverLength /\%81v.\+/
+
+augroup collumnLimit
+  autocmd!
+  let collumnLimit = 80
+  let pattern = '\%<' . (collumnLimit+1) . 'v.\%>' . collumnLimit . 'v'
+  let w:m1=matchadd('CollumnLimit', pattern, -1)
 augroup END
 
 " vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab

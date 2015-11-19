@@ -5,7 +5,7 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.23
-"    LastChange: 2014-09-18 00:17:46
+"    LastChange: 2015-11-19 18:13:06
 " =============================================================================
 
 set nocompatible
@@ -70,6 +70,7 @@ Bundle 'rhysd/accelerated-jk'
 " Bundle 'yonchu/accelerated-smooth-scroll'
 " For Loading my function after vim start (reduce vim start time)
 Bundle 'Marslo/MarsloFunc'
+Bundle 'LargeFile'
 " For Groovy
 Bundle 'groovy.vim--Ruley'
 " Bundle 'mwaisgold/groovy-vim-files'
@@ -189,22 +190,30 @@ if has("autocmd")
   au FileType python syn keyword pythonDecorator print self
   au FileType python set tabstop=2 softtabstop=2 shiftwidth=2
   au FileTYpe python set isk-=.
+  set textwidth=80
 endif
 let python_highlight_all = 1                                        " syntax-python
 
 " Python-mode configuratoin
 if isdirectory(expand(bud . 'python-mode'))
   let g:pymode = 1                                                  " 1: turn on python-mode plugin
+  let pymode_syntax_all = 1
   let g:pymode_warnings = 0                                         " turn off plugin's warnings
+  let g:pymode_folding = 1
+  let g:pymode_options_colorcolumn = 1
   let g:pymode_trim_whitespaces = 1                                 " trim unused white spaces on save
   let g:pymode_lint_on_write = 1
   let g:pymode_lint = 1                                             " turn on code checking
   let g:pymode_lint_checkers = ['pyflakes', 'pep8', 'mccabe']
-  let g:syntastic_python_flake8_args="--ignore=E501,W601"
+  " let g:pymode_lint_ignore = "E503"
   let g:pymode_trim_whitespace = 0
   let g:pymode_options = 0
   let g:pymode_rope = 0
-  let g:python_check_syntax = 0
+  let g:pymode_indent = 0
+  let g:python_check_syntax = 1
+  let g:pymode_syntax_highlight_self = g:pymode_syntax_all
+  let g:pymode_quickfix_minheight = 3
+  let g:pymode_quickfix_maxheight = 6
   if !has('python')
     let g:pymode = 0
   endif
@@ -220,6 +229,7 @@ if has("autocmd")
   au FileType make set tabstop=4 softtabstop=4 shiftwidth=4
 endif
 
+" Programming configs for Shell
 if has("autocmd")
   au FileType json set tabstop=4 softtabstop=4 shiftwidth=4
 endif
@@ -276,20 +286,20 @@ set fileencoding=utf-8
 let &termencoding=&encoding
 set selection=exclusive                                             " Mouse Settings
 set selectmode=mouse,key
-set nobackup noswapfile nowritebackup
-set number                                                          " number: line number
+set nobackup noswapfile nowritebackup noundofile noendofline
+set number                                                          " Number: line number
 set report=0
 set autoread                                                        " Set auto read when a file is changed by outside
 set showmatch                                                       " Show matching bracets (shortly jump to the other bracets)
 set matchtime=1                                                     " The shortly time
 set tabstop=2                                                       " Tab width
 set softtabstop=2                                                   " Width for backspace
-set shiftwidth=2                                                    " the tab width by using >> & <<
+set shiftwidth=2                                                    " The tab width by using >> & <<
 set autoindent expandtab
 set smartindent
-set smarttab						                                            " smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
+set smarttab						                                            " Smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
 set linebreak
-set tw=0
+set textwidth=80
 set modifiable
 set write
 set incsearch hlsearch ignorecase smartcase                         " Search
@@ -297,7 +307,7 @@ set magic                                                           " Regular Ex
 set linespace=0
 set wildmenu
 set wildmode=longest,list,full                                      " Completion mode that is used for the character
-set noerrorbells novisualbell                                       " turn off error beep/flash
+set noerrorbells novisualbell                                       " Turn off error beep/flash
 set t_vb=
 set list listchars=tab:\ \ ,trail:·,extends:»,precedes:«,nbsp:·
 set cursorline                                                      " Highlight the current line
@@ -313,7 +323,7 @@ set foldcolumn=1
 set foldexpr=1                                                      " Shown line number after fold
 set foldlevel=100                                                   " Not fold while VIM set up
 set viewoptions=folds
-set backspace=indent,eol,start                                      " make backspace h, l, etc wrap to
+set backspace=indent,eol,start                                      " Make backspace h, l, etc wrap to
 set whichwrap+=<,>,h,l
 set go+=a                                                           " Visual selection automatically copied to the clipboard
 set hidden                                                          " Switch between buffers with unsaved change
@@ -372,6 +382,7 @@ nnoremap <space> za
 nnoremap & :&&<CR>
 xnoremap & :&&<CR>
 vmap s <Plug>VSurround
+
 inoremap <leader>tt <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
 inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
 inoremap <leader>fe <C-R>=expand("%:t")<CR>
@@ -491,6 +502,7 @@ let g:rainbow_conf = {
 \   }
 \}
 
+let g:indentLine_enabled = 1
 let g:indentLine_color_gui = "#282828"
 let g:indentLine_color_term = 239
 let g:indentLine_indentLevel = 20
