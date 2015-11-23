@@ -8,12 +8,13 @@ if [ ! -d "$VIM_SRC" ]; then
 fi
 
 pushd $VIM_SRC
-git clean -dfx
+git clean -dfx *
 make clean
-git checkout *
+git checkout -- *
 
 git pull
-./configure --prefix=$HOME/.vim/tools/vim74 --enable-pythoninterp=yes --enable-python3interp=yes --enable-rubyinterp=yes --with-features=huge --disable-smack --with-compiledby=Marslo@Appliance > vim-build.log
+./configure --prefix=$HOME/.marslo/myprograms/vim74 --enable-pythoninterp=yes --with-python-config-dir=/usr/local/lib/python2.7/config --enable-rubyinterp=yes --with-features=huge --disable-smack --with-compiledby=marslo@appliance > vim-build.log
+
 make -j3 >> vim-build.log
 make install >> vim-build.log
 
