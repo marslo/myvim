@@ -5,7 +5,7 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.24
-"    LastChange: 2015-11-19 18:13:16
+"    LastChange: 2015-12-29 17:43:56
 " =============================================================================
 
 set nocompatible
@@ -113,7 +113,7 @@ endif
 " Programming configs for Python
 if has("autocmd")
   au FileType python syn keyword pythonDecorator print self
-  au FileType python set tabstop=4 softtabstop=4 shiftwidth=4
+  au FileType python set tabstop=2 softtabstop=2 shiftwidth=2
   au FileTYpe python set isk-=.
   set textwidth=80
 endif
@@ -161,7 +161,7 @@ endif
 
 " Programming configs for Shell
 if has("autocmd")
-  au FileType sh set tabstop=4 softtabstop=4 shiftwidth=4
+  au FileType sh set tabstop=2 softtabstop=2 shiftwidth=2
 endif
 
 " ====================================== For Inteface =====================================
@@ -235,8 +235,7 @@ set whichwrap+=<,>,h,l
 set go+=a                                                           " Visual selection automatically copied to the clipboard
 set hidden                                                          " Switch between buffers with unsaved change
 set equalalways
-set formatoptions=tcrqn
-set formatoptions+=B                                                " Remove the backspace for combine lines (Only for chinese)
+set formatoptions+=rnmMB                                            " Remove the backspace for combine lines (Only for chinese)
 set matchpairs+=<:>
 set ruler                                                         " Ruler: Show Line and colum number
 set showcmd                                                       " Show (partial) command in status line
@@ -247,7 +246,9 @@ set statusline+=%=\ %-{strftime(\"%H:%M\ %d/%m/%Y\")}\ %b[A],0x%B\ %c%V,%l/%L\ %
 noremap <F1> <ESC>
 inoremap <F1> <ESC>a
 nnoremap j gj
+nnoremap gj j
 nnoremap k gk
+nnoremap gk k
 nnoremap n nzzzv
 nnoremap N Nzzzv
 map <leader>bd :bd<CR>
@@ -275,12 +276,12 @@ inoremap <leader>fe <C-R>=expand("%:t")<CR>
 inoremap <leader>w <C-O>:w<CR>
 nnoremap <leader>g :%s///gn<CR>
 
-nnoremap zdb :%s/\s\+$//<CR>
-nnoremap zhh :%s/^\s\+//<CR>
-nnoremap zmm :g/^/ s//\=line('.').' '/<CR>
-nnoremap zws :g/^\s*$/d<CR>
-nnoremap zdm :%s/<C-v><CR>//ge<CR>
-nnoremap zng :%s///gn<CR>
+nnoremap <leader>zdb :%s/\s\+$//<CR>
+nnoremap <leader>zhh :%s/^\s\+//<CR>
+nnoremap <leader>zmm :g/^/ s//\=line('.').' '/<CR>
+nnoremap <leader>zws :g/^\s*$/d<CR>
+nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>
+nnoremap <leader>zng :%s///gn<CR>
 
 iabbrev <leader>/* /*********************************
 iabbrev <leader>*/ *********************************/
@@ -361,4 +362,5 @@ augroup collumnLimit
   let w:m1=matchadd('CollumnLimit', pattern, -1)
 augroup END
 
+autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
 " vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab
