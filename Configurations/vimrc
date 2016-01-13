@@ -4,8 +4,8 @@
 "        Author: Marslo
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
-"       Version: 0.0.23
-"    LastChange: 2015-11-19 18:13:06
+"       Version: 0.0.24
+"    LastChange: 2015-12-29 17:43:41
 " =============================================================================
 
 set nocompatible
@@ -50,14 +50,13 @@ else
 endif
 
 Bundle 'gmarik/vundle'
+Bundle 'tpope/vim-pathogen'
 Bundle 'Yggdroot/indentLine'
 Bundle 'kien/ctrlp.vim.git'
 Bundle 'sjl/gundo.vim'
 Bundle 'majutsushi/tagbar'
 Bundle 'dantezhu/authorinfo'
 Bundle 'Marslo/EnhCommentify.vim'
-Bundle 'tpope/vim-pathogen'
-Bundle 'gregsexton/MatchTag'
 Bundle 'ervandew/supertab'
 Bundle 'Marslo/auto-pairs'
 Bundle 'Marslo/snipmate.vim.git'
@@ -65,16 +64,16 @@ Bundle 'yegappan/mru'
 Bundle 'Conque-Shell'
 Bundle 'taglist.vim'
 Bundle 'winmanager'
-" For Moving faster
+" Moving faster
 Bundle 'rhysd/accelerated-jk'
 " Bundle 'yonchu/accelerated-smooth-scroll'
-" For Loading my function after vim start (reduce vim start time)
+" Loading my function after vim start (reduce vim start time)
 Bundle 'Marslo/MarsloFunc'
 Bundle 'LargeFile'
-" For Groovy
+" Groovy
 Bundle 'groovy.vim--Ruley'
 " Bundle 'mwaisgold/groovy-vim-files'
-" For Python
+" Python
 Bundle 'klen/python-mode'
 Bundle 'python_fold'
 " Bundle 'kevinw/pyflakes-vim'
@@ -82,19 +81,20 @@ Bundle 'pyflakes/pyflakes'
 Bundle 'python_match.vim'
 Bundle 'Marslo/python-syntax'
 Bundle 'tarmack/vim-python-ftplugin'
-" For ruby
+" ruby
 Bundle 'tpope/vim-rails'
 Bundle 'vim-ruby/vim-ruby'
 Bundle 'nelstrom/vim-textobj-rubyblock'
 Bundle 'kana/vim-textobj-user'
 Bundle 'ruby-matchit'
-" For Javascript
+" Javascript
 Bundle 'pangloss/vim-javascript'
 Bundle 'jelera/vim-javascript-syntax'
-" For AngularJS
+" AngularJS
 Bundle 'burnettk/vim-angular'
-" For web design
+" Web design
 Bundle 'tpope/vim-surround'
+Bundle 'gregsexton/MatchTag'
 Bundle 'tpope/vim-repeat'
 " Colors and themes and syntax
 Bundle 'luochen1990/rainbow'
@@ -165,8 +165,8 @@ if isdirectory(expand(bud . 'MarsloFunc'))
   " command! DiffSaved :call marslofunc#DiffWithSaved()<CR>
   " nnoremap <leader>df :call marslofunc#DiffWithSaved()<CR>
 
-  " set foldtext=v:folddashes.substitute(getline(v:foldstart),'/\\*\\\|\\*/\\\|{{{\\d\\=','','g')
-  " set foldtext=marslofund#MyFoldText()<CR>
+  set foldtext=v:folddashes.substitute(getline(v:foldstart),'/\\*\\\|\\*/\\\|{{{\\d\\=','','g')
+  set foldtext=marslofund#MyFoldText()<CR>
 endif
 
 " ====================================== For Programming =====================================
@@ -229,9 +229,14 @@ if has("autocmd")
   au FileType make set tabstop=4 softtabstop=4 shiftwidth=4
 endif
 
-" Programming configs for Shell
+" Programming configs for Json
 if has("autocmd")
   au FileType json set tabstop=4 softtabstop=4 shiftwidth=4
+endif
+
+" Programming configs for Shell
+if has("autocmd")
+  au FileType sh set tabstop=2 softtabstop=2 shiftwidth=2
 endif
 
 " ====================================== For Inteface =====================================
@@ -389,23 +394,12 @@ inoremap <leader>fe <C-R>=expand("%:t")<CR>
 inoremap <leader>w <C-O>:w<CR>
 nnoremap <leader>g :%s///gn<CR>
 
-nnoremap zdb :%s/\s\+$//<CR>
-nnoremap zhh :%s/^\s\+//<CR>
-nnoremap zmm :g/^/ s//\=line('.').' '/<CR>
-nnoremap zws :g/^\s*$/d<CR>
-nnoremap zdm :%s/<C-v><CR>//ge<CR>
-nnoremap zng :%s///gn<CR>
-
-if version > 703
-  " autocmd FocusLost * set norelativenumber
-  autocmd FocusGained * set relativenumber
-  autocmd InsertEnter * set norelativenumber
-  autocmd InsertLeave * set relativenumber
-  autocmd CmdwinEnter * set norelativenumber
-  autocmd CmdwinLeave * set relativenumber
-  autocmd CmdwinEnter * let b:ei_save = &eventignore | set eventignore=CursorHold,InsertEnter
-  autocmd CmdwinLeave * let &eventignore = b:ei_save
-endif
+nnoremap <leader>zdb :%s/\s\+$//<CR>
+nnoremap <leader>zhh :%s/^\s\+//<CR>
+nnoremap <leader>zmm :g/^/ s//\=line('.').' '/<CR>
+nnoremap <leader>zws :g/^\s*$/d<CR>
+nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>
+nnoremap <leader>zng :%s///gn<CR>
 
 iabbrev <leader>/* /*********************************
 iabbrev <leader>*/ *********************************/
@@ -478,11 +472,6 @@ map <leader>re :MRU<CR>
 
 noremap <Leader>u :GundoToggle<CR>
 
-augroup vimrc
-  au BufReadPre * setlocal foldmethod=indent
-  au BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
-augroup END
-
 let g:rainbow_active = 1
 let g:rainbow_operators = 1
 let g:rainbow_conf = {
@@ -508,7 +497,7 @@ let g:indentLine_color_term = 239
 let g:indentLine_indentLevel = 20
 let g:indentLine_showFirstIndentLevel = 1
 let g:indentLine_color_tty = 0
-" let g:indentLine_faster = 1
+let g:indentLine_faster = 1
 if has('gui_running') || 'xterm-256color' == $TERM
   let g:indentLine_char = '¦'
 elseif has('win32')
@@ -526,7 +515,7 @@ let SuperTabClosePreviewOnPopupClose = 1
 
 let g:AutoPairs = {'(':')', '[':']', '{':'}', '<':'>',"'":"'",'"':'"', '`':'`'}
 let g:AutoPairsParens = {'(':')', '[':']', '{':'}', '<':'>'}
-let g:AutoPairsFlyMode = 1
+let g:AutoPairsFlyMode = 0
 let g:AutoPairsShortcutBackInsert = '<M-b>'
 
 match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
@@ -545,4 +534,17 @@ autocmd BufRead,BufNewFile * setfiletype txt
 autocmd BufRead,BufNewFile *.t set ft=perl
 autocmd FileType javascript syntax clear jsFuncBlock
 
+augroup vimrc
+  au BufReadPre * setlocal foldmethod=indent
+  au BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
+augroup END
+
+augroup collumnLimit
+  autocmd!
+  let collumnLimit = 80
+  let pattern = '\%<' . (collumnLimit+1) . 'v.\%>' . collumnLimit . 'v'
+  let w:m1=matchadd('CollumnLimit', pattern, -1)
+augroup END
+
+autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
 " vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab
