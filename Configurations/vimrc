@@ -5,7 +5,7 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.24
-"    LastChange: 2015-12-29 17:43:41
+"    LastChange: 2016-01-26 19:45:01
 " =============================================================================
 
 set nocompatible
@@ -219,23 +219,11 @@ if isdirectory(expand(bud . 'python-mode'))
   endif
 endif
 
-" Programming configs for Groovy
+" Programming configs for specified scripts
 if has("autocmd")
   au FileType groovy set tabstop=4 softtabstop=4 shiftwidth=4
-endif
-
-" Programming configs for Makefile
-if has("autocmd")
   au FileType make set tabstop=4 softtabstop=4 shiftwidth=4
-endif
-
-" Programming configs for Json
-if has("autocmd")
   au FileType json set tabstop=4 softtabstop=4 shiftwidth=4
-endif
-
-" Programming configs for Shell
-if has("autocmd")
   au FileType sh set tabstop=2 softtabstop=2 shiftwidth=2
 endif
 
@@ -333,8 +321,7 @@ set whichwrap+=<,>,h,l
 set go+=a                                                           " Visual selection automatically copied to the clipboard
 set hidden                                                          " Switch between buffers with unsaved change
 set equalalways
-set formatoptions=tcrqn
-set formatoptions+=B                                                " Remove the backspace for combine lines (Only for chinese)
+set formatoptions+=rnmMB                                            " Remove the backspace for combine lines (Only for chinese)
 set matchpairs+=<:>
 set noendofline
 if has('cmdline_info')
@@ -348,18 +335,19 @@ if has('statusline')
 endif
 " set synmaxcol=128
 " set binary
-" set cryptmethod=blowfish
+set cryptmethod=blowfish2
 
 if has('persistent_undo')
   set noundofile
+endif
+if version > 74399
+  set cryptmethod=blowfish2
 endif
 
 noremap <F1> <ESC>
 inoremap <F1> <ESC>a
 nnoremap j gj
-nnoremap gj j
 nnoremap k gk
-nnoremap gk k
 nnoremap n nzzzv
 nnoremap N Nzzzv
 map <leader>bd :bd<CR>

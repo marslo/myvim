@@ -5,7 +5,7 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.24
-"    LastChange: 2015-12-29 17:43:56
+"    LastChange: 2016-01-26 19:45:09
 " =============================================================================
 
 set nocompatible
@@ -45,6 +45,7 @@ Bundle 'LargeFile'
 Bundle 'klen/python-mode'
 Bundle 'python_fold'
 Bundle 'Marslo/python-syntax'
+Bundle 'davidhalter/jedi-vim'
 " Bundle 'python_match.vim'
 " Bundle 'tarmack/vim-python-ftplugin'
 " Web design
@@ -144,23 +145,11 @@ if isdirectory(expand(bud . 'python-mode'))
   endif
 endif
 
-" Programming configs for Groovy
+" Programming configs for specified scripts
 if has("autocmd")
   au FileType groovy set tabstop=4 softtabstop=4 shiftwidth=4
-endif
-
-" Programming configs for Makefile
-if has("autocmd")
   au FileType make set tabstop=4 softtabstop=4 shiftwidth=4
-endif
-
-" Programming configs for Json
-if has("autocmd")
   au FileType json set tabstop=4 softtabstop=4 shiftwidth=4
-endif
-
-" Programming configs for Shell
-if has("autocmd")
   au FileType sh set tabstop=2 softtabstop=2 shiftwidth=2
 endif
 
@@ -177,6 +166,9 @@ else
   set t_Sb=^[[4%dm
   set t_Sf=^[[3%dm
   colorscheme marslo16
+endif
+if exists('$TMUX')
+  set term=screen-256color
 endif
 
 nmap <leader>v :e ~/.vimrc<CR>
@@ -237,18 +229,19 @@ set hidden                                                          " Switch bet
 set equalalways
 set formatoptions+=rnmMB                                            " Remove the backspace for combine lines (Only for chinese)
 set matchpairs+=<:>
-set ruler                                                         " Ruler: Show Line and colum number
-set showcmd                                                       " Show (partial) command in status line
-set laststatus=2                                                  " Set status bar
+set ruler                                                           " Ruler: Show Line and colum number
+set showcmd                                                         " Show (partial) command in status line
+set laststatus=2                                                    " Set status bar
 set statusline=%#User2#%m%r%*\ %F\ %y,%{&fileformat}
 set statusline+=%=\ %-{strftime(\"%H:%M\ %d/%m/%Y\")}\ %b[A],0x%B\ %c%V,%l/%L\ %1*--%n%%--%*\ %p%%\ |
+if version > 74399
+  set cryptmethod=blowfish2
+endif
 
 noremap <F1> <ESC>
 inoremap <F1> <ESC>a
 nnoremap j gj
-nnoremap gj j
 nnoremap k gk
-nnoremap gk k
 nnoremap n nzzzv
 nnoremap N Nzzzv
 map <leader>bd :bd<CR>
