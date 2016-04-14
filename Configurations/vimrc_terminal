@@ -5,7 +5,7 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.24
-"    LastChange: 2016-01-26 19:45:09
+"    LastChange: 2016-04-14 16:34:17
 " =============================================================================
 
 set nocompatible
@@ -20,6 +20,7 @@ set wildignore+=*/tmp/*,*.so,*.swp,*.zip
 set tags=tags
 set tags+=/home/marslo/Study/Codes/Rails/sdt
 let bud=expand('~/.vim/bundle') . '/'
+let performance_mode = 1
 
 " ====================================== For Property =====================================
 let mapleader=","
@@ -46,6 +47,7 @@ Bundle 'klen/python-mode'
 Bundle 'python_fold'
 Bundle 'Marslo/python-syntax'
 Bundle 'davidhalter/jedi-vim'
+Bundle 'mfukar/robotframework-vim'
 " Bundle 'python_match.vim'
 " Bundle 'tarmack/vim-python-ftplugin'
 " Web design
@@ -57,6 +59,7 @@ Bundle 'txt.vim'
 Bundle 'Marslo/vim-coloresque'
 Bundle 'Marslo/marslo.vim'
 Bundle 'Marslo/MarsloVimOthers'
+Bundle 'plasticboy/vim-markdown.git'
 
 call vundle#end()
 call pathogen#infect()
@@ -147,13 +150,20 @@ endif
 
 " Programming configs for specified scripts
 if has("autocmd")
+  au FileType python set tabstop=4 softtabstop=4 shiftwidth=4
+  au FileType robot set tabstop=4 softtabstop=4 shiftwidth=4
   au FileType groovy set tabstop=4 softtabstop=4 shiftwidth=4
+  au FileType snippet set tabstop=4 softtabstop=4 shiftwidth=4
   au FileType make set tabstop=4 softtabstop=4 shiftwidth=4
   au FileType json set tabstop=4 softtabstop=4 shiftwidth=4
   au FileType sh set tabstop=2 softtabstop=2 shiftwidth=2
 endif
 
 " ====================================== For Inteface =====================================
+if exists('$TMUX')
+  set term=screen-256color
+endif
+
 if 'xterm-256color' == $TERM
   set t_Co=256
 endif
@@ -166,9 +176,6 @@ else
   set t_Sb=^[[4%dm
   set t_Sf=^[[3%dm
   colorscheme marslo16
-endif
-if exists('$TMUX')
-  set term=screen-256color
 endif
 
 nmap <leader>v :e ~/.vimrc<CR>
@@ -241,7 +248,9 @@ endif
 noremap <F1> <ESC>
 inoremap <F1> <ESC>a
 nnoremap j gj
+nnoremap gj j
 nnoremap k gk
+nnoremap gk k
 nnoremap n nzzzv
 nnoremap N Nzzzv
 map <leader>bd :bd<CR>
@@ -275,6 +284,9 @@ nnoremap <leader>zmm :g/^/ s//\=line('.').' '/<CR>
 nnoremap <leader>zws :g/^\s*$/d<CR>
 nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>
 nnoremap <leader>zng :%s///gn<CR>
+nnoremap <leader>zbd :%s/​//g<CR>
+nnoremap ztd :%s/ / /g<CR>
+nnoremap <leader>zad i•<ESC>
 
 iabbrev <leader>/* /*********************************
 iabbrev <leader>*/ *********************************/

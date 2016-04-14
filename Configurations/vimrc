@@ -5,7 +5,7 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.24
-"    LastChange: 2016-01-26 19:45:01
+"    LastChange: 2016-04-14 16:34:10
 " =============================================================================
 
 set nocompatible
@@ -372,12 +372,6 @@ cnoremap <C-a> <Home>
 map <C-e> <ESC>$
 inoremap <C-e> <ESC>A
 cnoremap <C-e> <End>
-inoremap <A-f> <ESC><Space>Wi
-cnoremap <A-f> <S-Right>
-inoremap <A-b> <ESC>Bi
-cnoremap <A-b> <S-Left>
-inoremap <A-d> <ESC>lcW
-inoremap <C-d> <Del>
 nnoremap Y y$
 nnoremap <Del> "_x
 xnoremap <Del> "_d
