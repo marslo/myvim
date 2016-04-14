@@ -350,6 +350,8 @@ let g:AutoPairsShortcutBackInsert = '<M-b>'
 autocmd BufWinLeave * silent! mkview
 autocmd BufWinEnter * silent! loadview
 autocmd BufRead,BufNewFile * setfiletype txt
+autocmd BufRead,BufNewFile *.t set ft=perl
+autocmd FileType javascript syntax clear jsFuncBlock
 
 augroup vimrc
   au BufReadPre * setlocal foldmethod=indent
@@ -368,4 +370,5 @@ augroup collumnLimit
 augroup END
 
 autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
+
 " vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab
