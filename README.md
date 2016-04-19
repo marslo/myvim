@@ -3,7 +3,7 @@ My Vim Config
 - Author: Marslo
 - Email: marslo.jiao@gmail.com
 - Version: 0.0.6
-- LastChange: 2014-07-11 17:28:38
+- LastChange: 2016-04-19 14:59:28
 
 -----------------------------
 
@@ -455,6 +455,9 @@ Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
 ...
 
 - An fully [gvim.desktop](http://mirrors2.kernel.org/slackware/slackware-14.0/source/ap/vim/gvim.desktop)
+
+### 4. Reference:
+- [Build Vim from source](https://github.com/Valloric/YouCompleteMe/wiki/Building-Vim-from-source)
 
 
 ### 4. Q&A
