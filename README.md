@@ -457,7 +457,8 @@ Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
 - An fully [gvim.desktop](http://mirrors2.kernel.org/slackware/slackware-14.0/source/ap/vim/gvim.desktop)
 
 ### 4. Reference:
-- [Build Vim from source](https://github.com/Valloric/YouCompleteMe/wiki/Building-Vim-from-source)
+- [Build Vim from source](https://github.com/Marslo/VimConfig/blob/master/Compile/docs/Building-Vim-from-source.md)
+- [Windows Installation Guide by using YouCompleteMe](https://github.com/Marslo/VimConfig/blob/master/Compile/docs/Windows-Installation-Guide.md)
 
 
 ### 4. Q&A
