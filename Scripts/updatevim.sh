@@ -4,10 +4,12 @@
 #     Author: Marslo
 #      Email: marslo.jiao@gmail.com
 #    Created: 2015-09-17 18:20:27
-#    Version: 0.0.1
-# LastChange: 2016-03-17 13:09:42
+#    Version: 0.0.3
+# LastChange: 2016-04-19 10:41:58
 #    History:
 #             0.0.1 | Marslo | init
+#             0.0.2 | Marslo | Build vim win64
+#             0.0.3 | Marslo | Add ruby in
 # =============================================================================
 
 sour=$HOME/../../Marslo/Tools/Git/vim/src
@@ -26,15 +28,20 @@ git checkout -- *
 
 
 echo '-----------------------------------'
-origver=`git status | grep v7 | awk -F'7.4.' '{print $2}'`
-curver=$(( ${origver}+1 ))
 git tag --sort=v:refname | grep 'v7.4\.' | tail -30
 latestver=`git tag --sort=v:refname | grep 'v7.4\.' | tail -1 | awk -F'v7.4.' '{print $2}'`
 
-if [ 0 -eq ${#origver} ]
-then
+git status | grep "On branch master"
+if [ 0 -ne $? ]; then
+  origver=${latestver}
+else
+  origver=`git status | grep v7 | awk -F'7.4.' '{print $2}'`
+fi
+
+if [ 0 -eq ${#origver} ]; then
   origver=${latestver}
 fi
+curver=$(( ${origver}+1 ))
 
 git checkout master
 git pull
@@ -59,11 +66,22 @@ do
   echo "----------------------------------- ${ver} --------------------------------------"
 
   git checkout tags/v${ver}
-  make -B -f Make_cyg.mak CROSS_COMPILE=x86_64-w64-mingw32- ARCH=x86-64 PYTHON=/cygdrive/c/Marslo/MyProgramFiles/Python27 DYNAMIC_PYTHON=yes PYTHON_VER=27 PYTHON3=/cygdrive/c/Marslo/MyProgramFiles/Python35 DYNAMIC_PYTHON3=yes PYTHON3_VER=35 FEATURES=huge IME=yes GIME=yes MBYTE=yes CSCOPE=yes USERNAME=Marslo.Jiao USERDOMAIN=China GUI=yes >log_gui_${ver}.log 2>&1
-  make -B -f Make_cyg.mak CROSS_COMPILE=x86_64-w64-mingw32- ARCH=x86-64 PYTHON=/cygdrive/c/Marslo/MyProgramFiles/Python27 DYNAMIC_PYTHON=yes PYTHON_VER=27 PYTHON3=/cygdrive/c/Marslo/MyProgramFiles/Python35 DYNAMIC_PYTHON3=yes PYTHON3_VER=35 FEATURES=huge IME=yes GIME=yes MBYTE=yes CSCOPE=yes USERNAME=Marslo.Jiao USERDOMAIN=China GUI=no > log_nogui_${ver}.log 2>&1
+
+  make -B -f Make_cyg.mak CROSS_COMPILE=x86_64-w64-mingw32- ARCH=x86-64 PYTHON=/cygdrive/c/Marslo/MyProgramFiles/Python27 DYNAMIC_PYTHON=yes PYTHON_VER=27 PYTHON3=/cygdrive/c/Marslo/MyProgramFiles/Python35 DYNAMIC_PYTHON3=yes PYTHON3_VER=35 RUBY=/cygdrive/c/Marslo/MyProgramFiles/Ruby23-x64 DYNAMIC_RUBY=yes RUBY_VER=23 RUBY_VER_LONG=2.3.0 FEATURES=huge IME=yes GIME=yes MBYTE=yes CSCOPE=yes USERNAME=Marslo.Jiao USERDOMAIN=China GUI=yes > log_gui_${ver}.log 2>&1
+  make -B -f Make_cyg.mak CROSS_COMPILE=x86_64-w64-mingw32- ARCH=x86-64 PYTHON=/cygdrive/c/Marslo/MyProgramFiles/Python27 DYNAMIC_PYTHON=yes PYTHON_VER=27 PYTHON3=/cygdrive/c/Marslo/MyProgramFiles/Python35 DYNAMIC_PYTHON3=yes PYTHON3_VER=35 RUBY=/cygdrive/c/Marslo/MyProgramFiles/Ruby23-x64 DYNAMIC_RUBY=yes RUBY_VER=23 RUBY_VER_LONG=2.3.0 FEATURES=huge IME=yes GIME=yes MBYTE=yes CSCOPE=yes USERNAME=Marslo.Jiao USERDOMAIN=China GUI=no > log_nogui_${ver}.log 2>&1
 
   mkdir -p ${targ}
-  mv ${sour}/vim.exe ${sour}/gvim.exe log_nogui_${ver}.log log_gui_${ver}.log ${targ}
+  if [ -f ${sour}/vim.exe ]; then
+    mv ${sour}/vim.exe ${targ}
+  else
+    mv ${sour}/log_nogui_${ver}.log ${targ}
+  fi
+
+  if [ -f ${sour}/gvim.exe ]; then
+    mv ${sour}/gvim.exe ${targ}
+  else
+    mv ${sour}/log_gui_${ver}.log ${targ}
+  fi
 done
 
 popd
