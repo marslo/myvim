@@ -224,6 +224,8 @@ endif
 
 " Programming configs for specified scripts
 if has("autocmd")
+  au FileType python set tabstop=4 softtabstop=4 shiftwidth=4
+  au FileType robot set tabstop=4 softtabstop=4 shiftwidth=4
   au FileType groovy set tabstop=4 softtabstop=4 shiftwidth=4
   au FileType snippet set tabstop=4 softtabstop=4 shiftwidth=4
   au FileType make set tabstop=4 softtabstop=4 shiftwidth=4
@@ -298,7 +300,7 @@ set softtabstop=2                                                   " Width for 
 set shiftwidth=2                                                    " The tab width by using >> & <<
 set autoindent expandtab
 set smartindent
-set smarttab						            " Smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
+set smarttab						                                            " Smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
 set linebreak
 set textwidth=80
 set modifiable
@@ -331,7 +333,6 @@ set hidden                                                          " Switch bet
 set equalalways
 set formatoptions+=rnmMB                                            " Remove the backspace for combine lines (Only for chinese)
 set matchpairs+=<:>
-set noendofline
 " set autowrite
 if has('cmdline_info')
   set ruler                                                         " ruler: Show Line and colum number
