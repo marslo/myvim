@@ -50,11 +50,13 @@ My Vim Config
             :BundleInstall!
 
 - Linux User:
-    - Copy **vimrc** from `VimConfig/Configurations/vimrc` into `$HOME`, and rename to **.vimrc**
+    - Copy **vimrc** from `VimConfig/Configurations/vimrc` into `$HOME`, and rename to **.vimrc** 
+
 
         $ cp vimrc ~/.vimrc
 
     - Get [Vundle](https://github.com/gmarik/vundle.git) automatically
+
 
         $ cat .vimrc | grep "set rtp"
             set rtp+=$VIM/vimfiles/bundle/vundle
