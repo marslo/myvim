@@ -377,6 +377,11 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
 ### 1. Prepare environment:
 #### 1.1. Downaload vim source code:
 Download source from:
+- [Vim official github repo](https://github.com/vim/vim)
+
+        $ git clone git@github.com:vim/vim.git
+        $ git clone https://github.com/vim/vim.git
+
 - [b4winckler](https://github.com/b4winckler/vim.git):
 
         $ git clone git@github.com:b4winckler/vim.git
