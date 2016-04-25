@@ -5,7 +5,7 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.24
-"    LastChange: 2016-04-14 16:34:17
+"    LastChange: 2016-04-25 21:02:55
 " =============================================================================
 
 set nocompatible
@@ -205,7 +205,6 @@ set autoindent expandtab
 set smartindent
 set smarttab						                                            " Smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
 set linebreak
-set textwidth=80
 set modifiable
 set write
 set incsearch hlsearch ignorecase smartcase                         " Search
@@ -279,14 +278,14 @@ inoremap <leader>w <C-O>:w<CR>
 nnoremap <leader>g :%s///gn<CR>
 
 nnoremap <leader>zdb :%s/\s\+$//<CR>
-nnoremap <leader>zhh :%s/^\s\+//<CR>
-nnoremap <leader>zmm :g/^/ s//\=line('.').' '/<CR>
-nnoremap <leader>zws :g/^\s*$/d<CR>
+nnoremap <leader>zhs :%s/^\s\+//<CR>
+nnoremap <leader>zim :g/^/ s//\=line('.').' '/<CR>
+nnoremap <leader>zbl :g/^\s*$/d<CR>
 nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>
 nnoremap <leader>zng :%s///gn<CR>
 nnoremap <leader>zbd :%s/​//g<CR>
-nnoremap ztd :%s/ / /g<CR>
-nnoremap <leader>zad i•<ESC>
+nnoremap <leader>zdd :%s/ / /g<CR>
+nnoremap <leader>zid i•<ESC>
 
 iabbrev <leader>/* /*********************************
 iabbrev <leader>*/ *********************************/

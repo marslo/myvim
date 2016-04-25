@@ -112,7 +112,7 @@ My Vim Config
 
 - Specified function shortcuts:
     - <kbd>F12</kbd>: Re-build tags file
-    - <kbd>gf</kbd>: Open file which under the cursor (Add the .py suffix while the filetype == python)
+    - <kbd>gf</kbd>: **G**oto **F**ile. Open file which under the cursor (Add the .py suffix while the filetype == python)
     - <kbd>Alt</kbd> + <kbd>-</kbd>: Reduce the font
     - <kbd>Alt</kbd> + <kbd>+</kbd>: Enlarge the font
     - <kbd>cmd</kbd>: Open command line and cd into the current file path
@@ -128,7 +128,7 @@ My Vim Config
     - <kbd>\<leader\>te</kbd>: Open the Tetris
     - <kbd>\<leader\>tv</kbd>: Open bash in the vim/gvim against Liunxu and open command line against Windows (Yes! That's true)
     - <kbd>\<leader\>u</kbd>: Open Gundo window
-    - <kbd>pyli</kbd>: Static Code Analysis for python
+    - <kbd>pyli</kbd>: Static Code Analysis for python            <<-- obsolete.  Use python-mode instead of
     - <kbd>\<leader\>re</kbd>: Open the most recently used files
     - <kbd>\<leader\>x</kbd>: Comments/Uncomments
 
@@ -137,21 +137,25 @@ My Vim Config
 - Emacs-style shortcuts:
     - <kbd>Ctrl</kbd> + <kbd>a</kbd>: Go to begin of the line  [Normal Mode && Insert Mode]
     - <kbd>Ctrl</kbd> + <kbd>e</kbd>: Go to end of the line [Normal Mode && Insert Mode]
-    - <kbd>Alt</kbd> + <kbd>b</kbd>: Backward a word [Insert Mode]
-    - <kbd>Alt</kbd> + <kbd>f</kbd>: Forward a word  [Insert Mode]
-    - <kbd>Alt</kbd> + <kbd>d</kbd>: Delete a word (backward) [Insert Mode]
+    - <kbd>Alt</kbd> + <kbd>b</kbd>: Backward a word [Insert Mode]          <<-- obsolete
+    - <kbd>Alt</kbd> + <kbd>f</kbd>: Forward a word  [Insert Mode]          <<-- obsolete
+    - <kbd>Alt</kbd> + <kbd>d</kbd>: Delete a word (backward) [Insert Mode]          <<-- obsolete
     - <kbd>Ctrl</kbd> + <kbd>w</kbd>: Delete a word (foreward) [Insert Mode]
     - <kbd>Ctrl</kbd> + <kbd>d</kbd>: Delete a char (backward) [Insert Mode] == [Delete]
 
 +++++++++++++++++++++++++++++++++++++++++++
 
 - Patten shortcuts:
-    - <kbd>zdb</kbd>: Delete the backspace at the each of each line
-    - <kbd>zmm</kbd>: Insert the line number
-    - <kbd>zws</kbd>: Delete the blank line
-    - <kbd>zdm</kbd>: Delete `^M` (<C-v><CR>)
-    - <kbd>zng</kbd>: Show the number of searched words in last time
-    - <kbd>zhh</kbd>: Delete all white space in the font of the line
+    - <kbd>\<leader\>zdb</kbd>: **D**elete *B*ackspace. Delete the backspace at the each of each line
+    - <kbd>\<leader\>zhs</kbd>: Delete **H**ead **S**pace. Delete all white space in the font of the line
+    - <kbd>\<leader\>zim</kbd>: **I**nsert Nu**m**ber. Insert the line number
+    - <kbd>\<leader\>zbl</kbd>: Delete **B**lank **L**ine. Delete the blank line
+    - <kbd>\<leader\>zdm</kbd>: **D**elete **M**. Delete `^M` (<C-v><CR>)
+    - <kbd>\<leader\>zng</kbd>: **N**umber **G**lobal. Show the number of searched words in last time
+    - <kbd>\<leader\>zbd</kbd>: \<200 **b**\> **D**elete. Delete \<200b\> character
+    - <kbd>\<leader\>zdd</kbd>: **D**elete **Dot**. Delete   character
+    - <kbd>\<leader\>zid</kbd>: **I**nsert **Dot**. Insert a dot (•)
+
 
 ### Plugins:
 - [AuthorInfo](https://github.com/dantezhu/authorinfo)
@@ -313,15 +317,18 @@ The default Font named: Monaco, download form: http://download.csdn.net/detail/j
 +++++++++++++++++++++++++++++++++++++++++++
 
 - 正则表达式快捷键
-    - <kbd>zdb</kbd>: 删除行尾空格
-    - <kbd>zmm</kbd>: 插入文档行号
-    - <kbd>zws</kbd>: 删除空行
-    - <kbd>zdm</kbd>: 删除`^M`
-    - <kbd>zng</kbd>: 显示最后一次搜索内容的个数
-    - <kbd>zhh</kbd>: 删除行前的空白（缩进，空格，等）
+    - <kbd>\<leader\>zdb</kbd>: **D**elete *B*ackspace. 删除行尾空格
+    - <kbd>\<leader\>zhs</kbd>: Delete **H**ead **S**pace. 删除行前空白（缩进，空格，等）
+    - <kbd>\<leader\>zim</kbd>: **I**nsert Nu**m**ber. 插入文档行号
+    - <kbd>\<leader\>zbl</kbd>: Delete **B**lank **L**ine. 删除空行
+    - <kbd>\<leader\>zdm</kbd>: **D**elete **M**. 删除 `^M` (<C-v><CR>) 字符
+    - <kbd>\<leader\>zng</kbd>: **N**umber **G**lobal. 显示最后一次搜索内容的个数
+    - <kbd>\<leader\>zbd</kbd>: `<200**b**>` **D**elete. 删除字符`<200b>`
+    - <kbd>\<leader\>zdd</kbd>: **D**elete **Dot**. 删除 `·` 字符
+    - <kbd>\<leader\>zid</kbd>: **I**nsert **Dot**. 插入一个点 (`•`)
 
 
-### 插件列表：
+### 插件列表:
 - [AuthorInfo](https://github.com/dantezhu/authorinfo)
 - [Conque Term](https://github.com/vim-scripts/Conque-Shell)
 - [MiniBufExpl](http://www.vim.org/scripts/script.php?script_id=159)
