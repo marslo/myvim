@@ -67,8 +67,8 @@ do
 
   git checkout tags/v${ver}
 
-  make -B -f Make_cyg.mak CROSS_COMPILE=x86_64-w64-mingw32- ARCH=x86-64 PYTHON=/cygdrive/c/Marslo/MyProgramFiles/Python27 DYNAMIC_PYTHON=yes PYTHON_VER=27 PYTHON3=/cygdrive/c/Marslo/MyProgramFiles/Python35 DYNAMIC_PYTHON3=yes PYTHON3_VER=35 RUBY=/cygdrive/c/Marslo/MyProgramFiles/Ruby23-x64 DYNAMIC_RUBY=yes RUBY_VER=23 RUBY_VER_LONG=2.3.0 FEATURES=huge IME=yes GIME=yes MBYTE=yes CSCOPE=yes USERNAME=Marslo.Jiao USERDOMAIN=China GUI=yes > log_gui_${ver}.log 2>&1
-  make -B -f Make_cyg.mak CROSS_COMPILE=x86_64-w64-mingw32- ARCH=x86-64 PYTHON=/cygdrive/c/Marslo/MyProgramFiles/Python27 DYNAMIC_PYTHON=yes PYTHON_VER=27 PYTHON3=/cygdrive/c/Marslo/MyProgramFiles/Python35 DYNAMIC_PYTHON3=yes PYTHON3_VER=35 RUBY=/cygdrive/c/Marslo/MyProgramFiles/Ruby23-x64 DYNAMIC_RUBY=yes RUBY_VER=23 RUBY_VER_LONG=2.3.0 FEATURES=huge IME=yes GIME=yes MBYTE=yes CSCOPE=yes USERNAME=Marslo.Jiao USERDOMAIN=China GUI=no > log_nogui_${ver}.log 2>&1
+  make -j12 -B -f Make_cyg.mak CROSS_COMPILE=x86_64-w64-mingw32- ARCH=x86-64 PYTHON=/cygdrive/c/Marslo/MyProgramFiles/Python27 DYNAMIC_PYTHON=yes PYTHON_VER=27 PYTHON3=/cygdrive/c/Marslo/MyProgramFiles/Python35 DYNAMIC_PYTHON3=yes PYTHON3_VER=35 RUBY=/cygdrive/c/Marslo/MyProgramFiles/Ruby23-x64 DYNAMIC_RUBY=yes RUBY_VER=23 RUBY_VER_LONG=2.3.0 FEATURES=huge IME=yes GIME=yes MBYTE=yes CSCOPE=yes USERNAME=Marslo.Jiao USERDOMAIN=China GUI=yes > log_gui_${ver}.log 2>&1
+  make -j12 -B -f Make_cyg.mak CROSS_COMPILE=x86_64-w64-mingw32- ARCH=x86-64 PYTHON=/cygdrive/c/Marslo/MyProgramFiles/Python27 DYNAMIC_PYTHON=yes PYTHON_VER=27 PYTHON3=/cygdrive/c/Marslo/MyProgramFiles/Python35 DYNAMIC_PYTHON3=yes PYTHON3_VER=35 RUBY=/cygdrive/c/Marslo/MyProgramFiles/Ruby23-x64 DYNAMIC_RUBY=yes RUBY_VER=23 RUBY_VER_LONG=2.3.0 FEATURES=huge IME=yes GIME=yes MBYTE=yes CSCOPE=yes USERNAME=Marslo.Jiao USERDOMAIN=China GUI=no > log_nogui_${ver}.log 2>&1
 
   mkdir -p ${targ}
   if [ -f ${sour}/vim.exe ]; then
