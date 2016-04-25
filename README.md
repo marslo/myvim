@@ -52,15 +52,14 @@ My Vim Config
 - Linux User:
     - Copy **vimrc** from `VimConfig/Configurations/vimrc` into `$HOME`, and rename to **.vimrc** 
 
-
-        $ cp vimrc ~/.vimrc
+        <pre><code>$ cp vimrc ~/.vimrc</code></pre>
 
     - Get [Vundle](https://github.com/gmarik/vundle.git) automatically
 
-
-        $ cat .vimrc | grep "set rtp"
+        <pre><code>$ cat .vimrc | grep "set rtp"
             set rtp+=$VIM/vimfiles/bundle/vundle
             set rtp+=~/.vim/bunle/vundle
+        </code></pre>
 
         - Open Vim and Run (Ignore warnings and errors):
 
