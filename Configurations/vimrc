@@ -97,7 +97,7 @@ Bundle 'jelera/vim-javascript-syntax'
 Bundle 'burnettk/vim-angular'
 " Web design
 Bundle 'tpope/vim-surround'
-Bundle 'gregsexton/MatchTag'
+Bundle 'valloric/MatchTagAlways'
 Bundle 'tpope/vim-repeat'
 " Colors and themes and syntax
 Bundle 'luochen1990/rainbow'
@@ -398,6 +398,7 @@ nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>
 nnoremap <leader>zng :%s///gn<CR>
 nnoremap <leader>zbd :%s/​//g<CR>
 nnoremap <leader>zdd :%s/ / /g<CR>
+nnoremap <leader>zds :%s/^<span.*span>//g<CR>
 nnoremap <leader>zid i•<ESC>
 
 iabbrev <leader>/* /*********************************
