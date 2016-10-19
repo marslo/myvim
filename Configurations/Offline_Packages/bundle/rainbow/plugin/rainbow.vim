@@ -1,16 +1,16 @@
 "==============================================================================
 "Script Title: rainbow parentheses improved
-"Script Version: 3.3.0
+"Script Version: 3.4.0
 "Author: luochen1990
-"Last Edited: 2014 Aug 9
+"Last Edited: 2015 Nov 19
 "Simple Configuration:
 "	first, put "rainbow.vim"(this file) to dir vimfiles/plugin or vim73/plugin
 "	second, add the follow sentences to your .vimrc or _vimrc :
 "	 	let g:rainbow_active = 1
 "	third, restart your vim and enjoy coding.
 "Advanced Configuration:
-"	an advanced configuration allows you to define what parentheses to use 
-"	for each type of file . you can also determine the colors of your 
+"	an advanced configuration allows you to define what parentheses to use
+"	for each type of file . you can also determine the colors of your
 "	parentheses by this way (read file vim73/rgb.txt for all named colors).
 "	READ THE SOURCE FILE FROM LINE 25 TO LINE 50 FOR EXAMPLE.
 "User Command:
@@ -21,19 +21,22 @@ if exists('s:loaded') || !(exists('g:rainbow_active') || exists('g:rainbow_conf'
 	finish
 endif
 let s:loaded = 1
- 
+
 let s:rainbow_conf = {
 \	'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
 \	'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
 \	'operators': '_,_',
-\	'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/'],
+\	'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
 \	'separately': {
 \		'*': {},
+\		'lisp': {
+\			'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick', 'darkorchid3'],
+\		},
 \		'tex': {
 \			'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/'],
 \		},
 \		'vim': {
-\			'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody', 'start=/{/ end=/}/ containedin=vimFuncBody'],
+\			'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/ fold', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody', 'start=/{/ end=/}/ fold containedin=vimFuncBody'],
 \		},
 \		'xml': {
 \			'parentheses': ['start=/\v\<\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'))?)*\>/ end=#</\z1># fold'],
@@ -86,6 +89,7 @@ func rainbow#load()
 	let b:rainbow_loaded = maxlvl
 	for parenthesis_args in conf.parentheses
 		let [paren, containedin, contains, op] = s:resolve_parenthesis(parenthesis_args)
+		if op == '' |let op = conf.operators |endif
 		for lvl in range(maxlvl)
 			if op != '' |exe printf(def_op, 'rainbow_o'.lvl, op, 'rainbow_r'.lvl) |endif
 			if lvl == 0
@@ -100,6 +104,10 @@ func rainbow#load()
 			exe printf(def_rg, 'rainbow_r0', 'rainbow_p0 contained', containedin.',rainbow_r'.(maxlvl - 1), contains, paren)
 		endif
 	endfor
+	exe 'syn cluster RainbowRegions contains='.join(map(range(maxlvl), '"rainbow_r".v:val'),',')
+	exe 'syn cluster RainbowParentheses contains='.join(map(range(maxlvl), '"rainbow_p".v:val'),',')
+	exe 'syn cluster RainbowOperators contains='.join(map(range(maxlvl), '"rainbow_o".v:val'),',')
+
 	call rainbow#show()
 endfunc
 
@@ -120,8 +128,8 @@ func rainbow#show()
 		for id in range(b:rainbow_loaded)
 			let ctermfg = b:rainbow_conf.ctermfgs[id % len(b:rainbow_conf.ctermfgs)]
 			let guifg = b:rainbow_conf.guifgs[id % len(b:rainbow_conf.guifgs)]
-			exe 'hi default rainbow_p'.id.' ctermfg='.ctermfg.' guifg='.guifg
-			exe 'hi default rainbow_o'.id.' ctermfg='.ctermfg.' guifg='.guifg
+			exe 'hi rainbow_p'.id.' ctermfg='.ctermfg.' guifg='.guifg
+			exe 'hi rainbow_o'.id.' ctermfg='.ctermfg.' guifg='.guifg
 		endfor
 	endif
 endfunc
@@ -150,7 +158,11 @@ endfunc
 
 func rainbow#hook()
 	let g_conf = extend(copy(s:rainbow_conf), exists('g:rainbow_conf')? g:rainbow_conf : {}) |unlet g_conf.separately
-	let separately = extend(copy(s:rainbow_conf.separately), exists('g:rainbow_conf.separately')? g:rainbow_conf.separately : {})
+	if exists('g:rainbow_conf.separately') && has_key(g:rainbow_conf.separately, '*')
+		let separately = copy(g:rainbow_conf.separately)
+	else
+		let separately = extend(copy(s:rainbow_conf.separately), exists('g:rainbow_conf.separately')? g:rainbow_conf.separately : {})
+	endif
 	let b_conf = has_key(separately, &ft)? separately[&ft] : separately['*']
 	if type(b_conf) == type({})
 		let b:rainbow_conf = extend(g_conf, b_conf)
@@ -159,6 +171,8 @@ func rainbow#hook()
 endfunc
 
 command! RainbowToggle call rainbow#toggle()
+command! RainbowToggleOn call rainbow#load()
+command! RainbowToggleOff call rainbow#clear()
 
 if (exists('g:rainbow_active') && g:rainbow_active)
 	auto syntax * call rainbow#hook()

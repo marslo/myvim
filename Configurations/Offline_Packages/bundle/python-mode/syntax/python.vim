@@ -16,6 +16,9 @@ call pymode#default('g:pymode_syntax_all', 1)
 
 " Highlight 'print' as function
 call pymode#default("g:pymode_syntax_print_as_function", 0)
+"
+" Highlight 'async/await' keywords
+call pymode#default("g:pymode_syntax_highlight_async_await", g:pymode_syntax_all)
 
 " Highlight '=' operator
 call pymode#default('g:pymode_syntax_highlight_equal_operator', g:pymode_syntax_all)
@@ -80,13 +83,13 @@ endif
     syn match pythonFunction "\%(\%(def\s\|@\)\s*\)\@<=\h\%(\w\|\.\)*" contained nextgroup=pythonVars
     syn region pythonVars start="(" skip=+\(".*"\|'.*'\)+ end=")" contained contains=pythonParameters transparent keepend
     syn match pythonParameters "[^,]*" contained contains=pythonParam skipwhite
-    syn match pythonParam "[^,]*" contained contains=pythonExtraOperator,pythonLambdaExpr,pythonBuiltinObj,pythonBuiltinType,pythonConstant,pythonString,pythonNumber,pythonBrackets,pythonSelf skipwhite
+    syn match pythonParam "[^,]*" contained contains=pythonExtraOperator,pythonLambdaExpr,pythonBuiltinObj,pythonBuiltinType,pythonConstant,pythonString,pythonNumber,pythonBrackets,pythonSelf,pythonComment skipwhite
     syn match pythonBrackets "{[(|)]}" contained skipwhite
 
     syn keyword pythonStatement class nextgroup=pythonClass skipwhite
     syn match pythonClass "\%(\%(class\s\)\s*\)\@<=\h\%(\w\|\.\)*" contained nextgroup=pythonClassVars
     syn region pythonClassVars start="(" end=")" contained contains=pythonClassParameters transparent keepend
-    syn match pythonClassParameters "[^,\*]*" contained contains=pythonBuiltin,pythonBuiltinObj,pythonBuiltinType,pythonExtraOperatorpythonStatement,pythonBrackets,pythonString skipwhite
+    syn match pythonClassParameters "[^,\*]*" contained contains=pythonBuiltin,pythonBuiltinObj,pythonBuiltinType,pythonExtraOperatorpythonStatement,pythonBrackets,pythonString,pythonComment skipwhite
 
     syn keyword pythonRepeat        for while
     syn keyword pythonConditional   if elif else
@@ -99,6 +102,13 @@ endif
 
     if !g:pymode_syntax_print_as_function
         syn keyword pythonStatement print
+    endif
+
+    if g:pymode_syntax_highlight_async_await
+        syn keyword pythonStatement async await
+        syn match pythonStatement "\<async\s\+def\>" nextgroup=pythonFunction skipwhite
+        syn match pythonStatement "\<async\s\+with\>" display
+        syn match pythonStatement "\<async\s\+for\>" nextgroup=pythonRepeat skipwhite
     endif
 
     if g:pymode_syntax_highlight_equal_operator

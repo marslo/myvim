@@ -13,8 +13,9 @@ def set_prefs(prefs):
     # '.svn': matches 'pkg/.svn' and all of its children
     # 'build/*.o': matches 'build/lib.o' but not 'build/sub/lib.o'
     # 'build//*.o': matches 'build/lib.o' and 'build/sub/lib.o'
-    prefs['ignored_resources'] = ['*.pyc', '*~', '.ropeproject',
-                                  '.hg', '.svn', '_svn', '.git']
+    prefs['ignored_resources'] = [
+        '*.pyc', '*~', '.ropeproject', '.hg', '.svn', '_svn', '.git',
+        '.tox', '.env', 'node_modules', 'bower_components']
 
     # Specifies which files should be considered python files.  It is
     # useful when you have scripts inside your project.  Only files
@@ -78,6 +79,16 @@ def set_prefs(prefs):
     # If `True`, rope ignores unresolvable imports.  Otherwise, they
     # appear in the importing namespace.
     prefs['ignore_bad_imports'] = False
+
+    # If `True`, rope will transform a comma list of imports into
+    # multiple separate import statements when organizing
+    # imports.
+    prefs['split_imports'] = False
+
+    # If `True`, rope will sort imports alphabetically by module name
+    # instead of alphabetically by import statement, with from imports
+    # after normal imports.
+    prefs['sort_imports_alphabetically'] = False
 
 
 def project_opened(project):

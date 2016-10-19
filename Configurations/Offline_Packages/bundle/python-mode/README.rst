@@ -4,19 +4,32 @@
 .. image:: https://travis-ci.org/klen/python-mode.png?branch=develop
     :target: https://travis-ci.org/klen/python-mode
 
-.. image:: https://dl.dropboxusercontent.com/u/487440/reformal/donate.png
-    :target: https://www.gittip.com/klen/
-    :alt: Donate
+-----
+
+*The project needs maintainers and contributors*
+
+Actually, I have no time for support the project, so if you feel yourself as
+strong don't be hesitate to contact me.
+
+-----
+
+|
+| Src:  https://github.com/klen/python-mode
+| Homepage: https://klen.github.io/python-mode/
+| Docs: https://github.com/klen/python-mode/blob/develop/doc/pymode.txt
+|
 
 Python-mode is a vim plugin that helps you to create python code very quickly
-by utilizing libraries including pylint_, rope_, pydoc_, pyflakes_, pep8_, and
-mccabe_  for features like static analysis, refactoring, folding, completion,
+by utilizing libraries including
+`pylint`_, `rope`_, pydoc_, `pyflakes`_, `pep8`_, `autopep8`_,
+`pep257`_ and `mccabe`_
+for features like static analysis, refactoring, folding, completion,
 documentation, and more.
 
 The plugin contains all you need to develop python applications in Vim.
 
-There is no need to install pylint_, rope_ or any other Python libraries on
-your system.
+There is no need to install `pylint`_, `rope`_
+or any other `Python Libraries`_ on your system.
 
 - Support Python version 2.6+ and 3.2+
 - Syntax highlighting
@@ -40,7 +53,7 @@ See (very old) screencast here: http://www.youtube.com/watch?v=67OZNp9Z0CQ
 (sorry for quality, this is my first screencast) Another old presentation here:
 http://www.youtube.com/watch?v=YhqsjUUHj6g
 
-**To read python-mode documentation in Vim, see** ``:help pymode.txt``
+**To read python-mode documentation in Vim, see** ``:help pymode``
 
 
 .. contents::
@@ -56,13 +69,13 @@ Requirements
 How to install
 ==============
 
-Using pathogen (recomended)
+Using pathogen (recommended)
 ----------------------------
 ::
 
     % cd ~/.vim
     % mkdir -p bundle && cd bundle
-    % git clone git://github.com/klen/python-mode.git
+    % git clone https://github.com/klen/python-mode.git
 
 - Enable `pathogen <https://github.com/tpope/vim-pathogen>`_
   in your ``~/.vimrc``: ::
@@ -81,7 +94,7 @@ Manually
 --------
 ::
 
-    % git clone git://github.com/klen/python-mode.git
+    % git clone https://github.com/klen/python-mode.git
     % cd python-mode
     % cp -R * ~/.vim
 
@@ -97,13 +110,13 @@ Then rebuild **helptags** in vim::
 
 Debian packages
 ---------------
+|Repository URL: https://klen.github.io/python-mode/deb/
 
-Repository URL: http://klen.github.io/python-mode/deb/
 Install with commands:
 
 ::
 
-     add-apt-repository http://klen.github.io/python-mode/deb main
+     add-apt-repository https://klen.github.io/python-mode/deb main
      apt-get update
      apt-get install vim-python-mode
 
@@ -176,33 +189,161 @@ https://github.com/klen/python-mode
 Please make a pull request to `development` branch and add yourself to
 `AUTHORS`.
 
+Source Links
+===================
+- `doc/pymode.txt
+  <https://github.com/klen/python-mode/blob/develop/doc/pymode.txt>`__
+  -- ``:help pymode``
+- `plugin/pymode.vim
+  <https://github.com/klen/python-mode/blob/develop/plugin/pymode.vim>`__
+  -- python-mode VIM plugin
+- `syntax/python.vim
+  <https://github.com/klen/python-mode/blob/develop/syntax/python.vim>`__
+  -- python-mode ``python.vim`` VIM syntax
+- `syntax/pyrex.vim
+  <https://github.com/klen/python-mode/blob/develop/syntax/pyrex.vim>`__
+  -- ``pyrex.vim`` VIM syntax (pyrex, Cython)
+- `t/
+  <https://github.com/klen/python-mode/tree/develop/t>`__
+  -- ``*.vim`` more python-mode VIM configuration
+- `pymode/
+  <https://github.com/klen/python-mode/tree/develop/pymode>`__
+  -- ``*.py`` -- python-mode Python module
+- `pymode/libs/
+  <https://github.com/klen/python-mode/tree/develop/pymode/libs>`__
+  -- ``*.py`` -- `Python Libraries <#python-libraries>`__
+
+
+Python Libraries
+------------------
+Vendored Python modules are located
+mostly in
+`pymode/libs/ <https://github.com/klen/python-mode/tree/develop/pymode/libs>`__.
+
+
+======
+rope
+======
+| PyPI: https://pypi.python.org/pypi/rope
+| Src: https://github.com/python-rope/rope
+| Docs: https://github.com/python-rope/rope/blob/master/docs/overview.rst
+| Docs: https://github.com/python-rope/rope/blob/master/docs/library.rst
+
+========================
+ropemode
+========================
+| PyPI: https://pypi.python.org/pypi/ropemode
+| Src: https://github.com/python-rope/ropemode
+
+=========
+ropevim
+=========
+| PyPI: https://pypi.python.org/pypi/ropevim
+| Src: https://github.com/python-rope/ropevim
+| Docs: https://github.com/python-rope/ropevim/blob/master/doc/ropevim.txt
+
+=======
+pylama
+=======
+| PyPI: https://pypi.python.org/pypi/pylama
+| Src: https://github.com/klen/pylama
+
+========
+pylint
+========
+| PyPI: https://pypi.python.org/pypi/pylint
+| Src: https://bitbucket.org/logilab/pylint
+| Homepage: http://www.pylint.org/
+| Docs: http://docs.pylint.org/
+| Docs: http://docs.pylint.org/message-control.html
+| Docs: http://docs.pylint.org/faq.html#message-control
+| ErrCodes: http://pylint-messages.wikidot.com/all-codes
+| ErrCodes: http://pylint-messages.wikidot.com/all-messages
+
+==========
+pyflakes
+==========
+| PyPI: https://pypi.python.org/pypi/pyflakes
+| Src: https://github.com/pyflakes/pyflakes
+| ErrCodes: https://flake8.readthedocs.org/en/latest/warnings.html
+
+======
+pep8
+======
+| PyPI: https://pypi.python.org/pypi/pep8
+| Src: http://github.com/jcrocholl/pep8
+| PEP 8: http://www.python.org/dev/peps/pep-0008/
+| PEP 8: http://legacy.python.org/dev/peps/pep-0008/
+| Docs: https://pep8.readthedocs.org/en/latest/
+| Docs: https://pep8.readthedocs.org/en/latest/intro.html#configuration
+| ErrCodes: https://pep8.readthedocs.org/en/latest/intro.html#error-codes
+
+=========
+autopep8
+=========
+| PyPI: https://pypi.python.org/pypi/autopep8
+| Src: https://github.com/hhatto/autopep8
+
+=======
+pep257
+=======
+| PyPI: https://pypi.python.org/pypi/pep257
+| Src: http://github.com/GreenSteam/pep257
+| Docs: https://pep257.readthedocs.org/en/latest/
+| PEP 257: http://www.python.org/dev/peps/pep-0257/
+| ErrCodes: https://pep257.readthedocs.org/en/latest/error_codes.html
+
+=======
+mccabe
+=======
+| PyPI: https://pypi.python.org/pypi/mccabe
+| Src: https://github.com/flintwork/mccabe
+| Docs: https://en.wikipedia.org/wiki/Cyclomatic_complexity
+
+
+Vim Libraries
+---------------
+Vendored Vim modules are located mostly in ``t/``.
+
+======================
+Python syntax for vim
+======================
+| Src: http://www.hlabs.spb.ru/vim/python.vim
+
+
+=====================
+PEP8 VIM indentation
+=====================
+| Src: http://github.com/hynek/vim-python-pep8-indent
+
+
 
 Copyright
 =========
 
-Copyright © 2013 Kirill Klenov (klen_)
+Copyright © 2013-2015 Kirill Klenov (klen_)
 
 License
 =======
 
 Licensed under a `GNU lesser general public license`_.
 
-If you like this plugin, you can send me postcard :)
-My address is here: "Russia, 143401, Krasnogorsk, Shkolnaya 1-19" to "Kirill Klenov".
+If you like this plugin, I would very appreciated if you kindly send me a postcard :)
+My address is here: "Russia, 143500, MO, Istra, pos. Severny 8-3" to "Kirill Klenov".
 **Thanks for support!**
 
 .. _GNU lesser general public license: http://www.gnu.org/copyleft/lesser.html
-.. _klen: http://klen.github.com/
+.. _klen: https://klen.github.com/
 .. _pydoc: http://docs.python.org/library/pydoc.html
 .. _pathogen: https://github.com/tpope/vim-pathogen
-.. _rope: https://pypi.python.org/pypi/rope
-.. _pylama: https://github.com/klen/pylama
-.. _pylint: https://bitbucket.org/logilab/pylint
-.. _pyflakes: https://pypi.python.org/pypi/pyflakes
-.. _autopep8: https://github.com/hhatto/autopep8
-.. _pep257: http://github.com/GreenSteam/pep257
-.. _mccabe: https://github.com/flintwork/mccabe
+.. _rope_: https://pypi.python.org/pypi/rope
+.. _pylama_: https://github.com/klen/pylama
+.. _pylint_: https://bitbucket.org/logilab/pylint
+.. _pyflakes_: https://pypi.python.org/pypi/pyflakes
+.. _autopep8_: https://github.com/hhatto/autopep8
+.. _pep257_: http://github.com/GreenSteam/pep257
+.. _mccabe_: https://github.com/flintwork/mccabe
 .. _pythonvim: http://www.hlabs.spb.ru/vim/python.vim
-.. _pep8: http://github.com/jcrocholl/pep8
+.. _pep8_: http://github.com/jcrocholl/pep8
 .. _pep8indent: http://github.com/hynek/vim-python-pep8-indent
 .. |logo| image:: https://raw.github.com/klen/python-mode/develop/logo.png

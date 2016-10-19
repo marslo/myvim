@@ -1,12 +1,32 @@
 language: vim
 
-install: |
-  sudo apt-get update
-  sudo apt-get install vim
-  cd ..
-  git clone https://github.com/godlygeek/tabular
-  git clone https://github.com/junegunn/vader.vim
+os:
+  - linux
+  - osx
 
-script: |
-  cd "$TRAVIS_BUILD_DIR"
-  ./test/run-tests.sh
+env:
+  - TEST=package
+  - TEST=latest
+
+before_script: |
+  if [ "$TEST" = "package" ]; then
+    if [ "$TRAVIS_OS_NAME" = "linux" ]; then
+      sudo apt-get -y update
+      sudo apt-get -y install vim
+    fi
+  else
+    cd ..
+    git clone --depth 1 https://github.com/vim/vim
+    cd vim
+    ./configure --with-features=huge
+    make
+    sudo make install
+    export PATH="/usr/local/bin:$PATH"
+    cd "$TRAVIS_BUILD_DIR"
+  fi
+  sudo pip install virtualenv
+  stty cols 80
+
+script:
+  - make test
+  - make doc

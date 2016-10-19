@@ -76,7 +76,7 @@ auto-generated name.
 
 Another case where pseudo-tags appear is in C++ implementation files. Since
 classes are usually defined in a header file but the member methods and
-variables in the implementation file the class itself won't generate a tag
+variables are in the implementation file the class itself won't generate a tag
 in that file.
 
 Since pseudo-tags don't really exist they cannot be jumped to from the Tagbar
@@ -132,7 +132,7 @@ The following requirements have to be met in order to be able to use tagbar:
 
     Tagbar will work on any platform that ctags runs on -- this includes
     UNIX derivatives, Mac OS X and Windows. Note that other versions like
-    GNU ctags will not work.
+    BSD ctags will not work.
     Tagbar generates the tag information by itself and doesn't need (or use)
     already existing tag files.
   - File type detection must be turned on in vim. This can be done with the
@@ -481,6 +481,18 @@ Example:
         let g:tagbar_sort = 0
 <
 
+                                                   *g:tagbar_case_insensitive*
+g:tagbar_case_insensitive~
+Default: 0
+
+If this option is set a case-insensitive comparison is used when the tags
+are sorted according to their name. If it is unset a case-sensitive
+comparison is used.
+
+Example:
+>
+        let g:tagbar_case_insensitive = 1
+<
                                                             *g:tagbar_compact*
 g:tagbar_compact~
 Default: 0
@@ -1202,10 +1214,11 @@ imporant tips to get it to integrate well with Tagbar:
     (stdout), it doesn't generate files and reads them in after that. So make
     sure that your program has an option to output the tags on stdout.
   - Some fields are supported for providing additional information about a
-    tag. One field is required: the "kind" field as a single letter without
-    a "kind:" fieldname. This field has to be the first one in the list. All
-    other fields need to have a fieldname in order to determine what they are.
-    The following fields are supported for all filetypes:
+    tag. One field is required: the "kind" field as a single letter, either
+    with or without a "kind:" fieldname. If it is used without the fieldname
+    then it has to be the first field in the list. All other fields need to
+    have a fieldname in order to determine what they are. The following fields
+    are supported for all filetypes:
 
         * line:      The line number of the tag.
         * column:    The column number of the tag.
@@ -1236,6 +1249,10 @@ ctags manually execute the following command in a terminal:
 <
 If you set the |g:tagbar_ctags_bin| variable you probably have to use the same
 value here instead of simply "ctags".
+
+If something more fundamental isn't working right then try running the
+|:messages| command to see if Tagbar printed any error messages that might
+have been missed.
 
 If the bug does seem to be in Tagbar then you can use Tagbar's debug mode to
 try to find the source of the problem. Usually you would use it like this:

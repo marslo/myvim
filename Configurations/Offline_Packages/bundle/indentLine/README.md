@@ -1,7 +1,7 @@
 indentLine
 ==========
 
-This plugin is used for displaying thin vertical lines at each indentation level for code indented with spaces. For code indented with tabs I think there is no need to support it, because you can use `:set list lcs=tab:\|\ ` (here is a space).
+This plugin is used for displaying thin vertical lines at each indentation level for code indented with spaces. For code indented with tabs I think there is no need to support it, because you can use `:set list lcs=tab:\|\ (here is a space)`.
 
 ## Requirements
 This plugin takes advantage of the newly provided `conceal` feature in Vim 7.3, so this plugin will not work with lower versions of Vim.
@@ -9,16 +9,69 @@ This plugin takes advantage of the newly provided `conceal` feature in Vim 7.3, 
 ## Installation
 To install the plugin just put the plugin files in your `~/.vim` (Linux) or `~/vimfiles` (Windows).
 
-If you use a plugin manager you can put the whole directory into your `~/.vim/bundle/` directory ([Pathogen][pathogen]) or add the line `Bundle 'Yggdroot/indentLine'` to your `.vimrc` ([Vundle][vundle]).
+If you use a plugin manager you can put the whole directory into your `~/.vim/bundle/` directory ([Pathogen][pathogen]) or add the line `Plugin 'Yggdroot/indentLine'` to your `.vimrc` ([Vundle][vundle]).
 
 ## Customization
-You can change the color of indentLines:  
-for Vim, set `g:indentLine_color_term` in your `.vimrc`, e.g. `let g:indentLine_color_term = 239`,  
-for GVim, set `g:indentLine_color_gui` in your `.vimrc`, e.g. `let g:indentLine_color_gui = '#A4E57E'`  
-for none X terminal, set `g:indentLine_color_tty_light` and `g:indentLine_color_tty_dark` in your `.vimrc`. e.g. `let g:indentLine_color_tty_light = 7`(default: 4), `let g:indentLine_color_dark = 1`(default: 2).
+To apply customization, apply the variable definitions to your `.vimrc` file.
 
-You can also change the indentLine char:  
-for both Vim and GVim, set `let g:indentLine_char = 'c'` where `'c'` can be any ASCII character. You can also use one of `¦`, `┆`, `︙` or `│` to display more beautiful lines. However, these characters will only work with files whose encoding is UTF-8.
+**Change Character Color**
+
+indentLine will overwrite 'conceal' color with grey by default. If you want to highlight conceal color with your colorscheme, disable by:
+```
+let g:indentLine_setColors = 0
+```
+
+Or you can customize conceal color by: 
+```
+" Vim
+let g:indentLine_color_term = 239
+
+"GVim
+let g:indentLine_color_gui = '#A4E57E'
+
+" none X terminal
+let g:indentLine_color_tty_light = 7 " (default: 4)
+let g:indentLine_color_dark = 1 " (default: 2)
+```
+
+**Change Indent Char**
+
+Vim and GVim
+```
+let g:indentLine_char = 'c'
+```
+where `'c'` can be any ASCII character. You can also use one of `¦`, `┆`, or `│` to display more beautiful lines. However, these characters will only work with files whose encoding is UTF-8.
+
+**Change Conceal Behaviour**
+
+This plugin enables the Vim `conceal` feature which automatically hides stretches of text based on syntax highlighting. This setting will apply to all syntax items.
+
+For example, users utilizing the built in json.vim syntax file will no longer see quotation marks in their JSON files.
+
+indentLine will overwrite your "concealcursor" and "conceallevel" with default value:
+
+```
+let g:indentLine_concealcursor = 'inc'
+let g:indentLine_conceallevel = 2
+```
+
+You can customize these settings, but the plugin will not function if `conceallevel` is not set to 1 or 2.
+
+If you want to keep your conceal settting, put this line to your vim dotfile:
+```
+let g:indentLine_setConceal = 0
+```
+
+See the [VIM Reference Manual](http://vimdoc.sourceforge.net/htmldoc/version7.html#new-conceal) for more information on the `conceal` feature.
+
+
+**Disable by default**
+```
+let g:indentLine_enabled = 0
+```
+
+### Commands
+`:IndentLinesToggle` toggles lines on and off.
 
 ### Font patching
 If you find all the standard unicode and ASCII characters too obtrusive, you might consider patching your font with the [indentLine-dotted-guide.eps][glyph] glyph provided.  [FontForge][fontforge] makes the process amazingly simple:
@@ -52,3 +105,10 @@ If you think this script is helpful, follow the [GitHub repository][repository],
 ### Patched font
 ![Screenshot](http://i.imgur.com/2ZA7oaZ.png)
 
+### Leading Spaces
+![Screenshot](http://i.imgur.com/tLYkb79.png)
+
+![Screenshot](http://i.imgur.com/07Atrrs.png)
+
+## License
+MIT

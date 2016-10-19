@@ -3,36 +3,29 @@
 Prepare params, check a modeline and run the checkers.
 
 """
-import re
-
 import logging
-from collections import defaultdict
 
-from .config import process_value, LOGGER
+import os.path as op
+from .config import process_value, LOGGER, MODELINE_RE, SKIP_PATTERN, CURDIR
+from .errors import Error, remove_duplicates
 from .lint.extensions import LINTERS
-from .errors import DUPLICATES, Error
 
 
-#: The skip pattern
-SKIP_PATTERN = re.compile(r'# *noqa\b', re.I).search
+def run(path='', code=None, rootdir=CURDIR, options=None):
+    """ Run code checkers with given params.
 
-# Parse a modelines
-MODELINE_RE = re.compile(
-    r'^\s*#\s+(?:pylama:)\s*((?:[\w_]*=[^:\n\s]+:?)+)',
-    re.I | re.M)
-
-
-def run(path='', code=None, options=None):
-    """ Run a code checkers with given params.
-
+    :param path: (str) A file's path.
+    :param code: (str) A code source
     :return errors: list of dictionaries with error's information
 
     """
     errors = []
     fileconfig = dict()
-    params = dict()
     linters = LINTERS
     linters_params = dict()
+    lname = 'undefined'
+    params = dict()
+    path = op.relpath(path, rootdir)
 
     if options:
         linters = options.linters
@@ -40,6 +33,10 @@ def run(path='', code=None, options=None):
         for mask in options.file_params:
             if mask.match(path):
                 fileconfig.update(options.file_params[mask])
+
+        if options.skip and any(p.match(path) for p in options.skip):
+            LOGGER.info('Skip checking for path: %s', path)
+            return []
 
     try:
         with CodeContext(code, path) as ctx:
@@ -50,7 +47,7 @@ def run(path='', code=None, options=None):
             if params.get('skip'):
                 return errors
 
-            for item in linters:
+            for item in params.get('linters') or linters:
 
                 if not isinstance(item, tuple):
                     item = (item, LINTERS.get(item))
@@ -78,7 +75,7 @@ def run(path='', code=None, options=None):
             Error(linter=lname, lnum=e.lineno, col=e.offset, text=e.args[0],
                   filename=path))
 
-    except Exception as e:
+    except Exception as e: # noqa
         import traceback
         LOGGER.info(traceback.format_exc())
 
@@ -89,7 +86,11 @@ def run(path='', code=None, options=None):
     if code and errors:
         errors = filter_skiplines(code, errors)
 
-    return sorted(errors, key=lambda e: e.lnum)
+    key = lambda e: e.lnum
+    if options and options.sort:
+        sort = dict((v, n) for n, v in enumerate(options.sort, 1))
+        key = lambda e: (sort.get(e.type, 999), e.lnum)
+    return sorted(errors, key=key)
 
 
 def parse_modeline(code):
@@ -111,13 +112,13 @@ def prepare_params(modeline, fileconfig, options):
     :return dict:
 
     """
-    params = dict(skip=False, ignore=[], select=[])
+    params = dict(skip=False, ignore=[], select=[], linters=[])
     if options:
-        params['ignore'] = options.ignore
-        params['select'] = options.select
+        params['ignore'] = list(options.ignore)
+        params['select'] = list(options.select)
 
     for config in filter(None, [modeline, fileconfig]):
-        for key in ('ignore', 'select'):
+        for key in ('ignore', 'select', 'linters'):
             params[key] += process_value(key, config.get(key, []))
         params['skip'] = bool(int(config.get('skip', False)))
 
@@ -170,18 +171,6 @@ def filter_skiplines(code, errors):
     return errors
 
 
-def remove_duplicates(errors):
-    """ Remove same errors from others linters. """
-    passed = defaultdict(list)
-    for error in errors:
-        key = error.linter, error.number
-        if key in DUPLICATES:
-            if key in passed[error.lnum]:
-                continue
-            passed[error.lnum] = DUPLICATES[key]
-        yield error
-
-
 class CodeContext(object):
 
     """ Read file if code is None. """
@@ -193,16 +182,19 @@ class CodeContext(object):
         self._file = None
 
     def __enter__(self):
-        """ Open file and read a code. """
+        """ Open a file and read it. """
         if self.code is None:
+            LOGGER.info("File is reading: %s", self.path)
             self._file = open(self.path, 'rU')
             self.code = self._file.read()
         return self
 
     def __exit__(self, t, value, traceback):
-        """ Close opened file. """
+        """ Close the file which was opened. """
         if self._file is not None:
             self._file.close()
 
         if t and LOGGER.level == logging.DEBUG:
             LOGGER.debug(traceback)
+
+# pylama:ignore=R0912,D210,F0001

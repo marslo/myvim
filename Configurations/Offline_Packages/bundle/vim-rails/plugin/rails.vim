@@ -26,11 +26,14 @@ function! RailsDetect(...) abort
     return 1
   endif
   let fn = fnamemodify(a:0 ? a:1 : expand('%'), ':p')
+  if fn =~# ':[\/]\{2\}'
+    return 0
+  endif
   if !isdirectory(fn)
     let fn = fnamemodify(fn, ':h')
   endif
   let file = findfile('config/environment.rb', escape(fn, ', ').';')
-  if !empty(file)
+  if !empty(file) && isdirectory(fnamemodify(file, ':p:h:h') . '/app')
     let b:rails_root = fnamemodify(file, ':p:h:h')
     return 1
   endif
@@ -79,11 +82,11 @@ augroup railsPluginDetect
   autocmd User ProjectionistDetect
         \ if RailsDetect(get(g:, 'projectionist_file', '')) |
         \   call projectionist#append(b:rails_root,
-        \     {'*': {'make': split(rails#app().rake_command('static'))}}) |
+        \     {'*': {"start": rails#app().static_rails_command('server')}}) |
         \ endif
 augroup END
 
-command! -bar -bang -nargs=* -complete=dir Rails execute rails#new_app_command(<bang>0,<f-args>)
+command! -bar -bang -nargs=* -complete=customlist,rails#complete_rails Rails execute rails#new_app_command(<bang>0,<f-args>)
 
 " }}}1
 " abolish.vim support {{{1

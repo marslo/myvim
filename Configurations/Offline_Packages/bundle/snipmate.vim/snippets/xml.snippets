@@ -7,8 +7,70 @@ snippet pro
 snippet mov
 	<modelVersion>${1}</modelVersion>
 snippet gid
-	<groupID>${1}</groupID>
+	<groupId>${1}</groupId>
 snippet aid
-	<artifactID>${1}</artifactID>
+	<artifactId>${1}</artifactId>
 snippet ver
 	<version>${1}</version>
+snippet tag
+	<${1:tag}>${2}</$1>
+# For Maven Pom
+snippet ?xml
+	<?xml version = "1.0" encoding = "UTF-8"?>
+snippet mpro
+	<project xmlns = "http://maven.apache.org/POM/4.0.0"
+		xmlns:xsi = "http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation = "http://maven.apache.org/POM/4.0.0
+		http://maven.apache.org/maven-v4_0_0.xsd">
+		${1}
+	</project>
+snippet mver
+	<version>${1:1.0}${2:-SNAPSHOT}</version>
+snippet depsall
+  <dependencies>
+    <dependency>
+      <groupId>${1}</groupId>
+      <artifactId>${2}</artifactId>
+			<version>${3}</version>
+      <scop>${4}</scop>
+    </dependency>
+  </dependencies>
+snippet depall
+	<dependency>
+		<groupId>${1}</groupId>
+		<artifactId>${2}</artifactId>
+		<version>${3}</version>
+		<scop>${4}</scop>
+	</dependency>
+snippet deps
+	<dependencies>
+		${1}
+	</dependencies>
+snippet dep
+	<dependency>
+		${1}
+	</dependency>
+snippet	scp
+	<scope>${1}</scope>
+snippet plugsall
+	<plugins>
+		<plugin>
+			<groupId>${1}</groupi>
+			<artifactId>${2}</artifactId>
+		</plugin>
+	</plugins>
+snippet conall
+	<configuration>
+		<source>${1}</source>
+		<target>${2}</target>
+	</configuration>
+snippet plugs
+	<plugins>
+		${1}
+	</plugins>
+snippet plug
+	<plugin>
+		${1}
+	</plugin>
+snippet con
+	<configuration>${1}</configuration>

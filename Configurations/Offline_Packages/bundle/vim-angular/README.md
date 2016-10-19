@@ -5,7 +5,7 @@
 Some niceties for using Vim with the AngularJS framework. See the [screencast][screencast].
 
 The [canonical "what editor should I use for Angular?" post][editorchoice]
-pretty squarely lands on Webstorm/IntelliJ as the peoples' choice 
+pretty squarely lands on Webstorm/IntelliJ as the peoples' choice
 (12 people), but Vim is right there tied for second place along with
 NetBeans and Sublime (four people each as of April, 2014) in this
 super-scientific analysis. And don't make me quote [Tim Pope][tpope] on
@@ -35,9 +35,9 @@ So why was this plugin written at all? I'm glad you asked!
 
 A, the "alternate" file, has been mapped to take you from your code to the
 corresponding test file, or from your test file to the corresponding
-implementation file. For example, if you're in app/js/rock-socks.js, and 
+implementation file. For example, if you're in app/js/rock-socks.js, and
 you hammer :A, you will be taken to test/spec/rock-socks.js, if such a file
-exists. Some other common directory structure conventions in the angular 
+exists. Some other common directory structure conventions in the angular
 community, such as app/src and test/unit, are also supported.
 
 If the convention you use doesn't work out of the box, you can specify your
@@ -51,6 +51,13 @@ let g:angular_test_directory = 'test/units'
 If there is a common convention that you feel should really work out of
 the box, feel free to file a pull request to make it work (please
 include a test to prove that it works).
+
+If you don't want to use the alternate functionality, set this before the
+plugin loads:
+
+```
+let g:angular_skip_alternate_mappings = 1
+```
 
 ### Jump to definition of service/directive/controller/etc
 
@@ -69,7 +76,7 @@ if (true) {
 file called awesome-service.js somewhere in a subdirectory of your path,
 you will be taken there. The default behavior of gf can also be quite
 useful in the context of an angular app, since file paths appear in views
-(with ng-include src="full/path.html) and directives (with templateUrl: 
+(with ng-include src="full/path.html) and directives (with templateUrl:
 'src/myapp/modules/main/views//prompt-list.html', so an
 attempt has been made to allow this to work as well. If all that is missing
 from a template path is the "app" directory (which is a common value for
@@ -83,16 +90,9 @@ Results can be filtered by specifying exclusions in your .vimrc like this:
 let g:angular_find_ignore = ['build/', 'dist/']
 ```
 
-It does, by default, assume your filenames are dasherized (likeABoss or
-LikeABoss goes to like-a-boss.js). If you roll with likeABoss.js or
-LikeABoss.js, you can include the following in your .vimrc to make it do
-the right thing:
-
-```
-let g:angular_filename_convention = 'camelcased'
-" or
-let g:angular_filename_convention = 'titlecased'
-```
+It does work in at least some cases regardless of whether your filenames are
+dasherized (likeABoss or LikeABoss goes to like-a-boss.js), camelcased
+(likeABoss.js), or titlecased (LikeABoss.js).
 
 ### Run the current spec
 
@@ -107,7 +107,7 @@ it('should work', function() {
 
 ```
 
-Now, if you take that "it" prefix, and replace it with "iit", instead of
+Now, if you take that "it" prefix, and replace it with "fit", instead of
 running your entire suite, it will run JUST THAT ONE SPEC. There are
 probably bad reasons to want to do this, like if your build is broken
 and you want to ignore the failures, but it can be pretty handy to
@@ -116,34 +116,53 @@ focus in on just one spec at a time (and one spec generally runs way fast).
 So, if you're anywhere inside a spec:
 
     :AngularRunSpec
-    
+
 or the "run spec" mapping:
 
     <leader>rs
-    
-will toggle the spec between "it" and "iit." This works especially well if
+
+will toggle the spec between "it" and "fit." This works especially well if
 you have a karma watch going, as shown in the [screencast][screencast].
 
 You are able to do the same with a describe block using the run block command:
-    
+
     :AngularRunSpecBlock
 
 or the corresponding mapping:
 
     <leader>rb
 
-### Syntastic syntax checker ignores
+If you're running jasmine 1 instead of jasmine 2, you will need to use iit and
+ddescribe instead of fit and fdescribe. To make that happen, tell vim-angular
+that you are using jasmine 1 in your .vimrc like this:
+
+```
+let g:angular_jasmine_version = 1
+```
+
+### Syntastic syntax checker customization
 
 You know how you use syntastic to check your syntax as you edit, because
 it works for pretty much any language and is awesome? When you use angular
 directives (like ng-app, ng-repeat, and even library directives like
-ui-view), the html tidy check will complain. This is fixed out of the box,
-and you can use the same mechanism to make syntastic aware of your own
-directives by specifying exclusions in your .vimrc like this:
+ui-view), the html tidy check will complain. This is fixed out of the box.
+
+Use the same mechanism to make syntastic aware of your own directives by
+specifying exclusions in your .vimrc like this:
 
 ```
 let g:syntastic_html_tidy_ignore_errors = ['proprietary attribute "myhotcompany-']
 ```
+
+Some angular directives can also be used as custom elements (i.e. ng-include,
+ng-form). These are added to the list of allowed tags by default. In order
+to make syntastic recognize your additional blocklevel tags define them in your
+.vimrc before the plugin is loaded:
+
+```
+let g:syntastic_html_tidy_blocklevel_tags = ['myCustomTag']
+```
+
 
 ## Installation
 

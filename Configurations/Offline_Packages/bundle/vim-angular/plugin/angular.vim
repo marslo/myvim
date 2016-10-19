@@ -7,29 +7,34 @@
 "
 " define your own proprietary attributes before this plugin loads, in your
 " .vimrc, like so:
-" let g:syntastic_html_tidy_ignore_errors = [' proprietary attribute "myhotcompany-']
+" let g:syntastic_html_tidy_ignore_errors   = [' proprietary attribute "myhotcompany-']
+" let g:syntastic_html_tidy_blocklevel_tags = ['myCustomTag']
 "
-" or copy the mechanism used here to ensure you get both your ignores and
-" the plugin's ignores.
+" or copy the mechanism used here to ensure you get both your settings and
+" the ones defined by the plugin.
 if !exists('g:syntastic_html_tidy_ignore_errors')
   let g:syntastic_html_tidy_ignore_errors = []
 endif
 
-let g:syntastic_html_tidy_ignore_errors = g:syntastic_html_tidy_ignore_errors + [
-  \   ' proprietary attribute "ng-',
-  \   ' proprietary attribute "ui-',
-  \   '<ng-include> is not recognized!',
-  \   'discarding unexpected <ng-include>',
-  \   'discarding unexpected </ng-include>',
-  \   '<div> proprietary attribute "src'
+let g:syntastic_html_tidy_ignore_errors += [
+  \   '> proprietary attribute "',
+  \   'trimming empty <'
   \ ]
 
+if !exists('g:syntastic_html_tidy_blocklevel_tags')
+  let g:syntastic_html_tidy_blocklevel_tags = []
+endif
+
+let g:syntastic_html_tidy_blocklevel_tags += [
+  \ 'ng-include',
+  \ 'ng-form'
+  \ ]
 
 if !exists('g:angular_find_ignore')
   let g:angular_find_ignore = []
 endif
 
-let g:angular_find_ignore = g:angular_find_ignore + [
+let g:angular_find_ignore += [
   \ 'coverage/',
   \ 'build/',
   \ 'dist/',
@@ -61,7 +66,7 @@ function! s:Find(...) abort
   let l:num=strlen(substitute(l:list, "[^\n]", "", "g"))
 
   if l:num < 1
-    echo "angular.vim says: '".query."' not found"
+    throw "AngularQueryNotFound"
     return
   endif
 
@@ -102,6 +107,16 @@ function! s:dashcase(word) abort
   return word
 endfunction
 
+function! s:dashcasewithngtype(word) abort
+  let word = substitute(a:word,'::','/','g')
+  let word = substitute(word,'\(\u\+\)\(\u\l\)','\1_\2','g')
+  let word = substitute(word,'\(\l\|\d\)\(\u\)','\1_\2','g')
+  let word = substitute(word,'_\([a-zA-Z]\+\)$','.\1','g')
+  let word = substitute(word,'_','-','g')
+  let word = tolower(word)
+  return word
+endfunction
+
 function! s:FindFileBasedOnAngularServiceUnderCursor(cmd) abort
   let l:fileundercursor = expand('<cfile>')
 
@@ -122,13 +137,27 @@ function! s:FindFileBasedOnAngularServiceUnderCursor(cmd) abort
 
   let l:wordundercursor = expand('<cword>')
   let l:dashcased = s:dashcase(l:wordundercursor)
-  let l:filethatmayexist = l:dashcased . '.js'
+  let l:ngdotcased = s:dashcasewithngtype(l:wordundercursor)
+  let l:filethatmayexistverbatim = l:wordundercursor . '.js'
+  let l:filethatmayexistdashcase = l:dashcased . '.js'
+  let l:filethatmayexistngdotcase = l:ngdotcased . '.js'
 
-  if exists('g:angular_filename_convention') && (g:angular_filename_convention == 'camelcased' || g:angular_filename_convention == 'titlecased')
-    call <SID>Find(l:wordundercursor . '.js', a:cmd)
-  else
-    call <SID>Find(l:filethatmayexist, a:cmd)
-  endif
+  let l:queries = [
+    \ l:filethatmayexistverbatim,
+    \ l:filethatmayexistdashcase,
+    \ l:filethatmayexistngdotcase
+    \ ]
+
+  for query in l:queries
+    try
+      call <SID>Find(query, a:cmd)
+      break
+    catch 'AngularQueryNotFound'
+      if (query == l:filethatmayexistngdotcase)
+        echo "angular.vim says: '".join(l:queries, ', ')."' not found"
+      endif
+    endtry
+  endfor
 endfunction
 
 function! s:SubStr(originalstring, pattern, replacement) abort
@@ -139,7 +168,7 @@ function! s:GenerateTestPaths(currentpath, appbasepath, testbasepath) abort
   let l:samefilename = s:SubStr(a:currentpath, a:appbasepath, a:testbasepath)
   let l:withcamelcasedspecsuffix = s:SubStr(s:SubStr(a:currentpath, a:appbasepath, a:testbasepath), ".js", "Spec.js")
   let l:withdotspecsuffix = s:SubStr(s:SubStr(a:currentpath, a:appbasepath, a:testbasepath), ".js", ".spec.js")
-  return [l:samefilename, l:withcamelcasedspecsuffix, l:withdotspecsuffix]
+  return [l:withdotspecsuffix, l:withcamelcasedspecsuffix, l:samefilename]
 endfunction
 
 function! s:GenerateSrcPaths(currentpath, appbasepath, testbasepath) abort
@@ -150,20 +179,39 @@ endfunction
 function! s:Alternate(cmd) abort
   let l:currentpath = expand('%')
   let l:possiblepathsforalternatefile = []
+
   for possiblenewpath in [s:SubStr(l:currentpath, ".js", "_test.js"), s:SubStr(l:currentpath, "_test.js", ".js")]
     if possiblenewpath != l:currentpath
-      let l:possiblepathsforalternatefile = [possiblenewpath]
+      let l:possiblepathsforalternatefile = l:possiblepathsforalternatefile + [possiblenewpath]
     endif
   endfor
 
+  " handle a test subdirectory just above the leaf node
+  let l:possiblenewpath = s:SubStr(l:currentpath, "/test/", "/")
+  if possiblenewpath != l:currentpath
+    let l:possiblepathsforalternatefile = l:possiblepathsforalternatefile + [s:SubStr(possiblenewpath, '.spec.js', '.js')]
+  else
+    let l:lastslashindex = strridx(l:currentpath, '/')
+    let l:possibletestpath = strpart(l:currentpath, 0, l:lastslashindex) . '/test' . s:SubStr(strpart(l:currentpath, l:lastslashindex), '.js', '.spec.js')
+    let l:possiblepathsforalternatefile = l:possiblepathsforalternatefile + [l:possibletestpath]
+  endif
+
   if exists('g:angular_source_directory')
-    let l:possiblesrcpaths = [g:angular_source_directory]
+    if type(g:angular_source_directory) == type([])
+      let l:possiblesrcpaths = g:angular_source_directory
+    else
+      let l:possiblesrcpaths = [g:angular_source_directory]
+    endif
   else
     let l:possiblesrcpaths = ['app/src', 'app/js', 'app/scripts', 'public/js', 'frontend/src']
   endif
 
   if exists('g:angular_test_directory')
-    let l:possibletestpaths = [g:angular_test_directory]
+    if type(g:angular_test_directory) == type([])
+      let l:possibletestpaths = g:angular_test_directory
+    else
+      let l:possibletestpaths = [g:angular_test_directory]
+    endif
   else
     let l:possibletestpaths = ['test/unit', 'test/spec', 'test/karma/unit', 'tests/frontend']
   endif
@@ -212,26 +260,36 @@ function! s:AngularRunSpecOrBlock(jasminekeyword) abort
   cal s:SearchUpForPattern(a:jasminekeyword . '(')
 
   let l:wordundercursor = expand('<cword>')
-  let l:firstletter = s:FirstLetterOf(a:jasminekeyword)
+  let l:jasmine1 = exists('g:angular_jasmine_version') && g:angular_jasmine_version == 1
+  if l:jasmine1
+    let l:additionalletter = s:FirstLetterOf(a:jasminekeyword)
+  else
+    let l:additionalletter = 'f'
+  end
 
   if l:wordundercursor == a:jasminekeyword
     " if there was a spec (anywhere in the file) highlighted with "iit" before, revert it to "it"
     let l:positionofspectorun = getpos('.')
 
     " this can move the cursor, hence setting the cursor back
-    %s/ddescribe/describe/ge
-    %s/iit/it/ge
+    if l:jasmine1
+      %s/ddescribe(/describe(/ge
+      %s/iit(/it(/ge
+    else
+      %s/fdescribe(/describe(/ge
+      %s/fit(/it(/ge
+    end
 
     " move cursor back to the spec we want to run
     call setpos('.', l:positionofspectorun)
 
     " either change the current spec to "iit" or
     " the current block to "ddescribe"
-    execute 'silent normal! cw' . l:firstletter . a:jasminekeyword
-  elseif l:wordundercursor == l:firstletter . a:jasminekeyword
-    " either delete the second i in "iit" or
-    " the second d in "ddescribe"
-    execute 'silent normal! x'
+    execute 'silent normal! cw' . l:additionalletter . a:jasminekeyword
+  elseif l:wordundercursor == l:additionalletter . a:jasminekeyword
+    " either delete the first i in "iit" or
+    " the first d in "ddescribe"
+    execute 'silent normal! hx'
   endif
 
   update " write the file if modified
@@ -262,13 +320,15 @@ augroup angular_gf
   autocmd FileType javascript,html nmap <buffer> <C-W>gf     <Plug>AngularGfTabjump
 augroup END
 
-augroup angular_alternate
-  autocmd!
-  autocmd FileType javascript command! -buffer -bar -bang A :exe s:Alternate('edit<bang>')
-  autocmd FileType javascript command! -buffer -bar AS :exe s:Alternate('split')
-  autocmd FileType javascript command! -buffer -bar AV :exe s:Alternate('vsplit')
-  autocmd FileType javascript command! -buffer -bar AT :exe s:Alternate('tabedit')
-augroup END
+if !exists('g:angular_skip_alternate_mappings')
+  augroup angular_alternate
+    autocmd!
+    autocmd FileType javascript command! -buffer -bar -bang A :exe s:Alternate('edit<bang>')
+    autocmd FileType javascript command! -buffer -bar AS :exe s:Alternate('split')
+    autocmd FileType javascript command! -buffer -bar AV :exe s:Alternate('vsplit')
+    autocmd FileType javascript command! -buffer -bar AT :exe s:Alternate('tabedit')
+  augroup END
+endif
 
 augroup angular_run_spec
   autocmd!

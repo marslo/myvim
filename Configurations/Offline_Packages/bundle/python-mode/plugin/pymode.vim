@@ -36,6 +36,8 @@ call pymode#default("g:pymode_indent", 1)
 
 " Enable/disable pymode folding for pyfiles.
 call pymode#default("g:pymode_folding", 1)
+" Maximum file length to check for nested class/def statements
+call pymode#default("g:pymode_folding_nest_limit", 1000)
 " Change for folding customization (by example enable fold for 'if', 'for')
 call pymode#default("g:pymode_folding_regex", '^\s*\%(class\|def\) \w\+')
 
@@ -49,6 +51,9 @@ call pymode#default("g:pymode_trim_whitespaces", 1)
 call pymode#default("g:pymode_options", 1)
 call pymode#default("g:pymode_options_max_line_length", 80)
 call pymode#default("g:pymode_options_colorcolumn", 1)
+
+" Enable/disable vertical display of python documentation
+call pymode#default("g:pymode_doc_vertical", 0)
 
 " Minimal height of pymode quickfix window
 call pymode#default('g:pymode_quickfix_maxheight', 6)
@@ -181,7 +186,7 @@ call pymode#default('g:pymode_rope_completion', 1)
 
 " Complete keywords from not imported modules (could make completion slower)
 " Enable autoimport used modules
-call pymode#default('g:pymode_rope_autoimport', 1)
+call pymode#default('g:pymode_rope_autoimport', 0)
 
 " Offer to import object after complete (if that not be imported before)
 call pymode#default('g:pymode_rope_autoimport_import_after_complete', 0)

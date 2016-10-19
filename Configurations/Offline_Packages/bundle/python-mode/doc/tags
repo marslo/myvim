@@ -55,6 +55,7 @@
 'g:pymode_syntax_builtin_types'	pymode.txt	/*'g:pymode_syntax_builtin_types'*
 'g:pymode_syntax_docstrings'	pymode.txt	/*'g:pymode_syntax_docstrings'*
 'g:pymode_syntax_doctests'	pymode.txt	/*'g:pymode_syntax_doctests'*
+'g:pymode_syntax_highlight_async_await'	pymode.txt	/*'g:pymode_syntax_highlight_async_await'*
 'g:pymode_syntax_highlight_equal_operator'	pymode.txt	/*'g:pymode_syntax_highlight_equal_operator'*
 'g:pymode_syntax_highlight_exceptions'	pymode.txt	/*'g:pymode_syntax_highlight_exceptions'*
 'g:pymode_syntax_highlight_self'	pymode.txt	/*'g:pymode_syntax_highlight_self'*

@@ -793,7 +793,7 @@ function s:GetFileTypeSettings(ft)
 		\ 'ruby\|screen\|sed\|sm\|snnsnet\|snnspat\|snnsres\|spec\|'.
 		\ 'squid\|terminfo\|tidy\|tli\|tsscl\|vgrindefs\|vrml\|'.
 		\ 'wget\|wml\|xf86conf\|xmath\|gitconfig\|txt\|snippet\|yaml\|'.
-                \ 'readline\)$'
+                \ 'readline\|robot\)$'
 	let b:ECcommentOpen = '#'
 	let b:ECcommentClose = ''
     elseif fileType == 'webmacro'

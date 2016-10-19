@@ -25,12 +25,12 @@ that `ar` selects _all_ of a ruby block, and `ir` selects the _inner_ portion
 of a rubyblock.
 
 In ruby, a block is always closed with the `end` keyword. Ruby blocks may be
-opened using one of several keywords, including `module`, `class`, `def` `if`
-and `do`. This example demonstrates a few of these:
+opened using one of several keywords, including `module`, `class`, `def`, `if`,
+`unless` and `do`. This example demonstrates a few of these:
 
     module Foo
       class Bar
-        def Baz
+        def baz
           [1,2,3].each do |i|
             i + 1
           end
@@ -42,7 +42,7 @@ Suppose your cursor was positioned on the word `def`. Typing `var` would
 enable visual mode selecting _all_ of the method definition. Your selection
 would comprise the following lines:
 
-    def Baz
+    def baz
       [1,2,3].each do |i|
         i + 1
       end
@@ -113,6 +113,11 @@ Credits
 =======
 
 This plugin was built by [Drew Neil][me], but the real credit goes to [Kana][], whose [textobj-user][kana-git] plugin provides a framework for building custom text objects. I couldn't have created the rubyblock plugin without building on top of his hard work, so I'd like to say a big thanks to Kana.
+
+License
+=======
+
+Copyright (c) Drew Neil. Distributed under the same terms as Vim itself. See `:help license`.
 
 [Kana]: http://whileimautomaton.net/
 [textobj-user]: http://www.vim.org/scripts/script.php?script_id=2100

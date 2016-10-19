@@ -30,6 +30,12 @@ g:indentLine_char                               *g:indentLine_char*
                   | ¦ ┆ │
                 Default value is "|".
 
+g:indentLine_setColors                          *g:indentLine_setColors*
+                By default, indentLine will overwrite 'conceal' color.
+                If you want to highlight conceal with your
+                colorscheme, set this value to 0.
+                Default value is 1.
+
 g:indentLine_first_char                         *g:indentLine_first_char*
                 Specify a character to be used as indent line
                 on the first level.
@@ -64,7 +70,7 @@ g:indentLine_indentLevel                        *g:indentLine_indentLevel*
 
 g:indentLine_showFirstIndentLevel               *g:indentLine_showFirstIndentLevel*
                 Specify whether the first indent level should be shown.
-                This is useful if you use indentLine in comination with
+                This is useful if you use indentLine in combination with
                 |listchars| in order to show tabs.
                 Default value is 0.
 
@@ -105,28 +111,57 @@ g:indentLine_faster                             *g:indentLine_faster*
                 1, default value is 0. But better performance may bring little
                 issue with it.
 
-g:indentLine_noConcealCursor                    *g:indentLine_noConcealCursor*
-                This variable toggles cursor lines behavior. If variable
-                exists, then cursorline will be above conceal chars.
-                Default value is not set.
+g:indentLine_setConceal
+                The plugin will overwrite your "concealcursor" and
+                "conceallevel" by default. If you want to keep your setting,
+                set this value to 0.
+                Default value is 1.
 
+g:indentLine_concealcursor                    *g:indentLine_concealcursor*
+                This variable toggles cursor lines behavior. If variable
+                exists and is empty, that is, set to '', then the indentlines
+                will not show up in the cursorline. 
+                See *concealcursor*.
+                Default value is 'inc'.
+
+g:indentLine_conceallevel                    *g:indentLine_conceallevel*
+                This variable toggles the concealing behavior.
+                See *conceallevel*.
+                Default value is '2'.
+
+g:indentLine_leadingSpaceChar                   *g:indentLine_leadingSpaceChar*
+                Specify a character to show for leading spaces.
+                You also can use other characters:˽˰··
+                e.g. let g:indentLine_leadingSpaceChar = '·'
+
+g:indentLine_leadingSpaceEnabled                *g:indentLine_leadingSpaceEnabled*
+                Specify whether to show leading spaces by default.
+                Default value is 0.
 ==============================================================================
 COMMANDS                                         *indentLine-commands*
 
-IndentLinesReset [number]
+*IndentLinesReset* [number]
                 if 'shiftwidth' changes, using this command can redraw the
                 indentLines. number is optional, it means the width between
                 two indent level, if ommited, value of 'shiftwidth' is used.
 
-IndentLinesToggle
+*IndentLinesToggle*
                 toggle the indent lines of the current buffer.
 
-IndentLinesEnable
+*IndentLinesEnable*
                 enable the indent lines of the current buffer.
 
-IndentLinesDisable
+*IndentLinesDisable*
                 disable the indent lines of the current buffer.
 
+*LeadingSpaceEnable*
+                enable the leading spaces of the current buffer.
+
+*LeadingSpaceDisable*
+                disable the leading spaces of the current buffer.
+
+*LeadingSpaceToggle*
+                toggle the leading spaces of the current buffer.
 ==============================================================================
 FAQ                                              *indentLine-faq*
 

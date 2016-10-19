@@ -32,13 +32,16 @@ endfunction
 
 function! marslofunc#OpenCMD()
   if has('win32') || has('win95') || has('win64')
-    let tcc='C:\Program Files\JPSoft\TCCLE13x64\tcc.exe'
-    let console2='!cmd /c start C:\Marslo\Tools\Softwares\Windows\Console\Console2\Console.exe'
+    let tcc = 'C:\Program Files\JPSoft\TCCLE13x64\tcc.exe'
+    let console2 = '!cmd /c start C:\Marslo\Tools\Software\System\CommandLine\Console2\Console.exe'
+    let origcmd = '!cmd /c start'
 
     if 'java' == &filetype
-      let com = '!cmd /c start "C:\Program Files\JPSoft\TCCLE13x64\tcc.exe" /d "' . expand('%:p:h') .'"'
+      let com = console2 . ' -d "' . expand('%:p:h') . '"'
     else
-      let com = '!cmd /c start C:\Marslo\Tools\Softwares\Windows\Console\Console2\Console.exe -d "' . expand('%:p:h') . '"'
+      " let com = tcc . ' /d "' . expand('%:p:h') . '"'
+      " let com = "shell"
+      let com = origcmd . ' /d "' . expand('%:p:h') . '"'
     endif
   else
     let com = '!/usr/bin/gnome-terminal --working-directory=' . expand('%:p:h')
@@ -89,7 +92,7 @@ function! marslofunc#GetVim()                                                   
     if filereadable(vimgitcfg)
       echo 'vimsrc has exists at ' . expand(vimsrc)
     else
-      execute 'silent !git clone git@github.com:vim-jp/vim.git "' . expand(vimsrc) . '"'
+      execute 'silent !git clone https://github.com/vim/vim.git "' . expand(vimsrc) . '"'
     end
   endif
 endfunction

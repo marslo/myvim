@@ -98,10 +98,6 @@ Setup default python options                                *'g:pymode_options'*
 >
     let g:pymode_options = 1
 
-Setup max line length                       *'g:pymode_options_max_line_length'*
->
-    let g:pymode_options_max_line_length = 79
-
 If this option is set to 1, pymode will enable the following options for
 python buffers: >
 
@@ -114,6 +110,10 @@ python buffers: >
     setlocal textwidth=79
     setlocal commentstring=#%s
     setlocal define=^\s*\\(def\\\\|class\\)
+
+Setup max line length                       *'g:pymode_options_max_line_length'*
+>
+    let g:pymode_options_max_line_length = 79
 
 Enable colorcolumn display at max_line_length   *'g:pymode_options_colorcolumn'*
 >
@@ -435,7 +435,7 @@ use the current directory.
 
 The location of the `.ropeproject` folder may also be overridden if you wish to
 keep it outside of your project root. The rope library treats this folder as a
-project resource, so the path will always be relative to your proejct root (a
+project resource, so the path will always be relative to your project root (a
 leading '/' will be ignored). You may use `'..'` path segments to place the
 folder outside of your project root.
                                                  *'g:pymode_rope_ropefolder'*
@@ -482,7 +482,7 @@ Keymap for autocomplete                        *'g:pymode_rope_completion_bind'*
 Extended autocompletion (rope could complete objects which have not been
 imported) from project                              *'g:pymode_rope_autoimport'*
 >
-    let g:pymode_rope_autoimport = 1
+    let g:pymode_rope_autoimport = 0
 
 Load modules to autoimport by default       *'g:pymode_rope_autoimport_modules'*
 >
@@ -627,6 +627,10 @@ Enable all python highlights                          *'g:pymode_syntax_all'*
 Highlight "print" as a function            *'g:pymode_syntax_print_as_function'*
 >
     let g:pymode_syntax_print_as_function = 0
+
+Highlight "async/await" keywords       *'g:pymode_syntax_highlight_async_await'*
+>
+    let g:pymode_syntax_highlight_async_await = g:pymode_syntax_all
 
 Highlight '=' operator              *'g:pymode_syntax_highlight_equal_operator'*
 >
@@ -781,10 +785,10 @@ The sequence of commands that fixed this:
 Python-mode is released under the GNU lesser general public license.
 See: http://www.gnu.org/copyleft/lesser.html
 
-If you like this plugin, you can send me a postcard :)
+If you like this plugin, I would very appreciated if you kindly send me a postcard :)
 
-My address is: "Russia, 143401, Krasnogorsk, Shkolnaya 1-19" to "Kirill
-Klenov". Thanks for your support!
+My address is: "Russia, 143500, MO, Istra, pos. Severny 8-3" to "Kirill Klenov".
+Thanks for your support!
 
 
 ------------------------------------------------------------------------------
