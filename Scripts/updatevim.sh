@@ -5,7 +5,7 @@
 #      Email: marslo.jiao@gmail.com
 #    Created: 2015-09-17 18:20:27
 #    Version: 0.0.3
-# LastChange: 2016-04-19 10:41:58
+# LastChange: 2016-10-19 19:30:25
 #    History:
 #             0.0.1 | Marslo | init
 #             0.0.2 | Marslo | Build vim win64
@@ -16,6 +16,14 @@
 sour=$HOME/../../Marslo/Tools/Git/vim/src
 dsk=$HOME/Desktop/vim
 UPLOAD_FLAG=true
+PY_PATH=/cygdrive/c/Marslo/MyProgramFiles/Python27
+PY3_PATH=/cygdrive/c/Marslo/MyProgramFiles/Python35
+RB_PATH=/cygdrive/c/Marslo/MyProgramFiles/Ruby23-x64
+PY_VER=27
+PY3_VER=35
+RB_VER=23
+RB_LONG_VER=2.3.0
+
 
 if [ ! -d "${sour}" ];
 then
@@ -69,8 +77,8 @@ do
 
   git checkout tags/v${ver}
 
-  make -j 12 -B -f Make_cyg.mak CROSS_COMPILE=x86_64-w64-mingw32- ARCH=x86-64 PYTHON=/cygdrive/c/Marslo/MyProgramFiles/Python27 DYNAMIC_PYTHON=yes PYTHON_VER=27 PYTHON3=/cygdrive/c/Marslo/MyProgramFiles/Python35 DYNAMIC_PYTHON3=yes PYTHON3_VER=35 RUBY=/cygdrive/c/Marslo/MyProgramFiles/Ruby23-x64 DYNAMIC_RUBY=yes RUBY_VER=23 RUBY_VER_LONG=2.3.0 FEATURES=huge IME=yes GIME=yes MBYTE=yes CSCOPE=yes USERNAME=Marslo.Jiao USERDOMAIN=China GUI=yes > log_gui_${ver}.log 2>&1
-  make -j 12 -B -f Make_cyg.mak CROSS_COMPILE=x86_64-w64-mingw32- ARCH=x86-64 PYTHON=/cygdrive/c/Marslo/MyProgramFiles/Python27 DYNAMIC_PYTHON=yes PYTHON_VER=27 PYTHON3=/cygdrive/c/Marslo/MyProgramFiles/Python35 DYNAMIC_PYTHON3=yes PYTHON3_VER=35 RUBY=/cygdrive/c/Marslo/MyProgramFiles/Ruby23-x64 DYNAMIC_RUBY=yes RUBY_VER=23 RUBY_VER_LONG=2.3.0 FEATURES=huge IME=yes GIME=yes MBYTE=yes CSCOPE=yes USERNAME=Marslo.Jiao USERDOMAIN=China GUI=no > log_nogui_${ver}.log 2>&1
+  make -j 12 -B -f Make_cyg.mak CROSS_COMPILE=x86_64-w64-mingw32- ARCH=x86-64 PYTHON=$PY_PATH DYNAMIC_PYTHON=yes PYTHON_VER=$PY_VER PYTHON3=$PY3_PATH DYNAMIC_PYTHON3=yes PYTHON3_VER=$PY3_VER RUBY=$RB_PATH DYNAMIC_RUBY=yes RUBY_VER=$RB_VER RUBY_VER_LONG=$RB_LONG_VER FEATURES=huge IME=yes GIME=yes MBYTE=yes CSCOPE=yes USERNAME=Marslo.Jiao USERDOMAIN=China GUI=yes > log_gui_${ver}.log 2>&1
+  make -j 12 -B -f Make_cyg.mak CROSS_COMPILE=x86_64-w64-mingw32- ARCH=x86-64 PYTHON=$PY_PATH DYNAMIC_PYTHON=yes PYTHON_VER=$PY_VER PYTHON3=$PY3_PATH DYNAMIC_PYTHON3=yes PYTHON3_VER=$PY3_VER RUBY=$RB_PATH DYNAMIC_RUBY=yes RUBY_VER=$RB_VER RUBY_VER_LONG=$RB_LONG_VER FEATURES=huge IME=yes GIME=yes MBYTE=yes CSCOPE=yes USERNAME=Marslo.Jiao USERDOMAIN=China GUI=no > log_nogui_${ver}.log 2>&1
 
   mkdir -p ${targ}
   if [ -f ${sour}/vim.exe ]; then
@@ -88,7 +96,7 @@ do
   fi
 
   if ${UPLOAD_FLAG}; then
-    scp -i ~/../../Marslo/Tools/Software/System/RemoteConnection/AuthorizedKeys/Marslo\@Appliance -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r ${targ} marslojiao@frs.sourceforge.net:/home/frs/project/marslos-vim-64/${ver}
+    scp -i ~/../../Marslo/Tools/Software/System/RemoteConnection/AuthorizedKeys/openssh/Marslo\@philips -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -r ${targ} marslojiao@frs.sourceforge.net:/home/frs/project/marslos-vim-64/${ver}
   fi
 done
 
