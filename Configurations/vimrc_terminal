@@ -180,7 +180,7 @@ endif
 
 nmap <leader>v :e ~/.vimrc<CR>
 autocmd! bufwritepost ~/.vimrc silent! source %
-set guifont=Monaco\ 13
+set guifont=Monaco\ 14
 set clipboard=unnamedplus
 
 set iskeyword-=.
@@ -201,9 +201,8 @@ set matchtime=1                                                     " The shortl
 set tabstop=2                                                       " Tab width
 set softtabstop=2                                                   " Width for backspace
 set shiftwidth=2                                                    " The tab width by using >> & <<
-set autoindent expandtab
-set smartindent
-set smarttab						                                            " Smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
+set autoindent smartindent expandtab 
+set smarttab                                                        " Smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
 set linebreak
 set modifiable
 set write

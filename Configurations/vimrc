@@ -238,8 +238,8 @@ if has('gui_running')
   set go=                                                           " Hide everything (go = guioptions)
   set cpoptions+=n
   if has('win32') || has('win64')
-    set lines=30                                                    " The initialize size
-    set columns=136
+    set lines=34                                                    " The initialize size
+    set columns=150
     if !filereadable("$VIM\vim74\vimtweak.dll")
       au GUIENTER * call libcallnr("vimtweak.dll","SetAlpha",243)
     endif
@@ -270,13 +270,14 @@ endif
 if has('win32') || has('win95') || has('win64')
   nmap <leader>v :e $VIM/_vimrc<CR>
   autocmd! bufwritepost $VIM/_vimrc silent! source %                " autoload _vimrc
-  set guifont=Monaco:h13                                            " Fonts
+  set guifont=Monaco:h14                                            " Fonts
+  set guifontwide=NSimsun:h14
   set clipboard+=unnamed                                            " Copy the content to system clipboard by using y/p
   set clipboard+=unnamedplus
 else
   nmap <leader>v :e ~/.vimrc<CR>
   autocmd! bufwritepost ~/.vimrc silent! source %
-  set guifont=Monaco\ 13
+  set guifont=Monaco\ 14
   set clipboard=unnamedplus
 endif
 
@@ -298,9 +299,8 @@ set matchtime=1                                                     " The shortl
 set tabstop=2                                                       " Tab width
 set softtabstop=2                                                   " Width for backspace
 set shiftwidth=2                                                    " The tab width by using >> & <<
-set autoindent expandtab
-set smartindent
-set smarttab						                                            " Smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
+set autoindent smartindent expandtab 
+set smarttab                                                        " Smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
 set linebreak
 set modifiable
 set write
@@ -344,7 +344,6 @@ if has('statusline')
 endif
 " set synmaxcol=128
 " set binary
-set cryptmethod=blowfish2
 
 if has('persistent_undo')
   set noundofile
@@ -372,6 +371,7 @@ cnoremap <C-a> <Home>
 map <C-e> <ESC>$
 inoremap <C-e> <ESC>A
 cnoremap <C-e> <End>
+inoremap <C-d> <Del>
 nnoremap Y y$
 nnoremap <Del> "_x
 xnoremap <Del> "_d
@@ -400,6 +400,16 @@ nnoremap <leader>zbd :%s/​//g<CR>
 nnoremap <leader>zdd :%s/ / /g<CR>
 nnoremap <leader>zds :%s/^<span.*span>//g<CR>
 nnoremap <leader>zid i•<ESC>
+if version > 703
+  " autocmd FocusLost * set norelativenumber
+  autocmd FocusGained * set relativenumber
+  autocmd InsertEnter * set norelativenumber
+  autocmd InsertLeave * set relativenumber
+  autocmd CmdwinEnter * set norelativenumber
+  autocmd CmdwinLeave * set relativenumber
+  autocmd CmdwinEnter * let b:ei_save = &eventignore | set eventignore=CursorHold,InsertEnter
+  autocmd CmdwinLeave * let &eventignore = b:ei_save
+endif
 
 iabbrev <leader>/* /*********************************
 iabbrev <leader>*/ *********************************/
