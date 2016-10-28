@@ -65,6 +65,7 @@ Bundle 'yegappan/mru'
 Bundle 'Conque-Shell'
 Bundle 'taglist.vim'
 Bundle 'winmanager'
+Bundle 'grep.vim'
 " Moving faster
 Bundle 'rhysd/accelerated-jk'
 " Bundle 'yonchu/accelerated-smooth-scroll'
@@ -381,6 +382,20 @@ nnoremap & :&&<CR>
 xnoremap & :&&<CR>
 vmap s <Plug>VSurround
 
+cnoreabbrev W! w!
+cnoreabbrev Q! q!
+cnoreabbrev Qall! qall!
+cnoreabbrev Wq wq
+cnoreabbrev Wa wa
+cnoreabbrev wQ wq
+cnoreabbrev WQ wq
+cnoreabbrev W w
+cnoreabbrev Q q
+cnoreabbrev X x
+cnoreabbrev X! x!
+cnoreabbrev QA qa
+cnoreabbrev Qall qall
+
 inoremap <leader>tt <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
 inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
 inoremap <leader>fe <C-R>=expand("%:t")<CR>
@@ -400,6 +415,7 @@ nnoremap <leader>zbd :%s/​//g<CR>
 nnoremap <leader>zdd :%s/ / /g<CR>
 nnoremap <leader>zds :%s/^<span.*span>//g<CR>
 nnoremap <leader>zid i•<ESC>
+
 if version > 703
   " autocmd FocusLost * set norelativenumber
   autocmd FocusGained * set relativenumber
