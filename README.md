@@ -519,6 +519,7 @@ Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
         - gcc / gcc-g++
         - make
         - [ncurses](https://stackoverflow.com/questions/9959243/building-vim-from-source-in-cygwin)
+        - bc (Math)
     - Optional
         - Flex
         - bison
