@@ -456,18 +456,18 @@ Download source from:
     ....
 
 ### 3. Make the compiled Gvim as the default text editor in Ubunut:
-- Copy `applications/gvim.desktop` and `application/defaults.list` to `/usr/share/applications/`
-
-    $ cp /usr/share/applications/defaults.list /usr/share/applications/defaults_bak.list`
+- Copy `applications/gvim.desktop` and `application/defaults.list` to `/usr/share/applications/`:
+    
+    <pre><code>$ cp /usr/share/applications/defaults.list /usr/share/applications/defaults_bak.list`
     $ cp applications/gvim.desktop /usr/share/applications/
-        $ cp -f applications/defaults.list /usr/share/applications/
+    $ cp -f applications/defaults.list /usr/share/applications/</code></pre>
 
 - Make gvim.desktop can find the gvim icon (it will be shown as bellow):
 
-    $ cat gvim.desktop
-...
-Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
-...
+    <pre><code>$ cat gvim.desktop
+    ...
+    Icon=/home/marslo/Tools/Software/Vim/applications/gvim.png
+    ...</code></pre>
 
 - An fully [gvim.desktop](http://mirrors2.kernel.org/slackware/slackware-14.0/source/ap/vim/gvim.desktop)
 
