@@ -531,6 +531,8 @@ Download source from:
         - wget
         - curl
         - tree
+        - rsync
+        - scp
 
 ### Command:
 - For GVIM:
