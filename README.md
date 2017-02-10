@@ -533,6 +533,7 @@ Download source from:
         - tree
         - rsync
         - scp
+        - [lynx](https://github.com/transcode-open/apt-cyg#quick-start)
 
 ### Command:
 - For GVIM:
