@@ -145,80 +145,82 @@ iabbrev <leader>/* /*********************************
 iabbrev <leader>*/ *********************************/
 iabbrev <leader>#- #------------------
 
-colorscheme desert
+let syntax_cmd = "enable"
+" let g:syntax_cmd = "skip"
+
 
 " marslo256.vim: https://github.com/Marslo/marslo.vim
-highlight SpecialKey           ctermfg=darkgreen
-highlight NonText              cterm=NONE          ctermfg=239
-highlight Directory            ctermfg=63
-highlight ErrorMsg             cterm=NONE          ctermfg=red         ctermbg=0
-highlight IncSearch            cterm=NONE          ctermfg=yellow      ctermbg=green
-highlight Search               cterm=NONE          ctermfg=grey        ctermbg=blue
-highlight MoreMsg              ctermfg=darkgreen
-highlight ModeMsg              cterm=NONE          ctermfg=brown
-highlight Question             ctermfg=green
-highlight StatusLine           cterm=NONE          ctermfg=darkgray    ctermbg=black
-highlight StatusLineNC         cterm=NONE
-highlight VertSplit            cterm=NONE
-highlight Title                ctermfg=5
-highlight Visual               cterm=underline     ctermbg=NONE
-highlight VisualNOS            cterm=underline
-highlight WarningMsg           ctermfg=yellow      ctermbg=black
-highlight WildMenu             ctermfg=0           ctermbg=3
-highlight Folded               ctermfg=darkgrey    ctermbg=NONE
-highlight FoldColumn           ctermfg=darkgrey    ctermbg=NONE
-highlight DiffAdd              cterm=NONE          ctermbg=56          ctermfg=255
-highlight DiffDelete           cterm=NONE          ctermbg=239
+highlight SpecialKey           ctermfg=darkgreen    ctermbg=NONE
+highlight NonText              cterm=NONE           ctermfg=239        ctermbg=NONE
+highlight Directory            ctermfg=63           ctermbg=NONE
+highlight ErrorMsg             cterm=NONE           ctermfg=red         ctermbg=0
+highlight IncSearch            cterm=NONE           ctermfg=yellow      ctermbg=green
+highlight Search               cterm=NONE           ctermfg=grey        ctermbg=blue
+highlight MoreMsg              ctermfg=darkgreen    ctermbg=NONE
+highlight ModeMsg              cterm=NONE           ctermfg=brown           ctermbg=NONE
+highlight Question             ctermfg=green        ctermbg=NONE
+highlight StatusLine           cterm=NONE           ctermfg=darkgray    ctermbg=black
+highlight StatusLineNC         cterm=NONE           ctermbg=NONE
+highlight VertSplit            cterm=NONE           ctermbg=NONE
+highlight Title                ctermfg=5            ctermbg=NONE
+highlight Visual               cterm=underline      ctermbg=NONE
+highlight VisualNOS            cterm=underline      ctermbg=NONE
+highlight WarningMsg           ctermfg=yellow       ctermbg=black
+highlight WildMenu             ctermfg=0            ctermbg=3
+highlight Folded               ctermfg=darkgrey     ctermbg=NONE
+highlight FoldColumn           ctermfg=darkgrey     ctermbg=NONE
+highlight DiffAdd              cterm=NONE           ctermbg=56          ctermfg=255
+highlight DiffDelete           cterm=NONE           ctermbg=239
 highlight DiffAdded            ctermbg=93
 highlight DiffRemoved          ctermbg=129
-highlight DiffChange           cterm=bold          ctermbg=99          ctermfg=255
-highlight DiffText             cterm=NONE          ctermbg=196
-highlight Pmenu                ctermfg=208         ctermbg=NONE
-highlight PmenuSel             ctermfg=154
-highlight Identifier           ctermfg=149
-highlight Cursor               cterm=underline     term=underline
-highlight MatchParen           cterm=inverse       term=inverse
-highlight LineNr               ctermfg=239         ctermbg=none
-highlight CursorLine           cterm=NONE
-highlight String               ctermfg=82
-highlight Entity               ctermfg=166
-highlight Support              ctermfg=202
-highlight CursorLineNr         ctermbg=NONE        ctermfg=118         term=bold
-highlight Comment              ctermfg=239
-highlight Constant             ctermfg=113
+highlight DiffChange           cterm=bold           ctermbg=99          ctermfg=255
+highlight DiffText             cterm=NONE           ctermbg=196
+highlight Pmenu                ctermfg=208          ctermbg=NONE
+highlight PmenuSel             ctermfg=154          ctermbg=NONE
+highlight Identifier           ctermfg=149          ctermbg=NONE
+highlight Cursor               cterm=underline      term=underline      ctermbg=NONE
+highlight MatchParen           cterm=inverse        term=inverse        ctermbg=NONE
+highlight LineNr               ctermfg=239          ctermbg=NONE
+highlight CursorLine           cterm=NONE           ctermbg=NONE
+highlight String               ctermfg=82           ctermbg=NONE
+highlight Entity               ctermfg=166          ctermbg=NONE
+highlight Support              ctermfg=202          ctermbg=NONE
+highlight CursorLineNr         ctermfg=118          ctermbg=NONE         term=bold
+highlight Comment              ctermfg=239          ctermbg=NONE
+highlight Constant             ctermfg=113          ctermbg=NONE
 """" Key words (while, if, else, for, in)
-highlight Statement            ctermfg=red
+highlight Statement            ctermfg=red          ctermbg=NONE
 """" #! color
-highlight PreProc              ctermfg=red
+highlight PreProc              ctermfg=red          ctermbg=NONE
 """" classname, <key>, <Groupname> color
-highlight Type                 ctermfg=106
-highlight Special              ctermfg=221
-highlight Underlined           cterm=underline     ctermfg=5
-highlight Ignore               cterm=NONE          ctermfg=7       ctermfg=darkgrey
-highlight Error                cterm=NONE          ctermfg=7       ctermbg=1
+highlight Type                 ctermfg=106          ctermbg=NONE
+highlight Special              ctermfg=221          ctermbg=NONE
+highlight Underlined           cterm=underline      ctermfg=5       ctermbg=NONE
+highlight Ignore               cterm=NONE           ctermfg=7       ctermfg=darkgrey      ctermbg=NONE
+highlight Error                cterm=NONE           ctermfg=7       ctermbg=1
 " HTML
-highlight htmlTag              ctermfg=244
-highlight htmlEndTag           ctermfg=244
-highlight htmlArg              ctermfg=203
-highlight htmlValue            ctermfg=187
-highlight htmlTitle            ctermfg=184         ctermbg=NONE
-highlight htmlTagName          ctermfg=69
-highlight htmlString           ctermfg=113
+highlight htmlTag              ctermfg=244          ctermbg=NONE
+highlight htmlEndTag           ctermfg=244          ctermbg=NONE
+highlight htmlArg              ctermfg=203          ctermbg=NONE
+highlight htmlValue            ctermfg=187          ctermbg=NONE
+highlight htmlTitle            ctermfg=184          ctermbg=NONE
+highlight htmlTagName          ctermfg=69           ctermbg=NONE
+highlight htmlString           ctermfg=113          ctermbg=NONE
 " NERDTree
-highlight treeCWD              ctermfg=180
-highlight treeClosable         ctermfg=174
-highlight treeOpenable         ctermfg=150
-highlight treePart             ctermfg=244
-highlight treeDirSlash         ctermfg=244
-highlight treeLink             ctermfg=182
+highlight treeCWD              ctermfg=180          ctermbg=NONE
+highlight treeClosable         ctermfg=174          ctermbg=NONE
+highlight treeOpenable         ctermfg=150          ctermbg=NONE
+highlight treePart             ctermfg=244          ctermbg=NONE
+highlight treeDirSlash         ctermfg=244          ctermbg=NONE
+highlight treeLink             ctermfg=182          ctermbg=NONE
 
-highlight Boolean              ctermfg=196
-highlight Function             ctermfg=105
-highlight Structure            ctermfg=202
-highlight Define               ctermfg=179
-highlight Conditional          ctermfg=190
-highlight Operator             ctermfg=208
+highlight Boolean              ctermfg=196          ctermbg=NONE
+highlight Function             ctermfg=105          ctermbg=NONE
+highlight Structure            ctermfg=202          ctermbg=NONE
+highlight Define               ctermfg=179          ctermbg=NONE
+highlight Conditional          ctermfg=190          ctermbg=NONE
+highlight Operator             ctermfg=208          ctermbg=NONE
 
-highlight rubyIdentifier       ctermfg=9
+highlight rubyIdentifier       ctermfg=9            ctermbg=NONE
 
 " vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab

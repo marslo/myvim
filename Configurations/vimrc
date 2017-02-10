@@ -232,6 +232,7 @@ if has("autocmd")
   au FileType make set tabstop=4 softtabstop=4 shiftwidth=4
   au FileType json set tabstop=4 softtabstop=4 shiftwidth=4
   au FileType sh set tabstop=2 softtabstop=2 shiftwidth=2
+  au FileType markdown set tabstop=4 softtabstop=4 shiftwidth=4
 endif
 
 " ====================================== For Inteface =====================================
@@ -239,8 +240,8 @@ if has('gui_running')
   set go=                                                           " Hide everything (go = guioptions)
   set cpoptions+=n
   if has('win32') || has('win64')
-    set lines=34                                                    " The initialize size
-    set columns=150
+    set lines=38                                                    " The initialize size
+    set columns=148
     if !filereadable("$VIM\vim74\vimtweak.dll")
       au GUIENTER * call libcallnr("vimtweak.dll","SetAlpha",243)
     endif
@@ -271,7 +272,7 @@ endif
 if has('win32') || has('win95') || has('win64')
   nmap <leader>v :e $VIM/_vimrc<CR>
   autocmd! bufwritepost $VIM/_vimrc silent! source %                " autoload _vimrc
-  set guifont=Monaco:h14                                            " Fonts
+  set guifont=monofur:h18                                           " Fonts
   set guifontwide=NSimsun:h14
   set clipboard+=unnamed                                            " Copy the content to system clipboard by using y/p
   set clipboard+=unnamedplus
@@ -300,7 +301,7 @@ set matchtime=1                                                     " The shortl
 set tabstop=2                                                       " Tab width
 set softtabstop=2                                                   " Width for backspace
 set shiftwidth=2                                                    " The tab width by using >> & <<
-set autoindent smartindent expandtab 
+set autoindent smartindent expandtab
 set smarttab                                                        " Smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
 set linebreak
 set modifiable
@@ -382,19 +383,23 @@ nnoremap & :&&<CR>
 xnoremap & :&&<CR>
 vmap s <Plug>VSurround
 
-cnoreabbrev W! w!
-cnoreabbrev Q! q!
-cnoreabbrev Qall! qall!
-cnoreabbrev Wq wq
-cnoreabbrev Wa wa
-cnoreabbrev wQ wq
-cnoreabbrev WQ wq
 cnoreabbrev W w
+cnoreabbrev W! w!
 cnoreabbrev Q q
+cnoreabbrev Q! q!
 cnoreabbrev X x
 cnoreabbrev X! x!
+cnoreabbrev XA xa
+cnoreabbrev XA! xa!
+cnoreabbrev WQ wq
+cnoreabbrev WQ! wq!
 cnoreabbrev QA qa
+cnoreabbrev QA! qa!
 cnoreabbrev Qall qall
+cnoreabbrev Qall! qall!
+cnoreabbrev WA wa
+cnoreabbrev WA! wa!
+cnoreabbrev NOH noh
 
 inoremap <leader>tt <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
 inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
@@ -578,5 +583,6 @@ augroup collumnLimit
 augroup END
 
 autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
+autocmd BufEnter *.md exe 'noremap <F5> :!start  c:\Program Files (x86)\Google\Chrome\Application\chrome.exe %:p<CR>'
 
 " vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab
