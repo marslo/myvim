@@ -535,9 +535,9 @@ Download source from:
         - scp
         - [lynx](https://github.com/transcode-open/apt-cyg#quick-start)
     - Using apt-cyg
-        - wget http://rawgit.com/transcode-open/apt-cyg/master/apt-cyg
-        - mv apt-cyg{.txt,}
-        - install apt-cyg /bin
+        - $ wget http://rawgit.com/transcode-open/apt-cyg/master/apt-cyg
+        - $ mv apt-cyg{.txt,}
+        - $ install apt-cyg /bin
 
 ### Command:
 - For GVIM:
