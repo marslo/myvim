@@ -125,27 +125,29 @@ let python_highlight_all = 1                                        " syntax-pyt
 
 " Python-mode configuratoin
 if isdirectory(expand(bud . 'python-mode'))
+  nnoremap <leader>p :PymodeLint<CR>                                " Trigger PymodeLint by manual
   let g:pymode = 1                                                  " 1: turn on python-mode plugin
-  let pymode_syntax_all = 1
+  let g:pymode_syntax_all = 1
   let g:pymode_warnings = 0                                         " turn off plugin's warnings
   let g:pymode_folding = 1
   let g:pymode_options_colorcolumn = 1
   let g:pymode_trim_whitespaces = 1                                 " trim unused white spaces on save
-  let g:pymode_lint_on_write = 1
   let g:pymode_lint = 1                                             " turn on code checking
   let g:pymode_lint_checkers = ['pyflakes', 'pep8', 'mccabe']
-  " let g:pymode_lint_ignore = "E503"
-  let g:pymode_trim_whitespace = 0
+  let g:pymode_lint_ignore="E501"                                   " Ignore long line
   let g:pymode_options = 0
   let g:pymode_rope = 0
   let g:pymode_indent = 0
-  let g:python_check_syntax = 1
   let g:pymode_syntax_highlight_self = g:pymode_syntax_all
   let g:pymode_quickfix_minheight = 3
-  let g:pymode_quickfix_maxheight = 6
+  let g:pymode_quickfix_maxheight = 3
   if !has('python')
     let g:pymode = 0
   endif
+  let g:python_check_syntax = 0                                     " Disalbe Check python script syntax on every save
+  let g:pymode_lint_on_write = 0                                    " Disalbe on save checking
+  " let g:pymode_rope_regenerate_on_write = 0
+  let g:pymode_lint_unmodified = 1
 endif
 
 " Programming configs for specified scripts
@@ -270,19 +272,21 @@ nnoremap & :&&<CR>
 xnoremap & :&&<CR>
 vmap s <Plug>VSurround
 
-cnoreabbrev W! w!
-cnoreabbrev Q! q!
-cnoreabbrev Qall! qall!
-cnoreabbrev Wq wq
-cnoreabbrev Wa wa
-cnoreabbrev wQ wq
-cnoreabbrev WQ wq
 cnoreabbrev W w
+cnoreabbrev W! w!
 cnoreabbrev Q q
+cnoreabbrev Q! q!
 cnoreabbrev X x
 cnoreabbrev X! x!
+cnoreabbrev XA xa
+cnoreabbrev XA! xa!
+cnoreabbrev WQ wq
+cnoreabbrev WQ! wq!
 cnoreabbrev QA qa
-cnoreabbrev Qall qall
+cnoreabbrev QA! qa!
+cnoreabbrev WA wa
+cnoreabbrev WA! wa!
+cnoreabbrev NOH noh
 
 inoremap <leader>tt <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
 inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
