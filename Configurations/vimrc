@@ -66,6 +66,8 @@ Bundle 'Conque-Shell'
 Bundle 'taglist.vim'
 Bundle 'winmanager'
 Bundle 'grep.vim'
+" For syntex check
+Bundle 'vim-syntastic/syntastic'
 " Moving faster
 Bundle 'rhysd/accelerated-jk'
 " Bundle 'yonchu/accelerated-smooth-scroll'
@@ -74,7 +76,6 @@ Bundle 'Marslo/MarsloFunc'
 Bundle 'LargeFile'
 " Groovy
 Bundle 'groovy.vim--Ruley'
-" Bundle 'mwaisgold/groovy-vim-files'
 " Python
 Bundle 'klen/python-mode'
 Bundle 'python_fold'
@@ -110,6 +111,8 @@ Bundle 'Marslo/MarsloVimOthers'
 Bundle 'plasticboy/vim-markdown.git'
 Bundle 'altercation/vim-colors-solarized'
 " Bundle 'cakebaker/scss-syntax.vim'
+" Git
+Bundle 'tpope/vim-fugitive'
 " For fun
 Bundle 'TeTrIs.vim'
 Bundle 'matrix.vim--Yang'
@@ -200,27 +203,29 @@ let python_highlight_all = 1                                        " syntax-pyt
 
 " Python-mode configuratoin
 if isdirectory(expand(bud . 'python-mode'))
+  nnoremap <leader>p :PymodeLint<CR>                                " Trigger PymodeLint by manual
   let g:pymode = 1                                                  " 1: turn on python-mode plugin
-  let pymode_syntax_all = 1
+  let g:pymode_syntax_all = 1
   let g:pymode_warnings = 0                                         " turn off plugin's warnings
   let g:pymode_folding = 1
   let g:pymode_options_colorcolumn = 1
   let g:pymode_trim_whitespaces = 1                                 " trim unused white spaces on save
-  let g:pymode_lint_on_write = 1
   let g:pymode_lint = 1                                             " turn on code checking
   let g:pymode_lint_checkers = ['pyflakes', 'pep8', 'mccabe']
-  " let g:pymode_lint_ignore = "E503"
-  let g:pymode_trim_whitespace = 0
+  let g:pymode_lint_ignore="E501"                                   " Ignore long line
   let g:pymode_options = 0
   let g:pymode_rope = 0
   let g:pymode_indent = 0
-  let g:python_check_syntax = 1
   let g:pymode_syntax_highlight_self = g:pymode_syntax_all
   let g:pymode_quickfix_minheight = 3
-  let g:pymode_quickfix_maxheight = 6
+  let g:pymode_quickfix_maxheight = 3
   if !has('python')
     let g:pymode = 0
   endif
+  let g:python_check_syntax = 0                                     " Disalbe Check python script syntax on every save
+  let g:pymode_lint_on_write = 0                                    " Disalbe on save checking
+  " let g:pymode_rope_regenerate_on_write = 0
+  let g:pymode_lint_unmodified = 1
 endif
 
 " Programming configs for specified scripts
@@ -272,8 +277,8 @@ endif
 if has('win32') || has('win95') || has('win64')
   nmap <leader>v :e $VIM/_vimrc<CR>
   autocmd! bufwritepost $VIM/_vimrc silent! source %                " autoload _vimrc
-  set guifont=monofur:h18                                           " Fonts
-  set guifontwide=NSimsun:h14
+  set guifont=monofur:h20                                           " Fonts
+  set guifontwide=NSimsun:h16
   set clipboard+=unnamed                                            " Copy the content to system clipboard by using y/p
   set clipboard+=unnamedplus
 else
@@ -553,6 +558,17 @@ let g:AutoPairs = {'(':')', '[':']', '{':'}', '<':'>',"'":"'",'"':'"', '`':'`'}
 let g:AutoPairsParens = {'(':')', '[':']', '{':'}', '<':'>'}
 let g:AutoPairsFlyMode = 0
 let g:AutoPairsShortcutBackInsert = '<M-b>'
+
+" configure syntastic syntax checking to check on open as well as save
+let g:syntastic_ignore_files = ['\.py$']
+let g:syntastic_check_on_wq = 0
+let g:syntastic_check_on_open=1
+let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute \"ng-"]
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+" set statusline+=%#warningmsg#
+" set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%*
 
 match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
 
