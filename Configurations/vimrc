@@ -400,8 +400,6 @@ cnoreabbrev WQ wq
 cnoreabbrev WQ! wq!
 cnoreabbrev QA qa
 cnoreabbrev QA! qa!
-cnoreabbrev Qall qall
-cnoreabbrev Qall! qall!
 cnoreabbrev WA wa
 cnoreabbrev WA! wa!
 cnoreabbrev NOH noh
