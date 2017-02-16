@@ -1,0 +1,5 @@
+call IMAP('""', "\"<++>\"", 'dot')
+call IMAP("''", "'<++>'", 'dot')
+call IMAP('()', "\(<++>\)", 'dot')
+call IMAP('[]', "\[<++>\]", 'dot')
+call IMAP('{}', "\{<++>\}", 'dot')
