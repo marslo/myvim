@@ -155,7 +155,7 @@ if isdirectory(expand(bud . 'MarsloFunc'))
   nmap gf :call marslofunc#GotoFile()<CR>
   xnoremap * :<C-u>call marslofunc#VSetSearch()<CR>/<C-R>=@/<CR><CR>
   xnoremap # :<C-u>call marslofunc#VSetSearch()<CR>?<C-R>=@/<CR><CR>
-  map <M-o> :call marslofunc#OpenFoler()<CR>
+  " map <M-o> :call marslofunc#OpenFoler()<CR>
   nmap <F12> :call marslofunc#UpdateTags()<CR>
   nmap <C-F5> :call marslofunc#RunResult()<CR>
   nmap <leader>ti :call marslofunc#callit()<CR>
@@ -558,6 +558,14 @@ let g:AutoPairsFlyMode = 0
 let g:AutoPairsShortcutBackInsert = '<M-b>'
 
 " configure syntastic syntax checking to check on open as well as save
+set statusline+=%#warningmsg#
+set statusline+=\ %{SyntasticStatuslineFlag()}
+set statusline+=\ %* |
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 1
+let g:syntastic_loc_list_height = 2
 let g:syntastic_ignore_files = ['\.py$']
 let g:syntastic_check_on_wq = 0
 let g:syntastic_check_on_open=1
