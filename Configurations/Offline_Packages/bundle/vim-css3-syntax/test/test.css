@@ -5,9 +5,9 @@
   align-self: self-end;
   align-content: flex-start;
   align-items: flex-end;
-  display: space-around;
-  display: space-between;
-  display: space-evenly;
+  place-self: space-around;
+  place-content: space-between;
+  place-items: space-evenly;
   display: legacy;
 }
 
@@ -109,14 +109,6 @@
   display: color-mod(#112233 tint(50%));
 }
 
-@supports (display: auto) or
-  (display: auto) not
-  (display: auto) {
-  .conditional {
-    display: auto;
-  }
-}
-
 .compositing-1 {
   mix-blend-mode: multiply;
   isolation: screen;
@@ -133,6 +125,20 @@
   display: saturation;
   display: color;
   display: luminosity;
+}
+
+@supports (display: auto) or
+  (display: auto) not
+  (display: auto) {
+  .conditional {
+    display: auto;
+  }
+}
+
+.contain-1 {
+  contain: layout;
+  display: paint;
+  display: size;
 }
 
 .content-3 {
@@ -402,6 +408,8 @@
   column-width: auto;
 }
 
+@namespace "http://example.com/css3-namespace/";
+
 .overflow-3 {
   max-lines: auto;
 }
@@ -451,6 +459,15 @@
   region-fragment: break;
   display: region;
   display: avoid-region;
+}
+
+.rhythm-1 {
+  line-height-step: margin;
+  block-step-size: up;
+  block-step-insert: down;
+  block-step-align: nearest;
+  block-step-round: auto;
+  block-step: auto;
 }
 
 @media (device-radius: 50%) {
@@ -601,6 +618,10 @@
   display: reduced;
 }
 
+.style-attr {
+  display: auto;
+}
+
 .syntax-3 {
   display: auto;
 }
@@ -658,6 +679,10 @@
   display: box-decoration;
   display: under;
   display: over;
+}
+
+.timing-1 {
+  display: frames(2);
 }
 
 .transforms-1 {
