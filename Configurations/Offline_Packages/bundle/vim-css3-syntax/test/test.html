@@ -15,9 +15,9 @@
   align-self: self-end;
   align-content: flex-start;
   align-items: flex-end;
-  display: space-around;
-  display: space-between;
-  display: space-evenly;
+  place-self: space-around;
+  place-content: space-between;
+  place-items: space-evenly;
   display: legacy;
 }
 </style>
@@ -129,15 +129,6 @@
 }
 </style>
 <style>
-@supports (display: auto) or
-  (display: auto) not
-  (display: auto) {
-  .conditional {
-    display: auto;
-  }
-}
-</style>
-<style>
 .compositing-1 {
   mix-blend-mode: multiply;
   isolation: screen;
@@ -154,6 +145,22 @@
   display: saturation;
   display: color;
   display: luminosity;
+}
+</style>
+<style>
+@supports (display: auto) or
+  (display: auto) not
+  (display: auto) {
+  .conditional {
+    display: auto;
+  }
+}
+</style>
+<style>
+.contain-1 {
+  contain: layout;
+  display: paint;
+  display: size;
 }
 </style>
 <style>
@@ -445,6 +452,9 @@
 }
 </style>
 <style>
+@namespace "http://example.com/css3-namespace/";
+</style>
+<style>
 .overflow-3 {
   max-lines: auto;
 }
@@ -501,6 +511,16 @@
   region-fragment: break;
   display: region;
   display: avoid-region;
+}
+</style>
+<style>
+.rhythm-1 {
+  line-height-step: margin;
+  block-step-size: up;
+  block-step-insert: down;
+  block-step-align: nearest;
+  block-step-round: auto;
+  block-step: auto;
 }
 </style>
 <style>
@@ -661,6 +681,11 @@
   display: reduced;
 }
 </style>
+<style style="display: auto">
+.style-attr {
+  display: auto;
+}
+</style>
 <style>
 .syntax-3 {
   display: auto;
@@ -723,6 +748,11 @@
   display: box-decoration;
   display: under;
   display: over;
+}
+</style>
+<style>
+.timing-1 {
+  display: frames(2);
 }
 </style>
 <style>
