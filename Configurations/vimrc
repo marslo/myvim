@@ -108,6 +108,7 @@ Bundle 'hail2u/vim-css3-syntax'
 Bundle 'Marslo/vim-coloresque'
 Bundle 'Marslo/marslo.vim'
 Bundle 'Marslo/MarsloVimOthers'
+Bundle 'godlygeek/tabular'
 Bundle 'plasticboy/vim-markdown.git'
 Bundle 'altercation/vim-colors-solarized'
 " Bundle 'cakebaker/scss-syntax.vim'
@@ -229,17 +230,6 @@ if isdirectory(expand(bud . 'python-mode'))
   let g:pymode_indent = 1
 endif
 
-" Programming configs for specified scripts
-if has("autocmd")
-  au FileType robot set tabstop=4 softtabstop=4 shiftwidth=4
-  au FileType groovy set tabstop=4 softtabstop=4 shiftwidth=4
-  au FileType snippet set tabstop=4 softtabstop=4 shiftwidth=4
-  au FileType make set tabstop=4 softtabstop=4 shiftwidth=4
-  au FileType json set tabstop=4 softtabstop=4 shiftwidth=4
-  au FileType sh set tabstop=2 softtabstop=2 shiftwidth=2
-  au FileType markdown set tabstop=4 softtabstop=4 shiftwidth=4
-endif
-
 " ====================================== For Inteface =====================================
 if has('gui_running')
   set go=                                                           " Hide everything (go = guioptions)
@@ -307,6 +297,8 @@ set tabstop=2                                                       " Tab width
 set softtabstop=2                                                   " Width for backspace
 set shiftwidth=2                                                    " The tab width by using >> & <<
 set autoindent smartindent expandtab
+set cindent
+set cinoptions=(0,u0,U0
 set smarttab                                                        " Smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
 set linebreak
 set modifiable
@@ -576,6 +568,17 @@ let g:syntastic_auto_loc_list = 1
 " set statusline+=%{SyntasticStatuslineFlag()}
 " set statusline+=%*
 
+" for vim-markdown
+let g:vim_markdown_folding_style_pythonic = 1
+let g:vim_markdown_override_foldtext = 0
+let g:vim_markdown_autowrite = 1
+let g:vim_markdown_new_list_item_indent = 4
+let g:vim_markdown_toc_autofit = 1
+let g:vim_markdown_conceal = 0
+" set conceallevel=2
+let g:vim_markdown_frontmatter = 1
+let g:vim_markdown_json_frontmatter = 1
+
 " fugitive
 nnoremap <Leader>ga :Git add %:p<CR><CR>
 nnoremap <Leader>gs :Gstatus<CR>
@@ -593,15 +596,8 @@ match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
   " nmap j <Plug>(accelerated_jk_gj)
   " nmap k <Plug>(accelerated_jk_gk)
 " endif
-
 " let g:accelerated_jk_acceleration_limit = 500
 " let g:accelerated_jk_acceleration_table = [10, 20, 30, 40, 50]
-
-autocmd BufWinLeave * silent! mkview
-autocmd BufWinEnter * silent! loadview
-autocmd BufRead,BufNewFile * setfiletype txt
-autocmd BufRead,BufNewFile *.t set ft=perl
-autocmd FileType javascript syntax clear jsFuncBlock
 
 augroup vimrc
   au BufReadPre * setlocal foldmethod=indent
@@ -615,7 +611,24 @@ augroup collumnLimit
   let w:m1=matchadd('CollumnLimit', pattern, -1)
 augroup END
 
-autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
-autocmd BufEnter *.md exe 'noremap <F5> :!start  c:\Program Files (x86)\Google\Chrome\Application\chrome.exe %:p<CR>'
+" Programming configs for specified scripts
+if has("autocmd")
+  autocmd FileType robot set tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd FileType groovy set tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd FileType snippet set tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd FileType make set tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd FileType json set tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd FileType sh set tabstop=2 softtabstop=2 shiftwidth=2
+  autocmd FileType markdown set tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd FileType javascript syntax clear jsFuncBlock
+
+  autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
+  autocmd BufEnter *.md exe 'noremap <F5> :!start  c:\Program Files (x86)\Google\Chrome\Application\chrome.exe %:p<CR>'
+
+  autocmd BufWinLeave * silent! mkview
+  autocmd BufWinEnter * silent! loadview
+  autocmd BufRead,BufNewFile * setfiletype txt
+  autocmd BufRead,BufNewFile *.t set ft=perl
+endif
 
 " vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab

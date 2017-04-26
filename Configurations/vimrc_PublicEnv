@@ -297,19 +297,21 @@ nnoremap & :&&<CR>
 xnoremap & :&&<CR>
 vmap s <Plug>VSurround
 
-cnoreabbrev W! w!
-cnoreabbrev Q! q!
-cnoreabbrev Qall! qall!
-cnoreabbrev Wq wq
-cnoreabbrev Wa wa
-cnoreabbrev wQ wq
-cnoreabbrev WQ wq
 cnoreabbrev W w
+cnoreabbrev W! w!
 cnoreabbrev Q q
+cnoreabbrev Q! q!
 cnoreabbrev X x
 cnoreabbrev X! x!
+cnoreabbrev XA xa
+cnoreabbrev XA! xa!
+cnoreabbrev WQ wq
+cnoreabbrev WQ! wq!
 cnoreabbrev QA qa
-cnoreabbrev Qall qall
+cnoreabbrev QA! qa!
+cnoreabbrev WA wa
+cnoreabbrev WA! wa!
+cnoreabbrev NOH noh
 
 inoremap <leader>tt <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
 inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
@@ -458,11 +460,13 @@ match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
   " nmap j <Plug>(accelerated_jk_gj)
   " nmap k <Plug>(accelerated_jk_gk)
 " endif
+if has("autocmd")
+  autocmd FileType javascript syntax clear jsFuncBlock
 
 autocmd BufWinLeave * silent! mkview
 autocmd BufWinEnter * silent! loadview
 autocmd BufRead,BufNewFile *.txt setfiletype txt
 autocmd BufRead,BufNewFile *.t set ft=perl
-autocmd FileType javascript syntax clear jsFuncBlock
+endif
 
 " vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab

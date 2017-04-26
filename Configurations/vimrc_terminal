@@ -151,15 +151,7 @@ if isdirectory(expand(bud . 'python-mode'))
   let g:pymode_indent = 1
 endif
 
-" Programming configs for specified scripts
-if has("autocmd")
-  au FileType robot set tabstop=4 softtabstop=4 shiftwidth=4
-  au FileType groovy set tabstop=4 softtabstop=4 shiftwidth=4
-  au FileType snippet set tabstop=4 softtabstop=4 shiftwidth=4
-  au FileType make set tabstop=4 softtabstop=4 shiftwidth=4
-  au FileType json set tabstop=4 softtabstop=4 shiftwidth=4
-  au FileType sh set tabstop=2 softtabstop=2 shiftwidth=2
-endif
+
 
 " ====================================== For Inteface =====================================
 if exists('$TMUX')
@@ -375,11 +367,7 @@ let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute \"ng-"]
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 
-autocmd BufWinLeave * silent! mkview
-autocmd BufWinEnter * silent! loadview
-autocmd BufRead,BufNewFile * setfiletype txt
-autocmd BufRead,BufNewFile *.t set ft=perl
-autocmd FileType javascript syntax clear jsFuncBlock
+
 
 augroup vimrc
   au BufReadPre * setlocal foldmethod=indent
@@ -397,6 +385,22 @@ augroup collumnLimit
   let w:m1=matchadd('CollumnLimit', pattern, -1)
 augroup END
 
-autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
+" Programming configs for specified scripts
+if has("autocmd")
+  autocmd FileType robot set tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd FileType groovy set tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd FileType snippet set tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd FileType make set tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd FileType json set tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd FileType sh set tabstop=2 softtabstop=2 shiftwidth=2
+  autocmd FileType markdown set tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd FileType javascript syntax clear jsFuncBlock
+  autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
+
+  autocmd BufWinLeave * silent! mkview
+  autocmd BufWinEnter * silent! loadview
+  autocmd BufRead,BufNewFile * setfiletype txt
+  autocmd BufRead,BufNewFile *.t set ft=perl
+endif
 
 " vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab
