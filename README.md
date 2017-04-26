@@ -52,22 +52,29 @@ My Vim Config
 - Linux User:
     - Copy **vimrc** from `VimConfig/Configurations/vimrc` into `$HOME`, and rename to **.vimrc** 
 
-        <pre><code>$ cp vimrc ~/.vimrc</code></pre>
+            $ cp vimrc ~/.vimrc
 
-    - Get [Vundle](https://github.com/gmarik/vundle.git) automatically
+    - Get `Vundle` and install plugins automatic:
+
+            $ vim +GetVundle +BundleInstall +qa
+            OR
+            $ vim -c :GetVundle -c :BundleInstall -c :qa
+
+    <details><summary>Setup Manually</summary>
+    - Get [Vundle](https://github.com/gmarik/vundle.git) by command:
 
         <pre><code>$ cat .vimrc | grep "set rtp"
-            set rtp+=$VIM/vimfiles/bundle/vundle
-            set rtp+=~/.vim/bunle/vundle
-        </code></pre>
+        set rtp+=$VIM/vimfiles/bundle/vundle
+        set rtp+=~/.vim/bunle/vundle</code></pre>
 
-        - Open Vim and Run (Ignore warnings and errors):
+    - Open Vim and Run (Ignore warnings and errors):
 
-                :GetVundle
+        <pre><code>:GetVundle</code></pre>
 
-    - Get the other plugins
+    - Get the other plugins by command:
 
-            :BundleInstall!
+        <pre><code>:BundleInstall!</code></pre>
+    </details>
 
 - Offline User:
     - For **vimrc** file
