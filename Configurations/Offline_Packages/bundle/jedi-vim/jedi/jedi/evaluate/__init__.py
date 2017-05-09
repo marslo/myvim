@@ -63,7 +63,7 @@ that are not used are just being ignored.
 import copy
 import sys
 
-from jedi.parser import tree
+from jedi.parser.python import tree
 from jedi import debug
 from jedi.common import unite
 from jedi.evaluate import representation as er
@@ -80,6 +80,7 @@ from jedi.evaluate import helpers
 from jedi.evaluate import pep0484
 from jedi.evaluate.filters import TreeNameDefinition, ParamName
 from jedi.evaluate.instance import AnonymousInstance, BoundMethod
+from jedi.evaluate.context import ContextualizedName, ContextualizedNode
 
 
 class Evaluator(object):
@@ -150,7 +151,8 @@ class Evaluator(object):
         types = self.eval_element(context, rhs)
 
         if seek_name:
-            types = finder.check_tuple_assignments(self, types, seek_name)
+            c_node = ContextualizedName(context, seek_name)
+            types = finder.check_tuple_assignments(self, c_node, types)
 
         first_operation = stmt.first_operation()
         if first_operation not in ('=', None) and first_operation.type == 'operator':
@@ -161,15 +163,15 @@ class Evaluator(object):
             left = context.py__getattribute__(
                 name, position=stmt.start_pos, search_global=True)
 
-            for_stmt = stmt.get_parent_until(tree.ForStmt)
-            if isinstance(for_stmt, tree.ForStmt) and types \
+            for_stmt = tree.search_ancestor(stmt, 'for_stmt')
+            if for_stmt is not None and for_stmt.type == 'for_stmt' and types \
                     and for_stmt.defines_one_name():
                 # Iterate through result and add the values, that's possible
                 # only in for loops without clutter, because they are
                 # predictable. Also only do it, if the variable is not a tuple.
                 node = for_stmt.get_input_node()
-                for_iterables = self.eval_element(context, node)
-                ordered = list(iterable.py__iter__(self, for_iterables, node))
+                cn = ContextualizedNode(context, node)
+                ordered = list(iterable.py__iter__(self, cn.infer(), cn))
 
                 for lazy_context in ordered:
                     dct = {str(for_stmt.children[1]): lazy_context.infer()}
@@ -269,18 +271,19 @@ class Evaluator(object):
     def _eval_element_not_cached(self, context, element):
         debug.dbg('eval_element %s@%s', element, element.start_pos)
         types = set()
-        if isinstance(element, (tree.Name, tree.Literal)) or element.type == 'atom':
+        typ = element.type
+        if typ in ('name', 'number', 'string', 'atom'):
             types = self.eval_atom(context, element)
-        elif isinstance(element, tree.Keyword):
+        elif typ == 'keyword':
             # For False/True/None
             if element.value in ('False', 'True', 'None'):
                 types.add(compiled.builtin_from_name(self, element.value))
             # else: print e.g. could be evaluated like this in Python 2.7
-        elif isinstance(element, tree.Lambda):
+        elif typ == 'lambda':
             types = set([er.FunctionContext(self, context, element)])
-        elif element.type == 'expr_stmt':
+        elif typ == 'expr_stmt':
             types = self.eval_statement(context, element)
-        elif element.type in ('power', 'atom_expr'):
+        elif typ in ('power', 'atom_expr'):
             first_child = element.children[0]
             if not (first_child.type == 'keyword' and first_child.value == 'await'):
                 types = self.eval_atom(context, first_child)
@@ -290,22 +293,22 @@ class Evaluator(object):
                         types = set(precedence.calculate(self, context, types, trailer, right))
                         break
                     types = self.eval_trailer(context, types, trailer)
-        elif element.type in ('testlist_star_expr', 'testlist',):
+        elif typ in ('testlist_star_expr', 'testlist',):
             # The implicit tuple in statements.
             types = set([iterable.SequenceLiteralContext(self, context, element)])
-        elif element.type in ('not_test', 'factor'):
+        elif typ in ('not_test', 'factor'):
             types = self.eval_element(context, element.children[-1])
             for operator in element.children[:-1]:
                 types = set(precedence.factor_calculate(self, types, operator))
-        elif element.type == 'test':
+        elif typ == 'test':
             # `x if foo else y` case.
             types = (self.eval_element(context, element.children[0]) |
                      self.eval_element(context, element.children[-1]))
-        elif element.type == 'operator':
+        elif typ == 'operator':
             # Must be an ellipsis, other operators are not evaluated.
             assert element.value == '...'
             types = set([compiled.create(self, Ellipsis)])
-        elif element.type == 'dotted_name':
+        elif typ == 'dotted_name':
             types = self.eval_atom(context, element.children[0])
             for next_name in element.children[2::2]:
                 # TODO add search_global=True?
@@ -314,12 +317,10 @@ class Evaluator(object):
                     for typ in types
                 )
             types = types
-        elif element.type == 'eval_input':
+        elif typ == 'eval_input':
             types = self._eval_element_not_cached(context, element.children[0])
-        elif element.type == 'annassign':
-            print(element.children[1])
+        elif typ == 'annassign':
             types = pep0484._evaluate_for_annotation(context, element.children[1])
-            print('xxx')
         else:
             types = precedence.calculate_children(self, context, element.children)
         debug.dbg('eval_element result %s', types)
@@ -331,12 +332,12 @@ class Evaluator(object):
         generate the node (because it has just one child). In that case an atom
         might be a name or a literal as well.
         """
-        if isinstance(atom, tree.Name):
+        if atom.type == 'name':
             # This is the first global lookup.
             stmt = atom.get_definition()
-            if isinstance(stmt, tree.CompFor):
-                stmt = stmt.get_parent_until((tree.ClassOrFunc, tree.ExprStmt))
-            if stmt.type != 'expr_stmt':
+            if stmt.type == 'comp_for':
+                stmt = tree.search_ancestor(stmt, ('expr_stmt', 'lambda', 'funcdef', 'classdef'))
+            if stmt is None or stmt.type != 'expr_stmt':
                 # We only need to adjust the start_pos for statements, because
                 # there the name cannot be used.
                 stmt = atom
@@ -451,8 +452,10 @@ class Evaluator(object):
                 return self.eval_statement(context, def_, name)
             elif def_.type == 'for_stmt':
                 container_types = self.eval_element(context, def_.children[3])
-                for_types = iterable.py__iter__types(self, container_types, def_.children[3])
-                return finder.check_tuple_assignments(self, for_types, name)
+                cn = ContextualizedNode(context, def_.children[3])
+                for_types = iterable.py__iter__types(self, container_types, cn)
+                c_node = ContextualizedName(context, name)
+                return finder.check_tuple_assignments(self, c_node, for_types)
             elif def_.type in ('import_from', 'import_name'):
                 return imports.infer_import(context, name)
 
@@ -486,7 +489,7 @@ class Evaluator(object):
                             if param_name.string_name == name.value:
                                 param_names.append(param_name)
                 return param_names
-        elif isinstance(par, tree.ExprStmt) and name in par.get_defined_names():
+        elif par.type == 'expr_stmt' and name in par.get_defined_names():
             # Only take the parent, because if it's more complicated than just
             # a name it's something you can "goto" again.
             return [TreeNameDefinition(context, name)]

@@ -10,9 +10,7 @@ from textwrap import dedent
 
 import jedi
 from jedi._compatibility import u
-from jedi.parser import load_grammar
-from jedi.parser.diff import FastParser
-from jedi.parser.utils import save_parser
+from jedi.parser.python import parse
 
 
 def test_carriage_return_splitting():
@@ -26,8 +24,8 @@ def test_carriage_return_splitting():
             pass
         '''))
     source = source.replace('\n', '\r\n')
-    p = FastParser(load_grammar(), source)
-    assert [n.value for lst in p.module.used_names.values() for n in lst] == ['Foo']
+    module = parse(source)
+    assert [n.value for lst in module.used_names.values() for n in lst] == ['Foo']
 
 
 def test_class_in_docstr():
@@ -45,11 +43,10 @@ def check_p(src, number_parsers_used, number_of_splits=None, number_of_misses=0)
     if number_of_splits is None:
         number_of_splits = number_parsers_used
 
-    p = FastParser(load_grammar(), u(src))
-    save_parser(None, p, pickling=False)
+    module_node = parse(src)
 
-    assert src == p.module.get_code()
-    return p.module
+    assert src == module_node.get_code()
+    return module_node
 
 
 def test_if():
@@ -257,7 +254,7 @@ def test_string_literals():
     """)
 
     script = jedi.Script(dedent(source))
-    script._get_module().tree_node.end_pos == (6, 0)
+    assert script._get_module().tree_node.end_pos == (6, 0)
     assert script.completions()
 
 
@@ -279,13 +276,12 @@ def test_decorator_string_issue():
 
 
 def test_round_trip():
-    source = dedent('''
+    code = dedent('''
     def x():
         """hahaha"""
     func''')
 
-    f = FastParser(load_grammar(), u(source))
-    assert f.get_parsed_node().get_code() == source
+    assert parse(code).get_code() == code
 
 
 def test_parentheses_in_string():

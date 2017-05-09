@@ -3,20 +3,19 @@ from textwrap import dedent
 
 from jedi._compatibility import u
 from jedi.evaluate.sys_path import (_get_parent_dir_with_file,
-                                    _get_buildout_scripts,
+                                    _get_buildout_script_paths,
                                     sys_path_with_modifications,
                                     _check_module)
 from jedi.evaluate import Evaluator
 from jedi.evaluate.representation import ModuleContext
-from jedi.parser import ParserWithRecovery, load_grammar
+from jedi.parser.python import parse, load_grammar
 
 from ..helpers import cwd_at
 
 
 def check_module_test(code):
     grammar = load_grammar()
-    p = ParserWithRecovery(grammar, code)
-    module_context = ModuleContext(Evaluator(grammar), p.module)
+    module_context = ModuleContext(Evaluator(grammar), parse(code), path=None)
     return _check_module(module_context)
 
 
@@ -30,7 +29,7 @@ def test_parent_dir_with_file():
 
 @cwd_at('test/test_evaluate/buildout_project/src/proj_name')
 def test_buildout_detection():
-    scripts = _get_buildout_scripts(os.path.abspath('./module_name.py'))
+    scripts = _get_buildout_script_paths(os.path.abspath('./module_name.py'))
     assert len(scripts) == 1
     curdir = os.path.abspath(os.curdir)
     appdir_path = os.path.normpath(os.path.join(curdir, '../../bin/app'))
@@ -62,14 +61,14 @@ def test_path_from_invalid_sys_path_assignment():
 
 @cwd_at('test/test_evaluate/buildout_project/src/proj_name/')
 def test_sys_path_with_modifications():
-    code = dedent(u("""
+    code = dedent("""
         import os
-    """))
+    """)
 
     path = os.path.abspath(os.path.join(os.curdir, 'module_name.py'))
     grammar = load_grammar()
-    p = ParserWithRecovery(grammar, code, module_path=path)
-    module_context = ModuleContext(Evaluator(grammar), p.module)
+    module_node = parse(code, path=path)
+    module_context = ModuleContext(Evaluator(grammar), module_node, path=path)
     paths = sys_path_with_modifications(module_context.evaluator, module_context)
     assert '/tmp/.buildout/eggs/important_package.egg' in paths
 

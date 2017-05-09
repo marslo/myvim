@@ -1,5 +1,5 @@
 from jedi.parser import token
-from jedi.parser import tree
+from jedi.parser.python import tree
 from jedi import debug
 from jedi import settings
 from jedi.api import classes
@@ -164,7 +164,7 @@ class Completion:
                 # No completions for ``with x as foo`` and ``import x as foo``.
                 # Also true for defining names as a class or function.
                 return list(self._get_class_context_completions(is_function=True))
-            elif symbol_names[-1] == 'trailer' and nodes[-1] == '.':
+            elif symbol_names[-1] in ('trailer', 'dotted_name') and nodes[-1] == '.':
                 dot = self._module_node.get_leaf_for_position(self._position)
                 completion_names += self._trailer_completions(dot.get_previous_leaf())
             else:
@@ -235,7 +235,7 @@ class Completion:
         Autocomplete inherited methods when overriding in child class.
         """
         leaf = self._module_node.get_leaf_for_position(self._position, include_prefixes=True)
-        cls = leaf.get_parent_until(tree.Class)
+        cls = tree.search_ancestor(leaf, 'classdef')
         if isinstance(cls, (tree.Class, tree.Function)):
             # Complete the methods that are defined in the super classes.
             random_context = self._module_context.create_context(

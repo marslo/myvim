@@ -4,12 +4,12 @@ import pytest
 
 import jedi
 from jedi import debug
-from jedi._compatibility import u
 from jedi.common import splitlines
 from jedi import cache
-from jedi.parser import load_grammar
-from jedi.parser.diff import DiffParser
-from jedi.parser import ParserWithRecovery
+from jedi.parser.cache import parser_cache
+from jedi.parser.python import load_grammar
+from jedi.parser.python.diff import DiffParser
+from jedi.parser.python import parse
 
 
 def _check_error_leaves_nodes(node):
@@ -42,22 +42,24 @@ def _assert_valid_graph(node):
 
 
 class Differ(object):
-    def initialize(self, source):
-        debug.dbg('differ: initialize', color='YELLOW')
-        grammar = load_grammar()
-        self.parser = ParserWithRecovery(grammar, u(source))
-        return self.parser.module
+    grammar = load_grammar()
 
-    def parse(self, source, copies=0, parsers=0, expect_error_leaves=False):
+    def initialize(self, code):
+        debug.dbg('differ: initialize', color='YELLOW')
+        self.lines = splitlines(code, keepends=True)
+        parser_cache.pop(None, None)
+        self.module = parse(code, diff_cache=True, cache=True)
+        return self.module
+
+    def parse(self, code, copies=0, parsers=0, expect_error_leaves=False):
         debug.dbg('differ: parse copies=%s parsers=%s', copies, parsers, color='YELLOW')
-        lines = splitlines(source, keepends=True)
-        diff_parser = DiffParser(self.parser)
-        new_module = diff_parser.update(lines)
-        assert source == new_module.get_code()
+        lines = splitlines(code, keepends=True)
+        diff_parser = DiffParser(self.grammar, self.module)
+        new_module = diff_parser.update(self.lines, lines)
+        self.lines = lines
+        assert code == new_module.get_code()
         assert diff_parser._copy_count == copies
         assert diff_parser._parser_count == parsers
-        self.parser.module = new_module
-        self.parser._parsed = new_module
 
         assert expect_error_leaves == _check_error_leaves_nodes(new_module)
         _assert_valid_graph(new_module)
@@ -423,6 +425,21 @@ def test_whitespace_at_end(differ):
     differ.parse(code + '\n', parsers=1, copies=1)
 
 
+def test_endless_while_loop(differ):
+    """
+    This was a bug in Jedi #878.
+    """
+    code = '#dead'
+    differ.initialize(code)
+    module = differ.parse(code, parsers=1)
+    assert module.end_pos == (1, 5)
+
+    code = '#dead\n'
+    differ.initialize(code)
+    module = differ.parse(code + '\n', parsers=1)
+    assert module.end_pos == (3, 0)
+
+
 def test_in_class_movements(differ):
     code1 = dedent("""\
         class PlaybookExecutor:
@@ -448,3 +465,31 @@ def test_in_class_movements(differ):
 
     differ.initialize(code1)
     differ.parse(code2, parsers=2, copies=1)
+
+
+def test_in_parentheses_newlines(differ):
+    code1 = dedent("""
+    x = str(
+        True)
+
+    a = 1
+
+    def foo():
+        pass
+
+    b = 2""")
+
+    code2 = dedent("""
+    x = str(True)
+
+    a = 1
+
+    def foo():
+        pass
+
+    b = 2""")
+
+
+    differ.initialize(code1)
+    differ.parse(code2, parsers=2, copies=1)
+    differ.parse(code1, parsers=2, copies=1)
