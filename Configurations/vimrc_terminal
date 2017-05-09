@@ -5,7 +5,7 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.24
-"    LastChange: 2016-04-25 21:02:55
+"    LastChange: 2017-05-09 19:40:21
 " =============================================================================
 
 set nocompatible
@@ -35,9 +35,11 @@ Bundle 'tpope/vim-pathogen'
 Bundle 'Yggdroot/indentLine'
 Bundle 'dantezhu/authorinfo'
 Bundle 'Marslo/EnhCommentify.vim'
-Bundle 'ervandew/supertab'
+" Bundle 'ervandew/supertab'
 Bundle 'Marslo/auto-pairs'
-Bundle 'Marslo/snipmate.vim.git'
+Bundle 'tomtom/tlib_vim'
+Bundle 'marcweber/vim-addon-mw-utils'
+Bundle 'Marslo/snipmate.vim'
 Bundle 'yegappan/mru'
 Bundle 'vim-syntastic/syntastic'
 Bundle 'Marslo/MarsloFunc'
@@ -346,10 +348,10 @@ let g:indentLine_color_tty = 0
 let g:indentLine_faster = 1
 let g:indentLine_char = '¦'
 
-let SuperTabDefaultCompletionType = '<c-p>'
-let SuperTabMappingForward = '<c-p>'
-let SuperTabMappingTabLiteral = '<Tab>'
-let SuperTabClosePreviewOnPopupClose = 1
+" let SuperTabDefaultCompletionType = '<c-p>'
+" let SuperTabMappingForward = '<c-p>'
+" let SuperTabMappingTabLiteral = '<Tab>'
+" let SuperTabClosePreviewOnPopupClose = 1
 
 let g:AutoPairs = {'(':')', '[':']', '{':'}', '<':'>',"'":"'",'"':'"', '`':'`'}
 let g:AutoPairsParens = {'(':')', '[':']', '{':'}', '<':'>'}
@@ -368,6 +370,11 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 
 
+
+" Snippet
+imap <C-J> <Plug>snipMateNextOrTrigger
+smap <C-J> <Plug>snipMateNextOrTrigger
+imap <Tab> <Plug>snipMateNextOrTrigger
 
 augroup vimrc
   au BufReadPre * setlocal foldmethod=indent
