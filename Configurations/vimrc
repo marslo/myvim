@@ -5,7 +5,7 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.24
-"    LastChange: 2016-04-25 21:01:18
+"    LastChange: 2017-05-09 19:37:03
 " =============================================================================
 
 set nocompatible
@@ -53,14 +53,16 @@ endif
 Bundle 'gmarik/vundle'
 Bundle 'tpope/vim-pathogen'
 Bundle 'Yggdroot/indentLine'
-Bundle 'kien/ctrlp.vim.git'
+Bundle 'kien/ctrlp.vim'
 Bundle 'sjl/gundo.vim'
 Bundle 'majutsushi/tagbar'
 Bundle 'dantezhu/authorinfo'
 Bundle 'Marslo/EnhCommentify.vim'
-Bundle 'ervandew/supertab'
+" Bundle 'ervandew/supertab'
 Bundle 'Marslo/auto-pairs'
-Bundle 'Marslo/snipmate.vim.git'
+Bundle 'tomtom/tlib_vim'
+Bundle 'marcweber/vim-addon-mw-utils'
+Bundle 'Marslo/snipmate.vim'
 Bundle 'yegappan/mru'
 Bundle 'Conque-Shell'
 Bundle 'taglist.vim'
@@ -314,6 +316,7 @@ set list listchars=tab:\ \ ,trail:·,extends:»,precedes:«,nbsp:·
 set cursorline                                                      " Highlight the current line
 set guicursor=a:hor1
 set guicursor+=i-r-ci-cr-o:hor2-blinkon0
+set virtualedit=onemore                                             " Allow for cursor beyond last character
 set scrolloff=3                                                     " Scroll settings
 set sidescroll=1
 set sidescrolloff=5
@@ -323,6 +326,7 @@ set foldenable                                                      " Enable Fol
 set foldcolumn=1
 set foldexpr=1                                                      " Shown line number after fold
 set foldlevel=100                                                   " Not fold while VIM set up
+set shortmess+=filmnrxoOtT                                          " Abbrev. of messages (avoids 'hit enter')
 set viewoptions=folds
 set backspace=indent,eol,start                                      " Make backspace h, l, etc wrap to
 set whichwrap+=<,>,h,l
@@ -539,11 +543,6 @@ else
   let g:indentLine_char = '¦'
 endif
 
-let SuperTabDefaultCompletionType = '<c-p>'
-let SuperTabMappingForward = '<c-p>'
-let SuperTabMappingTabLiteral = '<Tab>'
-let SuperTabClosePreviewOnPopupClose = 1
-
 let g:AutoPairs = {'(':')', '[':']', '{':'}', '<':'>',"'":"'",'"':'"', '`':'`'}
 let g:AutoPairsParens = {'(':')', '[':']', '{':'}', '<':'>'}
 let g:AutoPairsFlyMode = 0
@@ -590,7 +589,13 @@ nnoremap <leader>gc :Git commit -am ""<Left>
 command! -bar -nargs=* Gpull execute 'Git pull'
 command! -bar -nargs=* Gpush execute 'Git push'
 
+" Snippet
+imap <C-J> <Plug>snipMateNextOrTrigger
+smap <C-J> <Plug>snipMateNextOrTrigger
+imap <Tab> <Plug>snipMateNextOrTrigger
+
 match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
+
 
 " if isdirectory(bud . '/accelerated-jk')
   " nmap j <Plug>(accelerated_jk_gj)
@@ -598,6 +603,12 @@ match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
 " endif
 " let g:accelerated_jk_acceleration_limit = 500
 " let g:accelerated_jk_acceleration_table = [10, 20, 30, 40, 50]
+
+" Conflict with new Vim-Snippet
+" let SuperTabDefaultCompletionType = '<c-p>'
+" let SuperTabMappingForward = '<c-p>'
+" let SuperTabMappingTabLiteral = '<Tab>'
+" let SuperTabClosePreviewOnPopupClose = 1
 
 augroup vimrc
   au BufReadPre * setlocal foldmethod=indent

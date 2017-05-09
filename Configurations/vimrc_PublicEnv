@@ -1,11 +1,11 @@
 " =============================================================================
 "       FileName: vimrc_PublicEnv
-"           Desc:
-"         Author: Marslo
+"          Desc: Made in Marslo
+"        Author: Marslo Jiao
 "         Email: marslo.jiao@gmail.com
 "        Created: 2013-10-16 07:19:00
-"        Version: 0.0.11
-"    LastChange: 2014-09-18 00:17:46
+"       Version: 0.0.24
+"    LastChange: 2017-05-09 19:40:21
 " =============================================================================
 
 let &runtimepath=printf('%s/vimfiles,%s,%s/vimfiles/after', $VIM, $VIMRUNTIME, $VIM)
@@ -25,6 +25,7 @@ set viminfo=%,<800,'10,/50,:100,h,f0,n~/.marslo/.vim/cache/.viminfo
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip
 set tags=./tags
   let bud=expand('~/.vim/bundle') . '/'
+let performance_mode = 1
 
 " ====================================== For Property =====================================
 let mapleader=","
@@ -46,7 +47,9 @@ Bundle 'tpope/vim-pathogen'
 Bundle 'gregsexton/MatchTag'
 Bundle 'ervandew/supertab'
 Bundle 'Marslo/auto-pairs'
-Bundle 'Marslo/snipmate.vim.git'
+Bundle 'tomtom/tlib_vim'
+Bundle 'marcweber/vim-addon-mw-utils'
+Bundle 'Marslo/snipmate.vim'
 Bundle 'yegappan/mru'
 Bundle 'Conque-Shell'
 Bundle 'taglist.vim'
@@ -444,10 +447,10 @@ else
   let g:indentLine_char = '¦'
 endif
 
-let SuperTabDefaultCompletionType = '<c-p>'
-let SuperTabMappingForward = '<c-p>'
-let SuperTabMappingTabLiteral = '<Tab>'
-let SuperTabClosePreviewOnPopupClose = 1
+" let SuperTabDefaultCompletionType = '<c-p>'
+" let SuperTabMappingForward = '<c-p>'
+" let SuperTabMappingTabLiteral = '<Tab>'
+" let SuperTabClosePreviewOnPopupClose = 1
 
 let g:AutoPairs = {'(':')', '[':']', '{':'}', '<':'>',"'":"'",'"':'"', '`':'`'}
 let g:AutoPairsParens = {'(':')', '[':']', '{':'}', '<':'>'}
@@ -457,6 +460,11 @@ let g:AutoPairsShortcutBackInsert = '<M-b>'
 match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
 
 " if isdirectory(bud . '/accelerated-jk')
+" Snippet
+imap <C-J> <Plug>snipMateNextOrTrigger
+smap <C-J> <Plug>snipMateNextOrTrigger
+imap <Tab> <Plug>snipMateNextOrTrigger
+
   " nmap j <Plug>(accelerated_jk_gj)
   " nmap k <Plug>(accelerated_jk_gk)
 " endif
