@@ -1,10 +1,24 @@
+# shorthand variable declaration
+snippet v
+	${1} := ${2}
+# variable initialization
+snippet vr
+	var ${1:t} ${0:string}
+# variable declaration
+snippet var
+	var ${1} ${2} = ${3}
+# variables declaration
+snippet vars
+	var (
+		${1} ${2} = ${3}
+	)
 # append
 snippet ap
-	append(${1:slice}, ${2:value})
+	append(${1:slice}, ${0:value})
 # bool
 snippet bl
 	bool
-# byte 
+# byte
 snippet bt
 	byte
 # break
@@ -12,31 +26,31 @@ snippet br
 	break
 # channel
 snippet ch
-	chan ${1:int}
+	chan ${0:int}
 # case
 snippet cs
 	case ${1:value}:
-		${2:/* code */}
+		${0:${VISUAL}}
 # const
 snippet c
-	const ${1:NAME} = ${2:0}
+	const ${1:NAME} = ${0:0}
 # constants with iota
 snippet co
 	const (
 		${1:NAME1} = iota
-		${2:NAME2}
+		${0:NAME2}
 	)
 # continue
 snippet cn
 	continue
-# defer 
+# defer
 snippet df
-	defer ${1:func}()
+	defer ${0:func}()
 # defer recover
 snippet dfr
 	defer func() {
 		if err := recover(); err != nil {
-			${1:/* code */}
+			${0:${VISUAL}}
 		}
 	}()
 # gpl
@@ -79,19 +93,25 @@ snippet inf
 # if condition
 snippet if
 	if ${1:/* condition */} {
-		${2:/* code */}
+		${2:${VISUAL}}
+	}
+snippet ife
+	if ${1:/* condition */} {
+		${2:${VISUAL}}
+	} else {
+		${0}
 	}
 # else snippet
 snippet el
 	else {
-		${1}
+		${0:${VISUAL}}
 	}
 # error snippet
 snippet ir
 	if err != nil {
 		return err
 	}
-	${1}
+	${0}
 # false
 snippet f
 	false
@@ -114,8 +134,13 @@ snippet ie
 	} else {
 		${3}
 	}
-# for loop
-snippet fo
+# for int loop
+snippet for
+	for ${1}{
+		${0:${VISUAL}}
+	}
+# for int loop
+snippet fori
 	for ${2:i} = 0; $2 < ${1:count}; $2${3:++} {
 		${4:/* code */}
 	}
@@ -129,38 +154,53 @@ snippet fun
 	func ${1:funcName}(${2}) ${3:os.Error} {
 		${4:/* code */}
 	}
+	${0}
 # function on receiver 
 snippet fum
-	func (self ${1:type}) ${2:funcName}(${3}) ${4:os.Error} {
-		${5:/* code */}
+	func (${1:receiver} ${2:type}) ${3:funcName}(${4}) ${5:error} {
+		${6}
 	}
+	${0}
+# log printf
+snippet lf
+	log.Printf("%${1:s}", ${2:var})
+# log printf
+snippet lp
+	log.Println("${1}")
 # make
 snippet mk
-	make(${1:[]string}, ${2:0})
-# map 
+	make(${1:[]string}, ${0:0})
+# map
 snippet mp
-	map[${1:string}]${2:int}
+	map[${1:string}]${0:int}
 # main()
 snippet main
 	func main() {
 		${1:/* code */}
 	}
+	${0}
 # new
 snippet nw
-	new(${1:type})
-# panic 
+	new(${0:type})
+# package
+snippet pa
+	package ${1:main}
+# panic
 snippet pn
-	panic("${1:msg}")
+	panic("${0:msg}")
 # print
 snippet pr
 	fmt.Printf("${1:%s}\n", ${2:var})${3}
-# range 
+# println
+snippet pl
+	fmt.Println("${1:s}")
+# range
 snippet rn
-	range ${1}
-# return 
+	range ${0}
+# return
 snippet rt
-	return ${1}
-# result 
+	return ${0}
+# result
 snippet rs
 	result
 # select
@@ -180,7 +220,7 @@ snippet sr
 snippet st
 	struct ${1:name} {
 		${2:/* data */}
-	}${4}
+	}${0}
 # switch 
 snippet sw
 	switch ${1:var} {
@@ -199,3 +239,23 @@ snippet t
 # variable declaration
 snippet v
 	var ${1:t} ${2:string}
+
+# goroutine named function
+snippet g
+	go ${1:funcName}(${0})
+# goroutine anonymous function
+snippet ga
+	go func(${1} ${2:type}) {
+		${3:/* code */}
+	}(${0})
+snippet test test function
+	func Test${1:name}(t *testing.T) {
+		${0:${VISUAL}}
+	}
+snippet bench benchmark function
+	func Benchmark${1:name}(b *testing.B) {
+		for i := 0; i < b.N; i++ {
+			${2}
+		}
+	}
+	${0}

@@ -4,7 +4,7 @@ are needed for name resolution.
 """
 from abc import abstractmethod
 
-from jedi.parser.tree import search_ancestor
+from jedi.parser.python.tree import search_ancestor
 from jedi.evaluate import flow_analysis
 from jedi.common import to_list, unite
 
@@ -73,9 +73,6 @@ class ContextName(ContextNameMixin, AbstractTreeName):
 
 
 class TreeNameDefinition(AbstractTreeName):
-    def get_parent_flow_context(self):
-        return self.parent_context
-
     def infer(self):
         # Refactor this, should probably be here.
         from jedi.evaluate.finder import _name_to_types
@@ -287,7 +284,7 @@ def get_global_filters(evaluator, context, until_position, origin_scope):
     First we get the names names from the function scope.
 
     >>> no_unicode_pprint(filters[0])
-    <ParserTreeFilter: <ModuleContext: <Module: None@2-5>>>
+    <ParserTreeFilter: <ModuleContext: @2-5>>
     >>> sorted(str(n) for n in filters[0].values())
     ['<TreeNameDefinition: func@(3, 4)>', '<TreeNameDefinition: x@(2, 0)>']
     >>> filters[0]._until_position

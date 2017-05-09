@@ -9,7 +9,7 @@ import re
 from jedi._compatibility import u
 from jedi import settings
 from jedi import common
-from jedi.parser.utils import load_parser
+from jedi.parser.cache import parser_cache
 from jedi.cache import memoize_method
 from jedi.evaluate import representation as er
 from jedi.evaluate import instance
@@ -391,12 +391,11 @@ class BaseDefinition(object):
             return ''
 
         path = self._name.get_root_context().py__file__()
-        parser = load_parser(path)
-        lines = common.splitlines(parser.source)
+        lines = parser_cache[path].lines
 
         line_nr = self._name.start_pos[0]
         start_line_nr = line_nr - before
-        return '\n'.join(lines[start_line_nr:line_nr + after + 1])
+        return ''.join(lines[start_line_nr:line_nr + after + 1])
 
 
 class Completion(BaseDefinition):
@@ -669,7 +668,7 @@ class CallSignature(Definition):
            Use :attr:`.module_name` for the module name.
         .. todo:: Remove!
         """
-        return self._executable.get_parent_until()
+        return self._executable.get_root_node()
 
     def __repr__(self):
         return '<%s: %s index %s>' % \
@@ -702,6 +701,12 @@ class _Help(object):
 
     @memoize_method
     def _get_node(self, fast):
+        if isinstance(self._name, (compiled.CompiledContextName, compiled.CompiledName)):
+            followed = self._name.infer()
+            if followed:
+                return next(iter(followed))
+            return None
+
         if self._name.api_type == 'module' and not fast:
             followed = self._name.infer()
             if followed:

@@ -1,7 +1,7 @@
 from textwrap import dedent
 
 from jedi._compatibility import builtins, is_py3
-from jedi.parser import load_grammar
+from jedi.parser.python import load_grammar
 from jedi.evaluate import compiled, instance
 from jedi.evaluate.representation import FunctionContext
 from jedi.evaluate import Evaluator
@@ -83,3 +83,9 @@ def test_method_completion():
     else:
         result = ['__func__']
     assert [c.name for c in Script(code).completions()] == result
+
+
+def test_time_docstring():
+    import time
+    comp, = Script('import time\ntime.sleep').completions()
+    assert comp.docstring() == time.sleep.__doc__

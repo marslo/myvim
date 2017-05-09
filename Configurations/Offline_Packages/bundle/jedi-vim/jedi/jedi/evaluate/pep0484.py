@@ -22,8 +22,8 @@ x support for type hint comments for functions, `# type: (int, str) -> int`.
 import itertools
 
 import os
-from jedi.parser import \
-    Parser, load_grammar, ParseError, ParserWithRecovery, tree
+from jedi.parser import ParserSyntaxError
+from jedi.parser.python import parse, tree
 from jedi.common import unite
 from jedi.evaluate.cache import memoize_default
 from jedi.evaluate import compiled
@@ -62,14 +62,16 @@ def _fix_forward_reference(context, node):
     if isinstance(evaled_node, compiled.CompiledObject) and \
             isinstance(evaled_node.obj, str):
         try:
-            p = Parser(load_grammar(), _compatibility.unicode(evaled_node.obj),
-                       start_symbol='eval_input')
-            new_node = p.get_parsed_node()
-        except ParseError:
+            new_node = parse(
+                _compatibility.unicode(evaled_node.obj),
+                start_symbol='eval_input',
+                error_recovery=False
+            )
+        except ParserSyntaxError:
             debug.warning('Annotation not parsed: %s' % evaled_node.obj)
             return node
         else:
-            module = node.get_parent_until()
+            module = node.get_root_node()
             new_node.move(module.end_pos[0])
             new_node.parent = context.tree_node
             return new_node
@@ -116,8 +118,7 @@ def _get_typing_replacement_module():
             os.path.abspath(os.path.join(__file__, "../jedi_typing.py"))
         with open(typing_path) as f:
             code = _compatibility.unicode(f.read())
-        p = ParserWithRecovery(load_grammar(), code)
-        _typing_module = p.module
+        _typing_module = parse(code)
     return _typing_module
 
 
@@ -149,7 +150,11 @@ def py__getitem__(context, typ, node):
         return context.eval_node(nodes[0])
 
     from jedi.evaluate.representation import ModuleContext
-    typing = ModuleContext(context.evaluator, _get_typing_replacement_module())
+    typing = ModuleContext(
+        context.evaluator,
+        module_node=_get_typing_replacement_module(),
+        path=None
+    )
     factories = typing.py__getattribute__("factory")
     assert len(factories) == 1
     factory = list(factories)[0]

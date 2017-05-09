@@ -13,10 +13,9 @@ import os
 import warnings
 import sys
 
-from jedi.parser import load_grammar
-from jedi.parser import tree
-from jedi.parser.diff import FastParser
-from jedi.parser.utils import save_parser
+from jedi.parser.python import load_grammar
+from jedi.parser.python import tree
+from jedi.parser.python import parse
 from jedi import debug
 from jedi import settings
 from jedi import common
@@ -133,15 +132,21 @@ class Script(object):
 
     @cache.memoize_method
     def _get_module_node(self):
-        cache.invalidate_star_import_cache(self._path)
-        parser = FastParser(self._grammar, self._source, self.path)
-        save_parser(self.path, parser, pickling=False)
-
-        return parser.module
+        return parse(
+            code=self._source,
+            path=self.path,
+            grammar=self._grammar,
+            cache=False,  # No disk cache, because the current script often changes.
+            diff_cache=True,
+        )
 
     @cache.memoize_method
     def _get_module(self):
-        module = er.ModuleContext(self._evaluator, self._get_module_node())
+        module = er.ModuleContext(
+            self._evaluator,
+            self._get_module_node(),
+            self.path
+        )
         imports.add_module(self._evaluator, module.name.string_name, module)
         return module
 
@@ -343,7 +348,7 @@ class Script(object):
                     types = context.eval_node(node)
                     for testlist in node.children[:-1:2]:
                         # Iterate tuples.
-                        unpack_tuple_to_dict(self._evaluator, types, testlist)
+                        unpack_tuple_to_dict(context, types, testlist)
                 else:
                     try_iter_content(self._evaluator.goto_definitions(context, node))
                 self._evaluator.reset_recursion_limitations()
@@ -397,7 +402,8 @@ class Interpreter(Script):
         return interpreter.MixedModuleContext(
             self._evaluator,
             parser_module,
-            self.namespaces
+            self.namespaces,
+            path=self.path
         )
 
 
