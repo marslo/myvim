@@ -5,7 +5,7 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.24
-"    LastChange: 2017-05-09 19:37:03
+"    LastChange: 2017-06-20 14:16:53
 " =============================================================================
 
 set nocompatible
@@ -78,6 +78,7 @@ Bundle 'Marslo/MarsloFunc'
 Bundle 'LargeFile'
 " Groovy
 Bundle 'groovy.vim--Ruley'
+" Bundle 'martinda/Jenkinsfile-vim-syntax'
 " Python
 Bundle 'klen/python-mode'
 Bundle 'python_fold'
@@ -154,6 +155,8 @@ command! GetVundle :call GetVundle()
 
 if isdirectory(expand(bud . 'MarsloFunc'))
   command! GetVim :call marslofunc#GetVim()<CR>
+  command! Cyg :call marslofunc#OpenCygwin()
+  nmap cyg :call marslofunc#OpenCygwin()<CR>
   nmap cmd :call marslofunc#OpenCMD()<CR>
   nmap gf :call marslofunc#GotoFile()<CR>
   xnoremap * :<C-u>call marslofunc#VSetSearch()<CR>/<C-R>=@/<CR><CR>
@@ -625,7 +628,7 @@ augroup END
 " Programming configs for specified scripts
 if has("autocmd")
   autocmd FileType robot set tabstop=4 softtabstop=4 shiftwidth=4
-  autocmd FileType groovy set tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd FileType groovy set tabstop=2 softtabstop=2 shiftwidth=2
   autocmd FileType snippet set tabstop=4 softtabstop=4 shiftwidth=4
   autocmd FileType make set tabstop=4 softtabstop=4 shiftwidth=4
   autocmd FileType json set tabstop=4 softtabstop=4 shiftwidth=4
@@ -640,6 +643,9 @@ if has("autocmd")
   autocmd BufWinEnter * silent! loadview
   autocmd BufRead,BufNewFile * setfiletype txt
   autocmd BufRead,BufNewFile *.t set ft=perl
+
+  autocmd BufReadPost Jenkinsfile set syntax=groovy
+  autocmd BufReadPost Jenkinsfile set filetype=groovy
 endif
 
 " vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab

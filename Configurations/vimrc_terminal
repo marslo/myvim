@@ -5,7 +5,7 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.24
-"    LastChange: 2017-05-09 19:40:21
+"    LastChange: 2017-06-20 14:16:53
 " =============================================================================
 
 set nocompatible
@@ -33,6 +33,9 @@ call vundle#begin()
 Bundle 'gmarik/vundle'
 Bundle 'tpope/vim-pathogen'
 Bundle 'Yggdroot/indentLine'
+Bundle 'kien/ctrlp.vim'
+Bundle 'sjl/gundo.vim'
+Bundle 'majutsushi/tagbar'
 Bundle 'dantezhu/authorinfo'
 Bundle 'Marslo/EnhCommentify.vim'
 " Bundle 'ervandew/supertab'
@@ -41,13 +44,18 @@ Bundle 'tomtom/tlib_vim'
 Bundle 'marcweber/vim-addon-mw-utils'
 Bundle 'Marslo/snipmate.vim'
 Bundle 'yegappan/mru'
+Bundle 'grep.vim'
 Bundle 'vim-syntastic/syntastic'
 Bundle 'Marslo/MarsloFunc'
 Bundle 'LargeFile'
 " Python
 Bundle 'klen/python-mode'
 Bundle 'python_fold'
+" Bundle 'kevinw/pyflakes-vim'
+Bundle 'pyflakes/pyflakes'
+Bundle 'python_match.vim'
 Bundle 'Marslo/python-syntax'
+Bundle 'tarmack/vim-python-ftplugin'
 Bundle 'davidhalter/jedi-vim'
 Bundle 'mfukar/robotframework-vim'
 " Bundle 'python_match.vim'
@@ -55,6 +63,7 @@ Bundle 'mfukar/robotframework-vim'
 " Web design
 Bundle 'tpope/vim-surround'
 Bundle 'valloric/MatchTagAlways'
+Bundle 'tpope/vim-repeat'
 " Colors and themes and syntax
 Bundle 'luochen1990/rainbow'
 Bundle 'txt.vim'
@@ -62,6 +71,8 @@ Bundle 'Marslo/vim-coloresque'
 Bundle 'Marslo/marslo.vim'
 Bundle 'Marslo/MarsloVimOthers'
 Bundle 'plasticboy/vim-markdown.git'
+" Git
+Bundle 'tpope/vim-fugitive'
 
 call vundle#end()
 call pathogen#infect()
@@ -197,7 +208,9 @@ set matchtime=1                                                     " The shortl
 set tabstop=2                                                       " Tab width
 set softtabstop=2                                                   " Width for backspace
 set shiftwidth=2                                                    " The tab width by using >> & <<
-set autoindent smartindent expandtab 
+set autoindent smartindent expandtab
+set cindent
+set cinoptions=(0,u0,U0
 set smarttab                                                        " Smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
 set linebreak
 set modifiable
@@ -213,6 +226,7 @@ set list listchars=tab:\ \ ,trail:·,extends:»,precedes:«,nbsp:·
 set cursorline                                                      " Highlight the current line
 set guicursor=a:hor1
 set guicursor+=i-r-ci-cr-o:hor2-blinkon0
+set virtualedit=onemore                                             " Allow for cursor beyond last character
 set scrolloff=3                                                     " Scroll settings
 set sidescroll=1
 set sidescrolloff=5
@@ -222,6 +236,7 @@ set foldenable                                                      " Enable Fol
 set foldcolumn=1
 set foldexpr=1                                                      " Shown line number after fold
 set foldlevel=100                                                   " Not fold while VIM set up
+set shortmess+=filmnrxoOtT                                          " Abbrev. of messages (avoids 'hit enter')
 set viewoptions=folds
 set backspace=indent,eol,start                                      " Make backspace h, l, etc wrap to
 set whichwrap+=<,>,h,l
@@ -286,7 +301,7 @@ inoremap <leader>tt <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
 inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
 inoremap <leader>fe <C-R>=expand("%:t")<CR>
 inoremap <leader>w <C-O>:w<CR>
-nnoremap <leader>g :%s///gn<CR>
+nnoremap <leader>G :%s///gn<CR>
 
 nnoremap <leader>zdb :%s/\s\+$//<CR>
 nnoremap <leader>zhs :%s/^\s\+//<CR>
@@ -358,9 +373,14 @@ let g:AutoPairsParens = {'(':')', '[':']', '{':'}', '<':'>'}
 let g:AutoPairsFlyMode = 0
 let g:AutoPairsShortcutBackInsert = '<M-b>'
 
+" configure syntastic syntax checking to check on open as well as save
 set statusline+=%#warningmsg#
 set statusline+=\ %{SyntasticStatuslineFlag()}
 set statusline+=\ %* |
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 1
 let g:syntastic_loc_list_height = 2
 let g:syntastic_ignore_files = ['\.py$']
 let g:syntastic_check_on_wq = 0
@@ -370,6 +390,16 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 
 
+" for vim-markdown
+let g:vim_markdown_folding_style_pythonic = 1
+let g:vim_markdown_override_foldtext = 0
+let g:vim_markdown_autowrite = 1
+let g:vim_markdown_new_list_item_indent = 4
+let g:vim_markdown_toc_autofit = 1
+let g:vim_markdown_conceal = 0
+" set conceallevel=2
+let g:vim_markdown_frontmatter = 1
+let g:vim_markdown_json_frontmatter = 1
 
 " Snippet
 imap <C-J> <Plug>snipMateNextOrTrigger
@@ -395,19 +425,23 @@ augroup END
 " Programming configs for specified scripts
 if has("autocmd")
   autocmd FileType robot set tabstop=4 softtabstop=4 shiftwidth=4
-  autocmd FileType groovy set tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd FileType groovy set tabstop=2 softtabstop=2 shiftwidth=2
   autocmd FileType snippet set tabstop=4 softtabstop=4 shiftwidth=4
   autocmd FileType make set tabstop=4 softtabstop=4 shiftwidth=4
   autocmd FileType json set tabstop=4 softtabstop=4 shiftwidth=4
   autocmd FileType sh set tabstop=2 softtabstop=2 shiftwidth=2
   autocmd FileType markdown set tabstop=4 softtabstop=4 shiftwidth=4
   autocmd FileType javascript syntax clear jsFuncBlock
+
   autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
 
   autocmd BufWinLeave * silent! mkview
   autocmd BufWinEnter * silent! loadview
   autocmd BufRead,BufNewFile * setfiletype txt
   autocmd BufRead,BufNewFile *.t set ft=perl
+
+  autocmd BufReadPost Jenkinsfile set syntax=groovy
+  autocmd BufReadPost Jenkinsfile set filetype=groovy
 endif
 
 " vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab

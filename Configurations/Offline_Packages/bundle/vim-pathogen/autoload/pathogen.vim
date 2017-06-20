@@ -16,18 +16,31 @@ endif
 let g:loaded_pathogen = 1
 
 " Point of entry for basic default usage.  Give a relative path to invoke
-" pathogen#interpose() (defaults to "bundle/{}"), or an absolute path to invoke
-" pathogen#surround().  Curly braces are expanded with pathogen#expand():
-" "bundle/{}" finds all subdirectories inside "bundle" inside all directories
-" in the runtime path.
+" pathogen#interpose() or an absolute path to invoke pathogen#surround().
+" Curly braces are expanded with pathogen#expand(): "bundle/{}" finds all
+" subdirectories inside "bundle" inside all directories in the runtime path.
+" If no arguments are given, defaults "bundle/{}", and also "pack/{}/start/{}"
+" on versions of Vim without native package support.
 function! pathogen#infect(...) abort
-  for path in a:0 ? filter(reverse(copy(a:000)), 'type(v:val) == type("")') : ['bundle/{}']
-    if path =~# '^\%({\=[$~\\/]\|{\=\w:[\\/]\).*[{}*]'
+  if a:0
+    let paths = filter(reverse(copy(a:000)), 'type(v:val) == type("")')
+  else
+    let paths = ['bundle/{}', 'pack/{}/start/{}']
+  endif
+  if has('packages')
+    call filter(paths, 'v:val !~# "^pack/[^/]*/start/[^/]*$"')
+  endif
+  let static = '^\%([$~\\/]\|\w:[\\/]\)[^{}*]*[\/]$'
+  for path in filter(copy(paths), 'v:val =~# static')
+    call pathogen#surround(path)
+  endfor
+  for path in filter(copy(paths), 'v:val !~# static')
+    if path =~# '^\%({\=[$~\\/]\|{\=\w:[\\/]\).*\%([{}*]\|[\\/]$\)'
       call pathogen#surround(path)
     elseif path =~# '^\%([$~\\/]\|\w:[\\/]\)'
       call s:warn('Change pathogen#infect('.string(path).') to pathogen#infect('.string(path.'/{}').')')
       call pathogen#surround(path . '/{}')
-    elseif path =~# '[{}*]'
+    elseif path =~# '[{}*]\|[\\/]$'
       call pathogen#interpose(path)
     else
       call s:warn('Change pathogen#infect('.string(path).') to pathogen#infect('.string(path.'/{}').')')
@@ -176,19 +189,20 @@ endfunction
 " and globbed.  Actual globs are preserved.
 function! pathogen#expand(pattern, ...) abort
   let after = a:0 ? a:1 : ''
-  if a:pattern =~# '{[^{}]\+}'
-    let [pre, pat, post] = split(substitute(a:pattern, '\(.\{-\}\){\([^{}]\+\)}\(.*\)', "\\1\001\\2\001\\3", ''), "\001", 1)
+  let pattern = substitute(a:pattern, '^[~$][^\/]*', '\=expand(submatch(0))', '')
+  if pattern =~# '{[^{}]\+}'
+    let [pre, pat, post] = split(substitute(pattern, '\(.\{-\}\){\([^{}]\+\)}\(.*\)', "\\1\001\\2\001\\3", ''), "\001", 1)
     let found = map(split(pat, ',', 1), 'pre.v:val.post')
     let results = []
     for pattern in found
       call extend(results, pathogen#expand(pattern))
     endfor
-  elseif a:pattern =~# '{}'
-    let pat = matchstr(a:pattern, '^.*{}[^*]*\%($\|[\\/]\)')
-    let post = a:pattern[strlen(pat) : -1]
+  elseif pattern =~# '{}'
+    let pat = matchstr(pattern, '^.*{}[^*]*\%($\|[\\/]\)')
+    let post = pattern[strlen(pat) : -1]
     let results = map(split(glob(substitute(pat, '{}', '*', 'g')), "\n"), 'v:val.post')
   else
-    let results = [a:pattern]
+    let results = [pattern]
   endif
   let vf = pathogen#slash() . 'vimfiles'
   call map(results, 'v:val =~# "\\*" ? v:val.after : isdirectory(v:val.vf.after) ? v:val.vf.after : isdirectory(v:val.after) ? v:val.after : ""')
