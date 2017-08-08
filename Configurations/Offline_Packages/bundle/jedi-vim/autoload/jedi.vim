@@ -23,7 +23,8 @@ let s:default_settings = {
     \ 'call_signatures_command': "'<leader>n'",
     \ 'usages_command': "'<leader>n'",
     \ 'rename_command': "'<leader>r'",
-    \ 'popup_on_dot': 1,
+    \ 'completions_enabled': 1,
+    \ 'popup_on_dot': 'g:jedi#completions_enabled',
     \ 'documentation_command': "'K'",
     \ 'show_call_signatures': 1,
     \ 'show_call_signatures_delay': 500,
@@ -32,7 +33,6 @@ let s:default_settings = {
     \ 'max_doc_height': 30,
     \ 'popup_select_first': 1,
     \ 'quickfix_window_height': 10,
-    \ 'completions_enabled': 1,
     \ 'force_py_version': "'auto'",
     \ 'smart_auto_mappings': 1,
     \ 'use_tag_stack': 1
@@ -61,7 +61,7 @@ function! s:init_python() abort
     if g:jedi#force_py_version !=# 'auto'
         " Always use the user supplied version.
         try
-            return jedi#force_py_version(g:jedi#force_py_version)
+            return jedi#setup_py_version(g:jedi#force_py_version)
         catch
             throw 'Could not setup g:jedi#force_py_version: '.v:exception
         endtry
@@ -88,7 +88,7 @@ function! s:init_python() abort
 
         " Make sure that the auto-detected version is available in Vim.
         if !has('nvim') || has('python'.(s:def_py == 2 ? '' : s:def_py))
-            return jedi#force_py_version(s:def_py)
+            return jedi#setup_py_version(s:def_py)
         endif
 
         " Add a warning in case the auto-detected version is not available,
@@ -141,23 +141,45 @@ endfunction
 let s:python_version = 'null'
 function! jedi#setup_py_version(py_version) abort
     if a:py_version == 2
-        let cmd_init = 'pyfile'
         let cmd_exec = 'python'
         let s:python_version = 2
     elseif a:py_version == 3
-        let cmd_init = 'py3file'
         let cmd_exec = 'python3'
         let s:python_version = 3
     else
         throw 'jedi#setup_py_version: invalid py_version: '.a:py_version
     endif
 
-    try
-        execute cmd_init.' '.s:script_path.'/initialize.py'
-    catch
-        throw 'jedi#setup_py_version: '.v:exception
-    endtry
     execute 'command! -nargs=1 PythonJedi '.cmd_exec.' <args>'
+
+    let s:init_outcome = 0
+    PythonJedi << EOF
+try:
+    import vim
+    import os, sys
+    jedi_path = os.path.join(vim.eval('expand(s:script_path)'), 'jedi')
+    sys.path.insert(0, jedi_path)
+
+    jedi_vim_path = vim.eval('expand(s:script_path)')
+    if jedi_vim_path not in sys.path:  # Might happen when reloading.
+        sys.path.insert(0, jedi_vim_path)
+except Exception as excinfo:
+    vim.command('let s:init_outcome = "error when adding to sys.path: {0}: {1}"'.format(excinfo.__class__.__name__, excinfo))
+else:
+    try:
+        import jedi_vim
+    except Exception as excinfo:
+        vim.command('let s:init_outcome = "error when importing jedi_vim: {0}: {1}"'.format(excinfo.__class__.__name__, excinfo))
+    else:
+        vim.command('let s:init_outcome = 1')
+    finally:
+        sys.path.remove(jedi_path)
+EOF
+    if !exists('s:init_outcome')
+        throw 'jedi#setup_py_version: failed to run Python for initialization.'
+    elseif s:init_outcome isnot 1
+        throw printf('jedi#setup_py_version: %s.', s:init_outcome)
+    endif
     return 1
 endfunction
 
@@ -214,17 +236,22 @@ EOF
     echo "\n"
     echo '##### Settings'
     echo '```'
-    for [k, V] in items(filter(copy(g:), "v:key =~# '\\v^jedi#'"))
+    let jedi_settings = items(filter(copy(g:), "v:key =~# '\\v^jedi#'"))
+    let has_nondefault_settings = 0
+    for [k, V] in jedi_settings
       exe 'let default = '.get(s:default_settings,
             \ substitute(k, '\v^jedi#', '', ''), "'-'")
       " vint: -ProhibitUsingUndeclaredVariable
       if default !=# V
         echo printf('g:%s = %s (default: %s)', k, string(V), string(default))
         unlet! V  " Fix variable type mismatch with Vim 7.3.
+        let has_nondefault_settings = 1
       endif
       " vint: +ProhibitUsingUndeclaredVariable
     endfor
-    echo "\n"
+    if has_nondefault_settings
+      echo "\n"
+    endif
     verb set omnifunc? completeopt?
     echo '```'
 
@@ -373,6 +400,7 @@ function! jedi#show_documentation() abort
     setlocal nomodifiable
     setlocal nomodified
     setlocal filetype=rst
+    setlocal foldlevel=200 " do not fold in __doc__
 
     if l:doc_lines > g:jedi#max_doc_height " max lines for plugin
         let l:doc_lines = g:jedi#max_doc_height
@@ -382,15 +410,6 @@ function! jedi#show_documentation() abort
     " quit comands
     nnoremap <buffer> q ZQ
     execute 'nnoremap <buffer> '.g:jedi#documentation_command.' ZQ'
-
-    " highlight python code within rst
-    unlet! b:current_syntax
-    syn include @rstPythonScript syntax/python.vim
-    " 4 spaces
-    syn region rstPythonRegion start=/^\v {4}/ end=/\v^( {4}|\n)@!/ contains=@rstPythonScript
-    " >>> python code -> (doctests)
-    syn region rstPythonRegion matchgroup=pythonDoctest start=/^>>>\s*/ end=/\n/ contains=@rstPythonScript
-    let b:current_syntax = 'rst'
 endfunction
 
 " ------------------------------------------------------------------------

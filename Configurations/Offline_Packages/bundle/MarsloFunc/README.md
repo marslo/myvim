@@ -1,4 +1,4 @@
 MarsloFunc
 ==========
 
-The function made by myself
+live is hard, let's make it easy

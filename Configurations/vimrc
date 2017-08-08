@@ -5,7 +5,7 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.24
-"    LastChange: 2017-06-20 14:16:53
+"    LastChange: 2017-08-08 21:26:11
 " =============================================================================
 
 set nocompatible
@@ -78,7 +78,7 @@ Bundle 'Marslo/MarsloFunc'
 Bundle 'LargeFile'
 " Groovy
 Bundle 'groovy.vim--Ruley'
-" Bundle 'martinda/Jenkinsfile-vim-syntax'
+Bundle 'martinda/Jenkinsfile-vim-syntax'
 " Python
 Bundle 'klen/python-mode'
 Bundle 'python_fold'
@@ -117,6 +117,8 @@ Bundle 'altercation/vim-colors-solarized'
 " Bundle 'cakebaker/scss-syntax.vim'
 " Git
 Bundle 'tpope/vim-fugitive'
+" cocoapods
+Bundle 'keith/cocoapods.vim'
 " For fun
 Bundle 'TeTrIs.vim'
 Bundle 'matrix.vim--Yang'
@@ -272,7 +274,7 @@ endif
 if has('win32') || has('win95') || has('win64')
   nmap <leader>v :e $VIM/_vimrc<CR>
   autocmd! bufwritepost $VIM/_vimrc silent! source %                " autoload _vimrc
-  set guifont=monofur:h20                                           " Fonts
+  set guifont=monofur:h22                                           " Fonts
   set guifontwide=NSimsun:h16
   set clipboard+=unnamed                                            " Copy the content to system clipboard by using y/p
   set clipboard+=unnamedplus
@@ -566,9 +568,10 @@ let g:syntastic_check_on_open=1
 let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute \"ng-"]
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
-" set statusline+=%#warningmsg#
-" set statusline+=%{SyntasticStatuslineFlag()}
-" set statusline+=%*
+
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
 
 " for vim-markdown
 let g:vim_markdown_folding_style_pythonic = 1
@@ -638,11 +641,13 @@ if has("autocmd")
 
   autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
   autocmd BufEnter *.md exe 'noremap <F5> :!start  c:\Program Files (x86)\Google\Chrome\Application\chrome.exe %:p<CR>'
+  autocmd BufEnter *.markdown exe 'noremap <F5> :!start  c:\Program Files (x86)\Google\Chrome\Application\chrome.exe %:p<CR>'
 
   autocmd BufWinLeave * silent! mkview
   autocmd BufWinEnter * silent! loadview
   autocmd BufRead,BufNewFile * setfiletype txt
   autocmd BufRead,BufNewFile *.t set ft=perl
+  autocmd QuickFixCmdPost *grep* cwindow
 
   autocmd BufReadPost Jenkinsfile set syntax=groovy
   autocmd BufReadPost Jenkinsfile set filetype=groovy

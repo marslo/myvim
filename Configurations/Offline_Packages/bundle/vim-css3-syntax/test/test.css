@@ -214,7 +214,6 @@
   display: flow;
   display: flow-root;
   display: contents;
-  display: inline-list-item;
   display: discard;
 }
 
@@ -285,6 +284,9 @@
   display: auto;
 }
 
+.fonts-4 {
+}
+
 .fonts-3 {
   font-feature-settings: common-ligatures;
   font-kerning: no-common-ligatures;
@@ -324,10 +326,20 @@
 }
 
 .fonts-4 {
-  font-optical-sizing: emoji;
-  font-variation-settings: math;
-  display: fangsong;
-  display: system-ui;
+  font-min-size: emoji;
+  font-max-size: math;
+  font-display: fangsong;
+  font-optical-sizing: system-ui;
+  font-variation-settings: infinity;
+  font-palette: swap;
+  font-presentation: fallback;
+  display: optional;
+  display: light;
+  display: dark;
+}
+
+@font-palette-values Test {
+  base-palette: 1;
 }
 
 .gcpm-3::footnote-call,
@@ -479,10 +491,11 @@
 }
 
 .motion-1 {
-  motion-path: path(M 100 100 L 300 100 L 200 300 z);
-  motion-offset: auto;
-  motion-rotation: auto;
-  motion: auto;
+  offset-path: ray(45deg closest-side);
+  offset-distance: path(M 100 100 L 300 100 L 200 300 z);
+  offset-anchor: auto;
+  offset-rotate: auto;
+  offset: auto;
 }
 
 .multicol {
@@ -502,6 +515,14 @@
 
 .overflow-3 {
   max-lines: auto;
+}
+
+.overflow-4::nth-fragment(1) {
+  scrollbar-gutter: stable;
+  continue: force;
+  display: overflow;
+  display: paginate;
+  display: fragments;
 }
 
 .page {
