@@ -1,5 +1,5 @@
 " vi: fdl=1
-let g:pymode_version = "0.9.0"
+let g:pymode_version = "0.9.2"
 
 com! PymodeVersion echomsg "Current python-mode version: " . g:pymode_version
 com! PymodeTroubleshooting call pymode#troubleshooting#test()
@@ -135,7 +135,7 @@ call pymode#default("g:pymode_lint_info_symbol", "II")
 call pymode#default("g:pymode_lint_pyflakes_symbol", "FF")
 
 " Code checkers options
-call pymode#default("g:pymode_lint_options_pep8",
+call pymode#default("g:pymode_lint_options_pycodestyle",
     \ {'max_line_length': g:pymode_options_max_line_length})
 
 call pymode#default("g:pymode_lint_options_pylint",

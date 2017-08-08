@@ -11,11 +11,11 @@ from pylama.lint.extensions import LINTERS
 try:
     from pylama.lint.pylama_pylint import Linter
     LINTERS['pylint'] = Linter()
-except Exception: # noqa
+except Exception:  # noqa
     pass
 
 
-def code_check():
+def code_check():  # noqa
     """Run pylama and check current file.
 
     :return bool:
@@ -25,31 +25,35 @@ def code_check():
 
         from pylama.core import run
         from pylama.main import parse_options
+        from pylama.config import _override_options
 
         if not env.curbuf.name:
             return env.stop()
 
-        linters = env.var('g:pymode_lint_checkers')
-        env.debug(linters)
-
         options = parse_options(
-            linters=linters, force=1,
+            force=1,
             ignore=env.var('g:pymode_lint_ignore'),
             select=env.var('g:pymode_lint_select'),
         )
 
-        for linter in linters:
-            opts = env.var('g:pymode_lint_options_%s' % linter, silence=True)
-            if opts:
-                options.linters_params[linter] = options.linters_params.get(linter, {})
-                options.linters_params[linter].update(opts)
+        linters = env.var('g:pymode_lint_checkers', default=[])
+        if linters:
+            _override_options(options, linters=",".join(linters))
 
+            for linter in dict(options.linters):
+                opts = env.var('g:pymode_lint_options_%s' % linter, silence=True)
+                if opts:
+                    options.linters_params[linter] = options.linters_params.get(linter, {})
+                    options.linters_params[linter].update(opts)
+
+        if 'pylint' in options.linters_params:
+            options.linters_params['pylint']['clear_cache'] = True
         env.debug(options)
 
         path = os.path.relpath(env.curbuf.name, env.curdir)
         env.debug("Start code check: ", path)
 
-        if getattr(options, 'skip', None) and any(p.match(path) for p in options.skip): # noqa
+        if getattr(options, 'skip', None) and any(p.match(path) for p in options.skip):  # noqa
             env.message('Skip code checking.')
             env.debug("Skipped")
             return env.stop()

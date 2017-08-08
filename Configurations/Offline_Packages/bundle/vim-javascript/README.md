@@ -63,7 +63,7 @@ global vim option, we do not set it ourselves.
 
 ## Concealing Characters
 
-You can customize concealing characters, if your font provides the character you want, by defining one or more of the following
+You can customize concealing characters, if your font provides the glyph you want, by defining one or more of the following
 variables:
 
     let g:javascript_conceal_function             = "ƒ"
@@ -96,7 +96,10 @@ OR if you wish to toggle concealing you may wish to bind a command such as the f
 * `:h cino-star`
 * `:h cino-(`
 * `:h cino-w`
+* `:h cino-W`
 * `:h cino-U`
+* `:h cino-m`
+* `:h cino-M`
 * `:h 'indentkeys'`
 
 ## Contributing
