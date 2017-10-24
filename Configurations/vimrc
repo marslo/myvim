@@ -274,7 +274,8 @@ endif
 if has('win32') || has('win95') || has('win64')
   nmap <leader>v :e $VIM/_vimrc<CR>
   autocmd! bufwritepost $VIM/_vimrc silent! source %                " autoload _vimrc
-  set guifont=monofur:h22                                           " Fonts
+  " set guifont=Monaco:h19                                          " Fonts
+  set guifont=Ubuntu\ Mono:h22                                      " Fonts
   set guifontwide=NSimsun:h16
   set clipboard+=unnamed                                            " Copy the content to system clipboard by using y/p
   set clipboard+=unnamedplus
@@ -419,6 +420,7 @@ nnoremap <leader>zhs :%s/^\s\+//<CR>
 nnoremap <leader>zim :g/^/ s//\=line('.').' '/<CR>
 nnoremap <leader>zbl :g/^\s*$/d<CR>
 nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>
+nnoremap <leader>zcm :%s/<C-v><CR>/\r/g<CR>
 nnoremap <leader>zng :%s///gn<CR>
 nnoremap <leader>zbd :%s/​//g<CR>
 nnoremap <leader>zdd :%s/ / /g<CR>
@@ -649,8 +651,10 @@ if has("autocmd")
   autocmd BufRead,BufNewFile *.t set ft=perl
   autocmd QuickFixCmdPost *grep* cwindow
 
-  autocmd BufReadPost Jenkinsfile set syntax=groovy
-  autocmd BufReadPost Jenkinsfile set filetype=groovy
+  " autocmd BufReadPost Jenkinsfile set syntax=groovy
+  " autocmd BufReadPost Jenkinsfile set filetype=groovy
+  " autocmd FileType Jenkinsfile set syntax=groovy
+  " autocmd FileType Jenkinsfile set filetype=groovy
 endif
 
 " vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab
