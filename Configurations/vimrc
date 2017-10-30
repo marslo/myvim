@@ -509,11 +509,6 @@ map <leader>re :MRU<CR>
 
 noremap <Leader>u :GundoToggle<CR>
 
-augroup vimrc
-  au BufReadPre * setlocal foldmethod=indent
-  au BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
-augroup END
-
 let g:rainbow_active = 1
 let g:rainbow_operators = 1
 let g:rainbow_conf = {
@@ -571,10 +566,6 @@ let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute \"ng-"]
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-
 " for vim-markdown
 let g:vim_markdown_folding_style_pythonic = 1
 let g:vim_markdown_override_foldtext = 0
@@ -603,7 +594,6 @@ smap <C-J> <Plug>snipMateNextOrTrigger
 imap <Tab> <Plug>snipMateNextOrTrigger
 
 match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
-
 
 " if isdirectory(bud . '/accelerated-jk')
   " nmap j <Plug>(accelerated_jk_gj)
