@@ -5,7 +5,7 @@
 "         Email: marslo.jiao@gmail.com
 "        Created: 2013-10-16 07:19:00
 "       Version: 0.0.24
-"    LastChange: 2017-05-09 19:40:21
+"    LastChange: 2017-12-05 15:02:44
 " =============================================================================
 
 let &runtimepath=printf('%s/vimfiles,%s,%s/vimfiles/after', $VIM, $VIMRUNTIME, $VIM)
@@ -19,8 +19,9 @@ set nocompatible
 set history=500
 set diffopt=filler,context:3
 runtime macros/matchit.vim
-set wrap                                                            " Wrap lines
+
 set fileformat=unix
+set wrap                                                          " Wrap lines
 set viminfo=%,<800,'10,/50,:100,h,f0,n~/.marslo/.vim/cache/.viminfo
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip
 set tags=./tags
@@ -37,15 +38,14 @@ let &runtimepath .= ',' . expand(bud . '/vundle')
 call vundle#begin(bud)
 
 Bundle 'gmarik/vundle'
+Bundle 'tpope/vim-pathogen'
 Bundle 'Yggdroot/indentLine'
-Bundle 'kien/ctrlp.vim.git'
+Bundle 'kien/ctrlp.vim'
 Bundle 'sjl/gundo.vim'
 Bundle 'majutsushi/tagbar'
 Bundle 'dantezhu/authorinfo'
 Bundle 'Marslo/EnhCommentify.vim'
-Bundle 'tpope/vim-pathogen'
-Bundle 'gregsexton/MatchTag'
-Bundle 'ervandew/supertab'
+" Bundle 'ervandew/supertab'
 Bundle 'Marslo/auto-pairs'
 Bundle 'tomtom/tlib_vim'
 Bundle 'marcweber/vim-addon-mw-utils'
@@ -54,15 +54,14 @@ Bundle 'yegappan/mru'
 Bundle 'Conque-Shell'
 Bundle 'taglist.vim'
 Bundle 'winmanager'
+Bundle 'grep.vim'
+Bundle 'vim-syntastic/syntastic'
 " For Moving faster
 Bundle 'rhysd/accelerated-jk'
 " Bundle 'yonchu/accelerated-smooth-scroll'
-" For Loading my function after vim start (reduce vim start time)
 Bundle 'Marslo/MarsloFunc'
-" For Groovy
-Bundle 'groovy.vim--Ruley'
-" Bundle 'mwaisgold/groovy-vim-files'
-" For Python
+Bundle 'LargeFile'
+" Python
 Bundle 'klen/python-mode'
 Bundle 'python_fold'
 " Bundle 'kevinw/pyflakes-vim'
@@ -70,19 +69,22 @@ Bundle 'pyflakes/pyflakes'
 Bundle 'python_match.vim'
 Bundle 'Marslo/python-syntax'
 Bundle 'tarmack/vim-python-ftplugin'
-" For ruby
+Bundle 'davidhalter/jedi-vim'
+Bundle 'mfukar/robotframework-vim'
+" ruby
 Bundle 'tpope/vim-rails'
 Bundle 'vim-ruby/vim-ruby'
 Bundle 'nelstrom/vim-textobj-rubyblock'
 Bundle 'kana/vim-textobj-user'
 Bundle 'ruby-matchit'
-" For Javascript
+" Javascript
 Bundle 'pangloss/vim-javascript'
 Bundle 'jelera/vim-javascript-syntax'
-" For AngularJS
+" AngularJS
 Bundle 'burnettk/vim-angular'
-" For web design
+" Web design
 Bundle 'tpope/vim-surround'
+Bundle 'valloric/MatchTagAlways'
 Bundle 'tpope/vim-repeat'
 " Colors and themes and syntax
 Bundle 'luochen1990/rainbow'
@@ -94,6 +96,12 @@ Bundle 'Marslo/MarsloVimOthers'
 Bundle 'plasticboy/vim-markdown.git'
 Bundle 'altercation/vim-colors-solarized'
 " Bundle 'cakebaker/scss-syntax.vim'
+" Git
+Bundle 'tpope/vim-fugitive'
+" For Groovy
+Bundle 'groovy.vim--Ruley'
+" Bundle 'mwaisgold/groovy-vim-files'
+Bundle 'marslo/Jenkinsfile-vim-syntax'
 " For fun
 Bundle 'TeTrIs.vim'
 Bundle 'matrix.vim--Yang'
@@ -183,11 +191,6 @@ if isdirectory(expand(bud . 'python-mode'))
   let g:pymode_rope = 0
 endif
 
-" Programming configs for Groovy
-if has("autocmd")
-  au FileType groovy set tabstop=2 softtabstop=2 shiftwidth=2
-endif
-
 " ====================================== For Inteface =====================================
 if 'xterm-256color' == $TERM
   set t_Co=256
@@ -202,6 +205,8 @@ endif
 
 nmap <leader>v :e $HOME/.marslo/.vimrc<CR>
 autocmd! bufwritepost $HOME/.marslo/.vimrc silent! source %
+set clipboard+=unnamed                                            " Copy the content to system clipboard by using y/p
+set clipboard+=unnamedplus
 
 set iskeyword-=.
 set autochdir
@@ -210,7 +215,7 @@ set termencoding=utf-8
 set encoding=utf-8                                                  " Input Chinese (=cp936)
 set fileencoding=utf-8
 let &termencoding=&encoding
-set nobackup noswapfile nowritebackup
+set nobackup noswapfile nowritebackup noundofile noendofline
 set number                                                          " number: line number
 set report=0
 set autoread                                                        " Set auto read when a file is changed by outside
@@ -219,11 +224,11 @@ set matchtime=1                                                     " The shortl
 set tabstop=2                                                       " Tab width
 set softtabstop=2                                                   " Width for backspace
 set shiftwidth=2                                                    " the tab width by using >> & <<
-set autoindent expandtab
-set smartindent
+set autoindent smartindent expandtab
+set cindent
+set cinoptions=(0,u0,U0
 set smarttab						                                            " smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
 set linebreak
-set tw=0
 set modifiable
 set write
 set incsearch hlsearch ignorecase smartcase                         " Search
@@ -235,6 +240,7 @@ set noerrorbells novisualbell                                       " turn off e
 set t_vb=
 set list listchars=tab:\ \ ,trail:·,extends:»,precedes:«,nbsp:·
 set cursorline                                                      " Highlight the current line
+set virtualedit=onemore                                             " Allow for cursor beyond last character
 set scrolloff=3                                                     " Scroll settings
 set sidescroll=1
 set sidescrolloff=5
@@ -244,6 +250,7 @@ set foldenable                                                      " Enable Fol
 set foldcolumn=1
 set foldexpr=1                                                      " Shown line number after fold
 set foldlevel=100                                                   " Not fold while VIM set up
+set shortmess+=filmnrxoOtT                                          " Abbrev. of messages (avoids 'hit enter')
 set viewoptions=folds
 set backspace=indent,eol,start                                      " make backspace h, l, etc wrap to
 set whichwrap+=<,>,h,l
@@ -251,12 +258,12 @@ set go+=a                                                           " Visual sel
 set hidden                                                          " Switch between buffers with unsaved change
 set equalalways
 set formatoptions=tcrqn
-set formatoptions+=B                                                " Remove the backspace for combine lines (Only for chinese)
+set formatoptions+=rnmMB                                            " Remove the backspace for combine lines (Only for chinese)
 set matchpairs+=<:>
-set noendofline
+" set autowrite
 if has('cmdline_info')
   set ruler                                                         " ruler: Show Line and colum number
-  set showcmd                                                       " Show (partial) command in status line
+  set showcmd                                                     " Show (partial) command in status line
 endif
 if has('statusline')
   set laststatus=2                                                  " Set status bar
@@ -290,11 +297,9 @@ cnoremap <C-a> <Home>
 map <C-e> <ESC>$
 inoremap <C-e> <ESC>A
 cnoremap <C-e> <End>
-inoremap <C-d> <Del>
 nnoremap Y y$
 nnoremap <Del> "_x
 xnoremap <Del> "_d
-" nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
 nnoremap <space> za
 nnoremap & :&&<CR>
 xnoremap & :&&<CR>
@@ -320,13 +325,14 @@ inoremap <leader>tt <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
 inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
 inoremap <leader>fe <C-R>=expand("%:t")<CR>
 inoremap <leader>w <C-O>:w<CR>
-nnoremap <leader>g :%s///gn<CR>
+nnoremap <leader>G :%s///gn<CR>
 
 nnoremap <leader>zdb :%s/\s\+$//<CR>
 nnoremap <leader>zhs :%s/^\s\+//<CR>
 nnoremap <leader>zim :g/^/ s//\=line('.').' '/<CR>
 nnoremap <leader>zbl :g/^\s*$/d<CR>
 nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>
+nnoremap <leader>zcm :%s/<C-v><CR>/\r/g<CR>
 nnoremap <leader>zng :%s///gn<CR>
 nnoremap <leader>zbd :%s/​//g<CR>
 nnoremap <leader>zdd :%s/ / /g<CR>
@@ -396,7 +402,7 @@ let g:EnhCommentifyMultiPartBlocks='Yes'
 let g:EnhCommentifyUseSyntax='Yes'
 
 map <leader>aid :AuthorInfoDetect<CR>
-let g:vimrc_author='Marslo'
+let g:vimrc_author='marslo'
 let g:vimrc_email='marslo.jiao@gmail.com'
 au BufWritePre, FileWritePre * :AuthorInfoDetect<CR>
 
@@ -406,11 +412,6 @@ let MRU_Exclude_Files='^/tmp/.*\|^/temp/.*\|^/media/.*\|^/mnt/.*'
 map <leader>re :MRU<CR>
 
 noremap <Leader>u :GundoToggle<CR>
-
-augroup vimrc
-  au BufReadPre * setlocal foldmethod=indent
-  au BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
-augroup END
 
 let g:rainbow_active = 1
 let g:rainbow_operators = 1
@@ -437,6 +438,8 @@ let g:indentLine_indentLevel = 20
 let g:indentLine_showFirstIndentLevel = 1
 let g:indentLine_color_tty = 0
 " let g:indentLine_faster = 1
+let g:indentLine_concealcursor = 'inc'
+let g:indentLine_conceallevel = 2
 if 'xterm-256color' == $TERM
   let g:indentLine_char = '¦'
 elseif has('win32')
@@ -454,27 +457,96 @@ endif
 
 let g:AutoPairs = {'(':')', '[':']', '{':'}', '<':'>',"'":"'",'"':'"', '`':'`'}
 let g:AutoPairsParens = {'(':')', '[':']', '{':'}', '<':'>'}
-let g:AutoPairsFlyMode = 1
+let g:AutoPairsFlyMode = 0
 let g:AutoPairsShortcutBackInsert = '<M-b>'
 
 match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
 
 " if isdirectory(bud . '/accelerated-jk')
+
+  " nmap j <Plug>(accelerated_jk_gj)
+  " nmap k <Plug>(accelerated_jk_gk)
+" endif
+
+" configure syntastic syntax checking to check on open as well as save
+set statusline+=%#warningmsg#
+set statusline+=\ %{SyntasticStatuslineFlag()}
+set statusline+=\ %* |
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 1
+let g:syntastic_loc_list_height = 2
+let g:syntastic_ignore_files = ['\.py$']
+let g:syntastic_check_on_wq = 0
+let g:syntastic_check_on_open=1
+let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute \"ng-"]
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+
+" for vim-markdown
+let g:vim_markdown_folding_style_pythonic = 1
+let g:vim_markdown_override_foldtext = 0
+let g:vim_markdown_autowrite = 1
+let g:vim_markdown_new_list_item_indent = 4
+let g:vim_markdown_toc_autofit = 1
+let g:vim_markdown_conceal = 0
+" set conceallevel=2
+let g:vim_markdown_frontmatter = 1
+let g:vim_markdown_json_frontmatter = 1
+
+" fugitive
+nnoremap <Leader>ga :Git add %:p<CR><CR>
+nnoremap <Leader>gs :Gstatus<CR>
+nnoremap <leader>gl :silent! Glog<CR>:bot copen<CR>
+nnoremap <leader>gp :Ggrep<Space>
+nnoremap <leader>gb :Git branch<Space>
+nnoremap <leader>go :Git checkout<Space>
+nnoremap <leader>gc :Git commit -am ""<Left>
+command! -bar -nargs=* Gpull execute 'Git pull'
+command! -bar -nargs=* Gpush execute 'Git push'
+
 " Snippet
 imap <C-J> <Plug>snipMateNextOrTrigger
 smap <C-J> <Plug>snipMateNextOrTrigger
 imap <Tab> <Plug>snipMateNextOrTrigger
 
-  " nmap j <Plug>(accelerated_jk_gj)
-  " nmap k <Plug>(accelerated_jk_gk)
-" endif
+augroup collumnLimit
+  autocmd!
+  let collumnLimit = 80
+  let pattern = '\%<' . (collumnLimit+1) . 'v.\%>' . collumnLimit . 'v'
+  let w:m1=matchadd('CollumnLimit', pattern, -1)
+augroup END
 if has("autocmd")
-  autocmd FileType javascript syntax clear jsFuncBlock
 
-autocmd BufWinLeave * silent! mkview
-autocmd BufWinEnter * silent! loadview
-autocmd BufRead,BufNewFile *.txt setfiletype txt
-autocmd BufRead,BufNewFile *.t set ft=perl
+  autocmd BufRead,BufNewFile * setfiletype txt
+  autocmd BufRead,BufNewFile *.t set filetype=perl
+  autocmd BufEnter *.md exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" %:p "--no-gpu"<CR>'
+  autocmd BufEnter *.markdown exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome --no-gpu"  %:p<CR>'
+  autocmd BufWinLeave * silent! mkview
+  autocmd BufWinEnter * silent! loadview
+  autocmd QuickFixCmdPost *grep* cwindow
+
+  autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
+  autocmd syntax groovy,Jenkinsfile setlocal foldmethod=indent
+  autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile normal zM
+  autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile let g:indentLine_loaded=1
+  autocmd FileType groovy,Jenkinsfile,sh set tabstop=2 softtabstop=2 shiftwidth=2
+  autocmd FileType make,json,snippet,robot,markdown set tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd FileType javascript syntax clear jsFuncBlock
+  " autocmd BufReadPost Jenkinsfile set syntax=groovy
+  " autocmd BufReadPost Jenkinsfile set filetype=groovy
+  " autocmd BufNewFile,BufRead Jenkinsfile setf groovy
+  " autocmd BufNewFile,BufRead,BufReadPost Jenkinsfile setlocal foldmethod=indent setf groovy
+  " autocmd FileType Jenkinsfile setlocal syntax=groovy foldmethod=indent
+  " autocmd FileType Jenkinsfile setlocal filetype=groovy foldmethod=indent
+  " autocmd FileType Jenkinsfile set syntax=groovy
+  " autocmd FileType Jenkinsfile set filetype=groovy
+
+  augroup vimrc
+    autocmd BufReadPre * setlocal foldmethod=indent
+    autocmd BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
+  augroup END
 endif
 
 " vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab

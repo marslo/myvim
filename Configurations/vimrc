@@ -5,7 +5,7 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.24
-"    LastChange: 2017-08-08 21:26:11
+"    LastChange: 2017-12-05 15:02:44
 " =============================================================================
 
 set nocompatible
@@ -76,9 +76,7 @@ Bundle 'rhysd/accelerated-jk'
 " Loading my function after vim start (reduce vim start time)
 Bundle 'Marslo/MarsloFunc'
 Bundle 'LargeFile'
-" Groovy
-Bundle 'groovy.vim--Ruley'
-Bundle 'martinda/Jenkinsfile-vim-syntax'
+Bundle 'altercation/vim-colors-solarized'
 " Python
 Bundle 'klen/python-mode'
 Bundle 'python_fold'
@@ -117,11 +115,14 @@ Bundle 'altercation/vim-colors-solarized'
 " Bundle 'cakebaker/scss-syntax.vim'
 " Git
 Bundle 'tpope/vim-fugitive'
-" cocoapods
+" Groovy
+Bundle 'groovy.vim--Ruley'
+Bundle 'marslo/Jenkinsfile-vim-syntax'
 Bundle 'keith/cocoapods.vim'
 " For fun
 Bundle 'TeTrIs.vim'
 Bundle 'matrix.vim--Yang'
+
 
 call vundle#end()
 call pathogen#infect()
@@ -339,6 +340,7 @@ set whichwrap+=<,>,h,l
 set go+=a                                                           " Visual selection automatically copied to the clipboard
 set hidden                                                          " Switch between buffers with unsaved change
 set equalalways
+set formatoptions=tcrqn
 set formatoptions+=rnmMB                                            " Remove the backspace for combine lines (Only for chinese)
 set matchpairs+=<:>
 " set autowrite
@@ -380,7 +382,6 @@ cnoremap <C-a> <Home>
 map <C-e> <ESC>$
 inoremap <C-e> <ESC>A
 cnoremap <C-e> <End>
-inoremap <C-d> <Del>
 nnoremap Y y$
 nnoremap <Del> "_x
 xnoremap <Del> "_d
@@ -498,7 +499,7 @@ let g:EnhCommentifyMultiPartBlocks='Yes'
 let g:EnhCommentifyUseSyntax='Yes'
 
 map <leader>aid :AuthorInfoDetect<CR>
-let g:vimrc_author='Marslo'
+let g:vimrc_author='marslo'
 let g:vimrc_email='marslo.jiao@gmail.com'
 au BufWritePre, FileWritePre * :AuthorInfoDetect<CR>
 
@@ -535,6 +536,8 @@ let g:indentLine_indentLevel = 20
 let g:indentLine_showFirstIndentLevel = 1
 let g:indentLine_color_tty = 0
 let g:indentLine_faster = 1
+let g:indentLine_concealcursor = 'inc'
+let g:indentLine_conceallevel = 2
 if has('gui_running') || 'xterm-256color' == $TERM
   let g:indentLine_char = '¦'
 elseif has('win32')
@@ -608,10 +611,6 @@ match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
 " let SuperTabMappingTabLiteral = '<Tab>'
 " let SuperTabClosePreviewOnPopupClose = 1
 
-augroup vimrc
-  au BufReadPre * setlocal foldmethod=indent
-  au BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
-augroup END
 
 augroup collumnLimit
   autocmd!
@@ -622,29 +621,35 @@ augroup END
 
 " Programming configs for specified scripts
 if has("autocmd")
-  autocmd FileType robot set tabstop=4 softtabstop=4 shiftwidth=4
-  autocmd FileType groovy set tabstop=2 softtabstop=2 shiftwidth=2
-  autocmd FileType snippet set tabstop=4 softtabstop=4 shiftwidth=4
-  autocmd FileType make set tabstop=4 softtabstop=4 shiftwidth=4
-  autocmd FileType json set tabstop=4 softtabstop=4 shiftwidth=4
-  autocmd FileType sh set tabstop=2 softtabstop=2 shiftwidth=2
-  autocmd FileType markdown set tabstop=4 softtabstop=4 shiftwidth=4
-  autocmd FileType javascript syntax clear jsFuncBlock
-
-  autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
-  autocmd BufEnter *.md exe 'noremap <F5> :!start  c:\Program Files (x86)\Google\Chrome\Application\chrome.exe %:p<CR>'
-  autocmd BufEnter *.markdown exe 'noremap <F5> :!start  c:\Program Files (x86)\Google\Chrome\Application\chrome.exe %:p<CR>'
-
+  " autocmd! bufwritepost ~/.vimrc silent! source %
+  autocmd BufRead,BufNewFile * setfiletype txt
+  autocmd BufRead,BufNewFile *.t set filetype=perl
+  autocmd BufEnter *.md exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" %:p "--no-gpu"<CR>'
+  autocmd BufEnter *.markdown exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome --no-gpu"  %:p<CR>'
   autocmd BufWinLeave * silent! mkview
   autocmd BufWinEnter * silent! loadview
-  autocmd BufRead,BufNewFile * setfiletype txt
-  autocmd BufRead,BufNewFile *.t set ft=perl
   autocmd QuickFixCmdPost *grep* cwindow
-
+  autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
+  autocmd syntax groovy,Jenkinsfile setlocal foldmethod=indent
+  autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile normal zM
+  autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile let g:indentLine_loaded=1
+  autocmd FileType groovy,Jenkinsfile,sh set tabstop=2 softtabstop=2 shiftwidth=2
+  autocmd FileType make,json,snippet,robot,markdown set tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd FileType javascript syntax clear jsFuncBlock
   " autocmd BufReadPost Jenkinsfile set syntax=groovy
   " autocmd BufReadPost Jenkinsfile set filetype=groovy
+  " autocmd BufNewFile,BufRead Jenkinsfile setf groovy
+  " autocmd BufNewFile,BufRead,BufReadPost Jenkinsfile setlocal foldmethod=indent setf groovy
+  " autocmd FileType Jenkinsfile setlocal syntax=groovy foldmethod=indent
+  " autocmd FileType Jenkinsfile setlocal filetype=groovy foldmethod=indent
   " autocmd FileType Jenkinsfile set syntax=groovy
   " autocmd FileType Jenkinsfile set filetype=groovy
+
+  augroup vimrc
+    autocmd BufReadPre * setlocal foldmethod=indent
+    autocmd BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
+  augroup END
 endif
+" set list lcs=tab:\|\
 
 " vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab
