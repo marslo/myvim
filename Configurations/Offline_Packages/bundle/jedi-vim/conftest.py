@@ -1,6 +1,6 @@
 import os
 import subprocess
-import urllib
+import urllib.request
 import zipfile
 
 import pytest
@@ -24,6 +24,12 @@ class IntegrationTestFile(object):
                 pytest.fail("{0} failed:\n{1}".format(
                     self.path, output.decode('utf-8')), pytrace=False)
 
+    @property
+    def name(self):
+        name = os.path.basename(self.path)
+        name, _, _ = name.rpartition('.')
+        return name
+
     def __repr__(self):
         return "<%s: %s>" % (type(self), self.path)
 
@@ -33,7 +39,7 @@ def pytest_configure(config):
         os.mkdir(CACHE_FOLDER)
 
     if not os.path.exists(VSPEC_FOLDER):
-        name, hdrs = urllib.urlretrieve(VSPEC_URL)
+        name, hdrs = urllib.request.urlretrieve(VSPEC_URL)
         z = zipfile.ZipFile(name)
         for n in z.namelist():
             dest = os.path.join(CACHE_FOLDER, n)
@@ -42,7 +48,7 @@ def pytest_configure(config):
                 os.makedirs(destdir)
             data = z.read(n)
             if not os.path.isdir(dest):
-                with open(dest, 'w') as f:
+                with open(dest, 'wb') as f:
                     f.write(data)
         z.close()
         os.chmod(VSPEC_RUNNER, 0o777)
@@ -57,4 +63,5 @@ def pytest_generate_tests(metafunc):
             if f.endswith('.vim'):
                 yield IntegrationTestFile(os.path.join(TEST_DIR, f))
 
-    metafunc.parametrize('case', list(collect_tests()))
+    tests = list(collect_tests())
+    metafunc.parametrize('case', tests, ids=[test.name for test in tests])

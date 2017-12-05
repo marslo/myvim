@@ -153,29 +153,20 @@ function! jedi#setup_py_version(py_version) abort
     execute 'command! -nargs=1 PythonJedi '.cmd_exec.' <args>'
 
     let s:init_outcome = 0
-    PythonJedi << EOF
-try:
-    import vim
-    import os, sys
-    jedi_path = os.path.join(vim.eval('expand(s:script_path)'), 'jedi')
-    sys.path.insert(0, jedi_path)
-
-    jedi_vim_path = vim.eval('expand(s:script_path)')
-    if jedi_vim_path not in sys.path:  # Might happen when reloading.
-        sys.path.insert(0, jedi_vim_path)
-except Exception as excinfo:
-    vim.command('let s:init_outcome = "error when adding to sys.path: {0}: {1}"'.format(excinfo.__class__.__name__, excinfo))
-else:
-    try:
-        import jedi_vim
-    except Exception as excinfo:
-        vim.command('let s:init_outcome = "error when importing jedi_vim: {0}: {1}"'.format(excinfo.__class__.__name__, excinfo))
-    else:
-        vim.command('let s:init_outcome = 1')
-    finally:
-        sys.path.remove(jedi_path)
-EOF
-    if !exists('s:init_outcome')
+    let init_lines = [
+          \ 'import vim',
+          \ 'try:',
+          \ '    import jedi_vim',
+          \ 'except Exception as exc:',
+          \ '    vim.command(''let s:init_outcome = "could not import jedi_vim: {0}: {1}"''.format(exc.__class__.__name__, exc))',
+          \ 'else:',
+          \ '    vim.command(''let s:init_outcome = 1'')']
+    try
+        exe 'PythonJedi exec('''.escape(join(init_lines, '\n'), "'").''')'
+    catch
+        throw printf('jedi#setup_py_version: failed to run Python for initialization: %s.', v:exception)
+    endtry
+    if s:init_outcome is 0
         throw 'jedi#setup_py_version: failed to run Python for initialization.'
     elseif s:init_outcome isnot 1
         throw printf('jedi#setup_py_version: %s.', s:init_outcome)
@@ -186,7 +177,12 @@ endfunction
 
 function! jedi#debug_info() abort
     if s:python_version ==# 'null'
-        call s:init_python()
+        try
+            call s:init_python()
+        catch
+            echohl WarningMsg | echom v:exception | echohl None
+            return
+        endtry
     endif
     if &verbose
       if &filetype !=# 'python'
@@ -206,28 +202,8 @@ function! jedi#debug_info() abort
       endif
       echohl None
     else
-      PythonJedi << EOF
-vim.command("echo printf(' - sys.version: `%s`', {0!r})".format(', '.join([x.strip() for x in __import__('sys').version.split('\n')])))
-vim.command("echo printf(' - site module: `%s`', {0!r})".format(__import__('site').__file__))
-
-try:
-  jedi_vim
-except Exception as e:
-  vim.command("echo printf('ERROR: jedi_vim is not available: %s: %s', {0!r}, {1!r})".format(e.__class__.__name__, str(e)))
-else:
-  try:
-    if jedi_vim.jedi is None:
-      vim.command("echo 'ERROR: the \"jedi\" Python module could not be imported.'")
-      vim.command("echo printf('       The error was: %s', {0!r})".format(getattr(jedi_vim, "jedi_import_error", "UNKNOWN")))
-    else:
-      vim.command("echo printf('Jedi path: `%s`', {0!r})".format(jedi_vim.jedi.__file__))
-      vim.command("echo printf(' - version: %s', {0!r})".format(jedi_vim.jedi.__version__))
-      vim.command("echo ' - sys_path:'")
-      for p in jedi_vim.jedi.Script('')._evaluator.sys_path:
-        vim.command("echo printf('    - `%s`', {0!r})".format(p))
-  except Exception as e:
-    vim.command("echo printf('There was an error accessing jedi_vim.jedi: %s', {0!r})".format(e))
-EOF
+      PythonJedi from jedi_vim_debug import display_debug_info
+      PythonJedi display_debug_info()
     endif
     echo ' - jedi-vim git version: '
     echon substitute(system('git -C '.s:script_path.' describe --tags --always --dirty'), '\v\n$', '', '')
@@ -267,12 +243,12 @@ EOF
       messages
       echo '```'
       echo "\n"
-      echo "<details><summary>:scriptnames</summary>"
+      echo '<details><summary>:scriptnames</summary>'
       echo "\n"
       echo '```'
       scriptnames
       echo '```'
-      echo "</details>"
+      echo '</details>'
     endif
 endfunction
 
@@ -388,7 +364,7 @@ function! jedi#show_documentation() abort
             silent execute 'sbuffer '.bn
         endif
     else
-        split '__doc__'
+        split __doc__
     endif
 
     setlocal modifiable
@@ -582,31 +558,47 @@ function! s:save_first_col() abort
 endfunction
 
 
-function! jedi#complete_string(is_popup_on_dot) abort
-    if a:is_popup_on_dot && !(g:jedi#popup_on_dot && jedi#do_popup_on_dot_in_highlight())
-        return ''
-    endif
-    if pumvisible() && !a:is_popup_on_dot
+function! jedi#complete_string(autocomplete) abort
+    if a:autocomplete
+        if !(g:jedi#popup_on_dot && jedi#do_popup_on_dot_in_highlight())
+            return ''
+        endif
+
+        let s:saved_completeopt = &completeopt
+        set completeopt-=longest
+        set completeopt+=menuone
+        set completeopt-=menu
+        if &completeopt !~# 'noinsert\|noselect'
+            " Patch 775 introduced noinsert and noselect, previously these
+            " options didn't exist. Setting them in earlier versions results in
+            " errors (E474).
+            if has('patch-7.4-775')
+                if g:jedi#popup_select_first
+                    set completeopt+=noinsert
+                else
+                    set completeopt+=noselect
+                endif
+            else
+                " To pass the tests we use this, it seems to get the closest to
+                " the other options. I'm really not sure if this properly
+                " works, but VIM 7.4-775 is already pretty old, so it might not
+                " be a problem anymore in a few years.
+                set completeopt+=longest
+            endif
+        endif
+    elseif pumvisible()
         return "\<C-n>"
-    else
-        return "\<C-x>\<C-o>\<C-r>=jedi#complete_opened(".a:is_popup_on_dot.")\<CR>"
     endif
+    return "\<C-x>\<C-o>\<C-r>=jedi#complete_opened(".a:autocomplete.")\<CR>"
 endfunction
 
 
-function! jedi#complete_opened(is_popup_on_dot) abort
-    if pumvisible()
-        " Only go down if it is visible, user-enabled and the longest
-        " option is set.
-        if g:jedi#popup_select_first && stridx(&completeopt, 'longest') > -1
-            return "\<Down>"
-        endif
-        if a:is_popup_on_dot
-            if &completeopt !~# '\(noinsert\|noselect\)'
-                " Prevent completion of the first entry with dot completion.
-                return "\<C-p>"
-            endif
-        endif
+function! jedi#complete_opened(autocomplete) abort
+    if a:autocomplete
+        let &completeopt = s:saved_completeopt
+        unlet s:saved_completeopt
+    elseif pumvisible() && g:jedi#popup_select_first && stridx(&completeopt, 'longest') > -1
+        return "\<Down>"
     endif
     return ''
 endfunction
@@ -616,7 +608,7 @@ function! jedi#smart_auto_mappings() abort
     " Auto put import statement after from module.name<space> and complete
     if search('\m^\s*from\s\+[A-Za-z0-9._]\{1,50}\%#\s*$', 'bcn', line('.'))
         " Enter character and start completion.
-        return "\<space>import \<C-x>\<C-o>\<C-r>=jedi#complete_opened(1)\<CR>"
+        return "\<space>import \<C-r>=jedi#complete_string(1)\<CR>"
     endif
     return "\<space>"
 endfunction

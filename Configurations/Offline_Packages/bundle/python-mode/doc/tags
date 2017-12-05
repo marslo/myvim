@@ -86,12 +86,12 @@
 :PymodeRun	pymode.txt	/*:PymodeRun*
 :PymodeVirtualenv	pymode.txt	/*:PymodeVirtualenv*
 <C-C>g	pymode.txt	/*<C-C>g*
-pymode	pymode.txt	/*pymode*
 pymode-breakpoints	pymode.txt	/*pymode-breakpoints*
 pymode-common	pymode.txt	/*pymode-common*
 pymode-completion	pymode.txt	/*pymode-completion*
 pymode-contents	pymode.txt	/*pymode-contents*
 pymode-credits	pymode.txt	/*pymode-credits*
+pymode-development	pymode.txt	/*pymode-development*
 pymode-documentation	pymode.txt	/*pymode-documentation*
 pymode-faq	pymode.txt	/*pymode-faq*
 pymode-features	pymode.txt	/*pymode-features*
@@ -117,5 +117,3 @@ pymode-run	pymode.txt	/*pymode-run*
 pymode-syntax	pymode.txt	/*pymode-syntax*
 pymode-virtualenv	pymode.txt	/*pymode-virtualenv*
 pymode.txt	pymode.txt	/*pymode.txt*
-python-mode	pymode.txt	/*python-mode*
-python-mode.txt	pymode.txt	/*python-mode.txt*

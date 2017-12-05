@@ -1,4 +1,4 @@
-""" Pymode support functions. """
+"""Pymode support functions."""
 
 from __future__ import absolute_import
 
@@ -7,11 +7,15 @@ import vim  # noqa
 
 
 def auto():
-    """ Fix PEP8 erorrs in current buffer. """
+    """Fix PEP8 erorrs in current buffer.
+
+    pymode: uses it in command PymodeLintAuto with pymode#lint#auto()
+
+    """
     from .autopep8 import fix_file
 
     class Options(object):
-        aggressive = 2
+        aggressive = 1
         diff = False
         experimental = True
         ignore = vim.eval('g:pymode_lint_ignore')
@@ -28,7 +32,7 @@ def auto():
 
 
 def get_documentation():
-    """ Search documentation and append to current buffer. """
+    """Search documentation and append to current buffer."""
     from ._compat import StringIO
 
     sys.stdout, _ = StringIO(), sys.stdout

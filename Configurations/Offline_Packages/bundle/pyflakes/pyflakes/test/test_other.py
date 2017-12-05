@@ -1597,6 +1597,22 @@ class TestUnusedAssignment(TestCase):
             except Exception%se: e
         ''' % as_exc)
 
+    @skipIf(version_info < (3,),
+            "In Python 2 exception names stay bound after the exception handler")
+    def test_exceptionUnusedInExcept(self):
+        self.flakes('''
+        try: pass
+        except Exception as e: pass
+        ''', m.UnusedVariable)
+
+    def test_exceptionUnusedInExceptInFunction(self):
+        as_exc = ', ' if version_info < (2, 6) else ' as '
+        self.flakes('''
+        def download_review():
+            try: pass
+            except Exception%se: pass
+        ''' % as_exc, m.UnusedVariable)
+
     def test_exceptWithoutNameInFunction(self):
         """
         Don't issue false warning when an unnamed exception is used.
@@ -1874,3 +1890,77 @@ class TestAsyncStatements(TestCase):
             class C:
                 foo: not_a_real_type = None
         ''', m.UndefinedName)
+        self.flakes('''
+        from foo import Bar
+        bar: Bar
+        ''')
+        self.flakes('''
+        from foo import Bar
+        bar: 'Bar'
+        ''')
+        self.flakes('''
+        import foo
+        bar: foo.Bar
+        ''')
+        self.flakes('''
+        import foo
+        bar: 'foo.Bar'
+        ''')
+        self.flakes('''
+        from foo import Bar
+        def f(bar: Bar): pass
+        ''')
+        self.flakes('''
+        from foo import Bar
+        def f(bar: 'Bar'): pass
+        ''')
+        self.flakes('''
+        from foo import Bar
+        def f(bar) -> Bar: return bar
+        ''')
+        self.flakes('''
+        from foo import Bar
+        def f(bar) -> 'Bar': return bar
+        ''')
+        self.flakes('''
+        bar: 'Bar'
+        ''', m.UndefinedName)
+        self.flakes('''
+        bar: 'foo.Bar'
+        ''', m.UndefinedName)
+        self.flakes('''
+        from foo import Bar
+        bar: str
+        ''', m.UnusedImport)
+        self.flakes('''
+        from foo import Bar
+        def f(bar: str): pass
+        ''', m.UnusedImport)
+        self.flakes('''
+        def f(a: A) -> A: pass
+        class A: pass
+        ''', m.UndefinedName, m.UndefinedName)
+        self.flakes('''
+        def f(a: 'A') -> 'A': return a
+        class A: pass
+        ''')
+        self.flakes('''
+        a: A
+        class A: pass
+        ''', m.UndefinedName)
+        self.flakes('''
+        a: 'A'
+        class A: pass
+        ''')
+        self.flakes('''
+        a: 'A B'
+        ''', m.ForwardAnnotationSyntaxError)
+        self.flakes('''
+        a: 'A; B'
+        ''', m.ForwardAnnotationSyntaxError)
+        self.flakes('''
+        a: '1 + 2'
+        ''')
+        self.flakes('''
+        a: 'a: "A"'
+        ''', m.ForwardAnnotationSyntaxError)
