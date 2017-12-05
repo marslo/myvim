@@ -5,7 +5,7 @@
 "         Email: marslo.jiao@gmail.com
 "        Created: 2013-10-16 07:19:00
 "       Version: 0.0.24
-"    LastChange: 2017-12-05 15:02:44
+"    LastChange: 2017-12-05 17:40:26
 " =============================================================================
 
 let &runtimepath=printf('%s/vimfiles,%s,%s/vimfiles/after', $VIM, $VIMRUNTIME, $VIM)
@@ -184,12 +184,34 @@ if !has('python')
   let g:pymode = 0
 endif
 
+" Python-mode configuratoin
 if isdirectory(expand(bud . 'python-mode'))
-  let g:pymode_lint_checker = ['pyflakes']
-  let g:pymode_trim_whitespace = 0
+  nnoremap <leader>p :PymodeLint<CR>                                " Trigger PymodeLint by manual
+  let g:pymode = 1                                                  " 1: turn on python-mode plugin
+  let g:pymode_syntax_all = 1
+  let g:pymode_warnings = 0                                         " turn off plugin's warnings
+  let g:pymode_folding = 1
+  let g:pymode_options_colorcolumn = 1
+  let g:pymode_trim_whitespaces = 1                                 " trim unused white spaces on save
+  let g:pymode_lint = 1                                             " turn on code checking
+  let g:pymode_lint_checkers = ['pyflakes', 'pep8', 'mccabe']
+  let g:pymode_lint_ignore="E111,E114,E501,W0611,E266"              " E501: long line; E111&E114: 4 spaces indent; E266: too many # for comments
   let g:pymode_options = 0
   let g:pymode_rope = 0
+  let g:pymode_indent = 0
+  let g:pymode_syntax_highlight_self = g:pymode_syntax_all
+  let g:pymode_quickfix_minheight = 3
+  let g:pymode_quickfix_maxheight = 3
+  if !has('python')
+    let g:pymode = 0
+  endif
+  let g:python_check_syntax = 0                                     " Disalbe Check python script syntax on every save
+  let g:pymode_lint_on_write = 0                                    " Disalbe on save checking
+  " let g:pymode_rope_regenerate_on_write = 0
+  let g:pymode_lint_unmodified = 1
+  let g:pymode_indent = 1
 endif
+
 
 " ====================================== For Inteface =====================================
 if 'xterm-256color' == $TERM

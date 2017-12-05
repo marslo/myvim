@@ -5,7 +5,7 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.24
-"    LastChange: 2017-12-05 15:02:44
+"    LastChange: 2017-12-05 17:40:18
 " =============================================================================
 
 set nocompatible
@@ -122,7 +122,6 @@ Bundle 'keith/cocoapods.vim'
 " For fun
 Bundle 'TeTrIs.vim'
 Bundle 'matrix.vim--Yang'
-
 
 call vundle#end()
 call pathogen#infect()
