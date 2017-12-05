@@ -1,11 +1,12 @@
 " =============================================================================
-"      FileName: vimrc_terminal
+
+"      FileName: vimrc_mac
 "          Desc: Made in Marslo
 "        Author: Marslo Jiao
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.24
-"    LastChange: 2017-12-05 17:40:14
+"    LastChange: 2017-12-05 17:40:06
 " =============================================================================
 
 set nocompatible
@@ -48,6 +49,7 @@ Bundle 'grep.vim'
 Bundle 'vim-syntastic/syntastic'
 Bundle 'Marslo/MarsloFunc'
 Bundle 'LargeFile'
+Bundle 'altercation/vim-colors-solarized'
 " Python
 Bundle 'klen/python-mode'
 Bundle 'python_fold'
@@ -170,6 +172,14 @@ if isdirectory(expand(bud . 'python-mode'))
 endif
 
 " ====================================== For Inteface =====================================
+if has('gui_running')
+  set go=                                                           " Hide everything (go = guioptions)
+  set cpoptions+=n
+  set guifont=Ubuntu\ Mono:h26
+  " set guifontwide=NSimsun:h16
+  set lines=36                                                    " The initialize size
+  set columns=124
+endif
 if exists('$TMUX')
   set term=screen-256color
 endif
@@ -178,7 +188,7 @@ if 'xterm-256color' == $TERM
   set t_Co=256
 endif
 
-if 'xterm-256color' == $TERM
+if has('gui_running') || 'xterm-256color' == $TERM
   set background=dark
   colorscheme marslo
   let psc_style='cool'
@@ -190,6 +200,7 @@ else
 endif
 
 nmap <leader>v :e ~/.vimrc<CR>
+
 set clipboard+=unnamed                                            " Copy the content to system clipboard by using y/p
 set clipboard+=unnamedplus
 
@@ -227,6 +238,8 @@ set noerrorbells novisualbell                                       " Turn off e
 set t_vb=
 set list listchars=tab:\ \ ,trail:·,extends:»,precedes:«,nbsp:·
 set cursorline                                                      " Highlight the current line
+set guicursor=a:hor1
+set guicursor+=i-r-ci-cr-o:hor2-blinkon0
 set virtualedit=onemore                                             " Allow for cursor beyond last character
 set scrolloff=3                                                     " Scroll settings
 set sidescroll=1
@@ -341,6 +354,23 @@ iabbrev <leader>*/ *********************************/
 iabbrev <leader>#- #------------------
 
 " ====================================== For Function =====================================
+let g:ctrlp_map = '<c-p>'                                           " CtrlP
+let g:ctrlp_working_path_mode = 'ra'                                " Search parents as well (stop searching sartly)
+let g:ctrlp_max_height = 8
+let g:ctrlp_max_depth = 100
+let g:ctrl_root_makers = ['.ctrlp']                                 " Stop search if these files present
+let g:ctrlp_use_caching = 1
+let g:ctrlp_clear_cache_on_exit = 0                                 " Cross session caching
+if has('win32') || has('win95') || has('win64')
+  let g:ctrlp_cache_dir = $VIM . '/cache/ctrlp'
+else
+  let g:ctrlp_cache_dir = '$HOME/.vim/cache/ctrlp'
+endif
+let g:ctrlp_custom_ignore = {
+    \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+    \ 'file': '\v\.(exe|so|dll|rpm|tar|gz|bz2|zip|ctags|tags)|tags|ctags$',
+    \ 'link': 'some_bad_symbolic_links',
+    \ }
 let g:EnhCommentifyAlignRight='Yes'
 let g:EnhCommentifyRespectIndent='yes'
 let g:EnhCommentifyPretty='Yes'
@@ -454,7 +484,8 @@ augroup END
 
 " Programming configs for specified scripts
 if has("autocmd")
-  autocmd! bufwritepost ~/.vimrc silent! source %
+  " autocmd! bufwritepost ~/.vimrc silent! source %
+
   autocmd BufRead,BufNewFile * setfiletype txt
   autocmd BufRead,BufNewFile *.t set filetype=perl
   autocmd BufEnter *.md exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" %:p "--no-gpu"<CR>'
@@ -470,7 +501,6 @@ if has("autocmd")
   autocmd FileType groovy,Jenkinsfile,sh set tabstop=2 softtabstop=2 shiftwidth=2
   autocmd FileType make,json,snippet,robot,markdown set tabstop=4 softtabstop=4 shiftwidth=4
   autocmd FileType javascript syntax clear jsFuncBlock
-
   " autocmd BufReadPost Jenkinsfile set syntax=groovy
   " autocmd BufReadPost Jenkinsfile set filetype=groovy
   " autocmd BufNewFile,BufRead Jenkinsfile setf groovy
