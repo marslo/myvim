@@ -9,7 +9,7 @@
 " =============================================================================
 
 set nocompatible
-set history=300
+set history=800
 set diffopt=filler,context:3
 runtime macros/matchit.vim
 
@@ -48,8 +48,6 @@ Bundle 'grep.vim'
 Bundle 'vim-syntastic/syntastic'
 Bundle 'Marslo/MarsloFunc'
 Bundle 'LargeFile'
-Bundle 'keith/cocoapods.vim'
-Bundle 'altercation/vim-colors-solarized'
 " Python
 Bundle 'klen/python-mode'
 Bundle 'python_fold'
@@ -73,9 +71,13 @@ Bundle 'Marslo/vim-coloresque'
 Bundle 'Marslo/marslo.vim'
 Bundle 'Marslo/MarsloVimOthers'
 Bundle 'plasticboy/vim-markdown.git'
+Bundle 'altercation/vim-colors-solarized'
 " Git
 Bundle 'tpope/vim-fugitive'
+" Groovy
+Bundle 'groovy.vim--Ruley'
 Bundle 'marslo/Jenkinsfile-vim-syntax'
+Bundle 'keith/cocoapods.vim'
 
 call vundle#end()
 call pathogen#infect()
@@ -135,7 +137,7 @@ if has("autocmd")
   au FileType python syn keyword pythonDecorator print self
   au FileType python set tabstop=2 softtabstop=2 shiftwidth=2
   au FileTYpe python set isk-=.
-  set textwidth=80
+  " set textwidth=80
 endif
 let python_highlight_all = 1                                        " syntax-python
 
@@ -167,8 +169,6 @@ if isdirectory(expand(bud . 'python-mode'))
   let g:pymode_indent = 1
 endif
 
-
-
 " ====================================== For Inteface =====================================
 if exists('$TMUX')
   set term=screen-256color
@@ -177,6 +177,7 @@ endif
 if 'xterm-256color' == $TERM
   set t_Co=256
 endif
+
 if has('gui_running') || 'xterm-256color' == $TERM
   set background=dark
   colorscheme marslo
@@ -189,9 +190,10 @@ else
 endif
 
 nmap <leader>v :e ~/.vimrc<CR>
-autocmd! bufwritepost ~/.vimrc silent! source %
 set guifont=Ubuntu\ Mono:h26
 " set guifontwide=NSimsun:h16
+set columns=124
+set lines=36
 set clipboard+=unnamed                                            " Copy the content to system clipboard by using y/p
 set clipboard+=unnamedplus
 
@@ -248,6 +250,7 @@ set whichwrap+=<,>,h,l
 set go+=a                                                           " Visual selection automatically copied to the clipboard
 set hidden                                                          " Switch between buffers with unsaved change
 set equalalways
+set formatoptions=tcrqn
 set formatoptions+=rnmMB                                            " Remove the backspace for combine lines (Only for chinese)
 set matchpairs+=<:>
 " set autowrite
@@ -359,6 +362,7 @@ let MRU_Auto_Close = 1                                              " Most Recen
 let MRU_Max_Entries = 10
 let MRU_Exclude_Files='^/tmp/.*\|^/temp/.*\|^/media/.*\|^/mnt/.*'
 map <leader>re :MRU<CR>
+noremap <Leader>u :GundoToggle<CR>
 
 let g:rainbow_active = 1
 let g:rainbow_operators = 1
@@ -379,7 +383,6 @@ let g:rainbow_conf = {
 \   }
 \}
 
-let g:indentLine_loaded = 0
 let g:indentLine_enabled = 1
 let g:indentLine_color_gui = "#282828"
 let g:indentLine_color_term = 239
@@ -387,9 +390,9 @@ let g:indentLine_indentLevel = 20
 let g:indentLine_showFirstIndentLevel = 1
 let g:indentLine_color_tty = 0
 let g:indentLine_faster = 1
-let g:indentLine_char = '¦'
 let g:indentLine_concealcursor = 'inc'
 let g:indentLine_conceallevel = 2
+let g:indentLine_char = '¦'
 
 " let SuperTabDefaultCompletionType = '<c-p>'
 " let SuperTabMappingForward = '<c-p>'
@@ -428,6 +431,17 @@ let g:vim_markdown_conceal = 0
 let g:vim_markdown_frontmatter = 1
 let g:vim_markdown_json_frontmatter = 1
 
+" fugitive
+nnoremap <Leader>ga :Git add %:p<CR><CR>
+nnoremap <Leader>gs :Gstatus<CR>
+nnoremap <leader>gl :silent! Glog<CR>:bot copen<CR>
+nnoremap <leader>gp :Ggrep<Space>
+nnoremap <leader>gb :Git branch<Space>
+nnoremap <leader>go :Git checkout<Space>
+nnoremap <leader>gc :Git commit -am ""<Left>
+command! -bar -nargs=* Gpull execute 'Git pull'
+command! -bar -nargs=* Gpush execute 'Git push'
+
 " Snippet
 imap <C-J> <Plug>snipMateNextOrTrigger
 smap <C-J> <Plug>snipMateNextOrTrigger
@@ -463,11 +477,14 @@ if has("autocmd")
   autocmd FileType groovy,Jenkinsfile,sh set tabstop=2 softtabstop=2 shiftwidth=2
   autocmd FileType make,json,snippet,robot,markdown set tabstop=4 softtabstop=4 shiftwidth=4
   autocmd FileType javascript syntax clear jsFuncBlock
-
+  " autocmd BufReadPost Jenkinsfile set syntax=groovy
+  " autocmd BufReadPost Jenkinsfile set filetype=groovy
   " autocmd BufNewFile,BufRead Jenkinsfile setf groovy
   " autocmd BufNewFile,BufRead,BufReadPost Jenkinsfile setlocal foldmethod=indent setf groovy
   " autocmd FileType Jenkinsfile setlocal syntax=groovy foldmethod=indent
   " autocmd FileType Jenkinsfile setlocal filetype=groovy foldmethod=indent
+  " autocmd FileType Jenkinsfile set syntax=groovy
+  " autocmd FileType Jenkinsfile set filetype=groovy
 
   augroup vimrc
     autocmd BufReadPre * setlocal foldmethod=indent
