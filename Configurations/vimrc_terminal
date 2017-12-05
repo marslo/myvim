@@ -5,7 +5,7 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.24
-"    LastChange: 2017-06-20 14:16:53
+"    LastChange: 2017-12-05 15:02:44
 " =============================================================================
 
 set nocompatible
@@ -48,6 +48,8 @@ Bundle 'grep.vim'
 Bundle 'vim-syntastic/syntastic'
 Bundle 'Marslo/MarsloFunc'
 Bundle 'LargeFile'
+Bundle 'keith/cocoapods.vim'
+Bundle 'altercation/vim-colors-solarized'
 " Python
 Bundle 'klen/python-mode'
 Bundle 'python_fold'
@@ -73,6 +75,7 @@ Bundle 'Marslo/MarsloVimOthers'
 Bundle 'plasticboy/vim-markdown.git'
 " Git
 Bundle 'tpope/vim-fugitive'
+Bundle 'marslo/Jenkinsfile-vim-syntax'
 
 call vundle#end()
 call pathogen#infect()
@@ -187,8 +190,10 @@ endif
 
 nmap <leader>v :e ~/.vimrc<CR>
 autocmd! bufwritepost ~/.vimrc silent! source %
-set guifont=Monaco\ 14
-set clipboard=unnamedplus
+set guifont=Ubuntu\ Mono:h26
+" set guifontwide=NSimsun:h16
+set clipboard+=unnamed                                            " Copy the content to system clipboard by using y/p
+set clipboard+=unnamedplus
 
 set iskeyword-=.
 set autochdir
@@ -238,18 +243,26 @@ set foldexpr=1                                                      " Shown line
 set foldlevel=100                                                   " Not fold while VIM set up
 set shortmess+=filmnrxoOtT                                          " Abbrev. of messages (avoids 'hit enter')
 set viewoptions=folds
-set backspace=indent,eol,start                                      " Make backspace h, l, etc wrap to
+set backspace=indent,eol,start                                      	" Make backspace h, l, etc wrap to
 set whichwrap+=<,>,h,l
 set go+=a                                                           " Visual selection automatically copied to the clipboard
 set hidden                                                          " Switch between buffers with unsaved change
 set equalalways
 set formatoptions+=rnmMB                                            " Remove the backspace for combine lines (Only for chinese)
 set matchpairs+=<:>
-set ruler                                                           " Ruler: Show Line and colum number
-set showcmd                                                         " Show (partial) command in status line
-set laststatus=2                                                    " Set status bar
-set statusline=%#User2#%m%r%*\ %F\ %y,%{&fileformat}
-set statusline+=%=\ %-{strftime(\"%H:%M\ %d/%m/%Y\")}\ %b[A],0x%B\ %c%V,%l/%L\ %1*--%n%%--%*\ %p%%\ |
+" set autowrite
+if has('cmdline_info')
+  set ruler                                                         " ruler: Show Line and colum number
+  set showcmd                                                     " Show (partial) command in status line
+endif
+if has('statusline')
+  set laststatus=2                                                  " Set status bar
+  set statusline=%#User2#%m%r%*\ %F\ %y,%{&fileformat}
+  set statusline+=%=\ %-{strftime(\"%H:%M\ %d/%m/%Y\")}\ %b[A],0x%B\ %c%V,%l/%L\ %1*--%n%%--%*\ %p%%\ |
+endif
+if has('persistent_undo')
+  set noundofile
+endif
 if version > 74399
   set cryptmethod=blowfish2
 endif
@@ -308,11 +321,23 @@ nnoremap <leader>zhs :%s/^\s\+//<CR>
 nnoremap <leader>zim :g/^/ s//\=line('.').' '/<CR>
 nnoremap <leader>zbl :g/^\s*$/d<CR>
 nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>
+nnoremap <leader>zcm :%s/<C-v><CR>/\r/g<CR>
 nnoremap <leader>zng :%s///gn<CR>
 nnoremap <leader>zbd :%s/​//g<CR>
 nnoremap <leader>zdd :%s/ / /g<CR>
 nnoremap <leader>zds :%s/^<span.*span>//g<CR>
 nnoremap <leader>zid i•<ESC>
+
+if version > 703
+  " autocmd FocusLost * set norelativenumber
+  autocmd FocusGained * set relativenumber
+  autocmd InsertEnter * set norelativenumber
+  autocmd InsertLeave * set relativenumber
+  autocmd CmdwinEnter * set norelativenumber
+  autocmd CmdwinLeave * set relativenumber
+  autocmd CmdwinEnter * let b:ei_save = &eventignore | set eventignore=CursorHold,InsertEnter
+  autocmd CmdwinLeave * let &eventignore = b:ei_save
+endif
 
 iabbrev <leader>/* /*********************************
 iabbrev <leader>*/ *********************************/
@@ -326,7 +351,7 @@ let g:EnhCommentifyMultiPartBlocks='Yes'
 let g:EnhCommentifyUseSyntax='Yes'
 
 map <leader>aid :AuthorInfoDetect<CR>
-let g:vimrc_author='Marslo'
+let g:vimrc_author='marslo'
 let g:vimrc_email='marslo.jiao@gmail.com'
 au BufWritePre, FileWritePre * :AuthorInfoDetect<CR>
 
@@ -354,14 +379,17 @@ let g:rainbow_conf = {
 \   }
 \}
 
+let g:indentLine_loaded = 0
 let g:indentLine_enabled = 1
 let g:indentLine_color_gui = "#282828"
 let g:indentLine_color_term = 239
-let g:indentLine_indentLevel = 8
-let g:indentLine_showFirstIndentLevel = 0
+let g:indentLine_indentLevel = 20
+let g:indentLine_showFirstIndentLevel = 1
 let g:indentLine_color_tty = 0
 let g:indentLine_faster = 1
 let g:indentLine_char = '¦'
+let g:indentLine_concealcursor = 'inc'
+let g:indentLine_conceallevel = 2
 
 " let SuperTabDefaultCompletionType = '<c-p>'
 " let SuperTabMappingForward = '<c-p>'
@@ -389,7 +417,6 @@ let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute \"ng-"]
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 
-
 " for vim-markdown
 let g:vim_markdown_folding_style_pythonic = 1
 let g:vim_markdown_override_foldtext = 0
@@ -406,11 +433,6 @@ imap <C-J> <Plug>snipMateNextOrTrigger
 smap <C-J> <Plug>snipMateNextOrTrigger
 imap <Tab> <Plug>snipMateNextOrTrigger
 
-augroup vimrc
-  au BufReadPre * setlocal foldmethod=indent
-  au BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
-augroup END
-
 " set colorcolumn=80
 " call matchadd('ColorColumn', '\%81v', 100)
 " match OverLength /\%81v.\+/
@@ -424,24 +446,34 @@ augroup END
 
 " Programming configs for specified scripts
 if has("autocmd")
-  autocmd FileType robot set tabstop=4 softtabstop=4 shiftwidth=4
-  autocmd FileType groovy set tabstop=2 softtabstop=2 shiftwidth=2
-  autocmd FileType snippet set tabstop=4 softtabstop=4 shiftwidth=4
-  autocmd FileType make set tabstop=4 softtabstop=4 shiftwidth=4
-  autocmd FileType json set tabstop=4 softtabstop=4 shiftwidth=4
-  autocmd FileType sh set tabstop=2 softtabstop=2 shiftwidth=2
-  autocmd FileType markdown set tabstop=4 softtabstop=4 shiftwidth=4
-  autocmd FileType javascript syntax clear jsFuncBlock
+  " autocmd! bufwritepost ~/.vimrc silent! source %
 
-  autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
-
+  autocmd BufRead,BufNewFile * setfiletype txt
+  autocmd BufRead,BufNewFile *.t set filetype=perl
+  autocmd BufEnter *.md exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" %:p "--no-gpu"<CR>'
+  autocmd BufEnter *.markdown exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome --no-gpu"  %:p<CR>'
   autocmd BufWinLeave * silent! mkview
   autocmd BufWinEnter * silent! loadview
-  autocmd BufRead,BufNewFile * setfiletype txt
-  autocmd BufRead,BufNewFile *.t set ft=perl
+  autocmd QuickFixCmdPost *grep* cwindow
 
-  autocmd BufReadPost Jenkinsfile set syntax=groovy
-  autocmd BufReadPost Jenkinsfile set filetype=groovy
+  autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
+  autocmd syntax groovy,Jenkinsfile setlocal foldmethod=indent
+  autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile normal zM
+  autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile let g:indentLine_loaded=1
+  autocmd FileType groovy,Jenkinsfile,sh set tabstop=2 softtabstop=2 shiftwidth=2
+  autocmd FileType make,json,snippet,robot,markdown set tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd FileType javascript syntax clear jsFuncBlock
+
+  " autocmd BufNewFile,BufRead Jenkinsfile setf groovy
+  " autocmd BufNewFile,BufRead,BufReadPost Jenkinsfile setlocal foldmethod=indent setf groovy
+  " autocmd FileType Jenkinsfile setlocal syntax=groovy foldmethod=indent
+  " autocmd FileType Jenkinsfile setlocal filetype=groovy foldmethod=indent
+
+  augroup vimrc
+    autocmd BufReadPre * setlocal foldmethod=indent
+    autocmd BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
+  augroup END
 endif
+" set list lcs=tab:\|\
 
 " vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab
