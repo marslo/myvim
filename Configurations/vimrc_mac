@@ -6,7 +6,7 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.24
-"    LastChange: 2017-12-05 17:40:06
+"    LastChange: 2017-12-06 18:08:22
 " =============================================================================
 
 set nocompatible
@@ -39,7 +39,6 @@ Bundle 'sjl/gundo.vim'
 Bundle 'majutsushi/tagbar'
 Bundle 'dantezhu/authorinfo'
 Bundle 'Marslo/EnhCommentify.vim'
-" Bundle 'ervandew/supertab'
 Bundle 'Marslo/auto-pairs'
 Bundle 'tomtom/tlib_vim'
 Bundle 'marcweber/vim-addon-mw-utils'
@@ -49,19 +48,18 @@ Bundle 'grep.vim'
 Bundle 'vim-syntastic/syntastic'
 Bundle 'Marslo/MarsloFunc'
 Bundle 'LargeFile'
-Bundle 'altercation/vim-colors-solarized'
+Bundle 'L9'
+Bundle 'godlygeek/tabular'
+Bundle 'Chiel92/vim-autoformat'
 " Python
 Bundle 'klen/python-mode'
 Bundle 'python_fold'
-" Bundle 'kevinw/pyflakes-vim'
 Bundle 'pyflakes/pyflakes'
 Bundle 'python_match.vim'
 Bundle 'Marslo/python-syntax'
 Bundle 'tarmack/vim-python-ftplugin'
 Bundle 'davidhalter/jedi-vim'
 Bundle 'mfukar/robotframework-vim'
-" Bundle 'python_match.vim'
-" Bundle 'tarmack/vim-python-ftplugin'
 " Web design
 Bundle 'tpope/vim-surround'
 Bundle 'valloric/MatchTagAlways'
@@ -70,6 +68,7 @@ Bundle 'tpope/vim-repeat'
 Bundle 'luochen1990/rainbow'
 Bundle 'txt.vim'
 Bundle 'Marslo/vim-coloresque'
+" Bundle 'ap/vim-css-color'
 Bundle 'Marslo/marslo.vim'
 Bundle 'Marslo/MarsloVimOthers'
 Bundle 'plasticboy/vim-markdown.git'
@@ -112,6 +111,17 @@ function! GetVundle()                                                   " GetVun
   endif
 endfunction
 command! GetVundle :call GetVundle()
+
+function! ToggleVerbose()
+    if !&verbose
+        set verbosefile=~/.log/vim/verbose.log
+        set verbose=15
+    else
+        set verbose=0
+        set verbosefile=
+    endif
+endfunction
+command! ToggleVerbose :call ToggleVerbose()
 
 if isdirectory(expand(bud . 'MarsloFunc'))
   command! GetVim :call marslofunc#GetVim()<CR>
@@ -200,7 +210,6 @@ else
 endif
 
 nmap <leader>v :e ~/.vimrc<CR>
-
 set clipboard+=unnamed                                            " Copy the content to system clipboard by using y/p
 set clipboard+=unnamedplus
 
@@ -285,15 +294,17 @@ nnoremap k gk
 nnoremap gk k
 nnoremap n nzzzv
 nnoremap N Nzzzv
-map <leader>bd :bd<CR>
-map <leader>bp :bp<CR>
-map <leader>bn :bn<CR>
-map <C-k> <C-w>k
-map <C-j> <C-w>j
-map <C-a> <ESC>^
+nnoremap <leader>bd :bd<CR>
+nnoremap <leader>bp :bp<CR>
+nnoremap <leader>bn :bn<CR>
+nnoremap <C-k> <C-w>k
+nnoremap <C-j> <C-w>j
+nnoremap <C-h> <C-W>h
+nnoremap <C-l> <C-W>l
+nnoremap <C-a> <ESC>^
 inoremap <C-a> <ESC>I
 cnoremap <C-a> <Home>
-map <C-e> <ESC>$
+nnoremap <C-e> <ESC>$
 inoremap <C-e> <ESC>A
 cnoremap <C-e> <End>
 nnoremap Y y$
@@ -326,6 +337,7 @@ inoremap <leader>fe <C-R>=expand("%:t")<CR>
 inoremap <leader>w <C-O>:w<CR>
 nnoremap <leader>G :%s///gn<CR>
 
+nnoremap <leader>idl :IndentLineEnable<CR>
 nnoremap <leader>zdb :%s/\s\+$//<CR>
 nnoremap <leader>zhs :%s/^\s\+//<CR>
 nnoremap <leader>zim :g/^/ s//\=line('.').' '/<CR>
@@ -411,17 +423,12 @@ let g:indentLine_enabled = 1
 let g:indentLine_color_gui = "#282828"
 let g:indentLine_color_term = 239
 let g:indentLine_indentLevel = 20
-let g:indentLine_showFirstIndentLevel = 1
+let g:indentLine_showFirstIndentLevel = 0
 let g:indentLine_color_tty = 0
 let g:indentLine_faster = 1
 let g:indentLine_concealcursor = 'inc'
 let g:indentLine_conceallevel = 2
 let g:indentLine_char = '¦'
-
-" let SuperTabDefaultCompletionType = '<c-p>'
-" let SuperTabMappingForward = '<c-p>'
-" let SuperTabMappingTabLiteral = '<Tab>'
-" let SuperTabClosePreviewOnPopupClose = 1
 
 let g:AutoPairs = {'(':')', '[':']', '{':'}', '<':'>',"'":"'",'"':'"', '`':'`'}
 let g:AutoPairsParens = {'(':')', '[':']', '{':'}', '<':'>'}
@@ -497,18 +504,16 @@ if has("autocmd")
   autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
   autocmd syntax groovy,Jenkinsfile setlocal foldmethod=indent
   autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile normal zM
-  autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile let g:indentLine_loaded=1
   autocmd FileType groovy,Jenkinsfile,sh set tabstop=2 softtabstop=2 shiftwidth=2
   autocmd FileType make,json,snippet,robot,markdown set tabstop=4 softtabstop=4 shiftwidth=4
-  autocmd FileType javascript syntax clear jsFuncBlock
-  " autocmd BufReadPost Jenkinsfile set syntax=groovy
-  " autocmd BufReadPost Jenkinsfile set filetype=groovy
+  autocmd FileType javascript syntax clear jsFuncBlocka                             " rainbow issue #2
+
+  " autocmd Syntax groovy,Jenkinsfile :IndentLinesEnable
+  " autocmd BufReadPost Jenkinsfile set filetype=groovy syntax=groovy
   " autocmd BufNewFile,BufRead Jenkinsfile setf groovy
-  " autocmd BufNewFile,BufRead,BufReadPost Jenkinsfile setlocal foldmethod=indent setf groovy
-  " autocmd FileType Jenkinsfile setlocal syntax=groovy foldmethod=indent
-  " autocmd FileType Jenkinsfile setlocal filetype=groovy foldmethod=indent
-  " autocmd FileType Jenkinsfile set syntax=groovy
-  " autocmd FileType Jenkinsfile set filetype=groovy
+  " autocmd BufNewFile,BufRead,BufReadPost Jenkinsfile setlocal foldmethod=indent
+  " autocmd FileType Jenkinsfile setlocal filetype=groovy syntax=groovy foldmethod=indent
+  " autocmd FileType Jenkinsfile set syntax=groovy filetype=groovy
 
   augroup vimrc
     autocmd BufReadPre * setlocal foldmethod=indent
