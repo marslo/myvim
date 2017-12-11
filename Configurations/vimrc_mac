@@ -6,7 +6,7 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.24
-"    LastChange: 2017-12-06 18:08:22
+"    LastChange: 2017-12-11 20:25:18
 " =============================================================================
 
 set nocompatible
@@ -200,7 +200,8 @@ endif
 
 if has('gui_running') || 'xterm-256color' == $TERM
   set background=dark
-  colorscheme marslo
+  colorscheme solarized
+  " colorscheme marslo
   let psc_style='cool'
 else
   set t_Co=8
@@ -279,6 +280,8 @@ if has('statusline')
   set statusline=%#User2#%m%r%*\ %F\ %y,%{&fileformat}
   set statusline+=%=\ %-{strftime(\"%H:%M\ %d/%m/%Y\")}\ %b[A],0x%B\ %c%V,%l/%L\ %1*--%n%%--%*\ %p%%\ |
 endif
+" set synmaxcol=128
+" set binary
 if has('persistent_undo')
   set noundofile
 endif
@@ -423,7 +426,7 @@ let g:indentLine_enabled = 1
 let g:indentLine_color_gui = "#282828"
 let g:indentLine_color_term = 239
 let g:indentLine_indentLevel = 20
-let g:indentLine_showFirstIndentLevel = 0
+let g:indentLine_showFirstIndentLevel = 1
 let g:indentLine_color_tty = 0
 let g:indentLine_faster = 1
 let g:indentLine_concealcursor = 'inc'
@@ -482,6 +485,7 @@ imap <Tab> <Plug>snipMateNextOrTrigger
 " call matchadd('ColorColumn', '\%81v', 100)
 " match OverLength /\%81v.\+/
 
+highlight CollumnLimit        guibg=NONE    guifg=#4e4e4e       ctermfg=240
 augroup collumnLimit
   autocmd!
   let collumnLimit = 80
@@ -491,13 +495,13 @@ augroup END
 
 " Programming configs for specified scripts
 if has("autocmd")
-  " autocmd! bufwritepost ~/.vimrc silent! source %
+  autocmd! bufwritepost ~/.vimrc silent! source %
 
   autocmd BufRead,BufNewFile * setfiletype txt
   autocmd BufRead,BufNewFile *.t set filetype=perl
   autocmd BufEnter *.md exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" %:p "--no-gpu"<CR>'
   autocmd BufEnter *.markdown exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome --no-gpu"  %:p<CR>'
-  autocmd BufWinLeave * silent! mkview
+  " autocmd BufWinLeave * silent! mkview
   autocmd BufWinEnter * silent! loadview
   autocmd QuickFixCmdPost *grep* cwindow
 
