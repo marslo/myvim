@@ -228,6 +228,17 @@ Here is a list of formatprograms that are supported by default, and thus will be
 * `fprettify` for modern __Fortran__.
   Download from [official repository](https://github.com/pseewald/fprettify). Install with `./setup.py install` or `./setup.py install --user`.
 
+* `mix format` for __Elixir__.
+  `mix format` is included with Elixir 1.6+.
+
+* `fixjson` for JSON.
+  It is a JSON file fixer/formatter for humans using (relaxed) JSON5. It fixes various failures while humans writing JSON and formats JSON codes.
+  It can be installed with `npm install -g fixjson`. More info is available at https://github.com/rhysd/fixjson.
+
+* `shfmt` for __Shell__.
+  A shell formatter written in Go supporting POSIX Shell, Bash and mksh that can be installed with `go get -u mvdan.cc/sh/cmd/shfmt`. See https://github.com/mvdan/sh for more info.
+
+
 ## Help, the formatter doesn't work as expected!
 
 If you're struggling with getting a formatter to work, it may help to set vim-autoformat in

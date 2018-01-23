@@ -1,12 +1,11 @@
 " =============================================================================
-
 "      FileName: vimrc_mac
 "          Desc: Made in Marslo
 "        Author: Marslo Jiao
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.24
-"    LastChange: 2017-12-11 20:25:18
+"    LastChange: 2018-01-23 16:23:10
 " =============================================================================
 
 set nocompatible
@@ -51,6 +50,7 @@ Bundle 'LargeFile'
 Bundle 'L9'
 Bundle 'godlygeek/tabular'
 Bundle 'Chiel92/vim-autoformat'
+Bundle 'rizzatti/dash.vim'
 " Python
 Bundle 'klen/python-mode'
 Bundle 'python_fold'
@@ -67,11 +67,12 @@ Bundle 'tpope/vim-repeat'
 " Colors and themes and syntax
 Bundle 'luochen1990/rainbow'
 Bundle 'txt.vim'
-Bundle 'Marslo/vim-coloresque'
 " Bundle 'ap/vim-css-color'
+Bundle 'Marslo/vim-coloresque'
 Bundle 'Marslo/marslo.vim'
 Bundle 'Marslo/MarsloVimOthers'
 Bundle 'plasticboy/vim-markdown.git'
+Bundle 'mzlogin/vim-markdown-toc'
 Bundle 'altercation/vim-colors-solarized'
 " Git
 Bundle 'tpope/vim-fugitive'
@@ -262,7 +263,7 @@ set foldexpr=1                                                      " Shown line
 set foldlevel=100                                                   " Not fold while VIM set up
 set shortmess+=filmnrxoOtT                                          " Abbrev. of messages (avoids 'hit enter')
 set viewoptions=folds
-set backspace=indent,eol,start                                      	" Make backspace h, l, etc wrap to
+set backspace=indent,eol,start                                      " Make backspace h, l, etc wrap to
 set whichwrap+=<,>,h,l
 set go+=a                                                           " Visual selection automatically copied to the clipboard
 set hidden                                                          " Switch between buffers with unsaved change
@@ -273,15 +274,17 @@ set matchpairs+=<:>
 " set autowrite
 if has('cmdline_info')
   set ruler                                                         " ruler: Show Line and colum number
-  set showcmd                                                     " Show (partial) command in status line
+  set showcmd                                                       " Show (partial) command in status line
 endif
 if has('statusline')
   set laststatus=2                                                  " Set status bar
   set statusline=%#User2#%m%r%*\ %F\ %y,%{&fileformat}
+  " set statusline+=\ %{fugitive#statusline()}
   set statusline+=%=\ %-{strftime(\"%H:%M\ %d/%m/%Y\")}\ %b[A],0x%B\ %c%V,%l/%L\ %1*--%n%%--%*\ %p%%\ |
 endif
 " set synmaxcol=128
 " set binary
+
 if has('persistent_undo')
   set noundofile
 endif
@@ -302,8 +305,6 @@ nnoremap <leader>bp :bp<CR>
 nnoremap <leader>bn :bn<CR>
 nnoremap <C-k> <C-w>k
 nnoremap <C-j> <C-w>j
-nnoremap <C-h> <C-W>h
-nnoremap <C-l> <C-W>l
 nnoremap <C-a> <ESC>^
 inoremap <C-a> <ESC>I
 cnoremap <C-a> <Home>
@@ -333,6 +334,8 @@ cnoreabbrev QA! qa!
 cnoreabbrev WA wa
 cnoreabbrev WA! wa!
 cnoreabbrev NOH noh
+cnoremap sw!! w !sudo tee > /dev/null %
+cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
 
 inoremap <leader>tt <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
 inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
@@ -401,6 +404,7 @@ let MRU_Auto_Close = 1                                              " Most Recen
 let MRU_Max_Entries = 10
 let MRU_Exclude_Files='^/tmp/.*\|^/temp/.*\|^/media/.*\|^/mnt/.*'
 map <leader>re :MRU<CR>
+
 noremap <Leader>u :GundoToggle<CR>
 
 let g:rainbow_active = 1
@@ -465,6 +469,30 @@ let g:vim_markdown_conceal = 0
 let g:vim_markdown_frontmatter = 1
 let g:vim_markdown_json_frontmatter = 1
 
+" for vim-markdown-toc
+let g:vmt_auto_update_on_save = 1
+let g:vmt_cycle_list_item_markers = 0
+
+" let g:tabular_loaded = 0
+if exists(":Tabularize")
+  nmap <Leader>a= :Tabularize /=<CR>
+  vmap <Leader>a= :Tabularize /=<CR>
+  nmap <leader>a: :Tabularize /:\zs<CR>
+  vmap <leader>a: :Tabularize /:\zs<CR>
+  inoremap <silent> <Bar>   <Bar><Esc>:call <SID>table_auto_align()<CR>a
+  function! s:table_auto_align()
+      let p = '^\s*|\s.*\s|\s*$'
+      if exists(':Tabularize') && getline('.') =~# '^\s*|'
+                  \ && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+          let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
+          let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+          Tabularize/|/l1
+          normal! 0
+          call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+      endif
+  endfunction
+endif
+
 " fugitive
 nnoremap <Leader>ga :Git add %:p<CR><CR>
 nnoremap <Leader>gs :Gstatus<CR>
@@ -496,7 +524,6 @@ augroup END
 " Programming configs for specified scripts
 if has("autocmd")
   autocmd! bufwritepost ~/.vimrc silent! source %
-
   autocmd BufRead,BufNewFile * setfiletype txt
   autocmd BufRead,BufNewFile *.t set filetype=perl
   autocmd BufEnter *.md exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" %:p "--no-gpu"<CR>'
@@ -504,14 +531,13 @@ if has("autocmd")
   " autocmd BufWinLeave * silent! mkview
   autocmd BufWinEnter * silent! loadview
   autocmd QuickFixCmdPost *grep* cwindow
-
   autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
   autocmd syntax groovy,Jenkinsfile setlocal foldmethod=indent
   autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile normal zM
+  autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile let g:indentLine_loaded=1
   autocmd FileType groovy,Jenkinsfile,sh set tabstop=2 softtabstop=2 shiftwidth=2
   autocmd FileType make,json,snippet,robot,markdown set tabstop=4 softtabstop=4 shiftwidth=4
-  autocmd FileType javascript syntax clear jsFuncBlocka                             " rainbow issue #2
-
+  autocmd FileType javascript syntax clear jsFuncBlock                           " rainbow issue #2
   " autocmd Syntax groovy,Jenkinsfile :IndentLinesEnable
   " autocmd BufReadPost Jenkinsfile set filetype=groovy syntax=groovy
   " autocmd BufNewFile,BufRead Jenkinsfile setf groovy

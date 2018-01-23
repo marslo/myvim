@@ -5,11 +5,11 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.24
-"    LastChange: 2017-12-05 17:40:18
+"    LastChange: 2018-01-23 16:20:34
 " =============================================================================
 
 set nocompatible
-set history=500
+set history=800
 set diffopt=filler,context:3
 runtime macros/matchit.vim
 let vimrplugin_i386 = 1
@@ -68,7 +68,7 @@ Bundle 'Conque-Shell'
 Bundle 'taglist.vim'
 Bundle 'winmanager'
 Bundle 'grep.vim'
-" For syntex check
+" syntex check
 Bundle 'vim-syntastic/syntastic'
 " Moving faster
 Bundle 'rhysd/accelerated-jk'
@@ -76,7 +76,9 @@ Bundle 'rhysd/accelerated-jk'
 " Loading my function after vim start (reduce vim start time)
 Bundle 'Marslo/MarsloFunc'
 Bundle 'LargeFile'
-Bundle 'altercation/vim-colors-solarized'
+Bundle 'L9'
+Bundle 'godlygeek/tabular'
+Bundle 'Chiel92/vim-autoformat'
 " Python
 Bundle 'klen/python-mode'
 Bundle 'python_fold'
@@ -109,8 +111,8 @@ Bundle 'hail2u/vim-css3-syntax'
 Bundle 'Marslo/vim-coloresque'
 Bundle 'Marslo/marslo.vim'
 Bundle 'Marslo/MarsloVimOthers'
-Bundle 'godlygeek/tabular'
 Bundle 'plasticboy/vim-markdown.git'
+Bundle 'mzlogin/vim-markdown-toc'
 Bundle 'altercation/vim-colors-solarized'
 " Bundle 'cakebaker/scss-syntax.vim'
 " Git
@@ -154,6 +156,17 @@ function! GetVundle()                                                   " GetVun
   endif
 endfunction
 command! GetVundle :call GetVundle()
+
+function! ToggleVerbose()
+    if !&verbose
+        set verbosefile=~/.log/vim/verbose.log
+        set verbose=15
+    else
+        set verbose=0
+        set verbosefile=
+    endif
+endfunction
+command! ToggleVerbose :call ToggleVerbose()
 
 if isdirectory(expand(bud . 'MarsloFunc'))
   command! GetVim :call marslofunc#GetVim()<CR>
@@ -350,6 +363,7 @@ endif
 if has('statusline')
   set laststatus=2                                                  " Set status bar
   set statusline=%#User2#%m%r%*\ %F\ %y,%{&fileformat}
+  " set statusline+=\ %{fugitive#statusline()}
   set statusline+=%=\ %-{strftime(\"%H:%M\ %d/%m/%Y\")}\ %b[A],0x%B\ %c%V,%l/%L\ %1*--%n%%--%*\ %p%%\ |
 endif
 " set synmaxcol=128
@@ -370,15 +384,15 @@ nnoremap k gk
 nnoremap gk k
 nnoremap n nzzzv
 nnoremap N Nzzzv
-map <leader>bd :bd<CR>
-map <leader>bp :bp<CR>
-map <leader>bn :bn<CR>
-map <C-k> <C-w>k
-map <C-j> <C-w>j
-map <C-a> <ESC>^
+nnoremap <leader>bd :bd<CR>
+nnoremap <leader>bp :bp<CR>
+nnoremap <leader>bn :bn<CR>
+nnoremap <C-k> <C-w>k
+nnoremap <C-j> <C-w>j
+nnoremap <C-a> <ESC>^
 inoremap <C-a> <ESC>I
 cnoremap <C-a> <Home>
-map <C-e> <ESC>$
+nnoremap <C-e> <ESC>$
 inoremap <C-e> <ESC>A
 cnoremap <C-e> <End>
 nnoremap Y y$
@@ -405,6 +419,8 @@ cnoreabbrev QA! qa!
 cnoreabbrev WA wa
 cnoreabbrev WA! wa!
 cnoreabbrev NOH noh
+cnoremap sw!! w !sudo tee > /dev/null %
+cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
 
 inoremap <leader>tt <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
 inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
@@ -579,6 +595,30 @@ let g:vim_markdown_conceal = 0
 let g:vim_markdown_frontmatter = 1
 let g:vim_markdown_json_frontmatter = 1
 
+" for vim-markdown-toc
+let g:vmt_auto_update_on_save = 1
+let g:vmt_cycle_list_item_markers = 0
+
+" let g:tabular_loaded = 0
+if exists(":Tabularize")
+  nmap <Leader>a= :Tabularize /=<CR>
+  vmap <Leader>a= :Tabularize /=<CR>
+  nmap <leader>a: :Tabularize /:\zs<CR>
+  vmap <leader>a: :Tabularize /:\zs<CR>
+  inoremap <silent> <Bar>   <Bar><Esc>:call <SID>table_auto_align()<CR>a
+  function! s:table_auto_align()
+      let p = '^\s*|\s.*\s|\s*$'
+      if exists(':Tabularize') && getline('.') =~# '^\s*|'
+                  \ && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+          let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
+          let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+          Tabularize/|/l1
+          normal! 0
+          call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+      endif
+  endfunction
+endif
+
 " fugitive
 nnoremap <Leader>ga :Git add %:p<CR><CR>
 nnoremap <Leader>gs :Gstatus<CR>
@@ -610,7 +650,7 @@ match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
 " let SuperTabMappingTabLiteral = '<Tab>'
 " let SuperTabClosePreviewOnPopupClose = 1
 
-
+highlight CollumnLimit        guibg=NONE    guifg=#4e4e4e       ctermfg=240
 augroup collumnLimit
   autocmd!
   let collumnLimit = 80
