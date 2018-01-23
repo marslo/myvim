@@ -5,7 +5,7 @@
 "         Email: marslo.jiao@gmail.com
 "        Created: 2013-10-16 07:19:00
 "       Version: 0.0.24
-"    LastChange: 2017-12-05 17:40:26
+"    LastChange: 2018-01-23 16:20:29
 " =============================================================================
 
 let &runtimepath=printf('%s/vimfiles,%s,%s/vimfiles/after', $VIM, $VIMRUNTIME, $VIM)
@@ -55,12 +55,16 @@ Bundle 'Conque-Shell'
 Bundle 'taglist.vim'
 Bundle 'winmanager'
 Bundle 'grep.vim'
+" syntex check
 Bundle 'vim-syntastic/syntastic'
-" For Moving faster
+" Moving faster
 Bundle 'rhysd/accelerated-jk'
 " Bundle 'yonchu/accelerated-smooth-scroll'
 Bundle 'Marslo/MarsloFunc'
 Bundle 'LargeFile'
+Bundle 'L9'
+Bundle 'godlygeek/tabular'
+Bundle 'Chiel92/vim-autoformat'
 " Python
 Bundle 'klen/python-mode'
 Bundle 'python_fold'
@@ -94,11 +98,12 @@ Bundle 'Marslo/vim-coloresque'
 Bundle 'Marslo/marslo.vim'
 Bundle 'Marslo/MarsloVimOthers'
 Bundle 'plasticboy/vim-markdown.git'
+Bundle 'mzlogin/vim-markdown-toc'
 Bundle 'altercation/vim-colors-solarized'
 " Bundle 'cakebaker/scss-syntax.vim'
 " Git
 Bundle 'tpope/vim-fugitive'
-" For Groovy
+" Groovy
 Bundle 'groovy.vim--Ruley'
 " Bundle 'mwaisgold/groovy-vim-files'
 Bundle 'marslo/Jenkinsfile-vim-syntax'
@@ -131,6 +136,17 @@ function! GetVundle()                                                   " GetVun
   endif
 endfunction
 command! GetVundle :call GetVundle()
+
+function! ToggleVerbose()
+    if !&verbose
+        set verbosefile=~/.log/vim/verbose.log
+        set verbose=15
+    else
+        set verbose=0
+        set verbosefile=
+    endif
+endfunction
+command! ToggleVerbose :call ToggleVerbose()
 
 if isdirectory(expand(bud . 'MarsloFunc'))
   command! GetVim :call marslofunc#GetVim()<CR>
@@ -238,18 +254,18 @@ set encoding=utf-8                                                  " Input Chin
 set fileencoding=utf-8
 let &termencoding=&encoding
 set nobackup noswapfile nowritebackup noundofile noendofline
-set number                                                          " number: line number
+set number                                                          " Number: line number
 set report=0
 set autoread                                                        " Set auto read when a file is changed by outside
 set showmatch                                                       " Show matching bracets (shortly jump to the other bracets)
 set matchtime=1                                                     " The shortly time
 set tabstop=2                                                       " Tab width
 set softtabstop=2                                                   " Width for backspace
-set shiftwidth=2                                                    " the tab width by using >> & <<
+set shiftwidth=2                                                    " The tab width by using >> & <<
 set autoindent smartindent expandtab
 set cindent
 set cinoptions=(0,u0,U0
-set smarttab						                                            " smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
+set smarttab                                                        " Smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
 set linebreak
 set modifiable
 set write
@@ -258,7 +274,7 @@ set magic                                                           " Regular Ex
 set linespace=0
 set wildmenu
 set wildmode=longest,list,full                                      " Completion mode that is used for the character
-set noerrorbells novisualbell                                       " turn off error beep/flash
+set noerrorbells novisualbell                                       " Turn off error beep/flash
 set t_vb=
 set list listchars=tab:\ \ ,trail:·,extends:»,precedes:«,nbsp:·
 set cursorline                                                      " Highlight the current line
@@ -274,7 +290,7 @@ set foldexpr=1                                                      " Shown line
 set foldlevel=100                                                   " Not fold while VIM set up
 set shortmess+=filmnrxoOtT                                          " Abbrev. of messages (avoids 'hit enter')
 set viewoptions=folds
-set backspace=indent,eol,start                                      " make backspace h, l, etc wrap to
+set backspace=indent,eol,start                                      " Make backspace h, l, etc wrap to
 set whichwrap+=<,>,h,l
 set go+=a                                                           " Visual selection automatically copied to the clipboard
 set hidden                                                          " Switch between buffers with unsaved change
@@ -290,6 +306,7 @@ endif
 if has('statusline')
   set laststatus=2                                                  " Set status bar
   set statusline=%#User2#%m%r%*\ %F\ %y,%{&fileformat}
+  " set statusline+=\ %{fugitive#statusline()}
   set statusline+=%=\ %-{strftime(\"%H:%M\ %d/%m/%Y\")}\ %b[A],0x%B\ %c%V,%l/%L\ %1*--%n%%--%*\ %p%%\ |
 endif
 " set synmaxcol=128
@@ -308,15 +325,15 @@ nnoremap k gk
 nnoremap gk k
 nnoremap n nzzzv
 nnoremap N Nzzzv
-map <leader>bd :bd<CR>
-map <leader>bp :bp<CR>
-map <leader>bn :bn<CR>
-map <C-k> <C-w>k
-map <C-j> <C-w>j
-map <C-a> <ESC>^
+nnoremap <leader>bd :bd<CR>
+nnoremap <leader>bp :bp<CR>
+nnoremap <leader>bn :bn<CR>
+nnoremap <C-k> <C-w>k
+nnoremap <C-j> <C-w>j
+nnoremap <C-a> <ESC>^
 inoremap <C-a> <ESC>I
 cnoremap <C-a> <Home>
-map <C-e> <ESC>$
+nnoremap <C-e> <ESC>$
 inoremap <C-e> <ESC>A
 cnoremap <C-e> <End>
 nnoremap Y y$
@@ -342,6 +359,8 @@ cnoreabbrev QA! qa!
 cnoreabbrev WA wa
 cnoreabbrev WA! wa!
 cnoreabbrev NOH noh
+cnoremap sw!! w !sudo tee > /dev/null %
+cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
 
 inoremap <leader>tt <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
 inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
@@ -454,6 +473,7 @@ let g:rainbow_conf = {
 \   }
 \}
 
+let g:indentLine_enabled = 1
 let g:indentLine_color_gui = "#282828"
 let g:indentLine_color_term = 239
 let g:indentLine_indentLevel = 20
@@ -482,10 +502,7 @@ let g:AutoPairsParens = {'(':')', '[':']', '{':'}', '<':'>'}
 let g:AutoPairsFlyMode = 0
 let g:AutoPairsShortcutBackInsert = '<M-b>'
 
-match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
-
 " if isdirectory(bud . '/accelerated-jk')
-
   " nmap j <Plug>(accelerated_jk_gj)
   " nmap k <Plug>(accelerated_jk_gk)
 " endif
@@ -533,14 +550,17 @@ imap <C-J> <Plug>snipMateNextOrTrigger
 smap <C-J> <Plug>snipMateNextOrTrigger
 imap <Tab> <Plug>snipMateNextOrTrigger
 
+match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
+highlight CollumnLimit        guibg=NONE    guifg=#4e4e4e       ctermfg=240
 augroup collumnLimit
   autocmd!
   let collumnLimit = 80
   let pattern = '\%<' . (collumnLimit+1) . 'v.\%>' . collumnLimit . 'v'
   let w:m1=matchadd('CollumnLimit', pattern, -1)
 augroup END
-if has("autocmd")
 
+" Programming configs for specified scripts
+if has("autocmd")
   autocmd BufRead,BufNewFile * setfiletype txt
   autocmd BufRead,BufNewFile *.t set filetype=perl
   autocmd BufEnter *.md exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" %:p "--no-gpu"<CR>'
@@ -548,7 +568,6 @@ if has("autocmd")
   autocmd BufWinLeave * silent! mkview
   autocmd BufWinEnter * silent! loadview
   autocmd QuickFixCmdPost *grep* cwindow
-
   autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
   autocmd syntax groovy,Jenkinsfile setlocal foldmethod=indent
   autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile normal zM

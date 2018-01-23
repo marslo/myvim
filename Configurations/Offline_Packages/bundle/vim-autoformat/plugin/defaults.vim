@@ -49,7 +49,7 @@ if !exists('g:formatdef_yapf')
 endif
 
 function! g:YAPFFormatConfigFileExists()
-    return len(findfile(".style.yapf", expand("%:p:h").";")) || len(findfile("setup.cfg", expand("%:p:h").";"))
+    return len(findfile(".style.yapf", expand("%:p:h").";")) || len(findfile("setup.cfg", expand("%:p:h").";")) || filereadable(exists('$XDG_CONFIG_HOME') ? expand('$XDG_CONFIG_HOME/yapf/style') : expand('~/.config/yapf/style'))
 endfunction
 
 if !exists('g:formatters_python')
@@ -179,6 +179,7 @@ endif
 if !exists('g:formatdef_eslint_local')
     function! g:BuildESLintLocalCmd()
         let l:path = fnamemodify(expand('%'), ':p')
+        let l:ext = ".".expand('%:p:e')
         let verbose = &verbose || g:autoformat_verbosemode == 1
         if has('win32')
             return "(>&2 echo 'ESLint not supported on win32')"
@@ -188,19 +189,27 @@ if !exists('g:formatdef_eslint_local')
         if empty(l:prog)
             let l:prog = findfile('~/.npm-global/bin/eslint')
         endif
-        let l:cfg = findfile('.eslintrc.js', l:path.";")
-        if empty(l:cfg)
-            let l:cfg = findfile('.eslintrc.yaml', l:path.";")
+        "initial
+        let l:cfg = fnamemodify(findfile('.eslintrc.js', l:path.";"),':p')
+
+        let l:tcfg = fnamemodify(findfile('.eslintrc.yaml', l:path.";"),':p')
+        if len(l:tcfg) > len(l:cfg)
+          let l:cfg = l:tcfg
         endif
-        if empty(l:cfg)
-            let l:cfg = findfile('.eslintrc.yml', l:path.";")
+        let l:tcfg = fnamemodify(findfile('.eslintrc.yml', l:path.";"),':p')
+        if len(l:tcfg) > len(l:cfg)
+          let l:cfg = l:tcfg
         endif
-        if empty(l:cfg)
-            let l:cfg = findfile('.eslintrc.json', l:path.";")
+        let l:tcfg = fnamemodify(findfile('.eslintrc.json', l:path.";"),':p')
+        if len(l:tcfg) > len(l:cfg)
+          let l:cfg = l:tcfg
         endif
-        if empty(l:cfg)
-            let l:cfg = findfile('.eslintrc', l:path.";")
+        let l:tcfg = fnamemodify(findfile('.eslintrc', l:path.";"),':p')
+        if len(l:tcfg) > len(l:cfg)
+          let l:cfg = l:tcfg
         endif
+
+        " This is in case we are outside home folder
         if empty(l:cfg)
             let l:cfg = findfile('~/.eslintrc.js')
         endif
@@ -225,11 +234,11 @@ if !exists('g:formatdef_eslint_local')
 
         " This formatter uses a temporary file as ESLint has not option to print
         " the formatted source to stdout without modifieing the file.
-        let l:eslint_js_tmp_file = fnameescape(tempname().".js")
+        let l:eslint_tmp_file = fnameescape(tempname().l:ext)
         let content = getline('1', '$')
-        call writefile(content, l:eslint_js_tmp_file)
-        return l:prog." -c ".l:cfg." --fix ".l:eslint_js_tmp_file." 1> /dev/null; exit_code=$?
-                     \ cat ".l:eslint_js_tmp_file."; rm -f ".l:eslint_js_tmp_file."; exit $exit_code"
+        call writefile(content, l:eslint_tmp_file)
+        return l:prog." -c ".l:cfg." --fix ".l:eslint_tmp_file." 1> /dev/null; exit_code=$?
+                     \ cat ".l:eslint_tmp_file."; rm -f ".l:eslint_tmp_file."; exit $exit_code"
     endfunction
     let g:formatdef_eslint_local = "g:BuildESLintLocalCmd()"
 endif
@@ -255,10 +264,15 @@ if !exists('g:formatdef_jsbeautify_json')
     endif
 endif
 
+if !exists('g:formatdef_fixjson')
+    let g:formatdef_fixjson =  '"fixjson"'
+endif
+
 
 if !exists('g:formatters_json')
     let g:formatters_json = [
                 \ 'jsbeautify_json',
+                \ 'fixjson',
                 \ ]
 endif
 
@@ -429,4 +443,22 @@ endif
 
 if !exists('g:formatters_fortran')
     let g:formatters_fortran = ['fprettify']
+endif
+
+" Elixir
+if !exists('g:formatdef_mix_format')
+    let g:formatdef_mix_format = '"mix format -"'
+endif
+
+if !exists('g:formatters_elixir')
+    let g:formatters_elixir = ['mix_format']
+endif
+
+" Shell
+if !exists('g:formatdef_shfmt')
+    let g:formatdef_shfmt = '"shfmt -i ".(&expandtab ? shiftwidth() : "0")'
+endif
+
+if !exists('g:formatters_sh')
+    let g:formatters_sh = ['shfmt']
 endif
