@@ -334,8 +334,8 @@ cnoreabbrev QA! qa!
 cnoreabbrev WA wa
 cnoreabbrev WA! wa!
 cnoreabbrev NOH noh
-cnoremap sw!! w !sudo tee > /dev/null %
-cnoremap w!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
+cnoremap sudow!! w !sudo tee > /dev/null %
+cnoremap sw!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
 
 inoremap <leader>tt <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
 inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
