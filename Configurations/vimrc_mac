@@ -5,11 +5,11 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.24
-"    LastChange: 2018-01-23 16:23:10
+"    LastChange: 2018-02-19 16:37:05
 " =============================================================================
 
 set nocompatible
-set history=800
+set history=1000
 set diffopt=filler,context:3
 runtime macros/matchit.vim
 
@@ -51,6 +51,7 @@ Bundle 'L9'
 Bundle 'godlygeek/tabular'
 Bundle 'Chiel92/vim-autoformat'
 Bundle 'rizzatti/dash.vim'
+Bundle 'mhinz/vim-signify'
 " Python
 Bundle 'klen/python-mode'
 Bundle 'python_fold'
@@ -130,7 +131,7 @@ if isdirectory(expand(bud . 'MarsloFunc'))
   nmap gf :call marslofunc#GotoFile()<CR>
   xnoremap * :<C-u>call marslofunc#VSetSearch()<CR>/<C-R>=@/<CR><CR>
   xnoremap # :<C-u>call marslofunc#VSetSearch()<CR>?<C-R>=@/<CR><CR>
-  map <M-o> :call marslofunc#OpenFoler()<CR>
+  " map <M-o> :call marslofunc#OpenFoler()<CR>
   nmap <F12> :call marslofunc#UpdateTags()<CR>
   nmap <C-F5> :call marslofunc#RunResult()<CR>
   nmap <leader>ti :call marslofunc#callit()<CR>
@@ -215,6 +216,7 @@ nmap <leader>v :e ~/.vimrc<CR>
 set clipboard+=unnamed                                            " Copy the content to system clipboard by using y/p
 set clipboard+=unnamedplus
 
+set ttyfast                                                       " Enable fast terminal connection.
 set iskeyword-=.
 set autochdir
 set fileencodings=utf-8,ucs-bom,gbk,cp936,gb2312,gb18030            " Code Format
@@ -245,8 +247,8 @@ set magic                                                           " Regular Ex
 set linespace=0
 set wildmenu
 set wildmode=longest,list,full                                      " Completion mode that is used for the character
-set noerrorbells novisualbell                                       " Turn off error beep/flash
-set t_vb=
+set noerrorbells novisualbell                                       " ┐ Turn off
+set t_vb=                                                           " ┘ error beep/flash
 set list listchars=tab:\ \ ,trail:·,extends:»,precedes:«,nbsp:·
 set cursorline                                                      " Highlight the current line
 set guicursor=a:hor1
@@ -342,19 +344,20 @@ inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
 inoremap <leader>fe <C-R>=expand("%:t")<CR>
 inoremap <leader>w <C-O>:w<CR>
 nnoremap <leader>G :%s///gn<CR>
-
 nnoremap <leader>idl :IndentLineEnable<CR>
-nnoremap <leader>zdb :%s/\s\+$//<CR>
-nnoremap <leader>zhs :%s/^\s\+//<CR>
-nnoremap <leader>zim :g/^/ s//\=line('.').' '/<CR>
-nnoremap <leader>zbl :g/^\s*$/d<CR>
-nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>
-nnoremap <leader>zcm :%s/<C-v><CR>/\r/g<CR>
-nnoremap <leader>zng :%s///gn<CR>
-nnoremap <leader>zbd :%s/​//g<CR>
-nnoremap <leader>zdd :%s/ / /g<CR>
-nnoremap <leader>zds :%s/^<span.*span>//g<CR>
-nnoremap <leader>zid i•<ESC>
+
+nnoremap <leader>zil :g/^/ s//\=line('.').' '/<CR>    " Insert line number
+nnoremap <leader>zcm :%s/<C-v><CR>/\r/g<CR>           " Convert  to new line
+nnoremap <leader>zwl :%s///gn<CR>                     " Show the matches numbers (wc -l)
+nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>            " Delete 
+nnoremap <leader>zdb :%s/\s\+$//<CR>                  " Delete blank tail
+nnoremap <leader>zdl :g/^\s*$/d<CR>                   " Delete blank line
+nnoremap <leader>zd2 :%s/​//g<CR>                " Delete <200b>
+nnoremap <leader>zdd :%s/ / /g<CR>                    " Delete   (dot)
+nnoremap <leader>zds :%s/^<span.*span>//g<CR>         " Delete span tag
+nnoremap <leader>zdi :%s/^\s\+//<CR>                  " Delete indent spaces
+nnoremap <leader>zid i•<ESC>                          " Insert •
+nnoremap <leader>cr 0yt=A<C-r>=<C-r>"<CR><Esc>        " Cacular expr
 
 if version > 703
   " autocmd FocusLost * set norelativenumber
@@ -481,15 +484,15 @@ if exists(":Tabularize")
   vmap <leader>a: :Tabularize /:\zs<CR>
   inoremap <silent> <Bar>   <Bar><Esc>:call <SID>table_auto_align()<CR>a
   function! s:table_auto_align()
-      let p = '^\s*|\s.*\s|\s*$'
-      if exists(':Tabularize') && getline('.') =~# '^\s*|'
-                  \ && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
-          let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
-          let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
-          Tabularize/|/l1
-          normal! 0
-          call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
-      endif
+    let p = '^\s*|\s.*\s|\s*$'
+    if exists(':Tabularize') && getline('.') =~# '^\s*|'
+      \ && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+      let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
+      let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+      Tabularize/|/l1
+      normal! 0
+      call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+    endif
   endfunction
 endif
 
@@ -508,6 +511,9 @@ command! -bar -nargs=* Gpush execute 'Git push'
 imap <C-J> <Plug>snipMateNextOrTrigger
 smap <C-J> <Plug>snipMateNextOrTrigger
 imap <Tab> <Plug>snipMateNextOrTrigger
+
+let g:signify_disable_by_default=0
+let g:signify_vcs_list = [ 'git' ]
 
 " set colorcolumn=80
 " call matchadd('ColorColumn', '\%81v', 100)
