@@ -42,6 +42,8 @@ b[int():]
 #? list()
 b[:]
 
+#?
+b[:, 1]
 
 class _StrangeSlice():
     def __getitem__(self, sliced):
@@ -204,6 +206,9 @@ g
 dic2 = {'asdf': 3, 'b': 'str'}
 #? int()
 dic2['asdf']
+# TODO for now get doesn't work properly when used with a literal.
+#? None
+dic2.get('asdf')
 
 # string literal
 #? int()
@@ -255,6 +260,17 @@ dic['']
 for x in {1: 3.0, '': 1j}:
     #? int() str()
     x
+
+#? ['__iter__']
+dict().values().__iter__
+
+d = dict(a=3, b='')
+#? int() str()
+d.values()[0]
+#? int()
+d['a']
+#? int() None
+d.get('a')
 
 # -----------------
 # with variable as index
@@ -388,6 +404,18 @@ for x in [1] + ['']:
     x
 
 # -----------------
+# Potential Recursion Issues
+# -----------------
+class X():
+    def y(self):
+        self.a = [1]
+
+    def x(self):
+        self.a = list(self.a)
+        #? int()
+        self.a[0]
+
+# -----------------
 # For loops with attribute assignment.
 # -----------------
 def test_func():
@@ -403,8 +431,6 @@ def test_func():
     x
 
 
-# python >= 2.7
-# Set literals are not valid in 2.6.
 #? int()
 tuple({1})[0]
 

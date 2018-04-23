@@ -3,6 +3,24 @@
 Changelog
 ---------
 
+0.12.0 (2018-04-15)
++++++++++++++++++++
+
+- Virtualenv/Environment support
+- F-String Completion/Goto Support
+- Cannot crash with segfaults anymore
+- Cleaned up import logic
+- Understand async/await and autocomplete it (including async generators)
+- Better namespace completions
+- Passing tests for Windows (including CI for Windows)
+- Remove Python 2.6 support
+
+0.11.1 (2017-12-14)
++++++++++++++++++++
+
+- Parso update - the caching layer was broken
+- Better usages - a lot of internal code was ripped out and improved.
+
 0.11.0 (2017-09-20)
 +++++++++++++++++++
 

@@ -18,6 +18,10 @@ int(str)
 str..
 #? []
 a(0):.
+#? 2 ['and', 'or', 'if', 'is', 'in', 'not']
+0x0
+#? ['and', 'or', 'if', 'is', 'in', 'not']
+1j
 
 # -----------------
 # if/else/elif
@@ -158,6 +162,16 @@ def funct2():
     global_dict_var
 
 
+global_var_predefined = None
+
+def init_global_var_predefined():
+    global global_var_predefined
+    if global_var_predefined is None:
+        global_var_predefined = 3
+
+#? int() None
+global_var_predefined
+
 # -----------------
 # within docstrs
 # -----------------
@@ -286,8 +300,6 @@ with open('') as f:
         #? str()
         line
 
-# Nested with statements don't exist in Python 2.6.
-# python >= 2.7
 with open('') as f1, open('') as f2:
     #? ['closed']
     f1.closed

@@ -1,11 +1,21 @@
 import tempfile
 import shutil
+import os
+from functools import partial
 
 import pytest
 
 import jedi
+from jedi.api.environment import get_default_environment, get_system_environment
+from jedi._compatibility import py_version
 
-collect_ignore = ["setup.py"]
+collect_ignore = [
+    'setup.py',
+    '__main__.py',
+    'jedi/evaluate/compiled/subprocess/__main__.py',
+    'build/',
+    'test/examples',
+]
 
 
 # The following hooks (pytest_configure, pytest_unconfigure) are used
@@ -28,6 +38,9 @@ def pytest_addoption(parser):
 
     parser.addoption("--warning-is-error", action='store_true',
                      help="Warnings are treated as errors.")
+
+    parser.addoption("--env", action='store',
+                     help="Execute the tests in that environment (e.g. 35 for python3.5).")
 
 
 def pytest_configure(config):
@@ -70,3 +83,36 @@ def clean_jedi_cache(request):
     def restore():
         settings.cache_directory = old
         shutil.rmtree(tmp)
+
+
+@pytest.fixture(scope='session')
+def environment(request):
+    version = request.config.option.env
+    if version is None:
+        version = os.environ.get('JEDI_TEST_ENVIRONMENT', str(py_version))
+
+    if int(version) == py_version:
+        return get_default_environment()
+
+    return get_system_environment(version[0] + '.' + version[1:])
+
+
+@pytest.fixture(scope='session')
+def Script(environment):
+    return partial(jedi.Script, environment=environment)
+
+
+@pytest.fixture(scope='session')
+def has_typing(environment):
+    if environment.version_info >= (3, 5, 0):
+        # This if is just needed to avoid that tests ever skip way more than
+        # they should for all Python versions.
+        return True
+
+    script = jedi.Script('import typing', environment=environment)
+    return bool(script.goto_definitions())
+
+
+@pytest.fixture(scope='session')
+def jedi_path():
+    return os.path.dirname(__file__)
