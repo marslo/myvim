@@ -5,7 +5,7 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.24
-"    LastChange: 2018-02-19 16:37:05
+"    LastChange: 2018-03-19 22:55:02
 " =============================================================================
 
 set nocompatible
@@ -49,6 +49,7 @@ Bundle 'Marslo/MarsloFunc'
 Bundle 'LargeFile'
 Bundle 'L9'
 Bundle 'godlygeek/tabular'
+Bundle 'dhruvasagar/vim-table-mode'
 Bundle 'Chiel92/vim-autoformat'
 Bundle 'rizzatti/dash.vim'
 Bundle 'mhinz/vim-signify'
@@ -81,6 +82,8 @@ Bundle 'tpope/vim-fugitive'
 Bundle 'groovy.vim--Ruley'
 Bundle 'marslo/Jenkinsfile-vim-syntax'
 Bundle 'keith/cocoapods.vim'
+" Plist
+Bundle "darfink/vim-plist"
 
 call vundle#end()
 call pathogen#infect()
@@ -115,15 +118,31 @@ endfunction
 command! GetVundle :call GetVundle()
 
 function! ToggleVerbose()
-    if !&verbose
-        set verbosefile=~/.log/vim/verbose.log
-        set verbose=15
-    else
-        set verbose=0
-        set verbosefile=
-    endif
+  if !&verbose
+    set verbosefile=~/.log/vim/verbose.log
+    set verbose=15
+  else
+    set verbose=0
+    set verbosefile=
+  endif
 endfunction
 command! ToggleVerbose :call ToggleVerbose()
+
+function! ToggleWindowHorizontalVerticalSplit()
+  if !exists('t:splitType')
+    let t:splitType = 'vertical'
+  endif
+
+  if t:splitType == 'vertical' " is vertical switch to horizontal
+    windo wincmd K
+    let t:splitType = 'horizontal'
+
+  else " is horizontal switch to vertical
+    windo wincmd H
+    let t:splitType = 'vertical'
+  endif
+endfunction
+nnoremap <silent> <leader>wt :call ToggleWindowHorizontalVerticalSplit()<cr>
 
 if isdirectory(expand(bud . 'MarsloFunc'))
   command! GetVim :call marslofunc#GetVim()<CR>
@@ -131,7 +150,7 @@ if isdirectory(expand(bud . 'MarsloFunc'))
   nmap gf :call marslofunc#GotoFile()<CR>
   xnoremap * :<C-u>call marslofunc#VSetSearch()<CR>/<C-R>=@/<CR><CR>
   xnoremap # :<C-u>call marslofunc#VSetSearch()<CR>?<C-R>=@/<CR><CR>
-  " map <M-o> :call marslofunc#OpenFoler()<CR>
+  map <M-o> :call marslofunc#OpenFoler()<CR>
   nmap <F12> :call marslofunc#UpdateTags()<CR>
   nmap <C-F5> :call marslofunc#RunResult()<CR>
   nmap <leader>ti :call marslofunc#callit()<CR>
@@ -213,6 +232,7 @@ else
 endif
 
 nmap <leader>v :e ~/.vimrc<CR>
+set ttyfast                                                       " Enable fast terminal connection.
 set clipboard+=unnamed                                            " Copy the content to system clipboard by using y/p
 set clipboard+=unnamedplus
 
@@ -307,6 +327,8 @@ nnoremap <leader>bp :bp<CR>
 nnoremap <leader>bn :bn<CR>
 nnoremap <C-k> <C-w>k
 nnoremap <C-j> <C-w>j
+nnoremap <C-l> <C-w>l
+nnoremap <C-h> <C-w>h
 nnoremap <C-a> <ESC>^
 inoremap <C-a> <ESC>I
 cnoremap <C-a> <Home>
@@ -336,6 +358,8 @@ cnoreabbrev QA! qa!
 cnoreabbrev WA wa
 cnoreabbrev WA! wa!
 cnoreabbrev NOH noh
+cnoreabbrev %Y %y
+cnoreabbrev %D %d
 cnoremap sudow!! w !sudo tee > /dev/null %
 cnoremap sw!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
 
@@ -476,13 +500,31 @@ let g:vim_markdown_json_frontmatter = 1
 let g:vmt_auto_update_on_save = 1
 let g:vmt_cycle_list_item_markers = 0
 
+noremap <Leader>tm :TableModeToggle<CR>
+let g:table_mode_corner='|'
+let g:table_mode_header_fillchar='-'
+" let g:table_mode_corner_corner='+'
+function! s:isAtStartOfLine(mapping)
+  let text_before_cursor = getline('.')[0 : col('.')-1]
+  let mapping_pattern = '\V' . escape(a:mapping, '\')
+  let comment_pattern = '\V' . escape(substitute(&l:commentstring, '%s.*$', '', ''), '\')
+  return (text_before_cursor =~? '^' . ('\v(' . comment_pattern . '\v)?') . '\s*\v' . mapping_pattern . '\v$')
+endfunction
+
+inoreabbrev <expr> <bar><bar>
+          \ <SID>isAtStartOfLine('\|\|') ?
+          \ '<c-o>:TableModeEnable<cr><bar><space><bar><left><left>' : '<bar><bar>'
+inoreabbrev <expr> __
+          \ <SID>isAtStartOfLine('__') ?
+          \ '<c-o>:silent! TableModeDisable<cr>' : '__'
+
 " let g:tabular_loaded = 0
 if exists(":Tabularize")
   nmap <Leader>a= :Tabularize /=<CR>
   vmap <Leader>a= :Tabularize /=<CR>
   nmap <leader>a: :Tabularize /:\zs<CR>
   vmap <leader>a: :Tabularize /:\zs<CR>
-  inoremap <silent> <Bar>   <Bar><Esc>:call <SID>table_auto_align()<CR>a
+  inoremap <silent> <Bar>   <Bar><Esc>:call <SID>table_auto_align()<CR>
   function! s:table_auto_align()
     let p = '^\s*|\s.*\s|\s*$'
     if exists(':Tabularize') && getline('.') =~# '^\s*|'
@@ -512,15 +554,18 @@ imap <C-J> <Plug>snipMateNextOrTrigger
 smap <C-J> <Plug>snipMateNextOrTrigger
 imap <Tab> <Plug>snipMateNextOrTrigger
 
+let g:plist_display_format = 'xml'
+let g:plist_json_filetype = 'javascript'
+
 let g:signify_disable_by_default=0
 let g:signify_vcs_list = [ 'git' ]
 
-" set colorcolumn=80
 " call matchadd('ColorColumn', '\%81v', 100)
 " match OverLength /\%81v.\+/
 
-highlight CollumnLimit        guibg=NONE    guifg=#4e4e4e       ctermfg=240
 augroup collumnLimit
+  set colorcolumn=80
+  highlight CollumnLimit        guibg=NONE    guifg=#4e4e4e       ctermfg=240
   autocmd!
   let collumnLimit = 80
   let pattern = '\%<' . (collumnLimit+1) . 'v.\%>' . collumnLimit . 'v'
@@ -542,7 +587,7 @@ if has("autocmd")
   autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile normal zM
   autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile let g:indentLine_loaded=1
   autocmd FileType groovy,Jenkinsfile,sh set tabstop=2 softtabstop=2 shiftwidth=2
-  autocmd FileType make,json,snippet,robot,markdown set tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd FileType make,json,snippet,robot,markdown,groovy set tabstop=4 softtabstop=4 shiftwidth=4
   autocmd FileType javascript syntax clear jsFuncBlock                           " rainbow issue #2
   " autocmd Syntax groovy,Jenkinsfile :IndentLinesEnable
   " autocmd BufReadPost Jenkinsfile set filetype=groovy syntax=groovy
@@ -552,8 +597,8 @@ if has("autocmd")
   " autocmd FileType Jenkinsfile set syntax=groovy filetype=groovy
 
   augroup vimrc
-    autocmd BufReadPre * setlocal foldmethod=indent
-    autocmd BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
+  autocmd BufReadPre * setlocal foldmethod=indent
+  autocmd BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
   augroup END
 endif
 " set list lcs=tab:\|\
