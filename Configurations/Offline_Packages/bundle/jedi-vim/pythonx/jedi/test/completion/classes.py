@@ -216,6 +216,32 @@ class Dude(classgetter()):
         self.s
 
 # -----------------
+# multiple inheritance # 1071
+# -----------------
+
+class FactorMixin(object):
+    FACTOR_1 = 0.1
+
+class Calc(object):
+    def sum(self, a, b):
+        self.xxx = 3
+        return a + b
+
+class BetterCalc(Calc, FactorMixin):
+    def multiply_factor(self, a):
+        return a * self.FACTOR_1
+
+calc = BetterCalc()
+#? ['sum']
+calc.sum
+#? ['multiply_factor']
+calc.multip
+#? ['FACTOR_1']
+calc.FACTOR_1
+#? ['xxx']
+calc.xxx
+
+# -----------------
 # __call__
 # -----------------
 
@@ -422,17 +448,18 @@ class Super(object):
     a = 3
     def return_sup(self):
         return 1
+SuperCopy = Super
 
 class TestSuper(Super):
     #?
     super()
     def test(self):
-        #? Super()
+        #? SuperCopy()
         super()
         #? ['a']
         super().a
         if 1:
-            #? Super()
+            #? SuperCopy()
             super()
         def a():
             #?
@@ -445,6 +472,17 @@ class TestSuper(Super):
 #? int()
 TestSuper().return_sup()
 
+
+Super = 3
+
+class Foo():
+    def foo(self):
+        return 1
+# Somehow overwriting the same name caused problems (#1044)
+class Foo(Foo):
+    def foo(self):
+        #? int()
+        super().foo()
 
 # -----------------
 # if flow at class level

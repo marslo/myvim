@@ -38,7 +38,7 @@ You can read the Jedi library documentation `here <http://jedi.readthedocs.io/en
 
 If you want to report issues, just use the github issue tracker. In case of
 questions about the software, please use `stackoverflow
-<https://stackoverflow.com>`_ and tag your question with ``jedi-vim``.
+<https://stackoverflow.com/questions/tagged/jedi-vim>`_ and tag your question with ``jedi-vim``.
 
 
 Contributing
@@ -90,6 +90,14 @@ Example installation command using Pathogen:
 .. code-block:: sh
 
     git clone --recursive https://github.com/davidhalter/jedi-vim.git ~/.vim/bundle/jedi-vim
+
+Example installation using Vundle:
+
+Add the following line in your `~/.vimrc`
+    
+.. code-block:: vim
+
+    Plugin 'davidhalter/jedi-vim'
 
 
 Installation with your distribution

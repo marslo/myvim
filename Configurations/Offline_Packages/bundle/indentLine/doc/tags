@@ -8,6 +8,7 @@ LeadingSpaceToggle	indentLine.txt	/*LeadingSpaceToggle*
 g:indentLine_bgcolor_gui	indentLine.txt	/*g:indentLine_bgcolor_gui*
 g:indentLine_bgcolor_term	indentLine.txt	/*g:indentLine_bgcolor_term*
 g:indentLine_bufNameExclude	indentLine.txt	/*g:indentLine_bufNameExclude*
+g:indentLine_bufTypeExclude	indentLine.txt	/*g:indentLine_bufTypeExclude*
 g:indentLine_char	indentLine.txt	/*g:indentLine_char*
 g:indentLine_color_gui	indentLine.txt	/*g:indentLine_color_gui*
 g:indentLine_color_term	indentLine.txt	/*g:indentLine_color_term*
