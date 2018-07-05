@@ -57,66 +57,41 @@ endfor
 " ------------------------------------------------------------------------
 let s:script_path = fnameescape(expand('<sfile>:p:h:h'))
 
+" Initialize Python (PythonJedi command).
 function! s:init_python() abort
-    if g:jedi#force_py_version !=# 'auto'
-        " Always use the user supplied version.
-        try
-            return jedi#setup_py_version(g:jedi#force_py_version)
-        catch
-            throw 'Could not setup g:jedi#force_py_version: '.v:exception
-        endtry
-    endif
-
-    " Handle "auto" version.
-    if has('nvim') || (has('python') && has('python3'))
-        " Neovim usually has both python providers. Skipping the `has` check
-        " avoids starting both of them.
-
-        " Get default python version from interpreter in $PATH.
-        let s:def_py = system('python -c '.shellescape('import sys; sys.stdout.write(str(sys.version_info[0]))'))
-        if v:shell_error != 0 || !len(s:def_py)
+    " Use g:jedi#force_py_version for loading Jedi, or fall back to using
+    " `has()` - preferring Python 3.
+    let loader_version = get(g:, 'jedi#loader_py_version', g:jedi#force_py_version)
+    if loader_version ==# 'auto'
+        if has('python3')
+            let loader_version = 3
+        elseif has('python2')
+            let loader_version = 2
+        else
+            throw 'jedi-vim requires Vim with support for Python 2 or 3.'
+        endif
+    else
+        if loader_version =~# '^3'
+            let loader_version = 3
+        elseif loader_version =~# '^2'
+            let loader_version = 2
+        else
             if !exists('g:jedi#squelch_py_warning')
                 echohl WarningMsg
-                echom 'Warning: jedi-vim failed to get Python version from sys.version_info: ' . s:def_py
-                echom 'Falling back to version 2.'
+                echom printf("jedi-vim: could not determine Python loader version from 'g:jedi#loader_py_version/g:jedi#force_py_version' (%s), using 3.",
+                            \ loader_version)
                 echohl None
             endif
-            let s:def_py = 2
-        elseif &verbose
-            echom 'jedi-vim: auto-detected Python: '.s:def_py
-        endif
-
-        " Make sure that the auto-detected version is available in Vim.
-        if !has('nvim') || has('python'.(s:def_py == 2 ? '' : s:def_py))
-            return jedi#setup_py_version(s:def_py)
-        endif
-
-        " Add a warning in case the auto-detected version is not available,
-        " usually because of a missing neovim module in a VIRTUAL_ENV.
-        if has('nvim')
-            echohl WarningMsg
-            echom 'jedi-vim: the detected Python version ('.s:def_py.')'
-                        \ 'is not functional.'
-                        \ 'Is the "neovim" module installed?'
-                        \ 'While jedi-vim will work, it might not use the'
-                        \ 'expected Python path.'
-            echohl None
+            let loader_version = 3
         endif
     endif
-
-    if has('python')
-        call jedi#setup_py_version(2)
-    elseif has('python3')
-        call jedi#setup_py_version(3)
-    else
-        throw 'jedi-vim requires Vim with support for Python 2 or 3.'
-    endif
+    call jedi#setup_python_imports(loader_version)
     return 1
 endfunction
 
 
 function! jedi#reinit_python() abort
-    unlet! s:_init_python
+    let s:_init_python = -1
     call jedi#init_python()
 endfunction
 
@@ -124,13 +99,29 @@ endfunction
 let s:_init_python = -1
 function! jedi#init_python() abort
     if s:_init_python == -1
+        let s:_init_python = 0
         try
             let s:_init_python = s:init_python()
-        catch
-            let s:_init_python = 0
+            let s:_init_python = 1
+        catch /^jedi/
+            " Only catch errors from jedi-vim itself here, so that for
+            " unexpected Python exceptions the traceback will be shown
+            " (e.g. with NameError in jedi#setup_python_imports's code).
             if !exists('g:jedi#squelch_py_warning')
-                echoerr 'Error: jedi-vim failed to initialize Python: '
-                            \ .v:exception.' (in '.v:throwpoint.')'
+                let error_lines = split(v:exception, '\n')
+                let msg = 'Error: jedi-vim failed to initialize Python: '
+                            \ .error_lines[0].' (in '.v:throwpoint.')'
+                if len(error_lines) > 1
+                    echohl ErrorMsg
+                    echom 'jedi-vim error: '.error_lines[0]
+                    for line in error_lines[1:]
+                        echom line
+                    endfor
+                    echohl None
+                    let msg .= '. See :messages for more information.'
+                endif
+                redraw  " Redraw to only have the main message by default.
+                echoerr msg
             endif
         endtry
     endif
@@ -139,7 +130,7 @@ endfunction
 
 
 let s:python_version = 'null'
-function! jedi#setup_py_version(py_version) abort
+function! jedi#setup_python_imports(py_version) abort
     if a:py_version == 2
         let cmd_exec = 'python'
         let s:python_version = 2
@@ -147,43 +138,32 @@ function! jedi#setup_py_version(py_version) abort
         let cmd_exec = 'python3'
         let s:python_version = 3
     else
-        throw 'jedi#setup_py_version: invalid py_version: '.a:py_version
+        throw 'jedi#setup_python_imports: invalid py_version: '.a:py_version
     endif
 
     execute 'command! -nargs=1 PythonJedi '.cmd_exec.' <args>'
 
-    let s:init_outcome = 0
+    let g:_jedi_init_error = 0
     let init_lines = [
           \ 'import vim',
           \ 'try:',
           \ '    import jedi_vim',
+          \ '    if hasattr(jedi_vim, "jedi_import_error"):',
+          \ '        from jedi_vim_debug import format_exc_info',
+          \ '        vim.vars["_jedi_init_error"] = format_exc_info(jedi_vim.jedi_import_error)',
           \ 'except Exception as exc:',
-          \ '    vim.command(''let s:init_outcome = "could not import jedi_vim: {0}: {1}"''.format(exc.__class__.__name__, exc))',
-          \ 'else:',
-          \ '    vim.command(''let s:init_outcome = 1'')']
-    try
-        exe 'PythonJedi exec('''.escape(join(init_lines, '\n'), "'").''')'
-    catch
-        throw printf('jedi#setup_py_version: failed to run Python for initialization: %s.', v:exception)
-    endtry
-    if s:init_outcome is 0
-        throw 'jedi#setup_py_version: failed to run Python for initialization.'
-    elseif s:init_outcome isnot 1
-        throw printf('jedi#setup_py_version: %s.', s:init_outcome)
+          \ '    from jedi_vim_debug import format_exc_info',
+          \ '    vim.vars["_jedi_init_error"] = format_exc_info()',
+          \ ]
+    exe 'PythonJedi exec('''.escape(join(init_lines, '\n'), "'").''')'
+    if g:_jedi_init_error isnot 0
+        throw printf('jedi#setup_python_imports: %s', g:_jedi_init_error)
     endif
     return 1
 endfunction
 
 
 function! jedi#debug_info() abort
-    if s:python_version ==# 'null'
-        try
-            call s:init_python()
-        catch
-            echohl WarningMsg | echom v:exception | echohl None
-            return
-        endtry
-    endif
     if &verbose
       if &filetype !=# 'python'
         echohl WarningMsg | echo 'You should run this in a buffer with filetype "python".' | echohl None
@@ -208,7 +188,9 @@ function! jedi#debug_info() abort
     echo ' - jedi-vim git version: '
     echon substitute(system('git -C '.s:script_path.' describe --tags --always --dirty'), '\v\n$', '', '')
     echo ' - jedi git submodule status: '
-    echon substitute(system('git -C '.s:script_path.' submodule status'), '\v\n$', '', '')
+    echon substitute(system('git -C '.s:script_path.' submodule status pythonx/jedi'), '\v\n$', '', '')
+    echo ' - parso git submodule status: '
+    echon substitute(system('git -C '.s:script_path.' submodule status pythonx/parso'), '\v\n$', '', '')
     echo "\n"
     echo '##### Settings'
     echo '```'
@@ -251,23 +233,6 @@ function! jedi#debug_info() abort
       echo '</details>'
     endif
 endfunction
-
-function! jedi#force_py_version(py_version) abort
-    let g:jedi#force_py_version = a:py_version
-    return jedi#setup_py_version(a:py_version)
-endfunction
-
-
-function! jedi#force_py_version_switch() abort
-    if g:jedi#force_py_version == 2
-        call jedi#force_py_version(3)
-    elseif g:jedi#force_py_version == 3
-        call jedi#force_py_version(2)
-    else
-        throw "Don't know how to switch from ".g:jedi#force_py_version.'!'
-    endif
-endfunction
-
 
 " Helper function instead of `python vim.eval()`, and `.command()` because
 " these also return error definitions.
