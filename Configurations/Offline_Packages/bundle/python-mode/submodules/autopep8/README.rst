@@ -2,6 +2,10 @@
 autopep8
 ========
 
+.. image:: https://img.shields.io/pypi/v/autopep8.svg
+    :target: https://pypi.python.org/pypi/autopep8
+    :alt: PyPI Version
+
 .. image:: https://travis-ci.org/hhatto/autopep8.svg?branch=master
     :target: https://travis-ci.org/hhatto/autopep8
     :alt: Build status
@@ -198,6 +202,7 @@ autopep8 fixes the following issues_ reported by pycodestyle_::
     E241 - Fix extraneous whitespace around keywords.
     E242 - Remove extraneous whitespace around operator.
     E251 - Remove whitespace around parameter '=' sign.
+    E252 - Missing whitespace around parameter equals.
     E26  - Fix spacing after comment hash for inline comments.
     E265 - Fix spacing after comment hash for block comments.
     E27  - Fix extraneous whitespace around keywords.

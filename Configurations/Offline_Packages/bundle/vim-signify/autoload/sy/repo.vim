@@ -425,7 +425,7 @@ if executable(s:difftool)
         \ 'tfs':      'tf'
         \ }
 else
-  echomsg 'signify: No diff tool found -> no support for svn, darcs, bzr, fossil.'
+  call sy#verbose('No "diff" executable found. Disable support for svn, darcs, bzr, fossil.')
   let s:vcs_dict = {
         \ 'git':      'git',
         \ 'hg':       'hg',
@@ -457,12 +457,13 @@ let s:default_vcs_cmds = {
       \ }
 
 let s:default_vcs_cmds_diffmode = {
-      \ 'git':   'git show HEAD:./%f',
-      \ 'hg':    'hg cat %f',
-      \ 'svn':   'svn cat %f',
-      \ 'bzr':   'bzr cat %f',
-      \ 'darcs': 'darcs show contents -- %f',
-      \ 'cvs':   'cvs up -p -- %f 2>%n',
+      \ 'git':      'git show HEAD:./%f',
+      \ 'hg':       'hg cat %f',
+      \ 'svn':      'svn cat %f',
+      \ 'bzr':      'bzr cat %f',
+      \ 'darcs':    'darcs show contents -- %f',
+      \ 'cvs':      'cvs up -p -- %f 2>%n',
+      \ 'perforce': 'p4 print %f',
       \ }
 
 if exists('g:signify_vcs_cmds')
