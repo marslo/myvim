@@ -285,7 +285,22 @@ else
   colorscheme marslo16
 endif
 
-nmap <leader>v :e ~/.vimrc<CR>
+if has('win32') || has('win95') || has('win64')
+  " nmap <leader>v :e $VIM/_vimrc<CR>
+  nmap <leader>v :e ~/_vimrc<CR>
+  autocmd! bufwritepost ~/_vimrc silent! source %                " autoload _vimrc
+  " set guifont=Monaco:h19                                          " Fonts
+  set guifont=Ubuntu\ Mono:h22                                      " Fonts
+  set guifontwide=NSimsun:h16
+  set clipboard+=unnamed                                            " Copy the content to system clipboard by using y/p
+  set clipboard+=unnamedplus
+else
+  nmap <leader>v :e ~/.vimrc<CR>
+  autocmd! bufwritepost ~/.vimrc silent! source %
+  set guifont=Monaco\ 14
+  set clipboard=unnamedplus
+endif
+
 set clipboard+=unnamed                                            " Copy the content to system clipboard by using y/p
 set clipboard+=unnamedplus
 
@@ -424,8 +439,7 @@ nnoremap <leader>G :%s///gn<CR>
 nnoremap <leader>idl :IndentLineEnable<CR>
 
 nnoremap <leader>zil :g/^/ s//\=line('.').' '/<CR>    " Insert line number
-nnoremap <leader>zcm :%s/<C-v><CR>/\r/g<CR>           " Convert 
- to new line
+nnoremap <leader>zcm :%s/<C-v><CR>/\r/g<CR>           " Convert to new line
 nnoremap <leader>zwl :%s///gn<CR>                     " Show the matches numbers (wc -l)
 nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>            " Delete 
 nnoremap <leader>zdb :%s/\s\+$//<CR>                  " Delete blank tail
@@ -629,7 +643,7 @@ imap <C-J> <Plug>snipMateNextOrTrigger
 smap <C-J> <Plug>snipMateNextOrTrigger
 imap <Tab> <Plug>snipMateNextOrTrigger
 
-match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
+" match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
 let g:signify_disable_by_default=0
 let g:signify_vcs_list = [ 'git' ]
 
@@ -683,5 +697,13 @@ if has("autocmd")
   augroup END
 endif
 " set list lcs=tab:\|\
+"
+"
+" Uncomment the following to have Vim jump to the last position when                                                       
+" reopening a file
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+    \| exe "normal! g'\"" | endif
+endif
 
 " vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab
