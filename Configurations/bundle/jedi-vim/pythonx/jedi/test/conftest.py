@@ -9,6 +9,7 @@ from . import run
 from . import refactor
 
 import jedi
+from jedi.api.environment import InterpreterEnvironment
 from jedi.evaluate.analysis import Warning
 
 
@@ -126,11 +127,12 @@ class StaticAnalysisCase(object):
         return "<%s: %s>" % (self.__class__.__name__, os.path.basename(self._path))
 
 
-@pytest.fixture()
-def venv_path(tmpdir, environment):
+@pytest.fixture(scope='session')
+def venv_path(tmpdir_factory, environment):
     if environment.version_info.major < 3:
         pytest.skip("python -m venv does not exist in Python 2")
 
+    tmpdir = tmpdir_factory.mktemp('venv_path')
     dirname = os.path.join(tmpdir.dirname, 'venv')
 
     # We cannot use the Python from tox because tox creates virtualenvs and
@@ -162,3 +164,8 @@ def cwd_tmpdir(monkeypatch, tmpdir):
 @pytest.fixture
 def evaluator(Script):
     return Script('')._evaluator
+
+
+@pytest.fixture
+def same_process_evaluator(Script):
+    return Script('', environment=InterpreterEnvironment())._evaluator

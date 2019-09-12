@@ -52,8 +52,12 @@ function! g:YAPFFormatConfigFileExists()
     return len(findfile(".style.yapf", expand("%:p:h").";")) || len(findfile("setup.cfg", expand("%:p:h").";")) || filereadable(exists('$XDG_CONFIG_HOME') ? expand('$XDG_CONFIG_HOME/yapf/style') : expand('~/.config/yapf/style'))
 endfunction
 
+if !exists('g:formatdef_black')
+    let g:formatdef_black = '"black -q ".(&textwidth ? "-l".&textwidth : "")." -"'
+endif
+
 if !exists('g:formatters_python')
-    let g:formatters_python = ['autopep8','yapf']
+    let g:formatters_python = ['autopep8','yapf', 'black']
 endif
 
 
@@ -285,7 +289,7 @@ endif
 
 " HTML
 if !exists('g:formatdef_htmlbeautify')
-    let g:formatdef_htmlbeautify = '"html-beautify -f - -".(&expandtab ? "s ".shiftwidth() : "t")'
+    let g:formatdef_htmlbeautify = '"html-beautify - -".(&expandtab ? "s ".shiftwidth() : "t")'
 endif
 
 if !exists('g:formatdef_tidy_html')
@@ -414,7 +418,7 @@ if !exists('g:formatdef_perltidy')
                 \ filereadable($HOMEPATH."/perltidy.ini"))) ||
                 \ ((has("unix") ||
                 \ has("mac")) && (filereadable(".perltidyrc") ||
-                \ filereadable("~/.perltidyrc") ||
+                \ filereadable(expand("~/.perltidyrc")) ||
                 \ filereadable("/usr/local/etc/perltidyrc") ||
                 \ filereadable("/etc/perltidyrc")))
         let g:formatdef_perltidy = '"perltidy -q -st"'
@@ -434,6 +438,15 @@ endif
 
 if !exists('g:formatters_haskell')
     let g:formatters_haskell = ['stylish_haskell']
+endif
+
+" Purescript
+if !exists('g:formatdef_purty')
+    let g:formatdef_purty = '"purty -"'
+endif
+
+if !exists('g:formatters_purescript')
+    let g:formatters_purescript = ['purty']
 endif
 
 " Markdown

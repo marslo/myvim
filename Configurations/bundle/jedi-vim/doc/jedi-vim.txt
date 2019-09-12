@@ -60,7 +60,7 @@ Jedi-vim is a Vim binding to the awesome Python autocompletion library
 - Infers function arguments from Sphinx/Epydoc strings
 - Doesn't execute Python code
 - Supports Virtualenv
-- Supports Python 2.5+ and 3.2+
+- Supports Python 2.7 and 3.4+
 
 By leveraging this library, jedi-vim adds the following capabilities to Vim:
 
@@ -77,15 +77,6 @@ By leveraging this library, jedi-vim adds the following capabilities to Vim:
 2.0. Requirements                       *jedi-vim-installation-requirements*
 
 First of all, jedi-vim requires Vim to be compiled with the `+python` option.
-
-The jedi library has to be installed for jedi-vim to work properly.  You can
-install it first, by using e.g. your distribution's package manager, or by
-using pip: >
-
-    pip install jedi
-
-However, you can also install it as a git submodule if you don't want to use
-jedi for anything but this plugin. How to do this is detailed below.
 
 It is best if you have VIM >= 7.3, compiled with the `+conceal` option. With
 older versions, you will probably not see the parameter recommendation list
@@ -107,11 +98,7 @@ feature (such as MacVim on OS X, which also contains a console binary).
 ------------------------------------------------------------------------------
 2.1. Installing manually                *jedi-vim-installation-manually*
 
-1a. Get the latest repository from Github: >
-
-    git clone http://github.com/davidhalter/jedi-vim path/to/bundles/jedi-vim
-
-1b. If you want to install jedi as a submodule instead, issue this command: >
+1. If you want to install jedi as a submodule instead, issue this command: >
 
     git clone --recursive http://github.com/davidhalter/jedi-vim
 
@@ -161,8 +148,8 @@ repositories. On Arch Linux, install vim-jedi. On Debian (8+) or Ubuntu
 ==============================================================================
 3. Supported Python features            *jedi-vim-support*
 
-The Jedi library does all the hard work behind the scenes. It supports
-completion of a large number of Python features, among them:
+The Jedi library does all the hard work behind the scenes. It understands most
+Python features, among them:
 
 - Builtins
 - Multiple `return`s or `yield`s
@@ -185,10 +172,12 @@ completion of a large number of Python features, among them:
 - Simple/usual `sys.path` modifications
 - `isinstance` checks for `if`/`while`/`assert` case, that doesn’t work with
   Jedi
+- Stubs
 - And more...
 
 Note: This list is not necessarily up to date. For a complete list of
-features, please refer to the Jedi documentation at http://jedi.jedidjah.ch.
+features, please refer to the Jedi documentation at
+http://jedi.readthedocs.io.
 
 ==============================================================================
 4. Usage                                *jedi-vim-usage*
@@ -439,10 +428,10 @@ Default: 500
 
 You can make jedi-vim open a new tab if you use the "go to", "show
 definition", or "related names" commands. When you leave this at the default
-(0), they open in the current buffer instead.
+(0), they open in the current window instead.
 
 Options: 0 or 1
-Default: 0 (Command output is put in a new tab)
+Default: 0 (Command output reuses current window)
 
 ------------------------------------------------------------------------------
 6.9. `g:jedi#squelch_py_warning`        *g:jedi#squelch_py_warning*
@@ -492,20 +481,20 @@ can be found.
 
 This variable can be changed during runtime.
 
-Options: 2, 2.7, 3, 3.3, 3.4, ...
+Options: 2, 2.7, 3, 3.5, 3.6, ...
 Default: "auto"
 ------------------------------------------------------------------------------
 6.13. `g:jedi#smart_auto_mappings`                  *g:jedi#smart_auto_mappings*
 
 When you start typing `from module.name<space>` jedi-vim automatically
-adds the "import" statement and displays the autocomplete popup.
+can add the "import" statement and trigger the autocompletion popup.
 
-This option can be disabled in the .vimrc:
+You can enable this using: >
 
-`let g:jedi#smart_auto_mappings = 0`
-
+    let g:jedi#smart_auto_mappings = 1
+<
 Options: 0 or 1
-Default: 1 (enabled by default)
+Default: 0 (disabled by default)
 
 ------------------------------------------------------------------------------
 6.14. `g:jedi#use_tag_stack`                    *g:jedi#use_tag_stack*

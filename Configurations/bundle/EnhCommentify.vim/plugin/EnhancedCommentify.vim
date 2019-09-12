@@ -1,7 +1,7 @@
 " EnhancedCommentify.vim
-" Maintainer:	Meikel Brandmeyer <Brandels_Mikesh@web.de>
-" Version:	2.3
-" Last Change:	Wednesday, February 20th, 2008
+" Maintainer:   Meikel Brandmeyer <Brandels_Mikesh@web.de>
+" Version:      2.3
+" Last Change:  Wednesday, February 20th, 2008
 
 " License:
 " Copyright (c) 2008 Meikel Brandmeyer, Frankfurt am Main
@@ -39,7 +39,7 @@
 "   Fixed type 'apacha' -> 'apache' (thanks to Brian Neu)
 "   Fixed nested comment escapes strings. (thanks to Samuel Ferencik)
 "   Fixed broken keyboard mappings when wcm was set to <Tab>.
-"					(thanks to xpatriotx)
+"                                       (thanks to xpatriotx)
 "   2.2
 "   Fixed problem with UseSyntax (thanks to Pieter Naaijkens)
 "   Fixed typo in ParseCommentsOp (commstr -> commStr).
@@ -64,7 +64,7 @@
 "   Fixed error detecting '*sh' filetypes.
 "   1.3
 "   hlsearch was set unconditionally (thanks to Mary Ellen Foster)
-"   made function silent	     (thanks to Mare Ellen Foster)
+"   made function silent             (thanks to Mare Ellen Foster)
 
 " Changelog:
 "   2.3
@@ -128,7 +128,7 @@
 "   strings. Prevents nesting errors (eg. /**/*/ in C)
 "   1.3
 "   Doesn't break lines like
-"	foo(); /* bar */
+"       foo(); /* bar */
 "   when doing commentify.
 
 " Install Details:
@@ -146,9 +146,9 @@ set cpo-=C
 "       initialisation.
 "
 " InitBooleanVariable(confVar, scriptVar, defaultVal)
-"	confVar		-- name of the configuration variable
-"	scriptVar	-- name of the variable to set
-"	defaultVal	-- default value
+"       confVar         -- name of the configuration variable
+"       scriptVar       -- name of the variable to set
+"       defaultVal      -- default value
 "
 " Tests on existence of configuration variable and sets scriptVar
 " according to its contents.
@@ -157,203 +157,203 @@ function s:InitBooleanVariable(confVar, scriptVar, defaultVal)
     let regex = a:defaultVal ? 'no*' : 'ye*s*'
 
     if exists(a:confVar) && {a:confVar} =~? regex
-	let {a:scriptVar} = !a:defaultVal
+        let {a:scriptVar} = !a:defaultVal
     else
-	let {a:scriptVar} = a:defaultVal
+        let {a:scriptVar} = a:defaultVal
     endif
 endfunction
 
 "
 " InitStringVariable(confVar, scriptVar, defaultVal)
-"	confVar		-- name of the configuration variable
-"	scriptVar	-- name of the variable to set
-"	defaultVal	-- default value
+"       confVar         -- name of the configuration variable
+"       scriptVar       -- name of the variable to set
+"       defaultVal      -- default value
 "
 " Tests on existence of configuration variable and sets scriptVar
 " to its contents.
 "
 function s:InitStringVariable(confVar, scriptVar, defaultVal)
     if exists(a:confVar)
-	execute "let ". a:scriptVar ." = ". a:confVar
+        execute "let ". a:scriptVar ." = ". a:confVar
     else
-	let {a:scriptVar} = a:defaultVal
+        let {a:scriptVar} = a:defaultVal
     endif
 endfunction
 
 "
 " InitScriptVariables(nameSpace)
-"	nameSpace	-- may be "g" for global or "b" for local
+"       nameSpace       -- may be "g" for global or "b" for local
 "
 " Initialises the script variables.
 "
 function s:InitScriptVariables(nameSpace)
-    let ns = a:nameSpace	" just for abbreviation
+    let ns = a:nameSpace        " just for abbreviation
     let lns = (ns == "g") ? "s" : "b" " 'local namespace'
 
     " Comment escape strings...
     call s:InitStringVariable(ns .":EnhCommentifyAltOpen", lns .":ECaltOpen",
-		\ s:ECaltOpen)
+                \ s:ECaltOpen)
     call s:InitStringVariable(ns .":EnhCommentifyAltClose", lns .":ECaltClose",
-		\ s:ECaltClose)
+                \ s:ECaltClose)
 
     call s:InitBooleanVariable(ns .":EnhCommentifyIgnoreWS", lns .":ECignoreWS",
-		\ s:ECignoreWS)
+                \ s:ECignoreWS)
 
     " Adding a space between comment strings and code...
     if exists(ns .":EnhCommentifyPretty")
-	if {ns}:EnhCommentifyPretty =~? 'ye*s*'
-	    let {lns}:ECprettyComments = ' '
-	    let {lns}:ECprettyUnComments = ' \='
-	else
-	    let {lns}:ECprettyComments = ''
-	    let {lns}:ECprettyUnComments = ''
-	endif
+        if {ns}:EnhCommentifyPretty =~? 'ye*s*'
+            let {lns}:ECprettyComments = ' '
+            let {lns}:ECprettyUnComments = ' \='
+        else
+            let {lns}:ECprettyComments = ''
+            let {lns}:ECprettyUnComments = ''
+        endif
     else
-	let {lns}:ECprettyComments = s:ECprettyComments
-	let {lns}:ECprettyUnComments = s:ECprettyUnComments
+        let {lns}:ECprettyComments = s:ECprettyComments
+        let {lns}:ECprettyUnComments = s:ECprettyUnComments
     endif
 
     " Identification string settings...
     call s:InitStringVariable(ns .":EnhCommentifyIdentString",
-		\ lns .":ECidentFront", s:ECidentFront)
+                \ lns .":ECidentFront", s:ECidentFront)
     let {lns}:ECidentBack =
-		\ (exists(ns .":EnhCommentifyIdentFrontOnly")
-		\	    && {ns}:EnhCommentifyIdentFrontOnly =~? 'ye*s*')
-		\ ? ''
-		\ : {lns}:ECidentFront
+                \ (exists(ns .":EnhCommentifyIdentFrontOnly")
+                \           && {ns}:EnhCommentifyIdentFrontOnly =~? 'ye*s*')
+                \ ? ''
+                \ : {lns}:ECidentFront
 
     " Wether to use syntax items...
     call s:InitBooleanVariable(ns .":EnhCommentifyUseSyntax",
-		\ lns .":ECuseSyntax", s:ECuseSyntax)
+                \ lns .":ECuseSyntax", s:ECuseSyntax)
 
     " Should the script respect line indentation, when inserting strings?
     call s:InitBooleanVariable(ns .":EnhCommentifyRespectIndent",
-		\ lns .":ECrespectIndent", s:ECrespectIndent)
+                \ lns .":ECrespectIndent", s:ECrespectIndent)
 
     " Keybindings...
     call s:InitBooleanVariable(ns .":EnhCommentifyUseAltKeys",
-		\ lns .":ECuseAltKeys", s:ECuseAltKeys)
+                \ lns .":ECuseAltKeys", s:ECuseAltKeys)
     call s:InitBooleanVariable(ns .":EnhCommentifyBindPerBuffer",
-		\ lns .":ECbindPerBuffer", s:ECbindPerBuffer)
+                \ lns .":ECbindPerBuffer", s:ECbindPerBuffer)
     call s:InitBooleanVariable(ns .":EnhCommentifyBindInNormal",
-		\ lns .":ECbindInNormal", s:ECbindInNormal)
+                \ lns .":ECbindInNormal", s:ECbindInNormal)
     call s:InitBooleanVariable(ns .":EnhCommentifyBindInInsert",
-		\ lns .":ECbindInInsert", s:ECbindInInsert)
+                \ lns .":ECbindInInsert", s:ECbindInInsert)
     call s:InitBooleanVariable(ns .":EnhCommentifyBindInVisual",
-		\ lns .":ECbindInVisual", s:ECbindInVisual)
+                \ lns .":ECbindInVisual", s:ECbindInVisual)
     call s:InitBooleanVariable(ns .":EnhCommentifyUserBindings",
-		\ lns .":ECuserBindings", s:ECuserBindings)
+                \ lns .":ECuserBindings", s:ECuserBindings)
     call s:InitBooleanVariable(ns .":EnhCommentifyTraditionalMode",
-		\ lns .":ECtraditionalMode", s:ECtraditionalMode)
+                \ lns .":ECtraditionalMode", s:ECtraditionalMode)
     call s:InitBooleanVariable(ns .":EnhCommentifyFirstLineMode",
-		\ lns .":ECfirstLineMode", s:ECfirstLineMode)
+                \ lns .":ECfirstLineMode", s:ECfirstLineMode)
     call s:InitBooleanVariable(ns .":EnhCommentifyUserMode",
-		\ lns .":ECuserMode", s:ECuserMode)
+                \ lns .":ECuserMode", s:ECuserMode)
     call s:InitBooleanVariable(ns .":EnhCommentifyBindUnknown",
-		\ lns .":ECbindUnknown", s:ECbindUnknown)
+                \ lns .":ECbindUnknown", s:ECbindUnknown)
 
     " Block stuff...
     call s:InitBooleanVariable(ns .":EnhCommentifyAlignRight",
-		\ lns .":ECalignRight", s:ECalignRight)
+                \ lns .":ECalignRight", s:ECalignRight)
     call s:InitBooleanVariable(ns .":EnhCommentifyUseBlockIndent",
-		\ lns .":ECuseBlockIndent", s:ECuseBlockIndent)
+                \ lns .":ECuseBlockIndent", s:ECuseBlockIndent)
     call s:InitBooleanVariable(ns .":EnhCommentifyMultiPartBlocks",
-		\ lns .":ECuseMPBlock", s:ECuseMPBlock)
+                \ lns .":ECuseMPBlock", s:ECuseMPBlock)
     call s:InitBooleanVariable(ns .":EnhCommentifyCommentsOp",
-		\ lns .":ECuseCommentsOp", s:ECuseCommentsOp)
+                \ lns .":ECuseCommentsOp", s:ECuseCommentsOp)
 
     let {lns}:ECsaveWhite = ({lns}:ECrespectIndent
-		\ || {lns}:ECignoreWS || {lns}:ECuseBlockIndent)
-		\	? '\(\s*\)'
-		\	: ''
+                \ || {lns}:ECignoreWS || {lns}:ECuseBlockIndent)
+                \       ? '\(\s*\)'
+                \       : ''
 
     if !{lns}:ECrespectIndent
-	let {lns}:ECuseBlockIndent = 0
+        let {lns}:ECuseBlockIndent = 0
     endif
 
     if {lns}:ECrespectIndent
-	let {lns}:ECrespectWhite = '\1'
-	let {lns}:ECignoreWhite = ''
+        let {lns}:ECrespectWhite = '\1'
+        let {lns}:ECignoreWhite = ''
     elseif {lns}:ECignoreWS
-	let {lns}:ECrespectWhite = ''
-	let {lns}:ECignoreWhite = '\1'
+        let {lns}:ECrespectWhite = ''
+        let {lns}:ECignoreWhite = '\1'
     else
-	let {lns}:ECrespectWhite = ''
-	let {lns}:ECignoreWhite = ''
+        let {lns}:ECrespectWhite = ''
+        let {lns}:ECignoreWhite = ''
     endif
 
     " Using comments option, doesn't make sense without useMPBlock
     "if lns == 'b' && b:ECuseCommentsOp
-    "	    let b:ECuseMPBlock = 1
+    "       let b:ECuseMPBlock = 1
     "endif
 endfunction
 
 "
 " EnhancedCommentifySet(option, value, ...)
-"	option	-- which option
-"	value	-- value which will be asigned to the option
+"       option  -- which option
+"       value   -- value which will be asigned to the option
 "
 " The purpose of this function is mainly to act as an interface to the
 " outer world. It hides the internally used variables.
 "
 function EnhancedCommentifySet(option, value)
     if a:option == 'AltOpen'
-	let oldval = b:ECaltOpen
-	let b:ECaltOpen = a:value
+        let oldval = b:ECaltOpen
+        let b:ECaltOpen = a:value
     elseif a:option == 'AltClose'
-	let oldval = b:ECaltClose
-	let b:ECaltClose = a:value
+        let oldval = b:ECaltClose
+        let b:ECaltClose = a:value
     elseif a:option == 'IdentString'
-	let oldval = b:ECidentFront
-	let b:ECidentFront = a:value
+        let oldval = b:ECidentFront
+        let b:ECidentFront = a:value
     elseif a:option == 'IdentFrontOnly'
-	let oldval = (b:ECidentBack == '') ? 'Yes' : 'No'
-	let b:ECidentBack = (a:value =~? 'ye*s*') ? '' : b:ECidentFront
+        let oldval = (b:ECidentBack == '') ? 'Yes' : 'No'
+        let b:ECidentBack = (a:value =~? 'ye*s*') ? '' : b:ECidentFront
     elseif a:option == 'RespectIndent'
-	let oldval = b:ECrespectIndent
-	let b:ECrespectIndent = (a:value =~? 'ye*s*') ? 1 : 0
+        let oldval = b:ECrespectIndent
+        let b:ECrespectIndent = (a:value =~? 'ye*s*') ? 1 : 0
     elseif a:option == 'IgnoreWS'
-	let oldval = b:ECignoreWS
-	let b:ECignoreWS = (a:value =~? 'ye*s*') ? 1 : 0
+        let oldval = b:ECignoreWS
+        let b:ECignoreWS = (a:value =~? 'ye*s*') ? 1 : 0
     elseif a:option == 'Pretty'
-	let oldval = (b:ECprettyComments == ' ') ? 'Yes' : 'No'
-	if a:value =~? 'ye*s*'
-	    let b:ECprettyComments = ' '
-	    let b:ECprettyUnComments = ' \='
-	else
-	    let b:ECprettyComments = ''
-	    let b:ECprettyUnComments = ''
-	endif
+        let oldval = (b:ECprettyComments == ' ') ? 'Yes' : 'No'
+        if a:value =~? 'ye*s*'
+            let b:ECprettyComments = ' '
+            let b:ECprettyUnComments = ' \='
+        else
+            let b:ECprettyComments = ''
+            let b:ECprettyUnComments = ''
+        endif
     elseif a:option == 'MultiPartBlocks'
-	let oldval = b:ECuseMPBlock
-	let b:ECuseMPBlock = (a:value =~? 'ye*s*') ? 1 : 0
+        let oldval = b:ECuseMPBlock
+        let b:ECuseMPBlock = (a:value =~? 'ye*s*') ? 1 : 0
     elseif a:option == 'CommentsOp'
-	let oldval = b:ECuseCommentsOp
-	let b:ECuseCommentsOp = (a:value =~? 'ye*s*') ? 1 : 0
+        let oldval = b:ECuseCommentsOp
+        let b:ECuseCommentsOp = (a:value =~? 'ye*s*') ? 1 : 0
     elseif a:option == 'UseBlockIndent'
-	let oldval = b:ECuseBlockIndent
-	let b:ECuseBlockIndent = (a:value =~? 'ye*s*') ? 1 : 0
+        let oldval = b:ECuseBlockIndent
+        let b:ECuseBlockIndent = (a:value =~? 'ye*s*') ? 1 : 0
     elseif a:option == 'AlignRight'
-	let oldval = b:ECalignRight
-	let b:ECalignRight = (a:value =~? 'ye*s*') ? 1 : 0
+        let oldval = b:ECalignRight
+        let b:ECalignRight = (a:value =~? 'ye*s*') ? 1 : 0
     elseif a:option == 'UseSyntax'
-	let oldval = b:ECuseSyntax
-	let b:ECuseSyntax = (a:value =~? 'ye*s*') ? 1 : 0
+        let oldval = b:ECuseSyntax
+        let b:ECuseSyntax = (a:value =~? 'ye*s*') ? 1 : 0
     else
-	if (has("dialog_gui") && has("gui_running"))
-	    call confirm("EnhancedCommentifySet: Unknwon option '"
-			\ . option . "'")
-	else
-	    echohl ErrorMsg
-	    echo "EnhancedCommentifySet: Unknown option '". option ."'"
-	    echohl None
-	endif
+        if (has("dialog_gui") && has("gui_running"))
+            call confirm("EnhancedCommentifySet: Unknwon option '"
+                        \ . option . "'")
+        else
+            echohl ErrorMsg
+            echo "EnhancedCommentifySet: Unknown option '". option ."'"
+            echohl None
+        endif
     endif
 
     if oldval == 1
-	let oldval = 'Yes'
+        let oldval = 'Yes'
     elseif oldval == 0
-	let oldval = 'No'
+        let oldval = 'No'
     endif
 
     return oldval
@@ -363,9 +363,9 @@ endfunction
 "
 " Setting the default options resp. taking user preferences.
 if !exists("g:EnhCommentifyUserMode")
-	    \ && !exists("g:EnhCommentifyFirstLineMode")
-	    \ && !exists("g:EnhCommentifyTraditionalMode")
-	    \ && !exists("g:EnhCommentifyUserBindings")
+            \ && !exists("g:EnhCommentifyFirstLineMode")
+            \ && !exists("g:EnhCommentifyTraditionalMode")
+            \ && !exists("g:EnhCommentifyUserBindings")
     let g:EnhCommentifyTraditionalMode = 'Yes'
 endif
 
@@ -415,53 +415,53 @@ let s:maxLen = 0
 
 function EnhancedCommentifyInitBuffer()
     if !exists("b:ECdidBufferInit")
-	call s:InitScriptVariables("b")
+        call s:InitScriptVariables("b")
 
-	if !exists("b:EnhCommentifyFallbackTest")
-	    let b:EnhCommentifyFallbackTest = 0
-	endif
+        if !exists("b:EnhCommentifyFallbackTest")
+            let b:EnhCommentifyFallbackTest = 0
+        endif
 
-	call s:GetFileTypeSettings(&ft)
-	call s:CheckPossibleEmbedding(&ft)
+        call s:GetFileTypeSettings(&ft)
+        call s:CheckPossibleEmbedding(&ft)
 
-	"
-	" If the filetype is not supported and the user wants us to, we do not
-	" add keybindings.
-	"
-	if s:ECbindPerBuffer
-	    if b:ECcommentOpen != "" || b:ECbindUnknown
-		call s:SetKeybindings("l")
-	    endif
-	endif
+        "
+        " If the filetype is not supported and the user wants us to, we do not
+        " add keybindings.
+        "
+        if s:ECbindPerBuffer
+            if b:ECcommentOpen != "" || b:ECbindUnknown
+                call s:SetKeybindings("l")
+            endif
+        endif
 
-	let b:ECdidBufferInit = 1
-	let b:ECsyntax = &ft
+        let b:ECdidBufferInit = 1
+        let b:ECsyntax = &ft
     endif
 endfunction
 
-autocmd BufWinEnter,BufNewFile  *	call EnhancedCommentifyInitBuffer()
+autocmd BufWinEnter,BufNewFile  *       call EnhancedCommentifyInitBuffer()
 
 "
 " EnhancedCommentify(emptyLines, action, ...)
-"	overrideEL	-- commentify empty lines
-"			   may be 'yes', 'no' or '' for guessing
-"	action		-- action which should be executed:
-"			    * guess:
-"			      toggle commetification (old behaviour)
-"			    * comment:
-"			      comment lines
-"			    * decomment:
-"			      decomment lines
-"			    * first:
-"			      use first line of block to determine action
-"	a:1, a:2	-- first and last line of block, which should be
-"			   processed.
+"       overrideEL      -- commentify empty lines
+"                          may be 'yes', 'no' or '' for guessing
+"       action          -- action which should be executed:
+"                           * guess:
+"                             toggle commetification (old behaviour)
+"                           * comment:
+"                             comment lines
+"                           * decomment:
+"                             decomment lines
+"                           * first:
+"                             use first line of block to determine action
+"       a:1, a:2        -- first and last line of block, which should be
+"                          processed.
 "
 " Commentifies the current line.
 "
 function EnhancedCommentify(overrideEL, action, ...)
     if a:overrideEL != ''
-	let s:overrideEmptyLines = 1
+        let s:overrideEmptyLines = 1
     endif
 
     " Now do the buffer initialisation. Every buffer will get
@@ -477,18 +477,18 @@ function EnhancedCommentify(overrideEL, action, ...)
 
     " The language is not supported.
     if b:ECcommentOpen == ''
-	if (has("dialog_gui") && has("gui_running"))
-	    call confirm("This filetype is currently _not_ supported!\n"
-			\ ."Please consider contacting the author in order"
-			\ ." to add this filetype.", "", 1, "Error")
-	else
-	    echohl ErrorMsg
-	    echo "This filetype is currently _not_ supported!"
-	    echo "Please consider contacting the author in order to add"
-	    echo "this filetype in future releases!"
-	    echohl None
-	endif
-	return
+        if (has("dialog_gui") && has("gui_running"))
+            call confirm("This filetype is currently _not_ supported!\n"
+                        \ ."Please consider contacting the author in order"
+                        \ ." to add this filetype.", "", 1, "Error")
+        else
+            echohl ErrorMsg
+            echo "This filetype is currently _not_ supported!"
+            echo "Please consider contacting the author in order to add"
+            echo "this filetype in future releases!"
+            echohl None
+        endif
+        return
     endif
 
     let lnum = line(".")
@@ -499,88 +499,88 @@ function EnhancedCommentify(overrideEL, action, ...)
     " FIXME: Is there really _no_ function to simplify this???
     " (Maybe something like 'let foo = 8x" "'?)
     if s:tabConvert == '' && strlen(s:tabConvert) != &tabstop
-	let s:tabConvert = ''
-	let i = 0
-	while i < &tabstop
-	    let s:tabConvert = s:tabConvert .' '
-	    let i = i + 1
-	endwhile
+        let s:tabConvert = ''
+        let i = 0
+        while i < &tabstop
+            let s:tabConvert = s:tabConvert .' '
+            let i = i + 1
+        endwhile
     endif
 
     if a:0 == 2
-	let s:startBlock = a:1
-	let s:i = a:1
-	let s:endBlock = a:2
+        let s:startBlock = a:1
+        let s:i = a:1
+        let s:endBlock = a:2
 
-	let s:inBlock = 1
+        let s:inBlock = 1
     else
-	let s:startBlock = lnum
-	let s:i = lnum
-	let s:endBlock = lnum
+        let s:startBlock = lnum
+        let s:i = lnum
+        let s:endBlock = lnum
 
-	let s:inBlock = 0
+        let s:inBlock = 0
     endif
 
     if b:ECuseSyntax && b:ECpossibleEmbedding
-	let column = indent(s:startBlock) + 1
-	if !&expandtab
-		let rem = column % &tabstop
-		let column = ((column - rem) / &tabstop) + rem
-	endif
-	call s:CheckSyntax(s:startBlock, column)
+        let column = indent(s:startBlock) + 1
+        if !&expandtab
+                let rem = column % &tabstop
+                let column = ((column - rem) / &tabstop) + rem
+        endif
+        call s:CheckSyntax(s:startBlock, column)
     endif
 
     " Get the indent of the less indented line of the block.
     if s:inBlock && (b:ECuseBlockIndent || b:ECalignRight)
-	call s:DoBlockComputations(s:startBlock, s:endBlock)
+        call s:DoBlockComputations(s:startBlock, s:endBlock)
     endif
 
     while s:i <= s:endBlock
-	let lineString = getline(s:i)
-	let lineString = s:TabsToSpaces(lineString)
+        let lineString = getline(s:i)
+        let lineString = s:TabsToSpaces(lineString)
 
-	" If we should comment "empty" lines, we have to add
-	" the correct indent, if we use blockIndent.
-	if b:ECemptyLines =~? 'ye*s*'
-			\ && b:ECuseBlockIndent
-			\ && lineString =~ "^\s*$"
-	    let i = 0
-	    while i < s:blockIndent
-		let lineString = " " . lineString
-		let i = i + 1
-	    endwhile
-	endif
+        " If we should comment "empty" lines, we have to add
+        " the correct indent, if we use blockIndent.
+        if b:ECemptyLines =~? 'ye*s*'
+                        \ && b:ECuseBlockIndent
+                        \ && lineString =~ "^\s*$"
+            let i = 0
+            while i < s:blockIndent
+                let lineString = " " . lineString
+                let i = i + 1
+            endwhile
+        endif
 
-	" Don't comment empty lines.
-	if lineString !~ "^\s*$"
-		    \ || b:ECemptyLines =~? 'ye*s*'
-	    if b:ECcommentClose != ''
-		let lineString = s:CommentifyMultiPart(lineString,
-			    \ b:ECcommentOpen,
-			    \ b:ECcommentClose,
-			    \ b:ECcommentMiddle)
-	    else
-	    	let lineString = s:CommentifySinglePart(lineString,
-			    \ b:ECcommentOpen)
-	    endif
-	endif
+        " Don't comment empty lines.
+        if lineString !~ "^\s*$"
+                    \ || b:ECemptyLines =~? 'ye*s*'
+            if b:ECcommentClose != ''
+                let lineString = s:CommentifyMultiPart(lineString,
+                            \ b:ECcommentOpen,
+                            \ b:ECcommentClose,
+                            \ b:ECcommentMiddle)
+            else
+                let lineString = s:CommentifySinglePart(lineString,
+                            \ b:ECcommentOpen)
+            endif
+        endif
 
-	" Revert the above: If the line is "empty" and we
-	" used blockIndent, we remove the spaces.
-	" FIXME: Why does "^\s*$" not work?
-	if b:ECemptyLines =~? 'ye*s*'
-		    \ && b:ECuseBlockIndent
-		    \ && lineString =~ "^" . s:blockIndentRegex ."\s*$"
-	    let lineString =
-			\ substitute(lineString, s:blockIndentRegex,
-			\     '', '')
-	endif
+        " Revert the above: If the line is "empty" and we
+        " used blockIndent, we remove the spaces.
+        " FIXME: Why does "^\s*$" not work?
+        if b:ECemptyLines =~? 'ye*s*'
+                    \ && b:ECuseBlockIndent
+                    \ && lineString =~ "^" . s:blockIndentRegex ."\s*$"
+            let lineString =
+                        \ substitute(lineString, s:blockIndentRegex,
+                        \     '', '')
+        endif
 
-	let lineString = s:SpacesToTabs(lineString)
-	call setline(s:i, lineString)
+        let lineString = s:SpacesToTabs(lineString)
+        call setline(s:i, lineString)
 
-	let s:i = s:i + 1
-	let s:firstOfBlock = 0
+        let s:i = s:i + 1
+        let s:firstOfBlock = 0
     endwhile
 
     let s:firstOfBlock = 1
@@ -588,8 +588,8 @@ endfunction
 
 "
 " DoBlockComputations(start, end)
-"	    start	-- number of first line
-"	    end		-- number of last line
+"           start       -- number of first line
+"           end         -- number of last line
 "
 " This function does some computations which are necessary for useBlockIndent
 " and alignRight. ie. find smallest indent and longest line.
@@ -597,52 +597,52 @@ endfunction
 function s:DoBlockComputations(start, end)
     let i = a:start
     let len = 0
-    let amount = 100000	    " this should be enough ...
+    let amount = 100000     " this should be enough ...
 
     while i <= a:end
-	if b:ECuseBlockIndent && getline(i) !~ '^\s*$'
-	    let cur = indent(i)
-	    if cur < amount
-		let amount = cur
-	    endif
-	endif
+        if b:ECuseBlockIndent && getline(i) !~ '^\s*$'
+            let cur = indent(i)
+            if cur < amount
+                let amount = cur
+            endif
+        endif
 
-	if b:ECalignRight
-	    let cur = s:GetLineLen(s:TabsToSpaces(getline(i)),
-			\ s:GetLineLen(b:ECcommentOpen, 0)
-			\ + strlen(b:ECprettyComments))
-	    if b:ECuseMPBlock
-		let cur = cur + s:GetLineLen(b:ECcommentOpen, 0)
-			    \ + strlen(b:ECprettyComments)
-	    endif
+        if b:ECalignRight
+            let cur = s:GetLineLen(s:TabsToSpaces(getline(i)),
+                        \ s:GetLineLen(b:ECcommentOpen, 0)
+                        \ + strlen(b:ECprettyComments))
+            if b:ECuseMPBlock
+                let cur = cur + s:GetLineLen(b:ECcommentOpen, 0)
+                            \ + strlen(b:ECprettyComments)
+            endif
 
-	    if len < cur
-		let len = cur
-	    endif
-	endif
+            if len < cur
+                let len = cur
+            endif
+        endif
 
-	let i = i + 1
+        let i = i + 1
     endwhile
 
     if b:ECuseBlockIndent
-	if amount > 0
-	    let regex = '\( \{'. amount .'}\)'
-	else
-	    let regex = ''
-	endif
-	let s:blockIndentRegex = regex
-	let s:blockIndent = amount
+        if amount > 0
+            let regex = '\( \{'. amount .'}\)'
+        else
+            let regex = ''
+        endif
+        let s:blockIndentRegex = regex
+        let s:blockIndent = amount
     endif
 
     if b:ECalignRight
-	let s:maxLen = len
+        let s:maxLen = len
     endif
 endfunction
 
 "
 " CheckSyntax(line, column)
-"	line	    -- line of line
-"	column	    -- column of line
+"       line        -- line of line
+"       column      -- column of line
 " Check what syntax is active during call of main function. First hit
 " wins. If the filetype changes during the block, we ignore that.
 " Adjust the filetype if necessary.
@@ -656,23 +656,23 @@ function s:CheckSyntax(line, column)
     " in lowwer case letters, followed by at least one upper case
     " letter.
     if match(synFiletype, '\l\+\u') == 0
-	let ft = substitute(synFiletype, '^\(\l\+\)\u.*$', '\1', "")
+        let ft = substitute(synFiletype, '^\(\l\+\)\u.*$', '\1', "")
     endif
 
     if ft == ""
-	execute "let specialCase = ". b:EnhCommentifyFallbackTest
+        execute "let specialCase = ". b:EnhCommentifyFallbackTest
 
-	if specialCase
-	    let ft = b:EnhCommentifyFallbackValue
-	else
-	    " Fallback: If nothing holds, use normal filetype!
-	    let ft = &ft
-	endif
+        if specialCase
+            let ft = b:EnhCommentifyFallbackValue
+        else
+            " Fallback: If nothing holds, use normal filetype!
+            let ft = &ft
+        endif
     endif
 
     " Nothing changed!
     if ft == b:ECsyntax
-	return
+        return
     endif
 
     let b:ECsyntax = ft
@@ -681,7 +681,7 @@ endfunction
 
 "
 " GetFileTypeSettings(ft)
-"	ft	    -- filetype
+"       ft          -- filetype
 "
 " This functions sets some buffer-variables, which control the comment
 " strings and 'empty lines'-handling.
@@ -703,13 +703,13 @@ function s:GetFileTypeSettings(ft)
         " endfunction
 
     if exists("g:EnhCommentifyCallbackExists")
-	call EnhCommentifyCallback(fileType)
+        call EnhCommentifyCallback(fileType)
 
-	" Check whether the callback did yield a result.
-	" If so we use it. The user nows, what he's doing.
-	if b:ECcommentOpen != ''
-	    return
-	endif
+        " Check whether the callback did yield a result.
+        " If so we use it. The user nows, what he's doing.
+        if b:ECcommentOpen != ''
+            return
+        endif
     endif
 
     " I learned about the commentstring option. Let's use it.
@@ -718,182 +718,182 @@ function s:GetFileTypeSettings(ft)
     " something other like CSS, etc. We have to wait, until the
     " filetypes adopt this option.
     if &commentstring != "/*%s*/" && !b:ECuseSyntax
-	let b:ECcommentOpen =
-		    \ substitute(&commentstring, '%s.*', "", "")
-	let b:ECcommentClose =
-		    \ substitute(&commentstring, '.*%s', "", "")
+        let b:ECcommentOpen =
+                    \ substitute(&commentstring, '%s.*', "", "")
+        let b:ECcommentClose =
+                    \ substitute(&commentstring, '.*%s', "", "")
     " Multipart comments:
     elseif fileType =~ '^\(c\|b\|css\|scss\|csc\|cupl\|indent\|jam\|lex\|lifelines\|'.
-		\ 'lite\|nqc\|phtml\|progress\|rexx\|rpl\|sas\|sdl\|sl\|'.
-		\ 'strace\|xpm\|yacc\)$'
-	let b:ECcommentOpen = '/*'
-	let b:ECcommentClose = '*/'
+                \ 'lite\|nqc\|phtml\|progress\|rexx\|rpl\|sas\|sdl\|sl\|'.
+                \ 'strace\|xpm\|yacc\)$'
+        let b:ECcommentOpen = '/*'
+        let b:ECcommentClose = '*/'
     elseif fileType =~ '^\(html\|xhtml\|xml\|xslt\|xsd\|dtd\|sgmllnx\)$'
-	let b:ECcommentOpen = '<!--'
-	let b:ECcommentClose = '-->'
+        let b:ECcommentOpen = '<!--'
+        let b:ECcommentClose = '-->'
     elseif fileType =~ '^\(sgml\|smil\)$'
-	let b:ECcommentOpen = '<!'
-	let b:ECcommentClose = '>'
+        let b:ECcommentOpen = '<!'
+        let b:ECcommentClose = '>'
     elseif fileType == 'atlas'
-	let b:ECcommentOpen = 'C'
-	let b:ECcommentClose = '$'
+        let b:ECcommentOpen = 'C'
+        let b:ECcommentClose = '$'
     elseif fileType =~ '^\(catalog\|sgmldecl\)$'
-	let b:ECcommentOpen = '--'
-	let b:ECcommentClose = '--'
+        let b:ECcommentOpen = '--'
+        let b:ECcommentClose = '--'
     elseif fileType == 'dtml'
-	let b:ECcommentOpen = '<dtml-comment>'
-	let b:ECcommentClose = '</dtml-comment>'
+        let b:ECcommentOpen = '<dtml-comment>'
+        let b:ECcommentClose = '</dtml-comment>'
     elseif fileType == 'htmlos'
-	let b:ECcommentOpen = '#'
-	let b:ECcommentClose = '/#'
+        let b:ECcommentOpen = '#'
+        let b:ECcommentClose = '/#'
     elseif fileType =~ '^\(jgraph\|lotos\|mma\|modula2\|modula3\|pascal\|'.
-		\ 'ocaml\|sml\)$'
-	let b:ECcommentOpen = '(*'
-	let b:ECcommentClose = '*)'
+                \ 'ocaml\|sml\)$'
+        let b:ECcommentOpen = '(*'
+        let b:ECcommentClose = '*)'
     elseif fileType == 'jsp'
-	let b:ECcommentOpen = '<%--'
-	let b:ECcommentClose = '--%>'
+        let b:ECcommentOpen = '<%--'
+        let b:ECcommentClose = '--%>'
     elseif fileType == 'eruby'
-	let b:ECcommentOpen = '<%#'
-	let b:ECcommentClose = ''
+        let b:ECcommentOpen = '<%#'
+        let b:ECcommentClose = ''
     elseif fileType == 'model'
-	let b:ECcommentOpen = '$'
-	let b:ECcommentClose = '$'
+        let b:ECcommentOpen = '$'
+        let b:ECcommentClose = '$'
     elseif fileType == 'st'
-	let b:ECcommentOpen = '"'
-	let b:ECcommentClose = '"'
+        let b:ECcommentOpen = '"'
+        let b:ECcommentClose = '"'
     elseif fileType =~ '^\(tssgm\|tssop\)$'
-	let b:ECcommentOpen = 'comment = "'
-	let b:ECcommentClose = '"'
+        let b:ECcommentOpen = 'comment = "'
+        let b:ECcommentClose = '"'
     " Singlepart comments:
     elseif fileType =~ '^\(ox\|cpp\|php\|java\|verilog\|acedb\|ch\|clean\|'.
-		\ 'clipper\|cs\|dot\|dylan\|hercules\|idl\|ishd\|javascript\|'.
-		\ 'kscript\|mel\|named\|openroad\|pccts\|pfmain\|pike\|'.
-		\ 'pilrc\|plm\|pov\|rc\|scilab\|specman\|tads\|tsalt\|uc\|'.
-		\ 'xkb\|groovy\|Jenkinsfile\)$'
-	let b:ECcommentOpen = '//'
-	let b:ECcommentClose = ''
+                \ 'clipper\|cs\|dot\|dylan\|hercules\|idl\|ishd\|javascript\|'.
+                \ 'kscript\|mel\|named\|openroad\|pccts\|pfmain\|pike\|'.
+                \ 'pilrc\|plm\|pov\|rc\|scilab\|specman\|tads\|tsalt\|uc\|'.
+                \ 'xkb\|groovy\|Jenkinsfile\)$'
+        let b:ECcommentOpen = '//'
+        let b:ECcommentClose = ''
     elseif fileType =~ '^\(vim\|vimperator\|abel\)$'
-	let b:ECcommentOpen = '"'
-	let b:ECcommentClose = ''
+        let b:ECcommentOpen = '"'
+        let b:ECcommentClose = ''
     elseif fileType =~ '^\(lisp\|scheme\|scsh\|amiga\|asm\|asm68k\|bindzone\|'.
-		\ 'def\|dns\|dosini\|dracula\|dsl\|idlang\|iss\|jess\|kix\|'.
-		\ 'masm\|monk\|nasm\|ncf\|omnimark\|pic\|povini\|rebol\|'.
-		\ 'registry\|samba\|skill\|smith\|tags\|tasm\|tf\|winbatch\|'.
-		\ 'wvdial\|autohotkey\|z8a\)$'
-	let b:ECcommentOpen = ';'
-	let b:ECcommentClose = ''
+                \ 'def\|dns\|dosini\|dracula\|dsl\|idlang\|iss\|jess\|kix\|'.
+                \ 'masm\|monk\|nasm\|ncf\|omnimark\|pic\|povini\|rebol\|'.
+                \ 'registry\|samba\|skill\|smith\|tags\|tasm\|tf\|winbatch\|'.
+                \ 'wvdial\|autohotkey\|z8a\)$'
+        let b:ECcommentOpen = ';'
+        let b:ECcommentClose = ''
     elseif fileType =~ '^\(python\|perl\|[^w]*sh$\|tcl\|jproperties\|make\|'.
-		\ 'robots\|apache\|apachestyle\|awk\|bc\|cfg\|cl\|conf\|'.
-		\ 'crontab\|diff\|ecd\|elmfilt\|eterm\|expect\|exports\|'.
-		\ 'fgl\|fvwm\|gdb\|gnuplot\|gtkrc\|hb\|hog\|ia64\|icon\|'.
-		\ 'inittab\|lftp\|lilo\|lout\|lss\|lynx\|maple\|mush\|'.
-		\ 'muttrc\|nsis\|ora\|pcap\|pine\|po\|procmail\|'.
-		\ 'psf\|ptcap\|r\|radiance\|ratpoison\|readline\remind\|'.
-		\ 'ruby\|screen\|sed\|sm\|snnsnet\|snnspat\|snnsres\|spec\|'.
-		\ 'squid\|terminfo\|tidy\|tli\|tsscl\|vgrindefs\|vrml\|'.
-		\ 'wget\|wml\|xf86conf\|xmath\|gitconfig\|txt\|snippet\|yaml\|'.
-                \ 'readline\|robot\)$'
-	let b:ECcommentOpen = '#'
-	let b:ECcommentClose = ''
+                \ 'robots\|apache\|apachestyle\|awk\|bc\|cfg\|cl\|conf\|'.
+                \ 'crontab\|diff\|ecd\|elmfilt\|eterm\|expect\|exports\|'.
+                \ 'fgl\|fvwm\|gdb\|gnuplot\|gtkrc\|hb\|hog\|ia64\|icon\|'.
+                \ 'inittab\|lftp\|lilo\|lout\|lss\|lynx\|maple\|mush\|'.
+                \ 'muttrc\|nsis\|ora\|pcap\|pine\|po\|procmail\|'.
+                \ 'psf\|ptcap\|r\|radiance\|ratpoison\|readline\remind\|'.
+                \ 'ruby\|screen\|sed\|sm\|snnsnet\|snnspat\|snnsres\|spec\|'.
+                \ 'squid\|terminfo\|tidy\|tli\|tsscl\|vgrindefs\|vrml\|'.
+                \ 'wget\|wml\|xf86conf\|xmath\|gitconfig\|txt\|snippet\|yaml\|'.
+                \ 'readline\|robot\|Dockerfile\|dockerifle\)$'
+        let b:ECcommentOpen = '#'
+        let b:ECcommentClose = ''
     elseif fileType == 'webmacro'
-	let b:ECcommentOpen = '##'
-	let b:ECcommentClose = ''
+        let b:ECcommentOpen = '##'
+        let b:ECcommentClose = ''
     elseif fileType == 'ppwiz'
-	let b:ECcommentOpen = ';;'
-	let b:ECcommentClose = ''
+        let b:ECcommentOpen = ';;'
+        let b:ECcommentClose = ''
     elseif fileType == 'latte'
-	let b:ECcommentOpen = '\\;'
-	let b:ECcommentClose = ''
+        let b:ECcommentOpen = '\\;'
+        let b:ECcommentClose = ''
     elseif fileType =~ '^\(tex\|abc\|erlang\|ist\|lprolog\|matlab\|mf\|'.
-		\ 'postscr\|ppd\|prolog\|simula\|slang\|slrnrc\|slrnsc\|'.
-		\ 'texmf\|viki\|virata\)$'
-	let b:ECcommentOpen = '%'
-	let b:ECcommentClose = ''
+                \ 'postscr\|ppd\|prolog\|simula\|slang\|slrnrc\|slrnsc\|'.
+                \ 'texmf\|viki\|virata\)$'
+        let b:ECcommentOpen = '%'
+        let b:ECcommentClose = ''
     elseif fileType =~ '^\(caos\|cterm\|form\|foxpro\|sicad\|snobol4\)$'
-	let b:ECcommentOpen = '*'
-	let b:ECcommentClose = ''
+        let b:ECcommentOpen = '*'
+        let b:ECcommentClose = ''
     elseif fileType =~ '^\(m4\|config\|automake\)$'
-	let b:ECcommentOpen = 'dnl '
-	let b:ECcommentClose = ''
+        let b:ECcommentOpen = 'dnl '
+        let b:ECcommentClose = ''
     elseif fileType =~ '^\(vb\|aspvbs\|ave\|basic\|elf\|lscript\)$'
-	let b:ECcommentOpen = "'"
-	let b:ECcommentClose = ''
+        let b:ECcommentOpen = "'"
+        let b:ECcommentClose = ''
     elseif fileType =~ '^\(plsql\|vhdl\|ahdl\|ada\|asn\|csp\|eiffel\|gdmo\|'.
-		\ 'haskell\|lace\|lua\|mib\|sather\|sql\|sqlforms\|sqlj\|'.
-		\ 'stp\)$'
-	let b:ECcommentOpen = '--'
-	let b:ECcommentClose = ''
+                \ 'haskell\|lace\|lua\|mib\|sather\|sql\|sqlforms\|sqlj\|'.
+                \ 'stp\)$'
+        let b:ECcommentOpen = '--'
+        let b:ECcommentClose = ''
     elseif fileType == 'abaqus'
-	let b:ECcommentOpen = '**'
-	let b:ECcommentClose = ''
+        let b:ECcommentOpen = '**'
+        let b:ECcommentClose = ''
     elseif fileType =~ '^\(aml\|natural\|vsejcl\)$'
-	let b:ECcommentOpen = '/*'
-	let b:ECcommentClose = ''
+        let b:ECcommentOpen = '/*'
+        let b:ECcommentClose = ''
     elseif fileType == 'ampl'
-	let b:ECcommentOpen = '\\#'
-	let b:ECcommentClose = ''
+        let b:ECcommentOpen = '\\#'
+        let b:ECcommentClose = ''
     elseif fileType == 'bdf'
-	let b:ECcommentOpen = 'COMMENT '
-	let b:ECcommentClose = ''
+        let b:ECcommentOpen = 'COMMENT '
+        let b:ECcommentClose = ''
     elseif fileType == 'btm'
-	let b:ECcommentOpen = '::'
-	let b:ECcommentClose = ''
+        let b:ECcommentOpen = '::'
+        let b:ECcommentClose = ''
     elseif fileType == 'dcl'
-	let b:ECcommentOpen = '$!'
-	let b:ECcommentClose = ''
+        let b:ECcommentOpen = '$!'
+        let b:ECcommentClose = ''
     elseif fileType == 'dosbatch'
-	let b:ECcommentOpen = 'rem '
-	let b:ECcommentClose = ''
+        let b:ECcommentOpen = 'rem '
+        let b:ECcommentClose = ''
     elseif fileType == 'focexec'
-	let b:ECcommentOpen = '-*'
-	let b:ECcommentClose = ''
+        let b:ECcommentOpen = '-*'
+        let b:ECcommentClose = ''
     elseif fileType == 'forth'
-	let b:ECcommentOpen = '\\ '
-	let b:ECcommentClose = ''
+        let b:ECcommentOpen = '\\ '
+        let b:ECcommentClose = ''
     elseif fileType =~ '^\(fortran\|inform\|sqr\|uil\|xdefaults\|'.
-		\ 'xmodmap\|xpm2\)$'
-	let b:ECcommentOpen = '!'
-	let b:ECcommentClose = ''
+                \ 'xmodmap\|xpm2\)$'
+        let b:ECcommentOpen = '!'
+        let b:ECcommentClose = ''
     elseif fileType == 'gp'
-	let b:ECcommentOpen = '\\\\'
-	let b:ECcommentClose = ''
+        let b:ECcommentOpen = '\\\\'
+        let b:ECcommentClose = ''
     elseif fileType =~ '^\(master\|nastran\|sinda\|spice\|tak\|trasys\)$'
-	let b:ECcommentOpen = '$'
-	let b:ECcommentClose = ''
+        let b:ECcommentOpen = '$'
+        let b:ECcommentClose = ''
     elseif fileType == 'nroff' || fileType == 'groff'
-	let b:ECcommentOpen = ".\\\\\""
-	let b:ECcommentClose = ''
+        let b:ECcommentOpen = ".\\\\\""
+        let b:ECcommentClose = ''
     elseif fileType == 'opl'
-	let b:ECcommentOpen = 'REM '
-	let b:ECcommentClose = ''
+        let b:ECcommentOpen = 'REM '
+        let b:ECcommentClose = ''
     elseif fileType == 'texinfo'
-	let b:ECcommentOpen = '@c '
-	let b:ECcommentClose = ''
+        let b:ECcommentOpen = '@c '
+        let b:ECcommentClose = ''
     elseif fileType == 'mail'
-	let b:ECcommentOpen = '>'
-	let b:ECcommentClose = ''
+        let b:ECcommentOpen = '>'
+        let b:ECcommentClose = ''
     endif
 
     if b:ECuseCommentsOp
-	let b:ECcommentMiddle =
-		    \ s:ParseCommentsOp(b:ECcommentOpen, b:ECcommentClose)
-	if b:ECcommentMiddle == ''
-	    let b:ECuseCommentsOp = 0
-	endif
+        let b:ECcommentMiddle =
+                    \ s:ParseCommentsOp(b:ECcommentOpen, b:ECcommentClose)
+        if b:ECcommentMiddle == ''
+            let b:ECuseCommentsOp = 0
+        endif
     else
-	let b:ECcommentMiddle = ''
+        let b:ECcommentMiddle = ''
     endif
 
     if !s:overrideEmptyLines
-	call s:CommentEmptyLines(fileType)
+        call s:CommentEmptyLines(fileType)
     endif
 endfunction
 
 "
 " ParseCommentsOp(commentOpen, commentClose)
-"	commentOpen -- comment-open string
-"	commentClose-- comment-close string
+"       commentOpen -- comment-open string
+"       commentClose-- comment-close string
 "
 " Try to extract the middle comment string from &comments. First hit wins.
 " If nothing is found '' is returned.
@@ -904,119 +904,119 @@ function s:ParseCommentsOp(commentOpen, commentClose)
     let commentMiddle = ''
 
     while commStr != ''
-	"
-	" First decompose &omments into consecutive s-, m- and e-parts.
-	"
-	let s = stridx(commStr, 's')
-	if s == -1
-	    return ''
-	endif
+        "
+        " First decompose &omments into consecutive s-, m- and e-parts.
+        "
+        let s = stridx(commStr, 's')
+        if s == -1
+            return ''
+        endif
 
-	let commStr = strpart(commStr, s)
-	let comma = stridx(commStr, ',')
-	if comma == -1
-	    return ''
-	endif
-	let sPart = strpart(commStr, 0, comma)
+        let commStr = strpart(commStr, s)
+        let comma = stridx(commStr, ',')
+        if comma == -1
+            return ''
+        endif
+        let sPart = strpart(commStr, 0, comma)
 
-	let commStr = strpart(commStr, comma)
-	let m = stridx(commStr, 'm')
-	if m == -1
-	    return ''
-	endif
+        let commStr = strpart(commStr, comma)
+        let m = stridx(commStr, 'm')
+        if m == -1
+            return ''
+        endif
 
-	let commStr = strpart(commStr, m)
-	let comma = stridx(commStr, ',')
-	if comma == -1
-	    return ''
-	endif
-	let mPart = strpart(commStr, 0, comma)
+        let commStr = strpart(commStr, m)
+        let comma = stridx(commStr, ',')
+        if comma == -1
+            return ''
+        endif
+        let mPart = strpart(commStr, 0, comma)
 
-	let commStr = strpart(commStr, comma)
-	let e = stridx(commStr, 'e')
-	if e == -1
-	    return ''
-	endif
+        let commStr = strpart(commStr, comma)
+        let e = stridx(commStr, 'e')
+        if e == -1
+            return ''
+        endif
 
-	let commStr = strpart(commStr, e)
-	let comma = stridx(commStr, ',')
-	if comma == -1
-	    let comma = strlen(commStr)
-	endif
-	let ePart = strpart(commStr, 0, comma)
+        let commStr = strpart(commStr, e)
+        let comma = stridx(commStr, ',')
+        if comma == -1
+            let comma = strlen(commStr)
+        endif
+        let ePart = strpart(commStr, 0, comma)
 
-	let commStr = strpart(commStr, comma)
+        let commStr = strpart(commStr, comma)
 
-	"
-	" Now check wether this is what we want:
-	" Are the comment string the same?
-	"
-	let sColon = stridx(sPart, ':')
-	let eColon = stridx(ePart, ':')
-	if sColon == -1 || eColon == -1
-	    return ''
-	endif
-	if strpart(sPart, sColon + 1) != a:commentOpen
-		    \ || strpart(ePart, eColon + 1) != a:commentClose
-	    continue
-	endif
+        "
+        " Now check wether this is what we want:
+        " Are the comment string the same?
+        "
+        let sColon = stridx(sPart, ':')
+        let eColon = stridx(ePart, ':')
+        if sColon == -1 || eColon == -1
+            return ''
+        endif
+        if strpart(sPart, sColon + 1) != a:commentOpen
+                    \ || strpart(ePart, eColon + 1) != a:commentClose
+            continue
+        endif
 
-	let mColon = stridx(mPart, ':')
-	if mColon == -1
-	    return ''
-	endif
-	let commentMiddle = strpart(mPart, mColon + 1)
+        let mColon = stridx(mPart, ':')
+        if mColon == -1
+            return ''
+        endif
+        let commentMiddle = strpart(mPart, mColon + 1)
 
-	"
-	" Check for any alignement.
-	"
-	let i = 1
-	while sPart[i] != ':'
-	    if sPart[i] == 'r'
-		let offset = strlen(a:commentOpen) - strlen(commentMiddle)
-		break
-	    elseif sPart[i] == 'l'
-		let offset = 0
-		break
-	    elseif s:isDigit(sPart[i])
-		let j = 1
-		while s:isDigit(sPart[i + j])
-		    let j = j + 1
-		endwhile
-		let offset = 1 * strpart(sPart, i, j)
-		break
-	    endif
-	    let i = i + 1
-	endwhile
+        "
+        " Check for any alignement.
+        "
+        let i = 1
+        while sPart[i] != ':'
+            if sPart[i] == 'r'
+                let offset = strlen(a:commentOpen) - strlen(commentMiddle)
+                break
+            elseif sPart[i] == 'l'
+                let offset = 0
+                break
+            elseif s:isDigit(sPart[i])
+                let j = 1
+                while s:isDigit(sPart[i + j])
+                    let j = j + 1
+                endwhile
+                let offset = 1 * strpart(sPart, i, j)
+                break
+            endif
+            let i = i + 1
+        endwhile
 
-	if offset == 0
-	    let i = 1
-	    while ePart[i] != ':'
-		if ePart[i] == 'r'
-		    let offset = strlen(a:commentClose) - strlen(commentMiddle)
-		    break
-		elseif ePart[i] == 'l'
-		    let offset = 0
-		    break
-		elseif s:isDigit(ePart[i])
-		    let j = 1
-		    while s:isDigit(ePart[i + j])
-			let j = j + 1
-		    endwhile
-		    let offset = 1 * strpart(ePart, i, j)
-		    break
-		endif
+        if offset == 0
+            let i = 1
+            while ePart[i] != ':'
+                if ePart[i] == 'r'
+                    let offset = strlen(a:commentClose) - strlen(commentMiddle)
+                    break
+                elseif ePart[i] == 'l'
+                    let offset = 0
+                    break
+                elseif s:isDigit(ePart[i])
+                    let j = 1
+                    while s:isDigit(ePart[i + j])
+                        let j = j + 1
+                    endwhile
+                    let offset = 1 * strpart(ePart, i, j)
+                    break
+                endif
 
-		let i = i + 1
-	    endwhile
-	endif
+                let i = i + 1
+            endwhile
+        endif
 
-	while offset > 0
-	    let commentMiddle = " " . commentMiddle
-	    let offset = offset - 1
-	endwhile
+        while offset > 0
+            let commentMiddle = " " . commentMiddle
+            let offset = offset - 1
+        endwhile
 
-	break
+        break
     endwhile
 
     return commentMiddle
@@ -1033,7 +1033,7 @@ function s:isDigit(char)
     let charVal = char2nr(a:char)
 
     if charVal >= 48 && charVal <= 57
-	let r = 1
+        let r = 1
     endif
 
     return r
@@ -1041,7 +1041,7 @@ endfunction
 
 "
 " CommentEmptyLines(ft)
-"	ft	    -- filetype of current buffer
+"       ft          -- filetype of current buffer
 "
 " Decides, if empty lines should be commentified or not. Add the filetype,
 " you want to change, to the apropriate if-clause.
@@ -1049,78 +1049,78 @@ endfunction
 function s:CommentEmptyLines(ft)
     " FIXME: Quick hack (tm)!
     if 0
-	" Add special filetypes here.
+        " Add special filetypes here.
     elseif b:ECcommentClose == ''
-	let b:ECemptyLines = 'yes'
+        let b:ECemptyLines = 'yes'
     else
-	let b:ECemptyLines = 'no'
+        let b:ECemptyLines = 'no'
     endif
 endfunction
 
 "
 " CheckPossibleEmbedding(ft)
-"	ft	-- the filetype of current buffer
+"       ft      -- the filetype of current buffer
 "
 " Check wether it makes sense to allow checking for the synIDs.
 " Eg. C will never have embedded code...
 "
 function s:CheckPossibleEmbedding(ft)
     if a:ft =~ '^\(php\|vim\|latte\|eruby\|html\|javascript\)$'
-	let b:ECpossibleEmbedding = 1
+        let b:ECpossibleEmbedding = 1
     else
-	" Since getting the synID is slow, we set the default to 'no'!
-	" There are also some 'broken' languages like the filetype for
-	" autoconf's configure.in's ('config').
-	let b:ECpossibleEmbedding = 0
+        " Since getting the synID is slow, we set the default to 'no'!
+        " There are also some 'broken' languages like the filetype for
+        " autoconf's configure.in's ('config').
+        let b:ECpossibleEmbedding = 0
     endif
 endfunction
 
 "
 " CommentifyMultiPart(lineString, commentStart, commentEnd, action)
-"	lineString	-- line to commentify
-"	commentStart	-- comment-start string, eg '/*'
-"	commentEnd	-- comment-end string, eg. '*/'
-"	commentMiddle	-- comment-middle string, eg. ' *'
+"       lineString      -- line to commentify
+"       commentStart    -- comment-start string, eg '/*'
+"       commentEnd      -- comment-end string, eg. '*/'
+"       commentMiddle   -- comment-middle string, eg. ' *'
 "
 " This function commentifies code of languages, which have multipart
 " comment strings, eg. '/*' - '*/' of C.
 "
 function s:CommentifyMultiPart(lineString, commentStart,
-	    \ commentEnd, commentMiddle)
+            \ commentEnd, commentMiddle)
     if s:Action == 'guess' || s:Action == 'first' || b:ECuseMPBlock
-	let todo = s:DecideWhatToDo(a:lineString, a:commentStart, a:commentEnd)
+        let todo = s:DecideWhatToDo(a:lineString, a:commentStart, a:commentEnd)
     else
-	let todo = s:Action
+        let todo = s:Action
     endif
 
     if todo == 'decomment'
-	return s:UnCommentify(a:lineString, a:commentStart,
-		    \ a:commentEnd, a:commentMiddle)
+        return s:UnCommentify(a:lineString, a:commentStart,
+                    \ a:commentEnd, a:commentMiddle)
     else
-	return s:Commentify(a:lineString, a:commentStart,
-		    \ a:commentEnd, a:commentMiddle)
+        return s:Commentify(a:lineString, a:commentStart,
+                    \ a:commentEnd, a:commentMiddle)
     endif
 endfunction
 
 "
 " CommentifySinglePart(lineString, commentSymbol)
-"	lineString	-- line to commentify
-"	commentSymbol	-- comment string, eg '#'
+"       lineString      -- line to commentify
+"       commentSymbol   -- comment string, eg '#'
 "
 " This function is used for all languages, whose comment strings
 " consist only of one string at the beginning of a line.
 "
 function s:CommentifySinglePart(lineString, commentSymbol)
     if s:Action == 'guess' || s:Action == 'first'
-	let todo = s:DecideWhatToDo(a:lineString, a:commentSymbol)
+        let todo = s:DecideWhatToDo(a:lineString, a:commentSymbol)
     else
-	let todo = s:Action
+        let todo = s:Action
     endif
 
     if todo == 'decomment'
-	return s:UnCommentify(a:lineString, a:commentSymbol)
+        return s:UnCommentify(a:lineString, a:commentSymbol)
     else
-	return s:Commentify(a:lineString, a:commentSymbol)
+        return s:Commentify(a:lineString, a:commentSymbol)
     endif
 endfunction
 
@@ -1133,12 +1133,12 @@ function s:Escape(lineString, commentStart, commentEnd)
     let line = a:lineString
 
     if b:ECaltOpen != ''
-	let line = substitute(line, s:EscapeString(a:commentStart),
-		    \ b:ECaltOpen, "g")
+        let line = substitute(line, s:EscapeString(a:commentStart),
+                    \ b:ECaltOpen, "g")
     endif
     if b:ECaltClose != ''
-	let line = substitute(line, s:EscapeString(a:commentEnd),
-		    \ b:ECaltClose, "g")
+        let line = substitute(line, s:EscapeString(a:commentEnd),
+                    \ b:ECaltClose, "g")
     endif
 
     return line
@@ -1156,14 +1156,14 @@ function s:UnEscape(lineString, commentStart, commentEnd)
     " of this resp. escape string. Commenting a line several
     " times and decommenting it again breaks things.
     if b:ECaltOpen != ''
-	let line = substitute(line, s:EscapeString(b:ECaltOpen),
-		    \ a:commentStart, "")
+        let line = substitute(line, s:EscapeString(b:ECaltOpen),
+                    \ a:commentStart, "")
     endif
     if b:ECaltClose != ''
-	let esAltClose = s:EscapeString(b:ECaltClose)
-	let line = substitute(line, esAltClose
-		    \ . "\\(.*" . esAltClose . "\\)\\@!",
-		    \ a:commentEnd, "")
+        let esAltClose = s:EscapeString(b:ECaltClose)
+        let line = substitute(line, esAltClose
+                    \ . "\\(.*" . esAltClose . "\\)\\@!",
+                    \ a:commentEnd, "")
     endif
 
     return line
@@ -1171,10 +1171,10 @@ endfunction
 
 "
 " Commentify(lineString, commentSymbol, [commentEnd])
-"       lineString	-- the line in work
-"	commentSymbol	-- string to insert at the beginning of the line
-"	commentEnd	-- string to insert at the end of the line
-"			   may be omitted
+"       lineString      -- the line in work
+"       commentSymbol   -- string to insert at the beginning of the line
+"       commentEnd      -- string to insert at the end of the line
+"                          may be omitted
 "
 " This function inserts the start- (and if given the end-) string of the
 " comment in the current line.
@@ -1185,37 +1185,37 @@ function s:Commentify(lineString, commentSymbol, ...)
 
     " If a end string is present, insert it too.
     if a:0 > 0
-	" First we have to escape any comment already contained in the line,
-	" since (at least for C) comments are not allowed to nest.
-	let line = s:Escape(line, a:commentSymbol, a:1)
+        " First we have to escape any comment already contained in the line,
+        " since (at least for C) comments are not allowed to nest.
+        let line = s:Escape(line, a:commentSymbol, a:1)
 
-	if b:ECuseCommentsOp && b:ECuseMPBlock
-		    \ && a:0 > 1
-		    \ && s:i > s:startBlock
-	    let line = substitute(line, s:LookFor('commentmiddle'),
-			\ s:SubstituteWith('commentmiddle', a:2), "")
-	endif
+        if b:ECuseCommentsOp && b:ECuseMPBlock
+                    \ && a:0 > 1
+                    \ && s:i > s:startBlock
+            let line = substitute(line, s:LookFor('commentmiddle'),
+                        \ s:SubstituteWith('commentmiddle', a:2), "")
+        endif
 
-	if !b:ECuseMPBlock || (b:ECuseMPBlock && s:i == s:endBlock)
-	    " Align the closing part to the right.
-	    if b:ECalignRight && s:inBlock
-		let len = s:GetLineLen(line, strlen(a:commentSymbol)
-			    \ + strlen(b:ECprettyComments))
-		while j < s:maxLen - len
-		    let line = line .' '
-		    let j = j + 1
-		endwhile
-	    endif
+        if !b:ECuseMPBlock || (b:ECuseMPBlock && s:i == s:endBlock)
+            " Align the closing part to the right.
+            if b:ECalignRight && s:inBlock
+                let len = s:GetLineLen(line, strlen(a:commentSymbol)
+                            \ + strlen(b:ECprettyComments))
+                while j < s:maxLen - len
+                    let line = line .' '
+                    let j = j + 1
+                endwhile
+            endif
 
-	    let line = substitute(line, s:LookFor('commentend'),
-			\ s:SubstituteWith('commentend', a:1), "")
-	endif
+            let line = substitute(line, s:LookFor('commentend'),
+                        \ s:SubstituteWith('commentend', a:1), "")
+        endif
     endif
 
     " insert the comment symbol
     if !b:ECuseMPBlock || a:0 == 0 || (b:ECuseMPBlock && s:i == s:startBlock)
-	let line = substitute(line, s:LookFor('commentstart'),
-		    \ s:SubstituteWith('commentstart', a:commentSymbol), "")
+        let line = substitute(line, s:LookFor('commentstart'),
+                    \ s:SubstituteWith('commentstart', a:commentSymbol), "")
     endif
 
     return line
@@ -1223,10 +1223,10 @@ endfunction
 
 "
 " UnCommentify(lineString, commentSymbol, [commentEnd])
-"	lineString	-- the line in work
-"	commentSymbol	-- string to remove at the beginning of the line
-"	commentEnd	-- string to remove at the end of the line
-"			   may be omitted
+"       lineString      -- the line in work
+"       commentSymbol   -- string to remove at the beginning of the line
+"       commentEnd      -- string to remove at the end of the line
+"                          may be omitted
 "
 " This function removes the start- (and if given the end-) string of the
 " comment in the current line.
@@ -1236,34 +1236,34 @@ function s:UnCommentify(lineString, commentSymbol, ...)
 
     " remove the first comment symbol found on a line
     if a:0 == 0 || !b:ECuseMPBlock || (b:ECuseMPBlock && s:i == s:startBlock)
-	let line = substitute(line, s:LookFor('decommentstart',
-		    \	a:commentSymbol),
-		    \ s:SubstituteWith('decommentstart'), "")
+        let line = substitute(line, s:LookFor('decommentstart',
+                    \   a:commentSymbol),
+                    \ s:SubstituteWith('decommentstart'), "")
     endif
 
     " If a end string is present, we have to remove it, too.
     if a:0 > 0
-	" First, we remove the trailing comment symbol.
-	if !b:ECuseMPBlock || (b:ECuseMPBlock && s:i == s:endBlock)
-	    let line = substitute(line, s:LookFor('decommentend', a:1),
-			\ s:SubstituteWith('decommentend'), "")
+        " First, we remove the trailing comment symbol.
+        if !b:ECuseMPBlock || (b:ECuseMPBlock && s:i == s:endBlock)
+            let line = substitute(line, s:LookFor('decommentend', a:1),
+                        \ s:SubstituteWith('decommentend'), "")
 
-	    " Remove any trailing whitespace, if we used alignRight.
-	    if b:ECalignRight
-		let line = substitute(line, ' *$', '', "")
-	    endif
-	endif
+            " Remove any trailing whitespace, if we used alignRight.
+            if b:ECalignRight
+                let line = substitute(line, ' *$', '', "")
+            endif
+        endif
 
-	" Maybe we added a middle string. Remove it here.
-	if b:ECuseCommentsOp && b:ECuseMPBlock
-		    \ && a:0 > 1
-		    \ && s:i > s:startBlock
-	    let line = substitute(line, s:LookFor('decommentmiddle', a:2),
-			\ s:SubstituteWith('decommentmiddle'), "")
-	endif
+        " Maybe we added a middle string. Remove it here.
+        if b:ECuseCommentsOp && b:ECuseMPBlock
+                    \ && a:0 > 1
+                    \ && s:i > s:startBlock
+            let line = substitute(line, s:LookFor('decommentmiddle', a:2),
+                        \ s:SubstituteWith('decommentmiddle'), "")
+        endif
 
-	" Remove escaped inner comments.
-	let line = s:UnEscape(line, a:commentSymbol, a:1)
+        " Remove escaped inner comments.
+        let line = s:UnEscape(line, a:commentSymbol, a:1)
     endif
 
     return line
@@ -1271,8 +1271,8 @@ endfunction
 
 "
 " GetLineLen(line, offset)
-"	line	    -- line of which length should be computed
-"	offset	    -- maybe a shift of the line to the right
+"       line        -- line of which length should be computed
+"       offset      -- maybe a shift of the line to the right
 "
 " Expands '\t' to it's tabstop value.
 "
@@ -1281,12 +1281,12 @@ function s:GetLineLen(line, offset)
     let i = 0
 
     while a:line[i] != ""
-	if a:line[i] == "\t"
-	    let len = (((len / &tabstop) + 1) * &tabstop)
-	else
-	    let len = len + 1
-	endif
-	let i = i + 1
+        if a:line[i] == "\t"
+            let len = (((len / &tabstop) + 1) * &tabstop)
+        else
+            let len = len + 1
+        endif
+        let i = i + 1
     endwhile
 
     return len
@@ -1294,7 +1294,7 @@ endfunction
 
 "
 " EscapeString(string)
-"	string	    -- string to process
+"       string      -- string to process
 "
 " Escapes characters in 'string', which have some function in
 " regular expressions, with a '\'.
@@ -1307,46 +1307,46 @@ endfunction
 
 "
 " LookFor(what, ...)
-"	what	    -- what type of regular expression
-"			* checkstart:
-"			* checkend:
-"			  check for comment at start/end of line
-"			* commentstart:
-"			* commentend:
-"			  insert comment strings
-"			* decommentstart:
-"			* decommentend:
-"			  remove comment strings
-"	a:1	    -- comment string
+"       what        -- what type of regular expression
+"                       * checkstart:
+"                       * checkend:
+"                         check for comment at start/end of line
+"                       * commentstart:
+"                       * commentend:
+"                         insert comment strings
+"                       * decommentstart:
+"                       * decommentend:
+"                         remove comment strings
+"       a:1         -- comment string
 "
 function s:LookFor(what, ...)
     if b:ECuseBlockIndent && s:inBlock
-	let handleWhitespace = s:blockIndentRegex
+        let handleWhitespace = s:blockIndentRegex
     else
-	let handleWhitespace = b:ECsaveWhite
+        let handleWhitespace = b:ECsaveWhite
     endif
 
     if a:what == 'checkstart'
-	let regex = '^'. b:ECsaveWhite . s:EscapeString(a:1)
-		    \ . s:EscapeString(b:ECidentFront)
+        let regex = '^'. b:ECsaveWhite . s:EscapeString(a:1)
+                    \ . s:EscapeString(b:ECidentFront)
     elseif a:what == 'checkend'
-	let regex = s:EscapeString(b:ECidentBack)
-		    \ . s:EscapeString(a:1) . b:ECsaveWhite . '$'
+        let regex = s:EscapeString(b:ECidentBack)
+                    \ . s:EscapeString(a:1) . b:ECsaveWhite . '$'
     elseif a:what == 'commentstart'
-	let regex = '^'. handleWhitespace
+        let regex = '^'. handleWhitespace
     elseif a:what == 'commentmiddle'
-	let regex = '^'. handleWhitespace
+        let regex = '^'. handleWhitespace
     elseif a:what == 'commentend'
-	let regex = '$'
+        let regex = '$'
     elseif a:what == 'decommentstart'
-	let regex = '^'. b:ECsaveWhite . s:EscapeString(a:1)
-    		    \ . s:EscapeString(b:ECidentFront) . b:ECprettyUnComments
+        let regex = '^'. b:ECsaveWhite . s:EscapeString(a:1)
+                    \ . s:EscapeString(b:ECidentFront) . b:ECprettyUnComments
     elseif a:what == 'decommentmiddle'
-	let regex = '^'. b:ECsaveWhite . s:EscapeString(a:1)
-		    \ . s:EscapeString(b:ECidentFront) . b:ECprettyUnComments
+        let regex = '^'. b:ECsaveWhite . s:EscapeString(a:1)
+                    \ . s:EscapeString(b:ECidentFront) . b:ECprettyUnComments
     elseif a:what == 'decommentend'
-	let regex = b:ECprettyUnComments . s:EscapeString(b:ECidentBack)
-		    \ . s:EscapeString(a:1) . b:ECsaveWhite .'$'
+        let regex = b:ECprettyUnComments . s:EscapeString(b:ECidentBack)
+                    \ . s:EscapeString(a:1) . b:ECsaveWhite .'$'
     endif
 
     return regex
@@ -1354,43 +1354,43 @@ endfunction
 
 "
 " SubstituteWith(what, ...)
-"	what	    -- what type of regular expression
-"			* commentstart:
-"			* commentend:
-"			  insert comment strings
-"			* decommentstart:
-"			* decommentend:
-"			  remove comment strings
-"	a:1	    -- comment string
+"       what        -- what type of regular expression
+"                       * commentstart:
+"                       * commentend:
+"                         insert comment strings
+"                       * decommentstart:
+"                       * decommentend:
+"                         remove comment strings
+"       a:1         -- comment string
 "
 function s:SubstituteWith(what, ...)
     if a:what == 'commentstart'
-		\ || a:what == 'commentmiddle'
-		\ || a:what == 'commentend'
-	let commentSymbol = a:1
+                \ || a:what == 'commentmiddle'
+                \ || a:what == 'commentend'
+        let commentSymbol = a:1
     else
-	let commentSymbol = ''
+        let commentSymbol = ''
     endif
 
     if b:ECuseBlockIndent && s:inBlock
-	let handleWhitespace = '\1' . commentSymbol
+        let handleWhitespace = '\1' . commentSymbol
     else
-	let handleWhitespace = b:ECrespectWhite . commentSymbol
-		    \ . b:ECignoreWhite
+        let handleWhitespace = b:ECrespectWhite . commentSymbol
+                    \ . b:ECignoreWhite
     endif
 
     if a:what == 'commentstart'
-	let regex = handleWhitespace . b:ECidentFront
-		    \ . b:ECprettyComments
+        let regex = handleWhitespace . b:ECidentFront
+                    \ . b:ECprettyComments
     elseif a:what == 'commentmiddle'
-	let regex = handleWhitespace . b:ECidentFront
-		    \ . b:ECprettyComments
+        let regex = handleWhitespace . b:ECidentFront
+                    \ . b:ECprettyComments
     elseif a:what == 'commentend'
-	let regex = b:ECprettyComments . b:ECidentBack . a:1
+        let regex = b:ECprettyComments . b:ECidentBack . a:1
     elseif a:what == 'decommentstart'
-		\ || a:what == 'decommentmiddle'
-		\ || a:what == 'decommentend'
-	let regex = handleWhitespace
+                \ || a:what == 'decommentmiddle'
+                \ || a:what == 'decommentend'
+        let regex = handleWhitespace
     endif
 
     return regex
@@ -1399,42 +1399,42 @@ endfunction
 "
 "
 " DecideWhatToDo(lineString, commentStart, ...)
-"	lineString	-- first line of block
-"	commentStart	-- comment start symbol
-"	a:1		-- comment end symbol
+"       lineString      -- first line of block
+"       commentStart    -- comment start symbol
+"       a:1             -- comment end symbol
 "
 function s:DecideWhatToDo(lineString, commentStart, ...)
     " If we checked already, we return our previous result.
     if !s:firstOfBlock
-		\ && (s:Action == 'first'
-		\	|| (b:ECuseMPBlock && s:inBlock && a:0))
-	return s:blockAction
+                \ && (s:Action == 'first'
+                \       || (b:ECuseMPBlock && s:inBlock && a:0))
+        return s:blockAction
     endif
 
     let s:blockAction = 'comment'
 
     if s:inBlock && a:0 && b:ECuseMPBlock
-	let first = getline(s:startBlock)
-	let last = getline(s:endBlock)
+        let first = getline(s:startBlock)
+        let last = getline(s:endBlock)
 
-	if first =~ s:LookFor('checkstart', a:commentStart)
-		\ && first !~ s:LookFor('checkend', a:1)
-		\ && last !~ s:LookFor('checkstart', a:commentStart)
-		\ && last =~ s:LookFor('checkend', a:1)
-	    let s:blockAction = 'decomment'
-	endif
+        if first =~ s:LookFor('checkstart', a:commentStart)
+                \ && first !~ s:LookFor('checkend', a:1)
+                \ && last !~ s:LookFor('checkstart', a:commentStart)
+                \ && last =~ s:LookFor('checkend', a:1)
+            let s:blockAction = 'decomment'
+        endif
 
-	return s:blockAction
+        return s:blockAction
     endif
 
     if a:lineString =~ s:LookFor('checkstart', a:commentStart)
-	let s:blockAction = 'decomment'
+        let s:blockAction = 'decomment'
     endif
 
     if a:0
-	if a:lineString !~ s:LookFor('checkend', a:1)
-	    let s:blockAction = 'comment'
-	endif
+        if a:lineString !~ s:LookFor('checkend', a:1)
+            let s:blockAction = 'comment'
+        endif
     endif
 
     let s:firstOfBlock = 0
@@ -1443,7 +1443,7 @@ endfunction
 
 "
 " TabsToSpaces(str)
-"	str	    -- string to convert
+"       str         -- string to convert
 "
 " Convert leading tabs of given string to spaces.
 "
@@ -1454,7 +1454,7 @@ function s:TabsToSpaces(str)
     " because retab changes every whitespace in the line, but we
     " wan't to modify only the leading spaces. Is this a problem?
     while string =~ '^\( *\)\t'
-	let string = substitute(string, '^\( *\)\t', '\1'. s:tabConvert, "")
+        let string = substitute(string, '^\( *\)\t', '\1'. s:tabConvert, "")
     endwhile
 
     return string
@@ -1462,7 +1462,7 @@ endfunction
 
 "
 " SpacesToTabs(str)
-"	str	    -- string to convert
+"       str         -- string to convert
 "
 " Convert leading spaces of given string to tabs.
 "
@@ -1470,10 +1470,10 @@ function s:SpacesToTabs(str)
     let string = a:str
 
     if !&expandtab
-	while string =~ '^\(\t*\)'. s:tabConvert
-	    let string = substitute(string, '^\(\t*\)'. s:tabConvert,
-			\ '\1\t', "")
-	endwhile
+        while string =~ '^\(\t*\)'. s:tabConvert
+            let string = substitute(string, '^\(\t*\)'. s:tabConvert,
+                        \ '\1\t', "")
+        endwhile
     endif
 
     return string
@@ -1481,8 +1481,8 @@ endfunction
 
 "
 " EnhCommentifyFallback4Embedded(test, fallback)
-"	test	    -- test for the special case
-"	fallback    -- filetype instead of normal fallback
+"       test        -- test for the special case
+"       fallback    -- filetype instead of normal fallback
 "
 " This function is global. It should be called from filetype
 " plugins like php, where the normal fallback behaviour may
@@ -1498,39 +1498,39 @@ endfunction
 " Keyboard mappings.
 "
 noremap <Plug>Comment
-	    \ :call EnhancedCommentify('', 'comment')<CR>
+            \ :call EnhancedCommentify('', 'comment')<CR>
 noremap <Plug>DeComment
-	    \ :call EnhancedCommentify('', 'decomment')<CR>
+            \ :call EnhancedCommentify('', 'decomment')<CR>
 noremap <Plug>Traditional
-	    \ :call EnhancedCommentify('', 'guess')<CR>
+            \ :call EnhancedCommentify('', 'guess')<CR>
 noremap <Plug>FirstLine
-	    \ :call EnhancedCommentify('', 'first')<CR>
+            \ :call EnhancedCommentify('', 'first')<CR>
 
 noremap <Plug>VisualComment
-	    \ <Esc>:call EnhancedCommentify('', 'comment',
-	    \   line("'<"), line("'>"))<CR>
+            \ <Esc>:call EnhancedCommentify('', 'comment',
+            \   line("'<"), line("'>"))<CR>
 noremap <Plug>VisualDeComment
-	    \ <Esc>:call EnhancedCommentify('', 'decomment',
-	    \   line("'<"), line("'>"))<CR>
+            \ <Esc>:call EnhancedCommentify('', 'decomment',
+            \   line("'<"), line("'>"))<CR>
 noremap <Plug>VisualTraditional
-	    \ <Esc>:call EnhancedCommentify('', 'guess',
-	    \   line("'<"), line("'>"))<CR>
+            \ <Esc>:call EnhancedCommentify('', 'guess',
+            \   line("'<"), line("'>"))<CR>
 noremap <Plug>VisualFirstLine
-	    \ <Esc>:call EnhancedCommentify('', 'first',
-	    \   line("'<"), line("'>"))<CR>
+            \ <Esc>:call EnhancedCommentify('', 'first',
+            \   line("'<"), line("'>"))<CR>
 "
 " Finally set keybindings.
 "
 " SetKeybindings(where)
-"	where	    -- "l" for local to the buffer, "g" for global
+"       where       -- "l" for local to the buffer, "g" for global
 "
 function s:SetKeybindings(where)
     if a:where == "l"
-	let where = "<buffer>"
-	let ns = "b"
+        let where = "<buffer>"
+        let ns = "b"
     else
-	let where = ""
-	let ns = "s"
+        let where = ""
+        let ns = "s"
     endif
 
     execute "let userBindings = ". ns .":ECuserBindings"
@@ -1542,36 +1542,36 @@ function s:SetKeybindings(where)
     execute "let bindInVisual = ". ns .":ECbindInVisual"
 
     if userBindings
-	"
-	" *** Put your personal bindings here! ***
-	"
+        "
+        " *** Put your personal bindings here! ***
+        "
     else
-	if useAltKeys
-	    let s:c = '<M-c>'
-	    let s:x = '<M-x>'
-	    let s:C = '<M-v>'
-	    let s:X = '<M-y>'
-	else
-	    let s:c = '<Leader>c'
-	    let s:x = '<Leader>x'
-	    let s:C = '<Leader>C'
-	    let s:X = '<Leader>X'
-	endif
+        if useAltKeys
+            let s:c = '<M-c>'
+            let s:x = '<M-x>'
+            let s:C = '<M-v>'
+            let s:X = '<M-y>'
+        else
+            let s:c = '<Leader>c'
+            let s:x = '<Leader>x'
+            let s:C = '<Leader>C'
+            let s:X = '<Leader>X'
+        endif
 
-	if traditionalMode
-	    let s:Method = 'Traditional'
-	elseif firstLineMode
-	    let s:Method = 'FirstLine'
-	else
-	    let s:Method = 'Comment'
+        if traditionalMode
+            let s:Method = 'Traditional'
+        elseif firstLineMode
+            let s:Method = 'FirstLine'
+        else
+            let s:Method = 'Comment'
 
-	    " Decomment must be defined here. Everything else is mapped below.
-	    if bindInNormal
-		execute 'nmap '. where .' <silent> <unique> '. s:C
-			    \ .' <Plug>DeCommentj'
-		execute 'nmap '. where .' <silent> <unique> '. s:X
-			    \ .' <Plug>DeComment'
-	    endif
+            " Decomment must be defined here. Everything else is mapped below.
+            if bindInNormal
+                execute 'nmap '. where .' <silent> <unique> '. s:C
+                            \ .' <Plug>DeCommentj'
+                execute 'nmap '. where .' <silent> <unique> '. s:X
+                            \ .' <Plug>DeComment'
+            endif
 
             " if bindInInsert
                 " execute 'imap '. where .' <silent> <unique> '. s:C
@@ -1580,20 +1580,20 @@ function s:SetKeybindings(where)
                             " \ .' <Esc><Plug>DeCommenti'
             " endif
 
-	    if bindInVisual
-		execute 'vmap '. where .' <silent> <unique> '. s:C
-			    \ .' <Plug>VisualDeCommentj'
-		execute 'vmap '. where .' <silent> <unique> '. s:X
-			    \ .' <Plug>VisualDeComment'
-	    endif
-	endif
+            if bindInVisual
+                execute 'vmap '. where .' <silent> <unique> '. s:C
+                            \ .' <Plug>VisualDeCommentj'
+                execute 'vmap '. where .' <silent> <unique> '. s:X
+                            \ .' <Plug>VisualDeComment'
+            endif
+        endif
 
-	if bindInNormal
-	    execute 'nmap '. where .' <silent> <unique> '. s:c
-			\ .' <Plug>'. s:Method .'j'
-	    execute 'nmap '. where .' <silent> <unique> '. s:x
-			\ .' <Plug>'. s:Method
-	endif
+        if bindInNormal
+            execute 'nmap '. where .' <silent> <unique> '. s:c
+                        \ .' <Plug>'. s:Method .'j'
+            execute 'nmap '. where .' <silent> <unique> '. s:x
+                        \ .' <Plug>'. s:Method
+        endif
 
         " if bindInInsert
             " execute 'imap '. where .' <silent> <unique> '. s:c
@@ -1602,12 +1602,12 @@ function s:SetKeybindings(where)
                         " \ .' <Esc><Plug>'. s:Method
         " endif
 
-	if bindInVisual
-	    execute 'vmap <silent> <unique> '. s:c
-			\ .' <Plug>Visual'. s:Method .'j'
-	    execute 'vmap '. where .' <silent> <unique> '. s:x
-			\ .' <Plug>Visual'. s:Method
-	endif
+        if bindInVisual
+            execute 'vmap <silent> <unique> '. s:c
+                        \ .' <Plug>Visual'. s:Method .'j'
+            execute 'vmap '. where .' <silent> <unique> '. s:x
+                        \ .' <Plug>Visual'. s:Method
+        endif
     endif
 endfunction
 

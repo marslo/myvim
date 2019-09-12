@@ -9,7 +9,6 @@ endif
 " Init: values {{{1
 let g:loaded_signify = 1
 let g:signify_locked = 0
-let s:has_doau_modeline = v:version > 703 || v:version == 703 && has('patch442')
 
 " Init: autocmds {{{1
 augroup signify
@@ -66,7 +65,8 @@ augroup END
 command! -nargs=0 -bar       SignifyList            call sy#debug#list_active_buffers()
 command! -nargs=0 -bar       SignifyDebug           call sy#repo#debug_detection()
 command! -nargs=0 -bar -bang SignifyFold            call sy#fold#dispatch(<bang>1)
-command! -nargs=0 -bar       SignifyDiff            call sy#repo#diffmode()
+command! -nargs=0 -bar -bang SignifyDiff            call sy#repo#diffmode(<bang>1)
+command! -nargs=0 -bar       SignifyDiffPreview     call sy#repo#preview_hunk()
 command! -nargs=0 -bar       SignifyRefresh         call sy#util#refresh_windows()
 command! -nargs=0 -bar       SignifyEnable          call sy#enable()
 command! -nargs=0 -bar       SignifyDisable         call sy#disable()
@@ -116,5 +116,5 @@ function! s:save()
 endfunction
 
 if exists('#User#SignifySetup')
-  execute 'doautocmd' (s:has_doau_modeline ? '<nomodeline>' : '') 'User SignifySetup'
+  doautocmd <nomodeline> User SignifySetup
 endif

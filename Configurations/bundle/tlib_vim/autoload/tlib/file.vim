@@ -1,7 +1,7 @@
 " @Author:      Tom Link (micathom AT gmail com?subject=[vim])
 " @Website:     http://www.vim.org/account/profile.php?user_id=4037
 " @License:     GPL (see http://www.gnu.org/licenses/gpl.txt)
-" @Revision:    211
+" @Revision:    225
 
 
 if !exists('g:tlib#file#drop')
@@ -139,12 +139,14 @@ endf
 
 function! tlib#file#Canonic(filename, ...) abort "{{{3
     TVarArg ['mode', '']
-    if a:filename =~# '^\\\\'
-        let mode = 'windows'
-    elseif a:filename =~# '^\(file\|ftp\|http\)s\?:'
-        let mode = 'url'
-    elseif (empty(mode) && g:tlib#sys#windows)
-        let mode = 'windows'
+    if empty(mode)
+        if a:filename =~# '^\\\\'
+            let mode = 'windows'
+        elseif a:filename =~# '^\(file\|ftp\|http\)s\?:'
+            let mode = 'url'
+        elseif (empty(mode) && g:tlib#sys#windows)
+            let mode = 'windows'
+        endif
     endif
     let filename = a:filename
     if mode ==# 'windows'
@@ -261,7 +263,11 @@ function! tlib#file#Edit(fileid) abort "{{{3
                 " echom "DBG" bufnr('%')
             endif
             return 1
-        elseif filereadable(filename)
+        endif
+        if !filereadable(filename) && exists('#TLibPrepareFile#User')
+            exec 'doautocmd TLibPrepareFile User' filename
+        endif
+        if filereadable(filename)
             try
                 " let file = tlib#arg#Ex(filename)
                 " Tlibtrace 'tlib', file
@@ -340,7 +346,6 @@ let s:filereadable = {}
 augroup TLib
 	autocmd BufWritePost,FileWritePost,FocusLost * let s:filereadable = {}
 augroup end
-
 
 function! tlib#file#Filereadable(filename) abort "{{{3
     if !has_key(s:filereadable, a:filename)
