@@ -29,13 +29,13 @@ My Vim Config
 
 ## ScreenShots:
 #### Linux Terminal (html) :
-![Screenshot_Terminal](https://github.com/Marslo/VimConfig/blob/master/Screenshots/Screenhost_Linux_Terminal.png?raw=true)
+![Screenshot_Terminal](https://github.com/Marslo/VimConfig/blob/master/screenshot/Screenhost_Linux_Terminal.png?raw=true)
 #### Linux Gvim (css):
-![Screenshot_Gvim](https://github.com/Marslo/VimConfig/blob/master/Screenshots/Screenhost_Linux_Gvim.png?raw=true)
+![Screenshot_Gvim](https://github.com/Marslo/VimConfig/blob/master/screenshot/Screenhost_Linux_Gvim.png?raw=true)
 #### Windows Gvim (python)
-![Screenshot_Windows](https://github.com/Marslo/VimConfig/blob/master/Screenshots/screenshot_gvim.png?raw=true)
+![Screenshot_Windows](https://github.com/Marslo/VimConfig/blob/master/screenshot/screenshot_gvim.png?raw=true)
 #### PuTTy (vimrc)
-![Screenshot_PuTTy](https://github.com/Marslo/VimConfig/blob/master/Screenshots/screenshot_PuTTy.png?raw=true)
+![Screenshot_PuTTy](https://github.com/Marslo/VimConfig/blob/master/screenshot/screenshot_PuTTy.png?raw=true)
 
 # Configuration
 ### Usage
