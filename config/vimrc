@@ -5,12 +5,14 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.24
-"    LastChange: 2018-02-19 16:37:05
+"    LastChange: 2020-06-12 20:29:50
 " =============================================================================
 
 set nocompatible
 set history=1000
 set diffopt=filler,context:3
+set spell spelllang=en_us
+set spellfile=~/.vim/spell/en.utf-8.add
 runtime macros/matchit.vim
 let vimrplugin_i386 = 1
 let performance_mode = 1
@@ -110,14 +112,15 @@ Bundle 'valloric/MatchTagAlways'
 Bundle 'tpope/vim-repeat'
 Bundle 'jaxbot/browserlink.vim'
 " Colors and themes and syntax
+Bundle '907th/vim-auto-save'
 Bundle 'luochen1990/rainbow'
 Bundle 'txt.vim'
 Bundle 'hail2u/vim-css3-syntax'
 Bundle 'Marslo/vim-coloresque'
 Bundle 'Marslo/marslo.vim'
 Bundle 'Marslo/MarsloVimOthers'
-Bundle 'plasticboy/vim-markdown.git'
-Bundle 'mzlogin/vim-markdown-toc'
+" Bundle 'plasticboy/vim-markdown.git'
+Bundle 'gabrielelana/vim-markdown'
 Bundle 'altercation/vim-colors-solarized'
 " Bundle 'cakebaker/scss-syntax.vim'
 " Git
@@ -366,7 +369,9 @@ set wildmenu
 set wildmode=longest,list,full                                      " Completion mode that is used for the character
 set noerrorbells novisualbell                                       " ┐ Turn off
 set t_vb=                                                           " ┘ error beep/flash
-set list listchars=tab:\ \ ,trail:·,extends:»,precedes:«,nbsp:·
+" set list listchars=tab:\ \ ,tab:▸,trail:·,extends:»,precedes:«,nbsp:·,eol:¬
+set list
+set listchars=tab:\⇥\ ,trail:·,extends:»,precedes:«,nbsp:·
 set cursorline                                                      " Highlight the current line
 set guicursor=a:hor1
 set guicursor+=i-r-ci-cr-o:hor2-blinkon0
@@ -375,6 +380,7 @@ set scrolloff=3                                                     " Scroll set
 set sidescroll=1
 set sidescrolloff=5
 set imcmdline                                                       " Fix context menu messing
+set complete+=kspell
 set completeopt=longest,menuone                                     " Supper Tab
 set foldenable                                                      " Enable Fold
 set foldcolumn=1
@@ -403,6 +409,8 @@ if has('statusline')
 endif
 " set synmaxcol=128
 " set binary
+set exrc
+set secure
 
 if has('persistent_undo')
   set noundofile
@@ -460,6 +468,8 @@ cnoreabbrev %Y %y
 cnoreabbrev %D %d
 cnoremap sudow!! w !sudo tee > /dev/null %
 cnoremap sw!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
+cnoremap ls ls<cr>:b<space>
+cnoremap lsd ls<cr>:bd<space>
 
 inoremap <leader>tt <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
 inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
@@ -500,6 +510,8 @@ iabbrev <leader>*/ *********************************/
 iabbrev <leader>#- #------------------
 
 " ====================================== For Function =====================================
+let g:auto_save = 0                                                 " enable AutoSave on Vim startup
+
 let g:ctrlp_map = '<c-p>'                                           " CtrlP
 let g:ctrlp_working_path_mode = 'ra'                                " Search parents as well (stop searching sartly)
 let g:ctrlp_max_height = 8
@@ -573,6 +585,10 @@ let g:rainbow_conf = {
 \   'ctermfgs' : 'xterm-256color' == $TERM ? ['141', '196', '112', '208', '129', '166', '85', '237'] : ['lightblue', 'lightgreen', 'yellow', 'red', 'magenta'],
 \   'parentheses': [['(',')'], ['\[','\]'], ['{','}']],
 \   'separately': {
+\     '*': {},
+\     'markdown': {
+\       'parentheses_options': 'containedin=markdownCode contained',
+\     },
 \     'css': {
 \       'parentheses': [['(',')'], ['\[','\]']],
 \     },
@@ -582,6 +598,9 @@ let g:rainbow_conf = {
 \     'html': {
 \       'parentheses': [['(',')'], ['\[','\]'], ['{','}']],
 \     },
+\     'stylus': {
+\       'parentheses': ['start=/{/ end=/}/ fold contains=@colorableGroup'],
+\     }
 \   }
 \}
 
@@ -625,6 +644,7 @@ let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute \"ng-"]
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 
+nnoremap <Leader>cc :let &cole=(&cole == 2) ? 0 : 2 <bar> echo 'conceallevel ' . &cole <CR>
 " for vim-markdown
 let g:vim_markdown_folding_style_pythonic = 1
 let g:vim_markdown_override_foldtext = 0
@@ -639,6 +659,24 @@ let g:vim_markdown_json_frontmatter = 1
 " for vim-markdown-toc
 let g:vmt_auto_update_on_save = 1
 let g:vmt_cycle_list_item_markers = 0
+
+noremap <Leader>tm :TableModeToggle<CR>
+let g:table_mode_corner='|'
+let g:table_mode_header_fillchar='-'
+" let g:table_mode_corner_corner='+'
+function! s:isAtStartOfLine(mapping)
+  let text_before_cursor = getline('.')[0 : col('.')-1]
+  let mapping_pattern = '\V' . escape(a:mapping, '\')
+  let comment_pattern = '\V' . escape(substitute(&l:commentstring, '%s.*$', '', ''), '\')
+  return (text_before_cursor =~? '^' . ('\v(' . comment_pattern . '\v)?') . '\s*\v' . mapping_pattern . '\v$')
+endfunction
+
+inoreabbrev <expr> <bar><bar>
+          \ <SID>isAtStartOfLine('\|\|') ?
+          \ '<c-o>:TableModeEnable<cr><bar><space><bar><left><left>' : '<bar><bar>'
+inoreabbrev <expr> __
+          \ <SID>isAtStartOfLine('__') ?
+          \ '<c-o>:silent! TableModeDisable<cr>' : '__'
 
 " let g:tabular_loaded = 0
 if exists(":Tabularize")
