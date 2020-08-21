@@ -1,9 +1,0 @@
-[paths]
-source =
-   pylint
-
-[report]
-include =
-    pylint/*
-omit =
-    */test/*
