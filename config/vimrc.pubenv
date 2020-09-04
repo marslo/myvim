@@ -1,11 +1,9 @@
 " =============================================================================
-"       FileName: vimrc_PublicEnv
-"          Desc: Made in Marslo
-"        Author: Marslo Jiao
-"         Email: marslo.jiao@gmail.com
+"       FileName: vimrc.pubenv
+"        Author: marslo.jiao@gmail.com
 "        Created: 2013-10-16 07:19:00
 "       Version: 0.0.24
-"    LastChange: 2018-01-23 16:20:29
+"    LastChange: 2020-09-04 17:15:03
 " =============================================================================
 
 let &runtimepath=printf('%s/vimfiles,%s,%s/vimfiles/after', $VIM, $VIMRUNTIME, $VIM)

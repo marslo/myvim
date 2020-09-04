@@ -5,9 +5,10 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.24
-"    LastChange: 2020-06-12 20:29:50
+"    LastChange: 2020-09-04 17:15:02
 " =============================================================================
 
+set maxmempattern=5000
 set nocompatible
 set history=1000
 set diffopt=filler,context:3
@@ -39,6 +40,16 @@ else
   let bud=expand('~/.vim/bundle') . '/'
 endif
 
+if empty(glob('~/.vim/cache/'))
+  execute 'silent !mkdir -p ~/.vim/cache'
+endif
+if empty(glob('~/.vim/undo/'))
+  execute 'silent !mkdir -p ~/.vim/undo'
+endif
+
+let bud=expand('~/.vim/bundle') . '/'
+let performance_mode = 1
+
 " ====================================== For Property =====================================
 let mapleader=","
 let g:mapleader=","
@@ -46,14 +57,17 @@ let g:mapleader=","
 " Vim Bundle
 filetype off
 if has('win32') || has('win64')
-  set rtp+=$VIM/bundle/vundle
+  set rtp+=$VIM/bundle/snipmate.vim/snippets/
+  set rtp+=$VIM/bundle/Vundle.vim
   call vundle#begin('$VIM/bundle')
 else
-  set rtp+=~/.vim/bundle/vundle
+  set rtp+=~/.vim/bundle/snipmate.vim/snippets/
+  set rtp+=~/.vim/bundle/Vundle.vim/
   call vundle#begin()
 endif
 
-Bundle 'gmarik/vundle'
+Bundle 'VundleVim/Vundle.vim'
+" Bundle 'gmarik/vundle.git'
 Bundle 'tpope/vim-pathogen'
 Bundle 'Yggdroot/indentLine'
 Bundle 'kien/ctrlp.vim'
@@ -84,17 +98,23 @@ Bundle 'godlygeek/tabular'
 Bundle 'dhruvasagar/vim-table-mode'
 Bundle 'Chiel92/vim-autoformat'
 Bundle 'rizzatti/dash.vim'
-Bundle 'mhinz/vim-signify'
+" Bundle 'mhinz/vim-signify'
+Bundle 'airblade/vim-gitgutter'
+Bundle 'mbbill/undotree'
+Bundle 'codota/tabnine-vim'
 " Python
-Bundle 'klen/python-mode'
+" Bundle 'python-mode/python-mode'
+Bundle 'Vimjas/vim-python-pep8-indent'
 Bundle 'python_fold'
 " Bundle 'kevinw/pyflakes-vim'
 Bundle 'pyflakes/pyflakes'
 Bundle 'python_match.vim'
-Bundle 'Marslo/python-syntax'
-Bundle 'tarmack/vim-python-ftplugin'
+Bundle 'vim-python/python-syntax'
 Bundle 'davidhalter/jedi-vim'
 Bundle 'mfukar/robotframework-vim'
+" Bundle 'tarmack/vim-python-ftplugin'
+" Bundle 'davidhalter/jedi-vim'
+" Bundle 'mfukar/robotframework-vim'
 " ruby
 Bundle 'tpope/vim-rails'
 Bundle 'vim-ruby/vim-ruby'
@@ -115,24 +135,29 @@ Bundle 'jaxbot/browserlink.vim'
 Bundle '907th/vim-auto-save'
 Bundle 'luochen1990/rainbow'
 Bundle 'txt.vim'
-Bundle 'hail2u/vim-css3-syntax'
+" Bundle 'hail2u/vim-css3-syntax'
+" Bundle 'ap/vim-css-color'
 Bundle 'Marslo/vim-coloresque'
 Bundle 'Marslo/marslo.vim'
 Bundle 'Marslo/MarsloVimOthers'
-" Bundle 'plasticboy/vim-markdown.git'
 Bundle 'gabrielelana/vim-markdown'
+" Bundle 'plasticboy/vim-markdown.git'
+" Bundle 'tpope/vim-markdown'
+" Bundle 'mzlogin/vim-markdown-toc'
 Bundle 'altercation/vim-colors-solarized'
 " Bundle 'cakebaker/scss-syntax.vim'
 " Git
 Bundle 'tpope/vim-fugitive'
 " Groovy
-Bundle 'groovy.vim--Ruley'
+Bundle 'modille/groovy.vim'
 Bundle 'marslo/Jenkinsfile-vim-syntax'
-Bundle 'keith/cocoapods.vim'
 " Plist
+" Bundle 'keith/cocoapods.vim'
 Bundle "darfink/vim-plist"
 " dockerfile
 Bundle 'ekalinin/Dockerfile.vim'
+" github page
+Bundle 'parkr/vim-jekyll'
 " brew
 Bundle 'xu-cheng/brew.vim'
 " For fun
@@ -149,11 +174,11 @@ function! GetVundle()                                                   " GetVun
   let vundleAlreadyExists=1
   if has('win32') || has('win64')
     let bud=$VIM . '\bundle'
-    let vud=bud . '\vundle'
+    let vud=bud . '\Vundle.vim'
     let vudcfg=expand(vud . '\.git\config')
   else
     let bud='~/.vim/bundle'
-    let vud=bud . '/vundle'
+    let vud=bud . '/Vundle.vim'
     let vudcfg=expand(vud . '/.git/config')
   endif
 
@@ -165,11 +190,17 @@ function! GetVundle()                                                   " GetVun
     if isdirectory(expand(bud)) == 0
       call mkdir(expand(bud), 'p')
     endif
-    execute 'silent !git clone https://github.com/gmarik/vundle.git "' . expand(vud) . '"'
+    execute 'silent !git clone https://github.com/VundleVim/Vundle.vim.git "' . expand(vud) . '"'
     let vundleAlreadyExists=0
   endif
 endfunction
 command! GetVundle :call GetVundle()
+
+if has('unix') || has('macunix')
+  if empty(glob('~/.vim/bundle/Vundle.vim')) || empty(glob($VIM . '\bundle\Vundle.vim'))
+    execute 'silent exec "GetVundle"'
+  endif
+endif
 
 function! ToggleVerbose()
   if !&verbose
@@ -206,7 +237,7 @@ if isdirectory(expand(bud . 'MarsloFunc'))
   nmap gf :call marslofunc#GotoFile()<CR>
   xnoremap * :<C-u>call marslofunc#VSetSearch()<CR>/<C-R>=@/<CR><CR>
   xnoremap # :<C-u>call marslofunc#VSetSearch()<CR>?<C-R>=@/<CR><CR>
-  " map <M-o> :call marslofunc#OpenFoler()<CR>
+  map <M-o> :call marslofunc#OpenFoler()<CR>
   nmap <F12> :call marslofunc#UpdateTags()<CR>
   nmap <C-F5> :call marslofunc#RunResult()<CR>
   nmap <leader>ti :call marslofunc#callit()<CR>
@@ -246,38 +277,36 @@ let g:rubycomplete_rails = 1
 " Programming configs for Python
 if has("autocmd")
   au FileType python syn keyword pythonDecorator print self
-  au FileType python set tabstop=2 softtabstop=2 shiftwidth=2
+  au FileType python set tabstop=4 softtabstop=4 shiftwidth=4
   au FileTYpe python set isk-=.
   " set textwidth=80
 endif
 let python_highlight_all = 1                                        " syntax-python
 
 " Python-mode configuratoin
-if isdirectory(expand(bud . 'python-mode'))
-  nnoremap <leader>p :PymodeLint<CR>                                " Trigger PymodeLint by manual
-  let g:pymode = 1                                                  " 1: turn on python-mode plugin
-  let g:pymode_syntax_all = 1
-  let g:pymode_warnings = 0                                         " turn off plugin's warnings
-  let g:pymode_folding = 1
-  let g:pymode_options_colorcolumn = 1
-  let g:pymode_trim_whitespaces = 1                                 " trim unused white spaces on save
-  let g:pymode_lint = 1                                             " turn on code checking
-  let g:pymode_lint_checkers = ['pyflakes', 'pep8', 'mccabe']
-  let g:pymode_lint_ignore="E111,E114,E501,W0611,E266"              " E501: long line; E111&E114: 4 spaces indent; E266: too many # for comments
-  let g:pymode_options = 0
-  let g:pymode_rope = 0
-  let g:pymode_indent = 0
-  let g:pymode_syntax_highlight_self = g:pymode_syntax_all
-  let g:pymode_quickfix_minheight = 3
-  let g:pymode_quickfix_maxheight = 3
-  if !has('python')
-    let g:pymode = 0
-  endif
-  let g:python_check_syntax = 0                                     " Disalbe Check python script syntax on every save
-  let g:pymode_lint_on_write = 0                                    " Disalbe on save checking
-  " let g:pymode_rope_regenerate_on_write = 0
-  let g:pymode_lint_unmodified = 1
-  let g:pymode_indent = 1
+if isdirectory(expand(bud . 'python-mode')) || has('python3')
+ nnoremap <leader>p :PymodeLint<CR>                                " Trigger PymodeLint by manual
+ let g:pymode_python =  '/usr/local/bin/python3'
+ let g:pymode = 1                                                  " 1: turn on python-mode plugin
+ let g:pymode_syntax_all = 1
+ let g:pymode_warnings = 0                                         " turn off plugin's warnings
+ let g:pymode_folding = 1
+ let g:pymode_options_colorcolumn = 1
+ let g:pymode_trim_whitespaces = 1                                 " trim unused white spaces on save
+ let g:pymode_lint = 1                                             " turn on code checking
+ let g:pymode_lint_checkers = ['pyflakes', 'pep8', 'mccabe']
+ let g:pymode_lint_ignore="E111,E114,E501,W0611,E266"              " E501: long line; E111&E114: 4 spaces indent; E266: too many # for comments
+ let g:pymode_options = 0
+ let g:pymode_rope = 0
+ let g:pymode_indent = 0
+ let g:pymode_syntax_highlight_self = g:pymode_syntax_all
+ let g:pymode_quickfix_minheight = 3
+ let g:pymode_quickfix_maxheight = 3
+ let g:python_check_syntax = 0                                     " disalbe Check python script syntax on every save
+ let g:pymode_lint_on_write = 0                                    " disalbe on save checking
+ " let g:pymode_rope_regenerate_on_write = 0
+ let g:pymode_lint_unmodified = 1
+ let g:pymode_indent = 1
 endif
 
 " ====================================== For Inteface =====================================
@@ -291,8 +320,10 @@ if has('gui_running')
       au GUIENTER * call libcallnr("vimtweak.dll","SetAlpha",243)
     endif
   else
-    set lines=29                                                    " The initialize size
-    set columns=129
+    set guifont=Ubuntu\ Mono:h26
+    " set guifontwide=NSimsun:h16
+    set lines=36                                                    " The initialize size
+    set columns=124
   endif
 endif
 
@@ -306,6 +337,7 @@ endif
 
 if has('gui_running') || 'xterm-256color' == $TERM
   set background=dark
+  " let g:solarized_termcolors=256
   colorscheme solarized
   " colorscheme marslo
   let psc_style='cool'
@@ -486,7 +518,7 @@ nnoremap <leader>zcm :%s/<C-v><CR>/\r/g<CR>           " Convert  to new line
 nnoremap <leader>zwl :%s///gn<CR>                     " Show the matches numbers (wc -l)
 nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>            " Delete 
 nnoremap <leader>zdb :%s/\s\+$//<CR>                  " Delete blank tail
-nnoremap <leader>zdl :g/^\s*$/d<CR>                   " Delete blank line
+nnoremap <leader>zbl :g/^\s*$/d<CR>                   " Delete blank line
 nnoremap <leader>zd2 :%s/​//g<CR>                " Delete <200b>
 nnoremap <leader>zdd :%s/ / /g<CR>                    " Delete   (dot)
 nnoremap <leader>zds :%s/^<span.*span>//g<CR>         " Delete span tag
@@ -576,13 +608,16 @@ let MRU_Max_Entries = 10
 let MRU_Exclude_Files='^/tmp/.*\|^/temp/.*\|^/media/.*\|^/mnt/.*'
 map <leader>re :MRU<CR>
 
+set undodir=~/.vim/undo/
+set undofile
 noremap <Leader>u :GundoToggle<CR>
 
+" for i in '9' '69' '99' '141' '196' '112' '208' '129' '166' '85'; do echo -e "\e[38;05;${i}m${i}"; done | column -c 250 -s ' '; echo -e "\e[m"
 let g:rainbow_active = 1
 let g:rainbow_operators = 1
 let g:rainbow_conf = {
-\   'guifgs' : ['#6A5ACD', '#B22222', '#C0FF3E', '#EEC900', '#9A32CD', '#EE7600', '#98fb98', '#686868'],
-\   'ctermfgs' : 'xterm-256color' == $TERM ? ['141', '196', '112', '208', '129', '166', '85', '237'] : ['lightblue', 'lightgreen', 'yellow', 'red', 'magenta'],
+\   'guifgs' : ['#DC322F', '#268bd2', '#6c71c4', '#B22222', '#C0FF3E', '#6A5ACD', '#EEC900', '#9A32CD', '#EE7600', '#98fb98'],
+\   'ctermfgs' : 'xterm-256color' == $TERM ? ['9', '69', '178', '196', '112', '208', '129', '166', '84', '99'] : ['lightblue', 'lightgreen', 'yellow', 'red', 'magenta'],
 \   'parentheses': [['(',')'], ['\[','\]'], ['{','}']],
 \   'separately': {
 \     '*': {},
@@ -646,21 +681,41 @@ let g:syntastic_auto_loc_list = 1
 
 nnoremap <Leader>cc :let &cole=(&cole == 2) ? 0 : 2 <bar> echo 'conceallevel ' . &cole <CR>
 " for vim-markdown
-let g:vim_markdown_folding_style_pythonic = 1
-let g:vim_markdown_override_foldtext = 0
-let g:vim_markdown_autowrite = 1
-let g:vim_markdown_new_list_item_indent = 4
-let g:vim_markdown_toc_autofit = 1
-let g:vim_markdown_conceal = 0
-" set conceallevel=2
-let g:vim_markdown_frontmatter = 1
-let g:vim_markdown_json_frontmatter = 1
+" let g:vim_markdown_folding_style_pythonic = 1
+" let g:vim_markdown_override_foldtext = 0
+" let g:vim_markdown_autowrite = 1
+" let g:vim_markdown_new_list_item_indent = 4
+" let g:vim_markdown_toc_autofit = 1
+" let g:vim_markdown_conceal = 0
+"" set conceallevel=2
+" let g:vim_markdown_frontmatter = 1
+" let g:vim_markdown_json_frontmatter = 1
+let g:markdown_enable_spell_checking = 0
+let g:markdown_enable_input_abbreviations = 0
+let g:markdown_enable_conceal = 0
+hi markdownItalic guifg=gray25 gui=underline
+" hi MarkdownHeadingDelimiter gui=bold guifg=gray25
+" hi htmlSpecialChar guifg=black
+" hi markdownBold gui=bold guifg=gray25
+" hi markdownUrl guifg=#2fb3a6
+" hi markdownAutomaticLink guifg=#2fb3a6
+" hi markdownLinkText guifg=#317849
+" hi markdownUrlTitle guifg=#317849
+" hi markdownBlockquote guifg=#317849 gui=bold
+" hi markdownId guifg=#2fb3a6
+" hi markdownIdDeclaration guifg=#317849 gui=bold
+" hi markdownListMarker guifg=#317849
+
+" for tpope vim-markdown
+" let g:markdown_fenced_languages = ['html', 'python', 'bash=sh']
+" let g:markdown_syntax_conceal = 0
+" let g:markdown_minlines = 100
 
 " for vim-markdown-toc
 let g:vmt_auto_update_on_save = 1
 let g:vmt_cycle_list_item_markers = 0
 
-noremap <Leader>tm :TableModeToggle<CR>
+noremap <Leader>tb :TableModeToggle<CR>
 let g:table_mode_corner='|'
 let g:table_mode_header_fillchar='-'
 " let g:table_mode_corner_corner='+'
@@ -684,11 +739,11 @@ if exists(":Tabularize")
   vmap <Leader>a= :Tabularize /=<CR>
   nmap <leader>a: :Tabularize /:\zs<CR>
   vmap <leader>a: :Tabularize /:\zs<CR>
-  inoremap <silent> <Bar>   <Bar><Esc>:call <SID>table_auto_align()<CR>a
+  inoremap <silent> <Bar>   <Bar><Esc>:call <SID>table_auto_align()<CR>
   function! s:table_auto_align()
     let p = '^\s*|\s.*\s|\s*$'
     if exists(':Tabularize') && getline('.') =~# '^\s*|'
-                \ && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+      \ && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
       let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
       let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
       Tabularize/|/l1
@@ -709,9 +764,17 @@ nnoremap <leader>gc :Git commit -am ""<Left>
 command! -bar -nargs=* Gpull execute 'Git pull'
 command! -bar -nargs=* Gpush execute 'Git push'
 
+" gitgutter
+let g:gitgutter_git_executable = '/usr/local/bin/git'
+let g:gitgutter_enabled = 1
+set updatetime=250
+" set signcolumn=yes
+" highlight clear LineNr
+highlight clear SignColumn
+
 " Snippet
-imap <C-J> <Plug>snipMateNextOrTrigger
-smap <C-J> <Plug>snipMateNextOrTrigger
+imap <S-C-J> <Plug>snipMateNextOrTrigger
+smap <S-C-J> <Plug>snipMateNextOrTrigger
 imap <Tab> <Plug>snipMateNextOrTrigger
 
 " match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
@@ -721,17 +784,49 @@ let g:plist_json_filetype = 'javascript'
 let g:signify_disable_by_default=0
 let g:signify_vcs_list = [ 'git' ]
 
-  " nmap j <Plug>(accelerated_jk_gj)
-  " nmap k <Plug>(accelerated_jk_gk)
+" tabnine-vim
+" if index(['vim'], &filetype) == -1
+" let g:loaded_youcompleteme = 1
+" if !(&filetype == 'vim')
+  " let g:loaded_youcompleteme = 1
 " endif
-" let g:accelerated_jk_acceleration_limit = 500
-" let g:accelerated_jk_acceleration_table = [10, 20, 30, 40, 50]
+" " let b:ycm_largefile=1
+" " let g:ycm_disable_for_files_larger_than_kb = 1000
+" let g:ycm_filetype_blacklist = {
+"       \ 'vim' : 1 ,
+"       \ 'vimshell': 1 ,
+"       \ 'vimwiki': 1,
+"       \ }
+" let g:ycm_filetype_specific_completion_to_disable = {
+"       \ 'gitcommit': 1
+"       \ }
+" " let g:ycm_semantic_triggers =  {
+"   " \   'c': ['->', '.'],
+"   " \   'objc': ['->', '.', 're!\[[_a-zA-Z]+\w*\s', 're!^\s*[^\W\d]\w*\s',
+"   " \            're!\[.*\]\s'],
+"   " \   'ocaml': ['.', '#'],
+"   " \   'cpp,cuda,objcpp': ['->', '.', '::'],
+"   " \   'perl': ['->'],
+"   " \   'php': ['->', '::'],
+"   " \   'cs,d,elixir,go,groovy,java,javascript,julia,perl6,python,scala,typescript,vb': ['.'],
+"   " \   'ruby,rust': ['.', '::'],
+"   " \   'lua': ['.', ':'],
+"   " \   'erlang': [':'],
+"   " \ }
+" let g:ycm_python_binary_path = '/usr/local/opt/python/libexec/bin/python'
+" let g:ycm_min_num_of_chars_for_completion = 2
 
-" Conflict with new Vim-Snippet
-" let SuperTabDefaultCompletionType = '<c-p>'
-" let SuperTabMappingForward = '<c-p>'
-" let SuperTabMappingTabLiteral = '<Tab>'
-" let SuperTabClosePreviewOnPopupClose = 1
+function! TriggerYCM()
+  if g:loaded_youcompleteme == 1
+    let g:loaded_youcompleteme = 0
+  else
+    let g:loaded_youcompleteme = 1
+  endif
+endfunction
+nmap <C-y> :call TriggerYCM()<CR>
+
+" call matchadd('ColorColumn', '\%81v', 100)
+" match OverLength /\%81v.\+/
 
 augroup collumnLimit
   set colorcolumn=80
@@ -744,8 +839,6 @@ augroup END
 
 " Programming configs for specified scripts
 if has("autocmd")
-  autocmd! bufwritepost ~/.vimrc silent! source %
-  autocmd BufRead,BufNewFile * setfiletype txt
   autocmd BufRead,BufNewFile *.t set filetype=perl
   autocmd BufEnter *.md exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" %:p "--no-gpu"<CR>'
   autocmd BufEnter *.markdown exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome --no-gpu"  %:p<CR>'
@@ -753,27 +846,57 @@ if has("autocmd")
   autocmd BufWinEnter * silent! loadview
   autocmd QuickFixCmdPost *grep* cwindow
   autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
-  autocmd syntax groovy,Jenkinsfile setlocal foldmethod=indent
+  autocmd syntax groovy,Jenkinsfile,python setlocal foldmethod=indent
   autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile normal zM
   autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile let g:indentLine_loaded=1
-  autocmd FileType groovy,Jenkinsfile,json,sh set tabstop=2 softtabstop=2 shiftwidth=2
-  autocmd FileType make,snippet,robot,markdown set tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd FileType make,snippet,robot set tabstop=4 softtabstop=4 shiftwidth=4
   autocmd FileType javascript syntax clear jsFuncBlock                           " rainbow issue #2
-  " autocmd Syntax groovy,Jenkinsfile :IndentLinesEnable
-  " autocmd BufReadPost Jenkinsfile set filetype=groovy syntax=groovy
-  " autocmd BufNewFile,BufRead Jenkinsfile setf groovy
-  " autocmd BufNewFile,BufRead,BufReadPost Jenkinsfile setlocal foldmethod=indent
-  " autocmd FileType Jenkinsfile setlocal filetype=groovy syntax=groovy foldmethod=indent
-  " autocmd FileType Jenkinsfile set syntax=groovy filetype=groovy
+
+  augroup devops
+    autocmd BufRead,BufNewFile * setfiletype jenkinsfile
+    autocmd FileType groovy,Jenkinsfile,json,sh,markdown  set tabstop=2 softtabstop=2 shiftwidth=2
+    " autocmd Syntax groovy,Jenkinsfile :IndentLinesEnable
+    " autocmd BufReadPost Jenkinsfile set filetype=groovy syntax=groovy
+    " autocmd BufNewFile,BufRead Jenkinsfile setf groovy
+    " autocmd BufNewFile,BufRead,BufReadPost Jenkinsfile setlocal foldmethod=indent
+    " autocmd FileType Jenkinsfile setlocal filetype=groovy syntax=groovy foldmethod=indent
+    " autocmd FileType Jenkinsfile set syntax=groovy filetype=groovy
+  augroup end
+
+  augroup python
+    autocmd BufNewFile,BufRead python
+            \ set tabstop=4
+            \ set softtabstop=4
+            \ set shiftwidth=4
+            \ setlocal shiftwidth=4
+            \ setlocal tabstop=4
+            \ setlocal softtabstop=4
+            \ setlocal noautoindent
+            \ fileformat=unix
+    autocmd FileType python syntax keyword pythonDecorator print self
+    autocmd FileType python set tabstop=4 softtabstop=4 shiftwidth=4 noautoindent
+    autocmd FileTYpe python set isk-=.
+  augroup end
+
+  if did_filetype()
+    finish
+  endif
+  if getline(1) =~ '^#!.*[/\\]groovy\>'
+    setf groovy
+  endif
 
   augroup vimrc
+    autocmd! bufwritepost ~/.vimrc silent! source %
     autocmd BufReadPre * setlocal foldmethod=indent
     autocmd BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
   augroup END
+
+  " if $TERM_PROGRAM =~ "iTerm"
+      " let &t_SI = "\<Esc>]50;CursorShape=1\x7" " Vertical bar in insert mode
+      " let &t_EI = "\<Esc>]50;CursorShape=0\x7" " Block in normal mode
+  " endif
 endif
 " set list lcs=tab:\|\
-"
-"
 " Uncomment the following to have Vim jump to the last position when                                                       
 " reopening a file
 if has("autocmd")
