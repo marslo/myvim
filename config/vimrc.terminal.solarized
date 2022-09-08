@@ -1,0 +1,906 @@
+" =============================================================================
+"      FileName: .vimrc
+"          Desc: Made in Marslo
+"        Author: Marslo Jiao
+"         Email: marslo.jiao@gmail.com
+"       Created: 2010-10
+"       Version: 0.0.24
+"    LastChange: 2022-04-14 01:32:47
+" =============================================================================
+
+set maxmempattern=5000
+set nocompatible
+set history=1000
+set diffopt=filler,context:3
+set spell spelllang=en_us
+set spellfile=~/.vim/spell/en.utf-8.add
+runtime macros/matchit.vim
+let vimrplugin_i386 = 1
+let performance_mode = 1
+set fileformat=unix
+set wrap                                                            " Wrap lines
+set viminfo=%,<800,'10,/50,:100,h,f0,n~/.vim/cache/.viminfo
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip
+set tags=tags
+set tags+=/home/marslo/Study/Codes/Rails/sdt
+let bud=expand('~/.vim/bundle') . '/'
+
+if empty(glob('~/.vim/cache/'))
+  execute 'silent !mkdir -p ~/.vim/cache'
+endif
+if empty(glob('~/.vim/undo/'))
+  execute 'silent !mkdir -p ~/.vim/undo'
+endif
+
+let bud=expand('~/.vim/bundle') . '/'
+let performance_mode = 1
+
+" ====================================== For Property =====================================
+let mapleader=","
+let g:mapleader=","
+
+" Vim Bundle
+filetype off
+set rtp+=~/.vim/bundle/snipmate.vim/snippets/
+set rtp+=~/.vim/bundle/Vundle.vim/
+call vundle#begin()
+
+Bundle 'VundleVim/Vundle.vim'
+" Bundle 'gmarik/vundle.git'
+Bundle 'tpope/vim-pathogen'
+Bundle 'Yggdroot/indentLine'
+Bundle 'kien/ctrlp.vim'
+Bundle 'sjl/gundo.vim'
+Bundle 'majutsushi/tagbar'
+Bundle 'dantezhu/authorinfo'
+Bundle 'Marslo/EnhCommentify.vim'
+" Bundle 'ervandew/supertab'
+Bundle 'Marslo/auto-pairs'
+Bundle 'tomtom/tlib_vim'
+Bundle 'marcweber/vim-addon-mw-utils'
+Bundle 'Marslo/snipmate.vim'
+Bundle 'yegappan/mru'
+Bundle 'Conque-Shell'
+Bundle 'taglist.vim'
+Bundle 'winmanager'
+Bundle 'grep.vim'
+" syntex check
+Bundle 'vim-syntastic/syntastic'
+" Moving faster
+Bundle 'rhysd/accelerated-jk'
+" Bundle 'yonchu/accelerated-smooth-scroll'
+" Loading my function after vim start (reduce vim start time)
+Bundle 'Marslo/MarsloFunc'
+Bundle 'LargeFile'
+Bundle 'L9'
+Bundle 'godlygeek/tabular'
+Bundle 'dhruvasagar/vim-table-mode'
+Bundle 'Chiel92/vim-autoformat'
+Bundle 'rizzatti/dash.vim'
+" Bundle 'mhinz/vim-signify'
+Bundle 'airblade/vim-gitgutter'
+Bundle 'mbbill/undotree'
+Bundle 'codota/tabnine-vim'
+" Python
+" Bundle 'python-mode/python-mode'
+Bundle 'Vimjas/vim-python-pep8-indent'
+Bundle 'python_fold'
+Bundle 'pyflakes/pyflakes'
+Bundle 'python_match.vim'
+Bundle 'vim-python/python-syntax'
+Bundle 'davidhalter/jedi-vim'
+Bundle 'mfukar/robotframework-vim'
+" ruby
+Bundle 'tpope/vim-rails'
+Bundle 'vim-ruby/vim-ruby'
+Bundle 'nelstrom/vim-textobj-rubyblock'
+Bundle 'kana/vim-textobj-user'
+Bundle 'ruby-matchit'
+" Javascript
+Bundle 'pangloss/vim-javascript'
+Bundle 'jelera/vim-javascript-syntax'
+" AngularJS
+Bundle 'burnettk/vim-angular'
+" Web design
+Bundle 'tpope/vim-surround'
+Bundle 'valloric/MatchTagAlways'
+Bundle 'tpope/vim-repeat'
+Bundle 'jaxbot/browserlink.vim'
+" Colors and themes and syntax
+Bundle '907th/vim-auto-save'
+Bundle 'luochen1990/rainbow'
+Bundle 'txt.vim'
+Bundle 'Marslo/vim-coloresque'
+Bundle 'Marslo/marslo.vim'
+Bundle 'Marslo/MarsloVimOthers'
+Bundle 'gabrielelana/vim-markdown'
+Bundle 'altercation/vim-colors-solarized'
+" Git
+Bundle 'tpope/vim-fugitive'
+" Groovy
+Bundle 'modille/groovy.vim'
+Bundle 'marslo/Jenkinsfile-vim-syntax'
+" Bundle 'thecodesmith/vim-groovy'
+" Plist
+Bundle "darfink/vim-plist"
+" dockerfile
+Bundle 'ekalinin/Dockerfile.vim'
+" github page
+Bundle 'parkr/vim-jekyll'
+" brew
+Bundle 'xu-cheng/brew.vim'
+" For fun
+Bundle 'TeTrIs.vim'
+Bundle 'matrix.vim--Yang'
+
+call vundle#end()
+call pathogen#infect()
+filetype plugin indent on
+syntax enable on
+
+" ====================================== For My Function =====================================
+function! GetVundle()                                                   " GetVundle() inspired by: http://pastebin.com/embed_iframe.php?i=C9fUE0M3
+  let vundleAlreadyExists=1
+  if has('win32') || has('win64')
+    let bud=$VIM . '\bundle'
+    let vud=bud . '\Vundle.vim'
+    let vudcfg=expand(vud . '\.git\config')
+  else
+    let bud='~/.vim/bundle'
+    let vud=bud . '/Vundle.vim'
+    let vudcfg=expand(vud . '/.git/config')
+  endif
+
+  if filereadable(vudcfg)
+    echo "Vundle has existed at " . expand(vud)
+  else
+    echo "Installing Vundle..."
+    echo ""
+    if isdirectory(expand(bud)) == 0
+      call mkdir(expand(bud), 'p')
+    endif
+    execute 'silent !git clone https://github.com/VundleVim/Vundle.vim.git "' . expand(vud) . '"'
+    let vundleAlreadyExists=0
+  endif
+endfunction
+command! GetVundle :call GetVundle()
+
+if has('unix') || has('macunix')
+  if empty(glob('~/.vim/bundle/Vundle.vim')) || empty(glob($VIM . '\bundle\Vundle.vim'))
+    execute 'silent exec "GetVundle"'
+  endif
+endif
+
+function! ToggleVerbose()
+  if !&verbose
+    set verbosefile=~/.log/vim/verbose.log
+    set verbose=15
+  else
+    set verbose=0
+    set verbosefile=
+  endif
+endfunction
+command! ToggleVerbose :call ToggleVerbose()
+
+function! ToggleWindowHorizontalVerticalSplit()
+  if !exists('t:splitType')
+    let t:splitType = 'vertical'
+  endif
+
+  if t:splitType == 'vertical' " is vertical switch to horizontal
+    windo wincmd K
+    let t:splitType = 'horizontal'
+  else " is horizontal switch to vertical
+    windo wincmd H
+    let t:splitType = 'vertical'
+  endif
+endfunction
+nnoremap <silent> <leader>wt :call ToggleWindowHorizontalVerticalSplit()<cr>
+
+if isdirectory(expand(bud . 'MarsloFunc'))
+  command! GetVim :call marslofunc#GetVim()<CR>
+  command! Cyg :call marslofunc#OpenCygwin()
+  nmap cyg :call marslofunc#OpenCygwin()<CR>
+  nmap cmd :call marslofunc#OpenCMD()<CR>
+  nmap gf :call marslofunc#GotoFile()<CR>
+  xnoremap * :<C-u>call marslofunc#VSetSearch()<CR>/<C-R>=@/<CR><CR>
+  xnoremap # :<C-u>call marslofunc#VSetSearch()<CR>?<C-R>=@/<CR><CR>
+  map <M-o> :call marslofunc#OpenFoler()<CR>
+  nmap <F12> :call marslofunc#UpdateTags()<CR>
+  nmap <C-F5> :call marslofunc#RunResult()<CR>
+  nmap <leader>ti :call marslofunc#callit()<CR>
+
+  augroup resCur
+    autocmd!
+      autocmd BufWinEnter * call marslofunc#ResCur()
+  augroup END
+
+  " command! DiffSaved :call marslofunc#DiffWithSaved()<CR>
+  " nnoremap <leader>df :call marslofunc#DiffWithSaved()<CR>
+
+  set foldtext=v:folddashes.substitute(getline(v:foldstart),'/\\*\\\|\\*/\\\|{{{\\d\\=','','g')
+  set foldtext=marslofund#MyFoldText()<CR>
+endif
+
+" ====================================== For Programming =====================================
+" Programming configs for Ruby and Rails
+let g:ruby_path=$RUBY_BIN
+if has("autocmd")
+  autocmd FileType ruby set omnifunc=rubycomplete#Complete
+  autocmd FileType ruby let g:rubycomplete_buffer_loading=1
+  autocmd FileType ruby let g:rubycomplete_classes_in_global=1
+  augroup filetypedetect                                            " Inspired from :h new-filetype
+    au BufNewFile,BufRead *.r.erb set filetype=r.ruby
+  augroup end
+  autocmd FileType ruby compiler ruby
+endif
+let g:rubycomplete_buffer_loading = 1
+let g:rubycomplete_classes_in_global = 1
+let g:rubycomplete_rails = 1
+
+" Programming configs for Python
+if has("autocmd")
+  au FileType python syn keyword pythonDecorator print self
+  au FileType python set tabstop=4 softtabstop=4 shiftwidth=4
+  au FileTYpe python set isk-=.
+  " set textwidth=80
+endif
+let python_highlight_all = 1                                        " syntax-python
+
+" Python-mode configuratoin
+if isdirectory(expand(bud . 'python-mode')) || has('python3')
+ nnoremap <leader>p :PymodeLint<CR>                                " Trigger PymodeLint by manual
+ let g:pymode_python =  '/usr/local/bin/python3'
+ let g:pymode = 1                                                  " 1: turn on python-mode plugin
+ let g:pymode_syntax_all = 1
+ let g:pymode_warnings = 0                                         " turn off plugin's warnings
+ let g:pymode_folding = 1
+ let g:pymode_options_colorcolumn = 1
+ let g:pymode_trim_whitespaces = 1                                 " trim unused white spaces on save
+ let g:pymode_lint = 1                                             " turn on code checking
+ let g:pymode_lint_checkers = ['pyflakes', 'pep8', 'mccabe']
+ let g:pymode_lint_ignore="E111,E114,E501,W0611,E266"              " E501: long line; E111&E114: 4 spaces indent; E266: too many # for comments
+ let g:pymode_options = 0
+ let g:pymode_rope = 0
+ let g:pymode_indent = 0
+ let g:pymode_syntax_highlight_self = g:pymode_syntax_all
+ let g:pymode_quickfix_minheight = 3
+ let g:pymode_quickfix_maxheight = 3
+ let g:python_check_syntax = 0                                     " disalbe Check python script syntax on every save
+ let g:pymode_lint_on_write = 0                                    " disalbe on save checking
+ " let g:pymode_rope_regenerate_on_write = 0
+ let g:pymode_lint_unmodified = 1
+ let g:pymode_indent = 1
+endif
+
+" ====================================== For Inteface =====================================
+if has('gui_running')
+  set go=                                                           " Hide everything (go = guioptions)
+  set cpoptions+=n
+  set guifont=Ubuntu\ Mono:h26
+  " set guifontwide=NSimsun:h16
+  set lines=36                                                    " The initialize size
+  set columns=124
+endif
+
+if exists('$TMUX')
+  set term=screen-256color
+endif
+
+if 'xterm-256color' == $TERM
+  set t_Co=256
+endif
+
+if has('gui_running') || 'xterm-256color' == $TERM
+  set background=dark
+  let psc_style='cool'
+
+  " for italic
+  " let &t_ZH="\e[3m"
+  " let &t_ZR="\e[23m"
+
+  """ solarized
+  " let g:solarized_termcolors=256
+  " set termguicolors
+  let &t_8f = "\<esc>[38;2;%lu;%lu;%lum"
+  let &t_8b = "\<esc>[48;2;%lu;%lu;%lum"
+  let g:solarized_termtrans = 1
+  let g:solarized_extra_hi_groups = 1
+  let g:solarized_visibility = "high"
+  let g:solarized_contrast = "high"
+  let s:base03 = "255"
+  colorscheme solarized
+
+  """ marslo
+  " colorscheme marslo
+else
+  set t_Co=8
+  set t_Sb=^[[4%dm
+  set t_Sf=^[[3%dm
+  colorscheme marslo16
+endif
+
+nmap <leader>v :e ~/.vimrc<CR>
+set ttyfast                                                         " Enable fast terminal connection.
+autocmd! bufwritepost ~/.vimrc silent! source %
+set guifont=Monaco\ 14
+set clipboard=unnamedplus
+
+set clipboard+=unnamed                                              " Copy the content to system clipboard by using y/p
+set clipboard+=unnamedplus
+
+set ttyfast                                                         " Enable fast terminal connection.
+set iskeyword-=.
+set autochdir
+set fileencodings=utf-8,ucs-bom,gbk,cp936,gb2312,gb18030            " Code Format
+set termencoding=utf-8
+set encoding=utf-8                                                  " Input Chinese (=cp936)
+set fileencoding=utf-8
+let &termencoding=&encoding
+set selection=exclusive                                             " Mouse Settings
+set selectmode=mouse,key
+set nobackup noswapfile nowritebackup noundofile noendofline
+set number                                                          " Number: line number
+set report=0
+set autoread                                                        " Set auto read when a file is changed by outside
+set showmatch                                                       " Show matching bracets (shortly jump to the other bracets)
+set matchtime=1                                                     " The shortly time
+set tabstop=2                                                       " Tab width
+set softtabstop=2                                                   " Width for backspace
+set shiftwidth=2                                                    " The tab width by using >> & <<
+set autoindent smartindent expandtab
+set cindent
+set cinoptions=(0,u0,U0
+set smarttab                                                        " Smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
+set linebreak
+set modifiable
+set write
+set incsearch hlsearch ignorecase smartcase                         " Search
+set magic                                                           " Regular Expression
+set linespace=0
+set wildmenu
+set wildmode=longest,list,full                                      " Completion mode that is used for the character
+set noerrorbells novisualbell                                       " ┐ Turn off
+set t_vb=                                                           " ┘ error beep/flash
+" set list listchars=tab:\ \ ,tab:▸,trail:·,extends:»,precedes:«,nbsp:·,eol:¬
+set list
+set listchars=tab:\⇥\ ,trail:·,extends:»,precedes:«,nbsp:·
+set cursorline                                                      " Highlight the current line
+set guicursor=a:hor1
+set guicursor+=i-r-ci-cr-o:hor2-blinkon0
+set virtualedit=onemore                                             " Allow for cursor beyond last character
+set scrolloff=3                                                     " Scroll settings
+set sidescroll=1
+set sidescrolloff=5
+set imcmdline                                                       " Fix context menu messing
+set complete+=kspell
+set completeopt=longest,menuone                                     " Supper Tab
+set foldenable                                                      " Enable Fold
+set foldcolumn=1
+set foldexpr=1                                                      " Shown line number after fold
+set foldlevel=100                                                   " Not fold while VIM set up
+set shortmess+=filmnrxoOtT                                          " Abbrev. of messages (avoids 'hit enter')
+set viewoptions=folds
+set backspace=indent,eol,start                                      " Make backspace h, l, etc wrap to
+set whichwrap+=<,>,h,l
+set go+=a                                                           " Visual selection automatically copied to the clipboard
+set hidden                                                          " Switch between buffers with unsaved change
+set equalalways
+set formatoptions=tcrqn
+set formatoptions+=rnmMB                                            " Remove the backspace for combine lines (Only for chinese)
+set matchpairs+=<:>
+" set autowrite
+if has('cmdline_info')
+  set ruler                                                         " ruler: Show Line and colum number
+  set showcmd                                                       " Show (partial) command in status line
+endif
+if has('statusline')
+  set laststatus=2                                                  " Set status bar
+  set statusline=%#User2#%m%r%*\ %F\ %y,%{&fileformat}
+  " set statusline+=\ %{fugitive#statusline()}
+  set statusline+=%=\ %-{strftime(\"%H:%M\ %d/%m/%Y\")}\ %b[A],0x%B\ %c%V,%l/%L\ %1*--%n%%--%*\ %p%%\ |
+endif
+" set synmaxcol=128
+" set binary
+set exrc
+set secure
+
+if has('persistent_undo')
+  set noundofile
+endif
+if version > 74399
+  set cryptmethod=blowfish2
+endif
+
+noremap <F1> <ESC>
+inoremap <F1> <ESC>a
+nnoremap j gj
+nnoremap gj j
+nnoremap k gk
+nnoremap gk k
+nnoremap n nzzzv
+nnoremap N Nzzzv
+nnoremap <leader>bd :bd<CR>
+nnoremap <leader>bp :bp<CR>
+nnoremap <leader>bn :bn<CR>
+nnoremap <C-k> <C-w>k
+nnoremap <C-j> <C-w>j
+nnoremap <C-l> <C-w>l
+nnoremap <C-h> <C-w>h
+nnoremap <C-a> <ESC>^
+inoremap <C-a> <ESC>I
+cnoremap <C-a> <Home>
+nnoremap <C-e> <ESC>$
+inoremap <C-e> <ESC>A
+cnoremap <C-e> <End>
+nnoremap Y y$
+nnoremap <Del> "_x
+xnoremap <Del> "_d
+" nnoremap <space> @=((foldclosed(line('.')) < 0) ? 'zc' : 'zo')<CR>
+nnoremap <space> za
+nnoremap & :&&<CR>
+xnoremap & :&&<CR>
+vmap s <Plug>VSurround
+
+cnoreabbrev W w
+cnoreabbrev W! w!
+cnoreabbrev Q q
+cnoreabbrev Q! q!
+cnoreabbrev X x
+cnoreabbrev X! x!
+cnoreabbrev XA xa
+cnoreabbrev XA! xa!
+cnoreabbrev WQ wq
+cnoreabbrev WQ! wq!
+cnoreabbrev QA qa
+cnoreabbrev QA! qa!
+cnoreabbrev WA wa
+cnoreabbrev WA! wa!
+cnoreabbrev NOH noh
+cnoreabbrev %Y %y
+cnoreabbrev %D %d
+cnoremap sudow!! w !sudo tee > /dev/null %
+cnoremap sw!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
+cnoremap ls ls<cr>:b<space>
+cnoremap lsd ls<cr>:bd<space>
+
+inoremap <leader>tt <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
+inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
+inoremap <leader>fe <C-R>=expand("%:t")<CR>
+inoremap <leader>w <C-O>:w<CR>
+nnoremap <leader>G :%s///gn<CR>
+"make < > shifts keep selection
+" vnoremap < <gv
+" vnoremap > >gv
+nnoremap <leader>idl :IndentLineEnable<CR>
+
+nnoremap <leader>zil :g/^/ s//\=line('.').' '/<CR>    " Insert line number
+nnoremap <leader>zcm :%s/<C-v><CR>/\r/g<CR>           " Convert  to new line
+nnoremap <leader>zwl :%s///gn<CR>                     " Show the matches numbers (wc -l)
+nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>            " Delete 
+nnoremap <leader>zdb :%s/\s\+$//<CR>                  " Delete blank tail
+nnoremap <leader>zbl :g/^\s*$/d<CR>                   " Delete blank line
+nnoremap <leader>zd2 :%s/​//g<CR>                " Delete <200b>
+nnoremap <leader>zdd :%s/ / /g<CR>                    " Delete   (dot)
+nnoremap <leader>zds :%s/^<span.*span>//g<CR>         " Delete span tag
+nnoremap <leader>zdi :%s/^\s\+//<CR>                  " Delete indent spaces
+nnoremap <leader>zid i•<ESC>                          " Insert •
+nnoremap <leader>cr 0yt=A<C-r>=<C-r>"<CR><Esc>        " Cacular expr
+
+if version > 703
+  " autocmd FocusLost * set norelativenumber
+  autocmd FocusGained * set relativenumber
+  autocmd InsertEnter * set norelativenumber
+  autocmd InsertLeave * set relativenumber
+  autocmd CmdwinEnter * set norelativenumber
+  autocmd CmdwinLeave * set relativenumber
+  autocmd CmdwinEnter * let b:ei_save = &eventignore | set eventignore=CursorHold,InsertEnter
+  autocmd CmdwinLeave * let &eventignore = b:ei_save
+endif
+
+iabbrev <leader>/* /*********************************
+iabbrev <leader>*/ *********************************/
+iabbrev <leader>#- #------------------
+
+" ====================================== For Function =====================================
+let g:auto_save = 0                                                 " enable AutoSave on Vim startup
+
+let g:ctrlp_map = '<c-p>'                                           " CtrlP
+let g:ctrlp_working_path_mode = 'ra'                                " Search parents as well (stop searching sartly)
+let g:ctrlp_max_height = 8
+let g:ctrlp_max_depth = 100
+let g:ctrl_root_makers = ['.ctrlp']                                 " Stop search if these files present
+let g:ctrlp_use_caching = 1
+let g:ctrlp_clear_cache_on_exit = 0                                 " Cross session caching
+let g:ctrlp_cache_dir = '$HOME/.vim/cache/ctrlp'
+let g:ctrlp_custom_ignore = {
+    \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+    \ 'file': '\v\.(exe|so|dll|rpm|tar|gz|bz2|zip|ctags|tags)|tags|ctags$',
+    \ 'link': 'some_bad_symbolic_links',
+    \ }
+
+nmap <leader>tv :ConqueTermSplit bash <CR>
+
+let g:winManagerWidth = 20
+let g:winManagerWindowLayout='FileExplorer|TagList'
+nmap <leader>mm :WMToggle<cr>
+
+let Tlist_Show_One_File=1
+let Tlist_Exit_OnlyWindow=1
+let Tlist_Use_SingleClick=1
+let Tlist_File_Fold_Auto_Close=1
+let Tlist_GainFocus_On_ToggleOpen=1
+let Tlist_show_Menu=1
+let Tlist_sql_settings = 'sql;P:package;t:table'
+let Tlist_Process_File_Always=0
+nmap <leader>tl :TlistToggle<CR>
+
+map <leader>ta :TagbarToggle<CR>
+let g:tagbar_left=1
+let g:tagbar_width=20
+let g:tagbar_autofocus=1
+let g:tagbar_expand=1
+let g:tagbar_singleclick=1
+let g:tagbar_iconchars=['+', '-']
+let g:tagbar_autoshowtag=1
+let g:tagbar_show_linenumbers=0
+
+let g:EnhCommentifyAlignRight='Yes'
+let g:EnhCommentifyRespectIndent='yes'
+let g:EnhCommentifyPretty='Yes'
+let g:EnhCommentifyMultiPartBlocks='Yes'
+let g:EnhCommentifyUseSyntax='Yes'
+
+map <leader>aid :AuthorInfoDetect<CR>
+let g:vimrc_author='marslo'
+let g:vimrc_email='marslo.jiao@gmail.com'
+au BufWritePre, FileWritePre * :AuthorInfoDetect<CR>
+
+let MRU_Auto_Close = 1                                              " Most Recently Used(MRU)
+let MRU_Max_Entries = 10
+let MRU_Exclude_Files='^/tmp/.*\|^/temp/.*\|^/media/.*\|^/mnt/.*'
+map <leader>re :MRU<CR>
+
+set undodir=~/.vim/undo/
+set undofile
+noremap <Leader>u :GundoToggle<CR>
+
+" for i in '9' '69' '99' '141' '196' '112' '208' '129' '166' '85'; do echo -e "\e[38;05;${i}m${i}"; done | column -c 250 -s ' '; echo -e "\e[m"
+let g:rainbow_active = 1
+let g:rainbow_operators = 1
+let g:rainbow_conf = {
+\   'guifgs' : ['#DC322F', '#268bd2', '#6c71c4', '#B22222', '#C0FF3E', '#6A5ACD', '#EEC900', '#9A32CD', '#EE7600', '#98fb98'],
+\   'ctermfgs' : 'xterm-256color' == $TERM ? ['9', '69', '178', '196', '112', '208', '129', '166', '84', '99'] : ['lightblue', 'lightgreen', 'yellow', 'red', 'magenta'],
+\   'parentheses': [['(',')'], ['\[','\]'], ['{','}']],
+\   'separately': {
+\     '*': {},
+\     'markdown': {
+\       'parentheses_options': 'containedin=markdownCode contained',
+\     },
+\     'css': {
+\       'parentheses': [['(',')'], ['\[','\]']],
+\     },
+\     'scss': {
+\       'parentheses': [['(',')'], ['\[','\]']],
+\     },
+\     'html': {
+\       'parentheses': [['(',')'], ['\[','\]'], ['{','}']],
+\     },
+\     'stylus': {
+\       'parentheses': ['start=/{/ end=/}/ fold contains=@colorableGroup'],
+\     }
+\   }
+\}
+
+let g:indentLine_enabled = 1
+let g:indentLine_color_gui = "#282828"
+let g:indentLine_color_term = 239
+let g:indentLine_indentLevel = 20
+let g:indentLine_showFirstIndentLevel = 1
+let g:indentLine_color_tty = 0
+let g:indentLine_faster = 1
+let g:indentLine_concealcursor = 'inc'
+let g:indentLine_conceallevel = 2
+if has('gui_running') || 'xterm-256color' == $TERM
+  let g:indentLine_char = '¦'
+elseif has('win32')
+  let g:indentLine_color_term = 8
+  let g:indentLine_char = '|'
+else
+  let g:indentLine_color_tty_dark = 0
+  let g:indentLine_char = '¦'
+endif
+
+let g:AutoPairs = {'(':')', '[':']', '{':'}', '<':'>',"'":"'",'"':'"', '`':'`'}
+let g:AutoPairsParens = {'(':')', '[':']', '{':'}', '<':'>'}
+let g:AutoPairsFlyMode = 0
+let g:AutoPairsShortcutBackInsert = '<M-b>'
+
+" configure syntastic syntax checking to check on open as well as save
+set statusline+=%#warningmsg#
+set statusline+=\ %{SyntasticStatuslineFlag()}
+set statusline+=\ %* |
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 1
+let g:syntastic_loc_list_height = 2
+let g:syntastic_ignore_files = ['\.py$']
+let g:syntastic_check_on_wq = 0
+let g:syntastic_check_on_open=1
+let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute \"ng-"]
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+
+nnoremap <Leader>cc :let &cole=(&cole == 2) ? 0 : 2 <bar> echo 'conceallevel ' . &cole <CR>
+" for vim-markdown
+" let g:vim_markdown_folding_style_pythonic = 1
+" let g:vim_markdown_override_foldtext = 0
+" let g:vim_markdown_autowrite = 1
+" let g:vim_markdown_new_list_item_indent = 4
+" let g:vim_markdown_toc_autofit = 1
+" let g:vim_markdown_conceal = 0
+"" set conceallevel=2
+" let g:vim_markdown_frontmatter = 1
+" let g:vim_markdown_json_frontmatter = 1
+let g:markdown_enable_spell_checking = 0
+let g:markdown_enable_input_abbreviations = 0
+let g:markdown_enable_conceal = 0
+hi markdownItalic guifg=gray25 gui=underline
+" hi MarkdownHeadingDelimiter gui=bold guifg=gray25
+" hi htmlSpecialChar guifg=black
+" hi markdownBold gui=bold guifg=gray25
+" hi markdownUrl guifg=#2fb3a6
+" hi markdownAutomaticLink guifg=#2fb3a6
+" hi markdownLinkText guifg=#317849
+" hi markdownUrlTitle guifg=#317849
+" hi markdownBlockquote guifg=#317849 gui=bold
+" hi markdownId guifg=#2fb3a6
+" hi markdownIdDeclaration guifg=#317849 gui=bold
+" hi markdownListMarker guifg=#317849
+
+" for tpope vim-markdown
+" let g:markdown_fenced_languages = ['html', 'python', 'bash=sh']
+" let g:markdown_syntax_conceal = 0
+" let g:markdown_minlines = 100
+
+" for vim-markdown-toc
+let g:vmt_auto_update_on_save = 1
+let g:vmt_cycle_list_item_markers = 0
+
+noremap <Leader>tb :TableModeToggle<CR>
+let g:table_mode_corner='|'
+let g:table_mode_header_fillchar='-'
+" let g:table_mode_corner_corner='+'
+function! s:isAtStartOfLine(mapping)
+  let text_before_cursor = getline('.')[0 : col('.')-1]
+  let mapping_pattern = '\V' . escape(a:mapping, '\')
+  let comment_pattern = '\V' . escape(substitute(&l:commentstring, '%s.*$', '', ''), '\')
+  return (text_before_cursor =~? '^' . ('\v(' . comment_pattern . '\v)?') . '\s*\v' . mapping_pattern . '\v$')
+endfunction
+
+inoreabbrev <expr> <bar><bar>
+          \ <SID>isAtStartOfLine('\|\|') ?
+          \ '<c-o>:TableModeEnable<cr><bar><space><bar><left><left>' : '<bar><bar>'
+inoreabbrev <expr> __
+          \ <SID>isAtStartOfLine('__') ?
+          \ '<c-o>:silent! TableModeDisable<cr>' : '__'
+
+" let g:tabular_loaded = 0
+if exists(":Tabularize")
+  nmap <Leader>a= :Tabularize /=<CR>
+  vmap <Leader>a= :Tabularize /=<CR>
+  nmap <leader>a: :Tabularize /:\zs<CR>
+  vmap <leader>a: :Tabularize /:\zs<CR>
+  inoremap <silent> <Bar>   <Bar><Esc>:call <SID>table_auto_align()<CR>
+  function! s:table_auto_align()
+    let p = '^\s*|\s.*\s|\s*$'
+    if exists(':Tabularize') && getline('.') =~# '^\s*|'
+      \ && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+      let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
+      let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+      Tabularize/|/l1
+      normal! 0
+      call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+    endif
+  endfunction
+endif
+
+" fugitive
+nnoremap <Leader>ga :Git add %:p<CR><CR>
+nnoremap <Leader>gs :Gstatus<CR>
+nnoremap <leader>gl :silent! Glog<CR>:bot copen<CR>
+nnoremap <leader>gp :Ggrep<Space>
+nnoremap <leader>gb :Git branch<Space>
+nnoremap <leader>go :Git checkout<Space>
+nnoremap <leader>gc :Git commit -am ""<Left>
+command! -bar -nargs=* Gpull execute 'Git pull'
+command! -bar -nargs=* Gpush execute 'Git push'
+
+" gitgutter
+let g:gitgutter_git_executable = '/usr/local/bin/git'
+let g:gitgutter_enabled = 1
+set updatetime=250
+" set signcolumn=yes
+" highlight clear LineNr
+highlight clear SignColumn
+
+" Snippet
+imap <S-C-J> <Plug>snipMateNextOrTrigger
+smap <S-C-J> <Plug>snipMateNextOrTrigger
+imap <Tab> <Plug>snipMateNextOrTrigger
+
+" match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
+let g:plist_display_format = 'xml'
+let g:plist_json_filetype = 'javascript'
+
+let g:signify_disable_by_default=0
+let g:signify_vcs_list = [ 'git' ]
+
+" tabnine-vim
+" if index(['vim'], &filetype) == -1
+" let g:loaded_youcompleteme = 1
+if !(&filetype == 'vim')
+  let g:loaded_youcompleteme = 1
+endif
+" " let b:ycm_largefile=1
+" " let g:ycm_disable_for_files_larger_than_kb = 1000
+" let g:ycm_filetype_blacklist = {
+"       \ 'vim' : 1 ,
+"       \ 'vimshell': 1 ,
+"       \ 'vimwiki': 1,
+"       \ }
+" let g:ycm_filetype_specific_completion_to_disable = {
+"       \ 'gitcommit': 1
+"       \ }
+" " let g:ycm_semantic_triggers =  {
+"   " \   'c': ['->', '.'],
+"   " \   'objc': ['->', '.', 're!\[[_a-zA-Z]+\w*\s', 're!^\s*[^\W\d]\w*\s',
+"   " \            're!\[.*\]\s'],
+"   " \   'ocaml': ['.', '#'],
+"   " \   'cpp,cuda,objcpp': ['->', '.', '::'],
+"   " \   'perl': ['->'],
+"   " \   'php': ['->', '::'],
+"   " \   'cs,d,elixir,go,groovy,java,javascript,julia,perl6,python,scala,typescript,vb': ['.'],
+"   " \   'ruby,rust': ['.', '::'],
+"   " \   'lua': ['.', ':'],
+"   " \   'erlang': [':'],
+"   " \ }
+" let g:ycm_python_binary_path = '/usr/local/opt/python/libexec/bin/python'
+" let g:ycm_min_num_of_chars_for_completion = 2
+
+function! TriggerYCM()
+  if g:loaded_youcompleteme == 1
+    let g:loaded_youcompleteme = 0
+  else
+    let g:loaded_youcompleteme = 1
+  endif
+endfunction
+nmap <C-y> :call TriggerYCM()<CR>
+
+" call matchadd('ColorColumn', '\%81v', 100)
+" match OverLength /\%81v.\+/
+
+augroup collumnLimit
+  set colorcolumn=80
+  highlight CollumnLimit        guibg=NONE    guifg=#4e4e4e       ctermfg=240
+  autocmd!
+  let collumnLimit = 80
+  let pattern = '\%<' . (collumnLimit+1) . 'v.\%>' . collumnLimit . 'v'
+  let w:m1=matchadd('CollumnLimit', pattern, -1)
+augroup END
+
+" Programming configs for specified scripts
+if has("autocmd")
+  autocmd BufRead,BufNewFile *.t set filetype=perl
+  autocmd BufEnter *.md exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" %:p "--no-gpu"<CR>'
+  autocmd BufEnter *.markdown exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome --no-gpu"  %:p<CR>'
+  " autocmd BufWinLeave * silent! mkview
+  autocmd BufWinEnter * silent! loadview
+  autocmd QuickFixCmdPost *grep* cwindow
+  autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
+  autocmd syntax groovy,Jenkinsfile,python setlocal foldmethod=indent
+  autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile normal zM
+  autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile let g:indentLine_loaded=1
+  autocmd FileType make,snippet,robot set tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd FileType javascript syntax clear jsFuncBlock                           " rainbow issue #2
+
+  augroup devops
+    autocmd BufNewFile,BufRead Groovy Jenkinsfile jenkinsfile set syntax=groovy
+    autocmd BufRead,BufNewFile * setfiletype jenkinsfile
+    autocmd FileType groovy,Jenkinsfile,json,sh,markdown  set tabstop=2 softtabstop=2 shiftwidth=2
+    " autocmd Syntax groovy,Jenkinsfile :IndentLinesEnable
+    " autocmd BufReadPost Jenkinsfile set filetype=groovy syntax=groovy
+    " autocmd BufNewFile,BufRead Jenkinsfile setf groovy
+    " autocmd BufNewFile,BufRead,BufReadPost Jenkinsfile setlocal foldmethod=indent
+    " autocmd FileType Jenkinsfile setlocal filetype=groovy syntax=groovy foldmethod=indent
+    " autocmd FileType Jenkinsfile set syntax=groovy filetype=groovy
+  augroup end
+
+  augroup python
+    autocmd BufNewFile,BufRead python
+            \ set tabstop=4
+            \ set softtabstop=4
+            \ set shiftwidth=4
+            \ setlocal shiftwidth=4
+            \ setlocal tabstop=4
+            \ setlocal softtabstop=4
+            \ setlocal noautoindent
+            \ fileformat=unix
+    autocmd FileType python syntax keyword pythonDecorator print self
+    autocmd FileType python set tabstop=4 softtabstop=4 shiftwidth=4 noautoindent
+    autocmd FileTYpe python set isk-=.
+  augroup end
+
+  if did_filetype()
+    finish
+  endif
+  if getline(1) =~ '^#!.*[/\\]groovy\>'
+    setf groovy
+  endif
+
+  augroup vimrc
+    autocmd! bufwritepost ~/.vimrc silent! source %
+    autocmd BufReadPre * setlocal foldmethod=indent
+    autocmd BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
+  augroup END
+
+  " if $TERM_PROGRAM =~ "iTerm"
+      " let &t_SI = "\<Esc>]50;CursorShape=1\x7" " Vertical bar in insert mode
+      " let &t_EI = "\<Esc>]50;CursorShape=0\x7" " Block in normal mode
+  " endif
+endif
+
+" set list lcs=tab:\|\
+" Uncomment the following to have Vim jump to the last position when
+" reopening a file
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+    \| exe "normal! g'\"" | endif
+endif
+
+highlight clear SpellBad Conceal PmenuSel SpecialKey Exception Folded TabLineSel Search
+highlight SpellBad       term=underline   cterm=underline     ctermbg=NONE    ctermfg=160
+highlight Conceal        term=NONE        cterm=NONE          ctermbg=NONE    ctermfg=239
+highlight SpecialKey     term=NONE        cterm=NONE          ctermfg=130
+highlight Constant       term=NONE        ctermfg=99
+highlight LineNr         term=NONE        ctermbg=NONE        ctermfg=235
+highlight CursorLineNr   term=underline   ctermbg=NONE        ctermfg=118
+highlight Exception      term=bold        ctermbg=NONE        ctermfg=136
+highlight Visual         term=NONE        cterm=underline     ctermbg=NONE
+highlight Comment        ctermfg=234      guifg=#002b36
+highlight Folded         term=underline   cterm=underline     ctermfg=235     ctermbg=0
+highlight FoldColumn     term=NONE        cterm=NONE          ctermfg=235     ctermbg=0
+highlight StatusLineNC   term=NONE        cterm=NONE          ctermfg=235     ctermbg=black
+highlight StatusLine     cterm=NONE       ctermfg=238         ctermbg=black
+highlight CmdLineEnter   cterm=NONE       ctermfg=238
+highlight CmdLineLeave   cterm=NONE       ctermfg=238
+highlight MsgArea        cterm=NONE       ctermfg=238
+highlight vimGroup       term=NONE        cterm=NONE          ctermfg=4
+highlight NonText        cterm=NONE       ctermfg=239
+highlight Pmenu          term=NONE        cterm=NONE          ctermfg=2       ctermbg=NONE
+highlight PmenuSel       term=NONE        cterm=NONE          ctermfg=121     ctermbg=NONE
+highlight PmenuSbar      term=NONE        cterm=NONE          ctermfg=15      ctermbg=234
+highlight PmenuThumb     term=NONE        cterm=NONE          ctermfg=15      ctermbg=234
+highlight TabLineSel     term=underline   cterm=underline     ctermbg=NONE
+highlight VertSplit      cterm=NONE       ctermfg=12          ctermbg=NONE
+highlight MatchParen     term=inverse     cterm=inverse
+highlight Search         term=NONE        cterm=NONE          ctermbg=12      ctermfg=4
+highlight Statement      term=NONE        cterm=NONE          ctermfg=11      ctermbg=NONE
+highlight Type           term=NONE        cterm=NONE          ctermfg=136     ctermbg=NONE
+highlight Visual         term=bold,underline   cterm=bold,underline     ctermfg=NONE    ctermbg=NONE
+
+highlight Normal         ctermfg=23
+highlight Boolean        ctermfg=196
+highlight Number         ctermfg=61
+highlight String         ctermfg=88
+highlight Function       ctermfg=105
+highlight Structure      ctermfg=202
+highlight Define         ctermfg=179
+highlight Conditional    ctermfg=190
+highlight Operator       ctermfg=208
+
+" highlight Search         term=bold,underline   cterm=bold,underline     ctermfg=64      ctermbg=NONE
+" highlight PreProc        term=NONE        cterm=NONE          ctermfg=166     ctermbg=NONE
+
+" vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab
