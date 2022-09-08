@@ -5,16 +5,18 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.24
-"    LastChange: 2018-03-19 22:55:02
+"    LastChange: 2020-06-12 20:29:50
 " =============================================================================
 
 set nocompatible
 set history=1000
 set diffopt=filler,context:3
+set spell spelllang=en_us
+set spellfile=~/.vim/spell/en.utf-8.add
 runtime macros/matchit.vim
 
 set fileformat=unix
-set wrap                                                          " Wrap lines
+set nowrap                                                          " Wrap lines
 set viminfo=%,<800,'10,/50,:100,h,f0,n~/.vim/cache/.viminfo
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip
 set tags=tags
@@ -54,12 +56,12 @@ Bundle 'Chiel92/vim-autoformat'
 Bundle 'rizzatti/dash.vim'
 Bundle 'mhinz/vim-signify'
 " Python
-Bundle 'klen/python-mode'
+" Bundle 'python-mode/python-mode'
 Bundle 'python_fold'
 Bundle 'pyflakes/pyflakes'
 Bundle 'python_match.vim'
-Bundle 'Marslo/python-syntax'
-Bundle 'tarmack/vim-python-ftplugin'
+Bundle 'vim-python/python-syntax'
+" Bundle 'tarmack/vim-python-ftplugin'
 Bundle 'davidhalter/jedi-vim'
 Bundle 'mfukar/robotframework-vim'
 " Web design
@@ -68,14 +70,17 @@ Bundle 'valloric/MatchTagAlways'
 Bundle 'tpope/vim-repeat'
 Bundle 'jaxbot/browserlink.vim'
 " Colors and themes and syntax
+Bundle '907th/vim-auto-save'
 Bundle 'luochen1990/rainbow'
 Bundle 'txt.vim'
 " Bundle 'ap/vim-css-color'
 Bundle 'Marslo/vim-coloresque'
 Bundle 'Marslo/marslo.vim'
 Bundle 'Marslo/MarsloVimOthers'
-Bundle 'plasticboy/vim-markdown.git'
-Bundle 'mzlogin/vim-markdown-toc'
+" Bundle 'plasticboy/vim-markdown.git'
+Bundle 'gabrielelana/vim-markdown'
+" Bundle 'tpope/vim-markdown'
+" Bundle 'mzlogin/vim-markdown-toc'
 Bundle 'altercation/vim-colors-solarized'
 " Git
 Bundle 'tpope/vim-fugitive'
@@ -89,6 +94,8 @@ Bundle "darfink/vim-plist"
 Bundle 'ekalinin/Dockerfile.vim'
 " brew
 Bundle 'xu-cheng/brew.vim'
+" github page
+Bundle 'parkr/vim-jekyll'
 
 call vundle#end()
 call pathogen#infect()
@@ -181,30 +188,31 @@ let python_highlight_all = 1                                        " syntax-pyt
 
 " Python-mode configuratoin
 if isdirectory(expand(bud . 'python-mode'))
-  nnoremap <leader>p :PymodeLint<CR>                                " Trigger PymodeLint by manual
-  let g:pymode = 1                                                  " 1: turn on python-mode plugin
-  let g:pymode_syntax_all = 1
-  let g:pymode_warnings = 0                                         " turn off plugin's warnings
-  let g:pymode_folding = 1
-  let g:pymode_options_colorcolumn = 1
-  let g:pymode_trim_whitespaces = 1                                 " trim unused white spaces on save
-  let g:pymode_lint = 1                                             " turn on code checking
-  let g:pymode_lint_checkers = ['pyflakes', 'pep8', 'mccabe']
-  let g:pymode_lint_ignore="E111,E114,E501,W0611,E266"              " E501: long line; E111&E114: 4 spaces indent; E266: too many # for comments
-  let g:pymode_options = 0
-  let g:pymode_rope = 0
-  let g:pymode_indent = 0
-  let g:pymode_syntax_highlight_self = g:pymode_syntax_all
-  let g:pymode_quickfix_minheight = 3
-  let g:pymode_quickfix_maxheight = 3
-  if !has('python')
-    let g:pymode = 0
-  endif
-  let g:python_check_syntax = 0                                     " Disalbe Check python script syntax on every save
-  let g:pymode_lint_on_write = 0                                    " Disalbe on save checking
-  " let g:pymode_rope_regenerate_on_write = 0
-  let g:pymode_lint_unmodified = 1
-  let g:pymode_indent = 1
+ nnoremap <leader>p :PymodeLint<CR>                                " Trigger PymodeLint by manual
+ let g:pymode_python =  '/usr/local/bin/python3'
+ let g:pymode = 0                                                  " 1: turn on python-mode plugin
+ let g:pymode_syrtax_all = 1
+ let g:pymode_warnings = 0                                         " turn off plugin's warnings
+ let g:pymode_folding = 1
+ let g:pymode_options_colorcolumn = 1
+ let g:pymode_trim_whitespaces = 1                                 " trim unused white spaces on save
+ let g:pymode_lint = 1                                             " turn on code checking
+ let g:pymode_lint_checkers = ['pyflakes', 'pep8', 'mccabe']
+ let g:pymode_lint_ignore="E111,E114,E501,W0611,E266"              " E501: long line; E111&E114: 4 spaces indent; E266: too many # for comments
+ let g:pymode_options = 0
+ let g:pymode_rope = 0
+ let g:pymode_indent = 0
+ let g:pymode_syntax_highlight_self = g:pymode_syntax_all
+ let g:pymode_quickfix_minheight = 3
+ let g:pymode_quickfix_maxheight = 3
+ if !has('python')
+   let g:pymode = 0
+ endif
+ let g:python_check_syntax = 0                                     " Disalbe Check python script syntax on every save
+ let g:pymode_lint_on_write = 0                                    " Disalbe on save checking
+ " let g:pymode_rope_regenerate_on_write = 0
+ let g:pymode_lint_unmodified = 1
+ let g:pymode_indent = 1
 endif
 
 " ====================================== For Inteface =====================================
@@ -275,7 +283,9 @@ set wildmenu
 set wildmode=longest,list,full                                      " Completion mode that is used for the character
 set noerrorbells novisualbell                                       " ┐ Turn off
 set t_vb=                                                           " ┘ error beep/flash
-set list listchars=tab:\ \ ,trail:·,extends:»,precedes:«,nbsp:·
+" set list listchars=tab:\ \ ,tab:▸,trail:·,extends:»,precedes:«,nbsp:·,eol:¬
+set list
+set listchars=tab:\⇥\ ,trail:·,extends:»,precedes:«,nbsp:·
 set cursorline                                                      " Highlight the current line
 set guicursor=a:hor1
 set guicursor+=i-r-ci-cr-o:hor2-blinkon0
@@ -284,6 +294,7 @@ set scrolloff=3                                                     " Scroll set
 set sidescroll=1
 set sidescrolloff=5
 set imcmdline                                                       " Fix context menu messing
+set complete+=kspell
 set completeopt=longest,menuone                                     " Supper Tab
 set foldenable                                                      " Enable Fold
 set foldcolumn=1
@@ -312,6 +323,8 @@ if has('statusline')
 endif
 " set synmaxcol=128
 " set binary
+set exrc
+set secure
 
 if has('persistent_undo')
   set noundofile
@@ -368,6 +381,8 @@ cnoreabbrev %Y %y
 cnoreabbrev %D %d
 cnoremap sudow!! w !sudo tee > /dev/null %
 cnoremap sw!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
+cnoremap ls ls<cr>:b<space>
+cnoremap lsd ls<cr>:bd<space>
 
 inoremap <leader>tt <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
 inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
@@ -404,7 +419,9 @@ iabbrev <leader>/* /*********************************
 iabbrev <leader>*/ *********************************/
 iabbrev <leader>#- #------------------
 
-" ====================================== For Function =====================================
+" ====================================== For Plugins =====================================
+let g:auto_save = 0                                                 " enable AutoSave on Vim startup
+
 let g:ctrlp_map = '<c-p>'                                           " CtrlP
 let g:ctrlp_working_path_mode = 'ra'                                " Search parents as well (stop searching sartly)
 let g:ctrlp_max_height = 8
@@ -440,13 +457,18 @@ map <leader>re :MRU<CR>
 
 noremap <Leader>u :GundoToggle<CR>
 
+" for i in '9' '69' '99' '141' '196' '112' '208' '129' '166' '85'; do echo -e "\e[38;05;${i}m${i}"; done | column -c 250 -s ' '; echo -e "\e[m"
 let g:rainbow_active = 1
 let g:rainbow_operators = 1
 let g:rainbow_conf = {
-\   'guifgs' : ['#6A5ACD', '#B22222', '#C0FF3E', '#EEC900', '#9A32CD', '#EE7600', '#98fb98', '#686868'],
-\   'ctermfgs' : 'xterm-256color' == $TERM ? ['141', '196', '112', '208', '129', '166', '85', '237'] : ['lightblue', 'lightgreen', 'yellow', 'red', 'magenta'],
+\   'guifgs' : ['#DC322F', '#268bd2', '#6c71c4', '#B22222', '#C0FF3E', '#6A5ACD', '#EEC900', '#9A32CD', '#EE7600', '#98fb98'],
+\   'ctermfgs' : 'xterm-256color' == $TERM ? ['9', '69', '178', '196', '112', '208', '129', '166', '84', '99'] : ['lightblue', 'lightgreen', 'yellow', 'red', 'magenta'],
 \   'parentheses': [['(',')'], ['\[','\]'], ['{','}']],
 \   'separately': {
+\     '*': {},
+\     'markdown': {
+\       'parentheses_options': 'containedin=markdownCode contained',
+\     },
 \     'css': {
 \       'parentheses': [['(',')'], ['\[','\]']],
 \     },
@@ -456,6 +478,9 @@ let g:rainbow_conf = {
 \     'html': {
 \       'parentheses': [['(',')'], ['\[','\]'], ['{','}']],
 \     },
+\     'stylus': {
+\       'parentheses': ['start=/{/ end=/}/ fold contains=@colorableGroup'],
+\     }
 \   }
 \}
 
@@ -491,16 +516,36 @@ let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute \"ng-"]
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 
+nnoremap <Leader>cc :let &cole=(&cole == 2) ? 0 : 2 <bar> echo 'conceallevel ' . &cole <CR>
 " for vim-markdown
-let g:vim_markdown_folding_style_pythonic = 1
-let g:vim_markdown_override_foldtext = 0
-let g:vim_markdown_autowrite = 1
-let g:vim_markdown_new_list_item_indent = 4
-let g:vim_markdown_toc_autofit = 1
-let g:vim_markdown_conceal = 0
-" set conceallevel=2
-let g:vim_markdown_frontmatter = 1
-let g:vim_markdown_json_frontmatter = 1
+" let g:vim_markdown_folding_style_pythonic = 1
+" let g:vim_markdown_override_foldtext = 0
+" let g:vim_markdown_autowrite = 1
+" let g:vim_markdown_new_list_item_indent = 4
+" let g:vim_markdown_toc_autofit = 1
+" let g:vim_markdown_conceal = 0
+" let g:vim_markdown_frontmatter = 1
+" let g:vim_markdown_json_frontmatter = 1
+let g:markdown_enable_spell_checking = 0
+let g:markdown_enable_input_abbreviations = 0
+let g:markdown_enable_conceal = 0
+hi markdownItalic guifg=gray25 gui=underline
+" hi MarkdownHeadingDelimiter gui=bold guifg=gray25
+" hi htmlSpecialChar guifg=black
+" hi markdownBold gui=bold guifg=gray25
+" hi markdownUrl guifg=#2fb3a6
+" hi markdownAutomaticLink guifg=#2fb3a6
+" hi markdownLinkText guifg=#317849
+" hi markdownUrlTitle guifg=#317849
+" hi markdownBlockquote guifg=#317849 gui=bold
+" hi markdownId guifg=#2fb3a6
+" hi markdownIdDeclaration guifg=#317849 gui=bold
+" hi markdownListMarker guifg=#317849
+
+" for tpope vim-markdown
+" let g:markdown_fenced_languages = ['html', 'python', 'bash=sh']
+" let g:markdown_syntax_conceal = 0
+" let g:markdown_minlines = 100
 
 " for vim-markdown-toc
 let g:vmt_auto_update_on_save = 1
@@ -592,8 +637,8 @@ if has("autocmd")
   autocmd syntax groovy,Jenkinsfile setlocal foldmethod=indent
   autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile normal zM
   autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile let g:indentLine_loaded=1
-  autocmd FileType groovy,Jenkinsfile,json,sh set tabstop=2 softtabstop=2 shiftwidth=2
-  autocmd FileType make,snippet,robot,markdown set tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd FileType groovy,Jenkinsfile,json,sh,markdown  set tabstop=2 softtabstop=2 shiftwidth=2
+  autocmd FileType make,snippet,robot set tabstop=4 softtabstop=4 shiftwidth=4
   autocmd FileType javascript syntax clear jsFuncBlock                           " rainbow issue #2
   " autocmd Syntax groovy,Jenkinsfile :IndentLinesEnable
   " autocmd BufReadPost Jenkinsfile set filetype=groovy syntax=groovy
