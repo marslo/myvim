@@ -6,7 +6,20 @@
 " =============================================================================
 
 set nocompatible
+set visualbell
 set diffopt=filler,context:3
+set spell spelllang=en_us
+set spellfile=~/.vim/spell/en.utf-8.add
+
+set fileformat=unix
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip
+
+if empty(glob('~/.cygwin/.vim/cache/'))
+  execute 'silent !mkdir -p ~/.vim/cache'
+endif
+if empty(glob('~/.cygwin/.vim/undo/'))
+  execute 'silent !mkdir -p ~/.vim/undo'
+endif
 
 filetype plugin indent on
 syntax enable on
@@ -23,12 +36,21 @@ endif
 nmap <leader>v :e ~/.cygwin/.vimrc<CR>
 autocmd! bufwritepost ~/.cygwin/.vimrc source %
 
+set ttyfast
+set clipboard+=unnamed
+set clipboard+=unnamedplus
+
+set ttyfast
 set iskeyword-=.
 set autochdir
+scriptencoding utf-8
 set fileencodings=utf-8,ucs-bom,gbk,cp936,gb2312,gb18030
+set termencoding=utf-8
 set encoding=utf-8
 set fileencoding=utf-8
 let &termencoding=&encoding
+set selection=exclusive
+set selectmode=mouse,key
 set nobackup noswapfile nowritebackup noundofile noendofline
 set number
 set report=0
@@ -38,8 +60,10 @@ set matchtime=1
 set tabstop=2
 set softtabstop=2
 set shiftwidth=2
-set autoindent smartindent
-set smarttab expandtab
+set autoindent smartindent expandtab
+set cindent
+set cinoptions=(0,u0,U0
+set smarttab
 set linebreak
 set textwidth=0
 set modifiable
@@ -52,23 +76,32 @@ set wildmode=longest,list,full
 set noerrorbells novisualbell
 set wildignore+=*.swp,*.zip,*.exe
 set t_vb=
-set list listchars=tab:\ \ ,trail:·,extends:»,precedes:«,nbsp:·
+
+set list
+" set listchars=tab:\⇥\ ,trail:·,extends:»,precedes:«,nbsp:·
+set listchars=tab:\ˇ\ ,trail:·,extends:»,precedes:«,nbsp:·
 set cursorline
+set guicursor=a:hor1
+set guicursor+=i-r-ci-cr-o:hor2-blinkon0
+set virtualedit=onemore
 set scrolloff=3
 set sidescroll=1
 set sidescrolloff=5
 set imcmdline
+set complete+=kspell
 set completeopt=longest,menuone
 set foldenable
 set foldcolumn=1
 set foldexpr=1
 set foldlevel=100
+set shortmess+=filmnrxoOtT
 set viewoptions=folds
 set backspace=indent,eol,start
 set whichwrap+=<,>,h,l
 set go+=a
 set hidden
 set equalalways
+set formatoptions=tcrqn
 set formatoptions+=rnmMB
 set matchpairs+=<:>
 " set autowrite
@@ -81,9 +114,12 @@ if has('statusline')
   set statusline=%#User2#%m%r%*\ %F\ %y,%{&fileformat}
   set statusline+=%=\ %-{strftime(\"%H:%M\ %d/%m/%Y\")}\ %b[A],0x%B\ %c%V,%l/%L\ %1*--%n%%--%*\ %p%%\ |
 endif
+set exrc
+set secure
 
 noremap <F1> <ESC>
 inoremap <F1> <ESC>a
+map <leader>bd :bd<CR>
 nnoremap j gj
 nnoremap gj j
 nnoremap k gk
@@ -93,8 +129,10 @@ nnoremap N Nzzzv
 map <leader>bd :bd<CR>
 map <leader>bp :bp<CR>
 map <leader>bn :bn<CR>
-map <C-k> <C-w>k
-map <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-j> <C-w>j
+nnoremap <C-l> <C-w>l
+nnoremap <C-h> <C-w>h
 map <C-a> <ESC>^
 inoremap <C-a> <ESC>I
 cnoremap <C-a> <Home>
@@ -106,19 +144,41 @@ nnoremap Y y$
 nnoremap <Del> "_x
 xnoremap <Del> "_d
 
-cnoreabbrev W! w!
-cnoreabbrev Q! q!
-cnoreabbrev Qall! qall!
-cnoreabbrev Wq wq
-cnoreabbrev Wa wa
-cnoreabbrev wQ wq
-cnoreabbrev WQ wq
 cnoreabbrev W w
+cnoreabbrev W! w!
 cnoreabbrev Q q
+cnoreabbrev Q! q!
 cnoreabbrev X x
 cnoreabbrev X! x!
+cnoreabbrev XA xa
+cnoreabbrev XA! xa!
+cnoreabbrev Wq wq
+cnoreabbrev WQ wq
+cnoreabbrev WQ! wq!
 cnoreabbrev QA qa
 cnoreabbrev Qall qall
+cnoreabbrev Qall! qall!
+cnoreabbrev QA! qa!
+cnoreabbrev WA wa
+cnoreabbrev WA! wa!
+cnoreabbrev NOH noh
+cnoreabbrev %Y %y
+cnoreabbrev %D %d
+cnoremap sudow!! w !sudo tee > /dev/null %
+cnoremap sw!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
+cnoremap ls ls<cr>:b<space>
+cnoremap lsd ls<cr>:bd<space>
+" https://vim.fandom.com/wiki/Search_for_visually_selected_text
+vnoremap <silent> * :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy/<C-R>=&ic?'\c':'\C'<CR><C-R><C-R>=substitute(
+  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gVzv:call setreg('"', old_reg, old_regtype)<CR>
+vnoremap <silent> # :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy?<C-R>=&ic?'\c':'\C'<CR><C-R><C-R>=substitute(
+  \escape(@", '?\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gVzv:call setreg('"', old_reg, old_regtype)<CR>
 
 inoremap <leader>tt <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
 inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
@@ -155,79 +215,135 @@ iabbrev <leader>#- #------------------
 let syntax_cmd = "enable"
 " let g:syntax_cmd = "skip"
 
+if has('gui_running') || 'xterm-256color' == $TERM
+  if has('win32') || has('win64')
+    let vsp='C:\Users\marslo\.cygwin\.vim\bundle\vim-colors-solarized'
+  else
+    let vsp='~/.cygwin/.vim/bundle/vim-colors-solarized'
+  endif
 
-" marslo256.vim: https://github.com/Marslo/marslo.vim
-highlight SpecialKey           ctermfg=darkgreen    ctermbg=NONE
-highlight NonText              cterm=NONE           ctermfg=239        ctermbg=NONE
-highlight Directory            ctermfg=63           ctermbg=NONE
-highlight ErrorMsg             cterm=NONE           ctermfg=red         ctermbg=0
-highlight IncSearch            cterm=NONE           ctermfg=yellow      ctermbg=green
-highlight Search               cterm=NONE           ctermfg=grey        ctermbg=blue
-highlight MoreMsg              ctermfg=darkgreen    ctermbg=NONE
-highlight ModeMsg              cterm=NONE           ctermfg=brown           ctermbg=NONE
-highlight Question             ctermfg=green        ctermbg=NONE
-highlight StatusLine           cterm=NONE           ctermfg=darkgray    ctermbg=black
-highlight StatusLineNC         cterm=NONE           ctermbg=NONE
-highlight VertSplit            cterm=NONE           ctermbg=NONE
-highlight Title                ctermfg=5            ctermbg=NONE
-highlight Visual               cterm=underline      ctermbg=NONE
-highlight VisualNOS            cterm=underline      ctermbg=NONE
-highlight WarningMsg           ctermfg=yellow       ctermbg=black
-highlight WildMenu             ctermfg=0            ctermbg=3
-highlight Folded               ctermfg=darkgrey     ctermbg=NONE
-highlight FoldColumn           ctermfg=darkgrey     ctermbg=NONE
-highlight DiffAdd              cterm=NONE           ctermbg=56          ctermfg=255
-highlight DiffDelete           cterm=NONE           ctermbg=239
-highlight DiffAdded            ctermbg=93
-highlight DiffRemoved          ctermbg=129
-highlight DiffChange           cterm=bold           ctermbg=99          ctermfg=255
-highlight DiffText             cterm=NONE           ctermbg=196
-highlight Pmenu                ctermfg=208          ctermbg=NONE
-highlight PmenuSel             ctermfg=154          ctermbg=NONE
-highlight Identifier           ctermfg=149          ctermbg=NONE
-highlight Cursor               cterm=underline      term=underline      ctermbg=NONE
-highlight MatchParen           cterm=inverse        term=inverse        ctermbg=NONE
-highlight LineNr               ctermfg=239          ctermbg=NONE
-highlight CursorLine           cterm=NONE           ctermbg=NONE
-highlight String               ctermfg=82           ctermbg=NONE
-highlight Entity               ctermfg=166          ctermbg=NONE
-highlight Support              ctermfg=202          ctermbg=NONE
-highlight CursorLineNr         ctermfg=118          ctermbg=NONE         term=bold
-highlight Comment              ctermfg=239          ctermbg=NONE
-highlight Constant             ctermfg=113          ctermbg=NONE
-"""" Key words (while, if, else, for, in)
-highlight Statement            ctermfg=red          ctermbg=NONE
-"""" #! color
-highlight PreProc              ctermfg=red          ctermbg=NONE
-"""" classname, <key>, <Groupname> color
-highlight Type                 ctermfg=106          ctermbg=NONE
-highlight Special              ctermfg=221          ctermbg=NONE
-highlight Underlined           cterm=underline      ctermfg=5       ctermbg=NONE
-highlight Ignore               cterm=NONE           ctermfg=7       ctermfg=darkgrey      ctermbg=NONE
-highlight Error                cterm=NONE           ctermfg=7       ctermbg=1
-" HTML
-highlight htmlTag              ctermfg=244          ctermbg=NONE
-highlight htmlEndTag           ctermfg=244          ctermbg=NONE
-highlight htmlArg              ctermfg=203          ctermbg=NONE
-highlight htmlValue            ctermfg=187          ctermbg=NONE
-highlight htmlTitle            ctermfg=184          ctermbg=NONE
-highlight htmlTagName          ctermfg=69           ctermbg=NONE
-highlight htmlString           ctermfg=113          ctermbg=NONE
-" NERDTree
-highlight treeCWD              ctermfg=180          ctermbg=NONE
-highlight treeClosable         ctermfg=174          ctermbg=NONE
-highlight treeOpenable         ctermfg=150          ctermbg=NONE
-highlight treePart             ctermfg=244          ctermbg=NONE
-highlight treeDirSlash         ctermfg=244          ctermbg=NONE
-highlight treeLink             ctermfg=182          ctermbg=NONE
+  set rtp+=~/.cygwin/.vim/bundle/vim-colors-solarized
+  if empty(glob(expand('~/.cygwin/.vim/bundle/vim-colors-solarized')))
+    execute 'silent !git clone https://github.com/altercation/vim-colors-solarized.git ~/.cygwin/.vim/bundle/vim-colors-solarized'
+  endif
 
-highlight Boolean              ctermfg=196          ctermbg=NONE
-highlight Function             ctermfg=105          ctermbg=NONE
-highlight Structure            ctermfg=202          ctermbg=NONE
-highlight Define               ctermfg=179          ctermbg=NONE
-highlight Conditional          ctermfg=190          ctermbg=NONE
-highlight Operator             ctermfg=208          ctermbg=NONE
+  set rtp+=~/.cygwin/.vim/bundle/Jenkinsfile-vim-syntax
+  if empty(glob(expand('~/.cygwin/.vim/bundle/Jenkinsfile-vim-syntax')))
+    execute 'silent !git clone https://github.com/marslo/kubernetes-plugin.git ~/.cygwin/.vim/bundle/Jenkinsfile-vim-syntax'
+  endif
 
-highlight rubyIdentifier       ctermfg=9            ctermbg=NONE
+  set guifont=Monaco:h16
+  if has('gui_running')
+    set t_Co=256
+    set background=dark
+    let g:solarized_termcolors=256
+    colorscheme solarized
+    let psc_style='cool'
+    set lines=33
+    set columns=118
+  endif
+
+else
+
+  set t_Co=8
+  set t_Sb=^[[4%dm
+  set t_Sf=^[[3%dm
+
+  " marslo256.vim: https://github.com/Marslo/marslo.vim
+  highlight SpecialKey           ctermfg=darkgreen
+  highlight NonText              cterm=NONE          ctermfg=239
+  highlight Directory            ctermfg=63
+  highlight ErrorMsg             cterm=NONE          ctermfg=red         ctermbg=0
+  highlight IncSearch            cterm=NONE          ctermfg=yellow      ctermbg=green
+  highlight Search               cterm=NONE          ctermfg=grey        ctermbg=blue
+  highlight MoreMsg              ctermfg=darkgreen
+  highlight ModeMsg              cterm=NONE          ctermfg=brown
+  highlight Question             ctermfg=green
+  highlight StatusLine           cterm=NONE          ctermfg=darkgray    ctermbg=black
+  highlight StatusLineNC         cterm=NONE
+  highlight VertSplit            cterm=NONE
+  highlight Title                ctermfg=5
+  highlight Visual               cterm=underline     ctermbg=NONE
+  highlight VisualNOS            cterm=underline
+  highlight WarningMsg           ctermfg=yellow      ctermbg=black
+  highlight WildMenu             ctermfg=0           ctermbg=3
+  highlight Folded               ctermfg=darkgrey    ctermbg=NONE
+  highlight FoldColumn           ctermfg=darkgrey    ctermbg=NONE
+  highlight DiffAdd              cterm=NONE          ctermbg=56          ctermfg=255
+  highlight DiffDelete           cterm=NONE          ctermbg=239
+  highlight DiffAdded            ctermbg=93
+  highlight DiffRemoved          ctermbg=129
+  highlight DiffChange           cterm=bold          ctermbg=99          ctermfg=255
+  highlight DiffText             cterm=NONE          ctermbg=196
+  highlight Pmenu                ctermfg=208         ctermbg=NONE
+  highlight PmenuSel             ctermfg=154
+  highlight Identifier           ctermfg=149
+  highlight Cursor               cterm=underline     term=underline
+  highlight MatchParen           cterm=inverse       term=inverse
+  highlight LineNr               ctermfg=239         ctermbg=none
+  highlight CursorLine           cterm=NONE
+  highlight String               ctermfg=82
+  highlight Entity               ctermfg=166
+  highlight Support              ctermfg=202
+  highlight CursorLineNr         ctermbg=NONE        ctermfg=118         term=bold
+  highlight Comment              ctermfg=239
+  highlight Constant             ctermfg=113
+  """" Key words (while, if, else, for, in)
+  highlight Statement            ctermfg=red
+  """" #! color
+  highlight PreProc              ctermfg=red
+  """" classname, <key>, <Groupname> color
+  highlight Type                 ctermfg=106
+  highlight Special              ctermfg=221
+  highlight Underlined           cterm=underline     ctermfg=5
+  highlight Ignore               cterm=NONE          ctermfg=7       ctermfg=darkgrey
+  highlight Error                cterm=NONE          ctermfg=7       ctermbg=1
+  " HTML
+  highlight htmlTag              ctermfg=244
+  highlight htmlEndTag           ctermfg=244
+  highlight htmlArg              ctermfg=203
+  highlight htmlValue            ctermfg=187
+  highlight htmlTitle            ctermfg=184         ctermbg=NONE
+  highlight htmlTagName          ctermfg=69
+  highlight htmlString           ctermfg=113
+  " NERDTree
+  highlight treeCWD              ctermfg=180
+  highlight treeClosable         ctermfg=174
+  highlight treeOpenable         ctermfg=150
+  highlight treePart             ctermfg=244
+  highlight treeDirSlash         ctermfg=244
+  highlight treeLink             ctermfg=182
+
+  highlight Boolean              ctermfg=196
+  highlight Function             ctermfg=105
+  highlight Structure            ctermfg=202
+  highlight Define               ctermfg=179
+  highlight Conditional          ctermfg=190
+  highlight Operator             ctermfg=208
+
+  highlight rubyIdentifier       ctermfg=9
+
+  " highlight NonText              cterm=NONE           ctermfg=239
+  " highlight ErrorMsg             cterm=NONE           ctermfg=red         ctermbg=0
+  " highlight IncSearch            cterm=NONE           ctermfg=yellow      ctermbg=green
+  " highlight Search               cterm=NONE           ctermfg=grey        ctermbg=blue
+  " highlight ModeMsg              cterm=NONE           ctermfg=brown
+  " highlight StatusLine           cterm=NONE           ctermfg=darkgray    ctermbg=black
+  " highlight Visual               cterm=underline
+  " highlight WarningMsg           ctermfg=yellow       ctermbg=black
+  " highlight WildMenu             ctermfg=0            ctermbg=3
+  " highlight Folded               ctermfg=darkgrey
+  " highlight FoldColumn           ctermfg=darkgrey
+  " highlight DiffAdd              cterm=NONE           ctermbg=56          ctermfg=255
+  " highlight DiffDelete           cterm=NONE           ctermbg=239
+  " highlight DiffChange           cterm=bold           ctermbg=99          ctermfg=255
+  " highlight DiffText             cterm=NONE           ctermbg=196
+  " highlight Pmenu                ctermfg=208
+  " highlight LineNr               ctermfg=239
+  " highlight Cursor             cterm=underline      term=underline
+  " highlight MatchParen         cterm=inverse        term=inverse
+  " highlight CursorLine         cterm=NONE
+  " highlight CursorLineNr       ctermfg=118                   term=bold
+endif
 
 " vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab
