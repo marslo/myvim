@@ -904,4 +904,4 @@ if has("autocmd")
     \| exe "normal! g'\"" | endif
 endif
 
-" vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab
+" vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab:filetype=vim

@@ -903,4 +903,4 @@ highlight Operator       ctermfg=208
 " highlight Search         term=bold,underline   cterm=bold,underline     ctermfg=64      ctermbg=NONE
 " highlight PreProc        term=NONE        cterm=NONE          ctermfg=166     ctermbg=NONE
 
-" vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab
+" vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab:filetype=vim

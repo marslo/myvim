@@ -162,8 +162,7 @@ function! ToggleWindowHorizontalVerticalSplit()
   if t:splitType == 'vertical' " is vertical switch to horizontal
     windo wincmd K
     let t:splitType = 'horizontal'
-
-  else " is horizontal switch to vertical
+  else                         " is horizontal switch to vertical
     windo wincmd H
     let t:splitType = 'vertical'
   endif
@@ -246,6 +245,7 @@ endif
 
 if has('gui_running') || 'xterm-256color' == $TERM
   set background=dark
+  let psc_style='cool'
   " let g:solarized_termcolors=256
   colorscheme solarized
   " colorscheme marslo
@@ -337,6 +337,18 @@ endif
 " set binary
 set exrc
 set secure
+
+" spell
+set spellcapcheck=1
+" set spellcamelcase=1
+" Ignore CamelCase words when spell checking
+fun! IgnoreCamelCaseSpell()
+  syn match CamelCase /\<[A-Z][a-z]\+[A-Z].\{-}\>/ contains=@NoSpell transparent
+  syn match mixedCase /\<[a-z]\+[A-Z].\{-}\>/ contains=@NoSpell transparent
+  syn cluster Spell add=CamelCase
+  syn cluster Spell add=mixedCase
+endfun
+autocmd BufRead,BufNewFile * :call IgnoreCamelCaseSpell()
 
 if has('persistent_undo')
   set noundofile
@@ -750,4 +762,4 @@ endif
 
 " set list lcs=tab:\|\
 
-" vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab
+" vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab:filetype=vim

@@ -580,4 +580,4 @@ if has("autocmd")
 endif
 " set list lcs=tab:\|\
 
-" vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab
+" vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab:filetype=vim

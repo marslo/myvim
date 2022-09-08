@@ -346,4 +346,4 @@ else
   " highlight CursorLineNr       ctermfg=118                   term=bold
 endif
 
-" vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab
+" vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab:filetype=vim
