@@ -1,5 +1,6 @@
 # -*- coding: utf-8    # This file contains Unicode characters.
 
+import sys
 from textwrap import dedent
 
 import pytest
@@ -16,6 +17,7 @@ from parso.python.tokenize import PythonToken
 NAME = PythonTokenTypes.NAME
 NEWLINE = PythonTokenTypes.NEWLINE
 STRING = PythonTokenTypes.STRING
+NUMBER = PythonTokenTypes.NUMBER
 INDENT = PythonTokenTypes.INDENT
 DEDENT = PythonTokenTypes.DEDENT
 ERRORTOKEN = PythonTokenTypes.ERRORTOKEN
@@ -23,11 +25,13 @@ OP = PythonTokenTypes.OP
 ENDMARKER = PythonTokenTypes.ENDMARKER
 ERROR_DEDENT = PythonTokenTypes.ERROR_DEDENT
 FSTRING_START = PythonTokenTypes.FSTRING_START
+FSTRING_STRING = PythonTokenTypes.FSTRING_STRING
+FSTRING_END = PythonTokenTypes.FSTRING_END
 
 
-def _get_token_list(string):
+def _get_token_list(string, version=None):
     # Load the current version.
-    version_info = parse_version_string()
+    version_info = parse_version_string(version)
     return list(tokenize.tokenize(string, version_info))
 
 
@@ -138,7 +142,7 @@ def test_identifier_contains_unicode():
     else:
         # Unicode tokens in Python 2 seem to be identified as operators.
         # They will be ignored in the parser, that's ok.
-        assert unicode_token[0] == OP
+        assert unicode_token[0] == ERRORTOKEN
 
 
 def test_quoted_strings():
@@ -197,11 +201,12 @@ def test_ur_literals():
 
 
 def test_error_literal():
-    error_token, endmarker = _get_token_list('"\n')
+    error_token, newline, endmarker = _get_token_list('"\n')
     assert error_token.type == ERRORTOKEN
     assert error_token.string == '"'
+    assert newline.type == NEWLINE
     assert endmarker.type == ENDMARKER
-    assert endmarker.prefix == '\n'
+    assert endmarker.prefix == ''
 
     bracket, error_token, endmarker = _get_token_list('( """')
     assert error_token.type == ERRORTOKEN
@@ -225,24 +230,163 @@ def test_endmarker_end_pos():
     check('a\\')
 
 
+xfail_py2 = dict(marks=[pytest.mark.xfail(sys.version_info[0] == 2, reason='Python 2')])
+
+
 @pytest.mark.parametrize(
     ('code', 'types'), [
+        # Indentation
         (' foo', [INDENT, NAME, DEDENT]),
         ('  foo\n bar', [INDENT, NAME, NEWLINE, ERROR_DEDENT, NAME, DEDENT]),
         ('  foo\n bar \n baz', [INDENT, NAME, NEWLINE, ERROR_DEDENT, NAME,
                                 NEWLINE, ERROR_DEDENT, NAME, DEDENT]),
         (' foo\nbar', [INDENT, NAME, NEWLINE, DEDENT, NAME]),
+
+        # Name stuff
+        ('1foo1', [NUMBER, NAME]),
+        pytest.param(
+            u'மெல்லினம்', [NAME],
+            **xfail_py2),
+        pytest.param(u'²', [ERRORTOKEN], **xfail_py2),
+        pytest.param(u'ä²ö', [NAME, ERRORTOKEN, NAME], **xfail_py2),
+        pytest.param(u'ää²¹öö', [NAME, ERRORTOKEN, NAME], **xfail_py2),
     ]
 )
-def test_indentation(code, types):
+def test_token_types(code, types):
     actual_types = [t.type for t in _get_token_list(code)]
     assert actual_types == types + [ENDMARKER]
 
 
 def test_error_string():
-    t1, endmarker = _get_token_list(' "\n')
+    t1, newline, endmarker = _get_token_list(' "\n')
     assert t1.type == ERRORTOKEN
     assert t1.prefix == ' '
     assert t1.string == '"'
-    assert endmarker.prefix == '\n'
+    assert newline.type == NEWLINE
+    assert endmarker.prefix == ''
     assert endmarker.string == ''
+
+
+def test_indent_error_recovery():
+    code = dedent("""\
+                        str(
+        from x import a
+        def
+        """)
+    lst = _get_token_list(code)
+    expected = [
+        # `str(`
+        INDENT, NAME, OP,
+        # `from parso`
+        NAME, NAME,
+        # `import a` on same line as the previous from parso
+        NAME, NAME, NEWLINE,
+        # Dedent happens, because there's an import now and the import
+        # statement "breaks" out of the opening paren on the first line.
+        DEDENT,
+        # `b`
+        NAME, NEWLINE, ENDMARKER]
+    assert [t.type for t in lst] == expected
+
+
+def test_error_token_after_dedent():
+    code = dedent("""\
+        class C:
+            pass
+        $foo
+        """)
+    lst = _get_token_list(code)
+    expected = [
+        NAME, NAME, OP, NEWLINE, INDENT, NAME, NEWLINE, DEDENT,
+        # $foo\n
+        ERRORTOKEN, NAME, NEWLINE, ENDMARKER
+    ]
+    assert [t.type for t in lst] == expected
+
+
+def test_brackets_no_indentation():
+    """
+    There used to be an issue that the parentheses counting would go below
+    zero. This should not happen.
+    """
+    code = dedent("""\
+        }
+        {
+          }
+        """)
+    lst = _get_token_list(code)
+    assert [t.type for t in lst] == [OP, NEWLINE, OP, OP, NEWLINE, ENDMARKER]
+
+
+def test_form_feed():
+    error_token, endmarker = _get_token_list(dedent('''\
+        \f"""'''))
+    assert error_token.prefix == '\f'
+    assert error_token.string == '"""'
+    assert endmarker.prefix == ''
+
+
+def test_carriage_return():
+    lst = _get_token_list(' =\\\rclass')
+    assert [t.type for t in lst] == [INDENT, OP, DEDENT, NAME, ENDMARKER]
+
+
+def test_backslash():
+    code = '\\\n# 1 \n'
+    endmarker, = _get_token_list(code)
+    assert endmarker.prefix == code
+
+
+@pytest.mark.parametrize(
+    ('code', 'types'), [
+        ('f"', [FSTRING_START]),
+        ('f""', [FSTRING_START, FSTRING_END]),
+        ('f" {}"', [FSTRING_START, FSTRING_STRING, OP, OP, FSTRING_END]),
+        ('f" "{}', [FSTRING_START, FSTRING_STRING, FSTRING_END, OP, OP]),
+        (r'f"\""', [FSTRING_START, FSTRING_STRING, FSTRING_END]),
+        (r'f"\""', [FSTRING_START, FSTRING_STRING, FSTRING_END]),
+
+        # format spec
+        (r'f"Some {x:.2f}{y}"', [FSTRING_START, FSTRING_STRING, OP, NAME, OP,
+                                 FSTRING_STRING, OP, OP, NAME, OP, FSTRING_END]),
+
+        # multiline f-string
+        ('f"""abc\ndef"""', [FSTRING_START, FSTRING_STRING, FSTRING_END]),
+        ('f"""abc{\n123}def"""', [
+            FSTRING_START, FSTRING_STRING, OP, NUMBER, OP, FSTRING_STRING,
+            FSTRING_END
+        ]),
+
+        # a line continuation inside of an fstring_string
+        ('f"abc\\\ndef"', [
+            FSTRING_START, FSTRING_STRING, FSTRING_END
+        ]),
+        ('f"\\\n{123}\\\n"', [
+            FSTRING_START, FSTRING_STRING, OP, NUMBER, OP, FSTRING_STRING,
+            FSTRING_END
+        ]),
+
+        # a line continuation inside of an fstring_expr
+        ('f"{\\\n123}"', [FSTRING_START, OP, NUMBER, OP, FSTRING_END]),
+
+        # a line continuation inside of an format spec
+        ('f"{123:.2\\\nf}"', [
+            FSTRING_START, OP, NUMBER, OP, FSTRING_STRING, OP, FSTRING_END
+        ]),
+
+        # a newline without a line continuation inside a single-line string is
+        # wrong, and will generate an ERRORTOKEN
+        ('f"abc\ndef"', [
+            FSTRING_START, FSTRING_STRING, NEWLINE, NAME, ERRORTOKEN
+        ]),
+
+        # a more complex example
+        (r'print(f"Some {x:.2f}a{y}")', [
+            NAME, OP, FSTRING_START, FSTRING_STRING, OP, NAME, OP,
+            FSTRING_STRING, OP, FSTRING_STRING, OP, NAME, OP, FSTRING_END, OP
+        ]),
+    ]
+)
+def test_fstring(code, types, version_ge_py36):
+    actual_types = [t.type for t in _get_token_list(code, version_ge_py36)]
+    assert types + [ENDMARKER] == actual_types

@@ -8,12 +8,14 @@ removed lines in a file that is managed by a version control system (VCS)._
 ---
 
 - Supports **git**, **mercurial**, **darcs**, **bazaar**, **subversion**,
-  **cvs**, **rcs**, **fossil**, **accurev**, **perforce**, **tfs**.
+  **cvs**, **rcs**, **fossil**, **accurev**, **perforce**, **tfs**, **yadm**.
 - **Asynchronous** execution of VCS tools for Vim 7.4.1967+ and Neovim.
 - **Preserves signs** from other plugins.
 - Handles **nested repositories** controlled by different VCS.
 - Provides mappings for **navigating hunks** ("blocks of changed lines").
 - Provides an **operator** that acts on hunks.
+- **Preview** changes in the current line in a popup window.
+- Show all changes in **diff mode**.
 - Alternative workflow: Disable the plugin by default and **toggle it per
   buffer** on demand.
 - Optional **line highlighting**.

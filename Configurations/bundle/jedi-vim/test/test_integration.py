@@ -9,7 +9,7 @@ import zipfile
 
 import pytest
 
-vspec_version = '1.8.1'
+vspec_version = '1.9.0'
 
 VSPEC_URL = 'https://github.com/kana/vim-vspec/archive/%s.zip' % vspec_version
 root = os.path.dirname(os.path.dirname(__file__))
@@ -56,10 +56,10 @@ def test_integration(install_vspec, path):
         if (line.startswith(b'not ok') or
                 line.startswith(b'Error') or
                 line.startswith(b'Bail out!')):
-            pytest.fail("{0} failed:\n{1}".format(
+            pytest.fail(u"{0} failed:\n{1}".format(
                 path, output.decode('utf-8')), pytrace=False)
         if not had_ok and line.startswith(b'ok'):
             had_ok = True
     if not had_ok:
-        pytest.fail("{0} failed: no 'ok' found:\n{1}".format(
+        pytest.fail(u"{0} failed: no 'ok' found:\n{1}".format(
             path, output.decode('utf-8')), pytrace=False)

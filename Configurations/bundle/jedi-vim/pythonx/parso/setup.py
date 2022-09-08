@@ -40,8 +40,16 @@ setup(name='parso',
           'Programming Language :: Python :: 3.3',
           'Programming Language :: Python :: 3.4',
           'Programming Language :: Python :: 3.5',
+          'Programming Language :: Python :: 3.6',
+          'Programming Language :: Python :: 3.7',
           'Topic :: Software Development :: Libraries :: Python Modules',
           'Topic :: Text Editors :: Integrated Development Environments (IDE)',
           'Topic :: Utilities',
       ],
+      extras_require={
+          'testing': [
+              'pytest>=3.0.7',
+              'docopt',
+          ],
+      },
       )

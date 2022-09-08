@@ -72,9 +72,8 @@ Installation
 
 Requirements
 ------------
-You need a VIM version that was compiled with Python 2.6 or later
-(``+python`` or ``+python3``), which is typical for most distributions on
-Linux.  You can check this from within VIM using
+You need a VIM version that was compiled with Python 2.7 or later
+(``+python`` or ``+python3``).  You can check this from within VIM using
 ``:python3 import sys; print(sys.version)`` (use ``:python`` for Python 2).
 
 Manual installation
@@ -83,9 +82,8 @@ Manual installation
 You might want to use `pathogen <https://github.com/tpope/vim-pathogen>`_ or
 `Vundle <https://github.com/gmarik/vundle>`_ to install jedi-vim.
 
-The first thing you need after that is an up-to-date version of Jedi. You can
-either install it via ``pip install jedi`` or with
-``git submodule update --init`` in your jedi-vim repository.
+The first thing you need after that is an up-to-date version of Jedi. Install
+``git submodule update --init --recursive`` in your jedi-vim repository.
 
 Example installation command using Pathogen:
 
@@ -100,6 +98,9 @@ Add the following line in your `~/.vimrc`
 .. code-block:: vim
 
     Plugin 'davidhalter/jedi-vim'
+
+For installing Jedi, ``pip install jedi`` will also work, but you might run
+into issues when working in virtual environments. Please use git submodules.
 
 
 Installation with your distribution

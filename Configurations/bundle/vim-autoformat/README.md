@@ -1,10 +1,11 @@
 # vim-autoformat
 
-Format code with one button press.
+Format code with one button press (or automatically on save).
 
-This plugin makes use of external formatting programs to achieve the best results.
+This plugin makes use of external formatting programs to achieve the most decent results.
 Check the list of formatprograms below to see which languages are supported by default.
-You can easily customize these or add your own formatprogram.
+Most formatprograms will obey vim settings, such as `textwidth` and `shiftwidth()`.
+You can easily customize existing formatprogram definitions or add your own formatprogram.
 When no formatprogram exists (or no formatprogram is installed) for a certain filetype,
 vim-autoformat falls back by default to indenting, (using vim's auto indent functionality), retabbing and removing trailing whitespace.
 
@@ -137,8 +138,7 @@ Here is a list of formatprograms that are supported by default, and thus will be
 * `yapf` for __Python__ (supports formatting ranges).
   Vim-autoformat checks whether there exists a `.style.yapf` or a `setup.cfg` file up in the current directory's ancestry.
   Based on that it either uses that file or tries to match vim options as much as possible.
-  It is readily available through PIP.
-  Most users can install with the terminal command `sudo pip install yapf` or `pip  install --user yapf`.
+  Most users can install with the terminal command `sudo pip install yapf` or `pip install --user yapf`.
   YAPF has one optional configuration variable to control the formatter style.
   For example:
 
@@ -150,13 +150,17 @@ Here is a list of formatprograms that are supported by default, and thus will be
 
   Here is the link to the repository: https://github.com/google/yapf
 
+* `black` for __Python__.
+  Most users can install with the terminal command `sudo pip install black` or `pip install --user black`.
+  Here is the link to the repository: https://github.com/ambv/black
+
 * `js-beautify` for __Javascript__ and __JSON__.
   It can be installed by running `npm install -g js-beautify`.
   Note that `nodejs` is needed for this to work.
   The python version version is also supported by default, which does not need `nodejs` to run.
   Here is the link to the repository: https://github.com/einars/js-beautify.
 
-* `JSCS` for __Javascript__. http://jscs.info/
+* `JSCS` for __Javascript__. https://jscs-dev.github.io/
 
 * `standard` for __Javascript__.
   It can be installed by running `npm install -g standard` (`nodejs` is required). No more configuration needed.
@@ -221,6 +225,9 @@ Here is a list of formatprograms that are supported by default, and thus will be
 
 * `stylish-haskell` for __Haskell__
   It can be installed using [`cabal`](https://www.haskell.org/cabal/) build tool. Installation instructions are available at https://github.com/jaspervdj/stylish-haskell#installation
+
+* `purty` for __Purescript__
+  It can be installed using `npm install purty`. Further instructions available at https://gitlab.com/joneshf/purty
 
 * `remark` for __Markdown__.
   A Javascript based markdown processor that can be installed with `npm install -g remark-cli`. More info is available at https://github.com/wooorm/remark.
@@ -347,9 +354,11 @@ contact me by creating an issue in this repository.
 
 ## Major Change Log
 
+### October 2018
+* We also take the returncode of the formatter process into account, not just the presence of output on stderr.
+
 ### March 2016
-* We don't use the option formatprg internally anymore, to always have the possible of using the default `gq`
-  command.
+* We don't use the option formatprg internally anymore, to always have the possible of using the default `gq` command.
 * More fallback options have been added.
 
 ### June 2015
@@ -363,7 +372,7 @@ contact me by creating an issue in this repository.
 
 ### December 20 2013
 
-* `html-beautify` is now the default for HTML since it seems to be better maintained, and seems to handle inline javascript neatly.
+* `html-beautify` is now the new default for HTML since it seems to be better maintained, and seems to handle inline javascript neatly.
 * The `formatters/` folder is no longer supported anymore, because it is unnecessary.
 * `js-beautify` can no longer be installed as a bundle, since it only makes this plugin unnecessarily complex.
 
@@ -371,8 +380,6 @@ contact me by creating an issue in this repository.
 
 * The default behaviour of gq is enabled again by removing the fallback on auto-indenting.
   Instead, the fallback is only used when running the command `:Autoformat`.
-* For HTML,XML and XHTML, the option `textwidth` is taken into account when formatting.
-  This extends the way the formatting style will match your current vim settings.
 
 ### March 16 2013
 
@@ -392,6 +399,4 @@ contact me by creating an issue in this repository.
 
 * Customization of formatprograms can be done easily now, as explained in the readme.
 * I set the default tabwidth to 4 for all formatprograms as well as for vim itself.
-* The default parameters for astyle have been slightly modified: it will wrap spaces around operators.
 * phpCB has been removed from the defaults, due to code-breaking behaviour.
-* XHTML default definition added

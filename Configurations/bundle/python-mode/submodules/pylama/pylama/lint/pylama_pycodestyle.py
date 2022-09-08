@@ -28,7 +28,7 @@ class Linter(Abstract):
                     params[option.dest] = option.convert_value(option, value)
 
         for key in ["filename", "exclude", "select", "ignore"]:
-            if key in params:
+            if key in params and isinstance(params[key], str):
                 params[key] = _parse_multi_options(params[key])
 
         P8Style = StyleGuide(reporter=_PycodestyleReport, **params)

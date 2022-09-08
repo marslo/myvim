@@ -66,6 +66,7 @@ Bundle 'mfukar/robotframework-vim'
 Bundle 'tpope/vim-surround'
 Bundle 'valloric/MatchTagAlways'
 Bundle 'tpope/vim-repeat'
+Bundle 'jaxbot/browserlink.vim'
 " Colors and themes and syntax
 Bundle 'luochen1990/rainbow'
 Bundle 'txt.vim'
@@ -84,6 +85,10 @@ Bundle 'marslo/Jenkinsfile-vim-syntax'
 Bundle 'keith/cocoapods.vim'
 " Plist
 Bundle "darfink/vim-plist"
+" dockerfile
+Bundle 'ekalinin/Dockerfile.vim'
+" brew
+Bundle 'xu-cheng/brew.vim'
 
 call vundle#end()
 call pathogen#infect()
@@ -211,6 +216,7 @@ if has('gui_running')
   set lines=36                                                    " The initialize size
   set columns=124
 endif
+
 if exists('$TMUX')
   set term=screen-256color
 endif
@@ -575,7 +581,7 @@ augroup END
 " Programming configs for specified scripts
 if has("autocmd")
   autocmd! bufwritepost ~/.vimrc silent! source %
-  autocmd BufRead,BufNewFile * setfiletype txt
+  autocmd BufRead,BufNewFile * setfiletype jenkinsfile
   autocmd BufRead,BufNewFile *.t set filetype=perl
   autocmd BufEnter *.md exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" %:p "--no-gpu"<CR>'
   autocmd BufEnter *.markdown exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome --no-gpu"  %:p<CR>'
@@ -586,8 +592,8 @@ if has("autocmd")
   autocmd syntax groovy,Jenkinsfile setlocal foldmethod=indent
   autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile normal zM
   autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile let g:indentLine_loaded=1
-  autocmd FileType groovy,Jenkinsfile,sh set tabstop=2 softtabstop=2 shiftwidth=2
-  autocmd FileType make,json,snippet,robot,markdown,groovy set tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd FileType groovy,Jenkinsfile,json,sh set tabstop=2 softtabstop=2 shiftwidth=2
+  autocmd FileType make,snippet,robot,markdown set tabstop=4 softtabstop=4 shiftwidth=4
   autocmd FileType javascript syntax clear jsFuncBlock                           " rainbow issue #2
   " autocmd Syntax groovy,Jenkinsfile :IndentLinesEnable
   " autocmd BufReadPost Jenkinsfile set filetype=groovy syntax=groovy
@@ -597,8 +603,8 @@ if has("autocmd")
   " autocmd FileType Jenkinsfile set syntax=groovy filetype=groovy
 
   augroup vimrc
-  autocmd BufReadPre * setlocal foldmethod=indent
-  autocmd BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
+    autocmd BufReadPre * setlocal foldmethod=indent
+    autocmd BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
   augroup END
 endif
 " set list lcs=tab:\|\

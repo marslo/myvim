@@ -3,6 +3,10 @@
 :TLet	tlib.txt	/*:TLet*
 :TScratch	tlib.txt	/*:TScratch*
 :TVarArg	tlib.txt	/*:TVarArg*
+:Tbrowseloc	tlib.txt	/*:Tbrowseloc*
+:Tbrowseqfl	tlib.txt	/*:Tbrowseqfl*
+:Texecloc	tlib.txt	/*:Texecloc*
+:Texecqfl	tlib.txt	/*:Texecqfl*
 :Tlibtrace	tlib.txt	/*:Tlibtrace*
 :Tlibtraceset	tlib.txt	/*:Tlibtraceset*
 autoload/tlib/Filter_cnf.vim	tlib.txt	/*autoload\/tlib\/Filter_cnf.vim*

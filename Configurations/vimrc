@@ -13,6 +13,7 @@ set history=1000
 set diffopt=filler,context:3
 runtime macros/matchit.vim
 let vimrplugin_i386 = 1
+let performance_mode = 1
 
 if has('win32') || has('win64')
   let skip_loading_mswin=1
@@ -78,7 +79,9 @@ Bundle 'Marslo/MarsloFunc'
 Bundle 'LargeFile'
 Bundle 'L9'
 Bundle 'godlygeek/tabular'
+Bundle 'dhruvasagar/vim-table-mode'
 Bundle 'Chiel92/vim-autoformat'
+Bundle 'rizzatti/dash.vim'
 Bundle 'mhinz/vim-signify'
 " Python
 Bundle 'klen/python-mode'
@@ -105,6 +108,7 @@ Bundle 'burnettk/vim-angular'
 Bundle 'tpope/vim-surround'
 Bundle 'valloric/MatchTagAlways'
 Bundle 'tpope/vim-repeat'
+Bundle 'jaxbot/browserlink.vim'
 " Colors and themes and syntax
 Bundle 'luochen1990/rainbow'
 Bundle 'txt.vim'
@@ -122,6 +126,12 @@ Bundle 'tpope/vim-fugitive'
 Bundle 'groovy.vim--Ruley'
 Bundle 'marslo/Jenkinsfile-vim-syntax'
 Bundle 'keith/cocoapods.vim'
+" Plist
+Bundle "darfink/vim-plist"
+" dockerfile
+Bundle 'ekalinin/Dockerfile.vim'
+" brew
+Bundle 'xu-cheng/brew.vim'
 " For fun
 Bundle 'TeTrIs.vim'
 Bundle 'matrix.vim--Yang'
@@ -159,15 +169,31 @@ endfunction
 command! GetVundle :call GetVundle()
 
 function! ToggleVerbose()
-    if !&verbose
-        set verbosefile=~/.log/vim/verbose.log
-        set verbose=15
-    else
-        set verbose=0
-        set verbosefile=
-    endif
+  if !&verbose
+    set verbosefile=~/.log/vim/verbose.log
+    set verbose=15
+  else
+    set verbose=0
+    set verbosefile=
+  endif
 endfunction
 command! ToggleVerbose :call ToggleVerbose()
+
+function! ToggleWindowHorizontalVerticalSplit()
+  if !exists('t:splitType')
+    let t:splitType = 'vertical'
+  endif
+
+  if t:splitType == 'vertical' " is vertical switch to horizontal
+    windo wincmd K
+    let t:splitType = 'horizontal'
+
+  else " is horizontal switch to vertical
+    windo wincmd H
+    let t:splitType = 'vertical'
+  endif
+endfunction
+nnoremap <silent> <leader>wt :call ToggleWindowHorizontalVerticalSplit()<cr>
 
 if isdirectory(expand(bud . 'MarsloFunc'))
   command! GetVim :call marslofunc#GetVim()<CR>
@@ -219,7 +245,7 @@ if has("autocmd")
   au FileType python syn keyword pythonDecorator print self
   au FileType python set tabstop=2 softtabstop=2 shiftwidth=2
   au FileTYpe python set isk-=.
-  set textwidth=80
+  " set textwidth=80
 endif
 let python_highlight_all = 1                                        " syntax-python
 
@@ -274,9 +300,11 @@ endif
 if 'xterm-256color' == $TERM
   set t_Co=256
 endif
+
 if has('gui_running') || 'xterm-256color' == $TERM
   set background=dark
-  colorscheme marslo
+  colorscheme solarized
+  " colorscheme marslo
   let psc_style='cool'
 else
   set t_Co=8
@@ -296,6 +324,7 @@ if has('win32') || has('win95') || has('win64')
   set clipboard+=unnamedplus
 else
   nmap <leader>v :e ~/.vimrc<CR>
+  set ttyfast                                                       " Enable fast terminal connection.
   autocmd! bufwritepost ~/.vimrc silent! source %
   set guifont=Monaco\ 14
   set clipboard=unnamedplus
@@ -395,6 +424,8 @@ nnoremap <leader>bp :bp<CR>
 nnoremap <leader>bn :bn<CR>
 nnoremap <C-k> <C-w>k
 nnoremap <C-j> <C-w>j
+nnoremap <C-l> <C-w>l
+nnoremap <C-h> <C-w>h
 nnoremap <C-a> <ESC>^
 inoremap <C-a> <ESC>I
 cnoremap <C-a> <Home>
@@ -425,6 +456,8 @@ cnoreabbrev QA! qa!
 cnoreabbrev WA wa
 cnoreabbrev WA! wa!
 cnoreabbrev NOH noh
+cnoreabbrev %Y %y
+cnoreabbrev %D %d
 cnoremap sudow!! w !sudo tee > /dev/null %
 cnoremap sw!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
 
@@ -439,7 +472,7 @@ nnoremap <leader>G :%s///gn<CR>
 nnoremap <leader>idl :IndentLineEnable<CR>
 
 nnoremap <leader>zil :g/^/ s//\=line('.').' '/<CR>    " Insert line number
-nnoremap <leader>zcm :%s/<C-v><CR>/\r/g<CR>           " Convert to new line
+nnoremap <leader>zcm :%s/<C-v><CR>/\r/g<CR>           " Convert  to new line
 nnoremap <leader>zwl :%s///gn<CR>                     " Show the matches numbers (wc -l)
 nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>            " Delete 
 nnoremap <leader>zdb :%s/\s\+$//<CR>                  " Delete blank tail
@@ -615,15 +648,15 @@ if exists(":Tabularize")
   vmap <leader>a: :Tabularize /:\zs<CR>
   inoremap <silent> <Bar>   <Bar><Esc>:call <SID>table_auto_align()<CR>a
   function! s:table_auto_align()
-      let p = '^\s*|\s.*\s|\s*$'
-      if exists(':Tabularize') && getline('.') =~# '^\s*|'
-                  \ && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
-          let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
-          let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
-          Tabularize/|/l1
-          normal! 0
-          call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
-      endif
+    let p = '^\s*|\s.*\s|\s*$'
+    if exists(':Tabularize') && getline('.') =~# '^\s*|'
+                \ && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+      let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
+      let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+      Tabularize/|/l1
+      normal! 0
+      call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+    endif
   endfunction
 endif
 
@@ -644,6 +677,9 @@ smap <C-J> <Plug>snipMateNextOrTrigger
 imap <Tab> <Plug>snipMateNextOrTrigger
 
 " match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
+let g:plist_display_format = 'xml'
+let g:plist_json_filetype = 'javascript'
+
 let g:signify_disable_by_default=0
 let g:signify_vcs_list = [ 'git' ]
 
@@ -659,8 +695,9 @@ let g:signify_vcs_list = [ 'git' ]
 " let SuperTabMappingTabLiteral = '<Tab>'
 " let SuperTabClosePreviewOnPopupClose = 1
 
-highlight CollumnLimit        guibg=NONE    guifg=#4e4e4e       ctermfg=240
 augroup collumnLimit
+  set colorcolumn=80
+  highlight CollumnLimit        guibg=NONE    guifg=#4e4e4e       ctermfg=240
   autocmd!
   let collumnLimit = 80
   let pattern = '\%<' . (collumnLimit+1) . 'v.\%>' . collumnLimit . 'v'
@@ -674,15 +711,15 @@ if has("autocmd")
   autocmd BufRead,BufNewFile *.t set filetype=perl
   autocmd BufEnter *.md exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" %:p "--no-gpu"<CR>'
   autocmd BufEnter *.markdown exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome --no-gpu"  %:p<CR>'
-  autocmd BufWinLeave * silent! mkview
+  " autocmd BufWinLeave * silent! mkview
   autocmd BufWinEnter * silent! loadview
   autocmd QuickFixCmdPost *grep* cwindow
   autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
   autocmd syntax groovy,Jenkinsfile setlocal foldmethod=indent
   autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile normal zM
   autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile let g:indentLine_loaded=1
-  autocmd FileType groovy,Jenkinsfile,sh set tabstop=2 softtabstop=2 shiftwidth=2
-  autocmd FileType make,json,snippet,robot,markdown set tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd FileType groovy,Jenkinsfile,json,sh set tabstop=2 softtabstop=2 shiftwidth=2
+  autocmd FileType make,snippet,robot,markdown set tabstop=4 softtabstop=4 shiftwidth=4
   autocmd FileType javascript syntax clear jsFuncBlock                           " rainbow issue #2
   " autocmd Syntax groovy,Jenkinsfile :IndentLinesEnable
   " autocmd BufReadPost Jenkinsfile set filetype=groovy syntax=groovy

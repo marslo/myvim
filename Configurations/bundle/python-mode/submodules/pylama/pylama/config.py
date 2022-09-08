@@ -12,7 +12,7 @@ from .libs.inirama import Namespace
 from .lint.extensions import LINTERS
 
 #: A default checkers
-DEFAULT_LINTERS = 'pycodestyle', 'pyflakes', 'mccabe'
+DEFAULT_LINTERS = 'pycodestyle', 'pyflakes', 'mccabe', 'eradicate'
 
 CURDIR = os.getcwd()
 CONFIG_FILES = 'pylama.ini', 'setup.cfg', 'tox.ini', 'pytest.ini'
@@ -48,7 +48,6 @@ def split_csp_str(val):
     """ Split comma separated string into unique values, keeping their order.
 
     :returns: list of splitted values
-
     """
     seen = set()
     values = val if isinstance(val, (list, tuple)) else val.strip().split(',')
@@ -113,7 +112,7 @@ PARSER.add_argument(
     "--linters", "-l", default=_Default(','.join(DEFAULT_LINTERS)),
     type=parse_linters, help=(
         "Select linters. (comma-separated). Choices are %s."
-        % ','.join(s for s in LINTERS.keys())
+        % ','.join(s for s in LINTERS)
     ))
 
 PARSER.add_argument(
@@ -131,7 +130,7 @@ PARSER.add_argument(
     "--hook", action="store_true", help="Install Git (Mercurial) hook.")
 
 PARSER.add_argument(
-    "--async", action="store_true", dest='async_mode',
+    "--concurrent", "--async", action="store_true",
     help="Enable async mode. Useful for checking a lot of files. "
     "Unsupported with pylint.")
 
@@ -172,28 +171,29 @@ def parse_options(args=None, config=True, rootdir=CURDIR, **overrides):  # noqa
     if config:
         cfg = get_config(str(options.options), rootdir=rootdir)
         for opt, val in cfg.default.items():
-            if opt == 'async':
-                opt = 'async_mode'
             LOGGER.info('Find option %s (%s)', opt, val)
             passed_value = getattr(options, opt, _Default())
             if isinstance(passed_value, _Default):
                 if opt == 'paths':
                     val = val.split()
+                if opt == 'skip':
+                    val = fix_pathname_sep(val)
                 setattr(options, opt, _Default(val))
 
         # Parse file related options
         for name, opts in cfg.sections.items():
 
-            if not name.startswith('pylama') or name == cfg.default_section:
+            if name == cfg.default_section:
                 continue
 
-            name = name[7:]
+            if name.startswith('pylama'):
+                name = name[7:]
 
             if name in LINTERS:
                 options.linters_params[name] = dict(opts)
                 continue
 
-            mask = re.compile(fnmatch.translate(name))
+            mask = re.compile(fnmatch.translate(fix_pathname_sep(name)))
             options.file_params[mask] = dict(opts)
 
     # Override options
@@ -205,9 +205,9 @@ def parse_options(args=None, config=True, rootdir=CURDIR, **overrides):  # noqa
         if isinstance(value, _Default):
             setattr(options, name, process_value(name, value.value))
 
-    if options.async_mode and 'pylint' in options.linters:
+    if options.concurrent and 'pylint' in options.linters:
         LOGGER.warning('Can\'t parse code asynchronously with pylint enabled.')
-        options.async_mode = False
+        options.concurrent = False
 
     return options
 
@@ -266,6 +266,11 @@ def setup_logger(options):
         LOGGER.addHandler(logging.FileHandler(options.report, mode='w'))
 
     if options.options:
-        LOGGER.info('Try to read configuration from: ' + options.options)
+        LOGGER.info('Try to read configuration from: %r', options.options)
+
+
+def fix_pathname_sep(val):
+    """Fix pathnames for Win."""
+    return val.replace(os.altsep or "\\", os.sep)
 
 # pylama:ignore=W0212,D210,F0001

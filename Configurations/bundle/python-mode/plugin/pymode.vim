@@ -1,5 +1,5 @@
 " vi: fdl=1
-let g:pymode_version = "0.9.4"
+let g:pymode_version = "0.10.0"
 
 " Enable pymode by default :)
 call pymode#default('g:pymode', 1)
@@ -67,6 +67,12 @@ call pymode#default('g:pymode_quickfix_maxheight', 6)
 
 " Maximal height of pymode quickfix window
 call pymode#default('g:pymode_quickfix_minheight', 3)
+
+" Height of preview window
+call pymode#default('g:pymode_preview_height', &previewheight)
+
+" Position of preview window
+call pymode#default('g:pymode_preview_position', 'botright')
 
 " LOAD VIRTUALENV {{{
 "
