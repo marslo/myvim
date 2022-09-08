@@ -1,11 +1,9 @@
 " =============================================================================
-"      FileName: vimrc_terminal
-"          Desc: Made in Marslo
-"        Author: Marslo Jiao
-"         Email: marslo.jiao@gmail.com
+"      FileName: vimrc.terminal
+"        Author: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.24
-"    LastChange: 2017-12-05 17:40:14
+"    LastChange: 2020-09-04 17:15:03
 " =============================================================================
 
 set nocompatible

@@ -1,11 +1,9 @@
 " =============================================================================
-"      FileName: vimrc_mac
-"          Desc: Made in Marslo
-"        Author: Marslo Jiao
-"         Email: marslo.jiao@gmail.com
+"      FileName: vimrc.mac
+"        Author: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.24
-"    LastChange: 2020-06-12 20:29:50
+"    LastChange: 2020-09-04 17:15:02
 " =============================================================================
 
 set maxmempattern=5000
@@ -28,7 +26,6 @@ endif
 if empty(glob('~/.vim/undo/'))
   execute 'silent !mkdir -p ~/.vim/undo'
 endif
-
 
 let bud=expand('~/.vim/bundle') . '/'
 let performance_mode = 1
@@ -195,6 +192,12 @@ endif
 
 " ====================================== For Programming =====================================
 " Programming configs for Python
+if has("autocmd")
+  au FileType python syn keyword pythonDecorator print self
+  au FileType python set tabstop=4 softtabstop=4 shiftwidth=4
+  au FileTYpe python set isk-=.
+  " set textwidth=80
+endif
 let python_highlight_all = 1                                        " syntax-python
 
 " Python-mode configuratoin
@@ -535,6 +538,7 @@ nnoremap <Leader>cc :let &cole=(&cole == 2) ? 0 : 2 <bar> echo 'conceallevel ' .
 " let g:vim_markdown_new_list_item_indent = 4
 " let g:vim_markdown_toc_autofit = 1
 " let g:vim_markdown_conceal = 0
+"" set conceallevel=2
 " let g:vim_markdown_frontmatter = 1
 " let g:vim_markdown_json_frontmatter = 1
 let g:markdown_enable_spell_checking = 0
@@ -620,8 +624,8 @@ set updatetime=250
 highlight clear SignColumn
 
 " Snippet
-imap <C-J> <Plug>snipMateNextOrTrigger
-smap <C-J> <Plug>snipMateNextOrTrigger
+imap <S-C-J> <Plug>snipMateNextOrTrigger
+smap <S-C-J> <Plug>snipMateNextOrTrigger
 imap <Tab> <Plug>snipMateNextOrTrigger
 
 let g:plist_display_format = 'xml'
@@ -632,34 +636,45 @@ let g:signify_vcs_list = [ 'git' ]
 
 " tabnine-vim
 " if index(['vim'], &filetype) == -1
-if !(&filetype == 'vim')
-  let g:loaded_youcompleteme = 1
-endif
-let b:ycm_largefile=1
-let g:ycm_disable_for_files_larger_than_kb = 1000
-let g:ycm_filetype_blacklist = {
-      \ 'vim' : 1 ,
-      \ 'vimshell': 1 ,
-      \ 'vimwiki': 1,
-      \ }
-let g:ycm_filetype_specific_completion_to_disable = {
-      \ 'gitcommit': 1
-      \ }
-let g:ycm_semantic_triggers =  {
-  \   'c': ['->', '.'],
-  \   'objc': ['->', '.', 're!\[[_a-zA-Z]+\w*\s', 're!^\s*[^\W\d]\w*\s',
-  \            're!\[.*\]\s'],
-  \   'ocaml': ['.', '#'],
-  \   'cpp,cuda,objcpp': ['->', '.', '::'],
-  \   'perl': ['->'],
-  \   'php': ['->', '::'],
-  \   'cs,d,elixir,go,groovy,java,javascript,julia,perl6,python,scala,typescript,vb': ['.'],
-  \   'ruby,rust': ['.', '::'],
-  \   'lua': ['.', ':'],
-  \   'erlang': [':'],
-  \ }
-let g:ycm_python_binary_path = '/usr/local/opt/python/libexec/bin/python'
-let g:ycm_min_num_of_chars_for_completion = 2
+" let g:loaded_youcompleteme = 1
+" if !(&filetype == 'vim')
+  " let g:loaded_youcompleteme = 1
+" endif
+
+" " let b:ycm_largefile=1
+" " let g:ycm_disable_for_files_larger_than_kb = 1000
+" let g:ycm_filetype_blacklist = {
+"       \ 'vim' : 1 ,
+"       \ 'vimshell': 1 ,
+"       \ 'vimwiki': 1,
+"       \ }
+" let g:ycm_filetype_specific_completion_to_disable = {
+"       \ 'gitcommit': 1
+"       \ }
+" " let g:ycm_semantic_triggers =  {
+"   " \   'c': ['->', '.'],
+"   " \   'objc': ['->', '.', 're!\[[_a-zA-Z]+\w*\s', 're!^\s*[^\W\d]\w*\s',
+"   " \            're!\[.*\]\s'],
+"   " \   'ocaml': ['.', '#'],
+"   " \   'cpp,cuda,objcpp': ['->', '.', '::'],
+"   " \   'perl': ['->'],
+"   " \   'php': ['->', '::'],
+"   " \   'cs,d,elixir,go,groovy,java,javascript,julia,perl6,python,scala,typescript,vb': ['.'],
+"   " \   'ruby,rust': ['.', '::'],
+"   " \   'lua': ['.', ':'],
+"   " \   'erlang': [':'],
+"   " \ }
+" let g:ycm_python_binary_path = '/usr/local/opt/python/libexec/bin/python'
+" let g:ycm_min_num_of_chars_for_completion = 2
+
+function! TriggerYCM()
+  if g:loaded_youcompleteme == 1
+    let g:loaded_youcompleteme = 0
+  else
+    let g:loaded_youcompleteme = 1
+  endif
+endfunction
+nmap <C-y> :call TriggerYCM()<CR>
 
 " call matchadd('ColorColumn', '\%81v', 100)
 " match OverLength /\%81v.\+/
@@ -701,16 +716,16 @@ if has("autocmd")
 
   augroup python
     autocmd BufNewFile,BufRead python
-            \ set tabstop=2
-            \ set softtabstop=2
-            \ set shiftwidth=2
-            \ setlocal shiftwidth=2
-            \ setlocal tabstop=2
-            \ setlocal softtabstop=2
+            \ set tabstop=4
+            \ set softtabstop=4
+            \ set shiftwidth=4
+            \ setlocal shiftwidth=4
+            \ setlocal tabstop=4
+            \ setlocal softtabstop=4
             \ setlocal noautoindent
             \ fileformat=unix
     autocmd FileType python syntax keyword pythonDecorator print self
-    autocmd FileType python set tabstop=2 softtabstop=2 shiftwidth=2 noautoindent
+    autocmd FileType python set tabstop=4 softtabstop=4 shiftwidth=4 noautoindent
     autocmd FileTYpe python set isk-=.
   augroup end
 
@@ -732,6 +747,7 @@ if has("autocmd")
       " let &t_EI = "\<Esc>]50;CursorShape=0\x7" " Block in normal mode
   " endif
 endif
+
 " set list lcs=tab:\|\
 
 " vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab
