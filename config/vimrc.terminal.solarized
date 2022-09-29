@@ -804,6 +804,8 @@ if has("autocmd")
   autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile let g:indentLine_loaded=1
   autocmd FileType make,snippet,robot set tabstop=4 softtabstop=4 shiftwidth=4
   autocmd FileType javascript syntax clear jsFuncBlock                           " rainbow issue #2
+  " https://vim.fandom.com/wiki/Remove_unwanted_spaces
+  autocmd BufWritePre * :%s/\s\+$//e                                             " automatic remove trailing space
 
   augroup devops
     autocmd BufNewFile,BufRead Groovy Jenkinsfile jenkinsfile set syntax=groovy

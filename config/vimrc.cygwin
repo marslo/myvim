@@ -214,6 +214,8 @@ iabbrev <leader>#- #------------------
 
 let syntax_cmd = "enable"
 " let g:syntax_cmd = "skip"
+" https://vim.fandom.com/wiki/Remove_unwanted_spaces
+autocmd BufWritePre * :%s/\s\+$//e                                             " automatic remove trailing space
 
 if has('gui_running') || 'xterm-256color' == $TERM
   if has('win32') || has('win64')

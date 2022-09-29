@@ -574,6 +574,8 @@ if has("autocmd")
   autocmd FileType groovy,Jenkinsfile,sh set tabstop=2 softtabstop=2 shiftwidth=2
   autocmd FileType make,json,snippet,robot,markdown set tabstop=4 softtabstop=4 shiftwidth=4
   autocmd FileType javascript syntax clear jsFuncBlock                           " rainbow issue #2
+  " https://vim.fandom.com/wiki/Remove_unwanted_spaces
+  autocmd BufWritePre * :%s/\s\+$//e                                             " automatic remove trailing space
   " autocmd Syntax groovy,Jenkinsfile :IndentLinesEnable
   " autocmd BufReadPost Jenkinsfile set filetype=groovy syntax=groovy
   " autocmd BufNewFile,BufRead Jenkinsfile setf groovy

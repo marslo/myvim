@@ -3,7 +3,7 @@
 "        Author: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.24
-"    LastChange: 2020-09-04 17:15:02
+"    LastChange: 2022-09-29 21:13:06
 " =============================================================================
 
 set maxmempattern=5000
@@ -48,7 +48,7 @@ Bundle 'Yggdroot/indentLine'
 Bundle 'kien/ctrlp.vim'
 Bundle 'sjl/gundo.vim'
 Bundle 'majutsushi/tagbar'
-Bundle 'dantezhu/authorinfo'
+Bundle 'marslo/authorinfo'
 Bundle 'Marslo/EnhCommentify.vim'
 Bundle 'Marslo/auto-pairs'
 Bundle 'tomtom/tlib_vim'
@@ -59,6 +59,7 @@ Bundle 'grep.vim'
 Bundle 'vim-syntastic/syntastic'
 Bundle 'Marslo/MarsloFunc'
 Bundle 'LargeFile'
+Bundle 'Konfekt/FastFold'
 Bundle 'L9'
 Bundle 'godlygeek/tabular'
 Bundle 'dhruvasagar/vim-table-mode'
@@ -68,6 +69,9 @@ Bundle 'rizzatti/dash.vim'
 Bundle 'airblade/vim-gitgutter'
 Bundle 'mbbill/undotree'
 Bundle 'codota/tabnine-vim'
+Bundle 'rhysd/vim-grammarous'
+Bundle 'dpelle/vim-LanguageTool'
+Bundle 'gabrielelana/vim-markdown'
 " Python
 " Bundle 'python-mode/python-mode'
 Bundle 'Vimjas/vim-python-pep8-indent'
@@ -76,12 +80,12 @@ Bundle 'pyflakes/pyflakes'
 Bundle 'python_match.vim'
 Bundle 'vim-python/python-syntax'
 Bundle 'davidhalter/jedi-vim'
-Bundle 'mfukar/robotframework-vim'
+" Bundle 'mfukar/robotframework-vim'
 " Web design
 Bundle 'tpope/vim-surround'
 Bundle 'valloric/MatchTagAlways'
 Bundle 'tpope/vim-repeat'
-Bundle 'jaxbot/browserlink.vim'
+" Bundle 'jaxbot/browserlink.vim'
 " Colors and themes and syntax
 Bundle '907th/vim-auto-save'
 Bundle 'luochen1990/rainbow'
@@ -90,9 +94,6 @@ Bundle 'txt.vim'
 Bundle 'Marslo/vim-coloresque'
 Bundle 'Marslo/marslo.vim'
 Bundle 'Marslo/MarsloVimOthers'
-Bundle 'gabrielelana/vim-markdown'
-" Bundle 'tpope/vim-markdown'
-" Bundle 'mzlogin/vim-markdown-toc'
 Bundle 'altercation/vim-colors-solarized'
 " Git
 Bundle 'tpope/vim-fugitive'
@@ -169,6 +170,33 @@ function! ToggleWindowHorizontalVerticalSplit()
 endfunction
 nnoremap <silent> <leader>wt :call ToggleWindowHorizontalVerticalSplit()<cr>
 
+function! GetFiletypes()
+  " https://vi.stackexchange.com/a/5782/7389
+  " Get a list of all the runtime directories by taking the value of that
+  " option and splitting it using a comma as the separator.
+  let rtps = split(&runtimepath, ",")
+  " This will be the list of filetypes that the function returns
+  let filetypes = []
+
+  " Loop through each individual item in the list of runtime paths
+  for rtp in rtps
+    let syntax_dir = rtp . "/syntax"
+    " Check to see if there is a syntax directory in this runtimepath.
+    if (isdirectory(syntax_dir))
+      " Loop through each vimscript file in the syntax directory
+      for syntax_file in split(glob(syntax_dir . "/*.vim"), "\n")
+        " Add this file to the filetypes list with its everything
+        " except its name removed.
+        call add(filetypes, fnamemodify(syntax_file, ":t:r"))
+      endfor
+    endif
+  endfor
+
+  " This removes any duplicates and returns the resulting list.
+  " NOTE: This might not be the best way to do this, suggestions are welcome.
+  return uniq(sort(filetypes))
+endfunction
+
 if isdirectory(expand(bud . 'MarsloFunc'))
   command! GetVim :call marslofunc#GetVim()<CR>
   nmap cmd :call marslofunc#OpenCMD()<CR>
@@ -199,7 +227,7 @@ if has("autocmd")
 endif
 let python_highlight_all = 1                                        " syntax-python
 
-" Python-mode configuratoin
+" Python-mode configurations
 if isdirectory(expand(bud . 'python-mode')) || has('python3')
  nnoremap <leader>p :PymodeLint<CR>                                " Trigger PymodeLint by manual
  let g:pymode_python =  '/usr/local/bin/python3'
@@ -218,14 +246,14 @@ if isdirectory(expand(bud . 'python-mode')) || has('python3')
  let g:pymode_syntax_highlight_self = g:pymode_syntax_all
  let g:pymode_quickfix_minheight = 3
  let g:pymode_quickfix_maxheight = 3
- let g:python_check_syntax = 0                                     " disalbe Check python script syntax on every save
- let g:pymode_lint_on_write = 0                                    " disalbe on save checking
+ let g:python_check_syntax = 0                                     " disable Check python script syntax on every save
+ let g:pymode_lint_on_write = 0                                    " disable on save checking
  " let g:pymode_rope_regenerate_on_write = 0
  let g:pymode_lint_unmodified = 1
  let g:pymode_indent = 1
 endif
 
-" ====================================== For Inteface =====================================
+" ====================================== for interface =====================================
 if has('gui_running')
   set go=                                                           " Hide everything (go = guioptions)
   set cpoptions+=n
@@ -245,7 +273,6 @@ endif
 
 if has('gui_running') || 'xterm-256color' == $TERM
   set background=dark
-  let psc_style='cool'
   " let g:solarized_termcolors=256
   colorscheme solarized
   " colorscheme marslo
@@ -259,10 +286,9 @@ endif
 
 nmap <leader>v :e ~/.vimrc<CR>
 set ttyfast                                                       " Enable fast terminal connection.
-set clipboard+=unnamed                                            " Copy the content to system clipboard by using y/p
+set clipboard+=unnamed                                            " copy the content to system clipboard by using y/p
 set clipboard+=unnamedplus
 
-set ttyfast                                                       " Enable fast terminal connection.
 set iskeyword-=.
 set autochdir
 set fileencodings=utf-8,ucs-bom,gbk,cp936,gb2312,gb18030            " Code Format
@@ -276,7 +302,7 @@ set nobackup noswapfile nowritebackup noundofile noendofline
 set number                                                          " Number: line number
 set report=0
 set autoread                                                        " Set auto read when a file is changed by outside
-set showmatch                                                       " Show matching bracets (shortly jump to the other bracets)
+set showmatch                                                       " Show matching bracts (shortly jump to the other bracts)
 set matchtime=1                                                     " The shortly time
 set tabstop=2                                                       " Tab width
 set softtabstop=2                                                   " Width for backspace
@@ -284,7 +310,7 @@ set shiftwidth=2                                                    " The tab wi
 set autoindent smartindent expandtab
 set cindent
 set cinoptions=(0,u0,U0
-set smarttab                                                        " Smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
+set smarttab                                                        " smarttab: the width of <Tab> in first line would refer to 'shiftwidth' parameter
 set linebreak
 set modifiable
 set write
@@ -312,7 +338,7 @@ set foldenable                                                      " Enable Fol
 set foldcolumn=1
 set foldexpr=1                                                      " Shown line number after fold
 set foldlevel=100                                                   " Not fold while VIM set up
-set shortmess+=filmnrxoOtT                                          " Abbrev. of messages (avoids 'hit enter')
+set shortmess+=filmnrxoOtTc                                         " Abbrev. of messages (avoids 'hit enter')
 set viewoptions=folds
 set backspace=indent,eol,start                                      " Make backspace h, l, etc wrap to
 set whichwrap+=<,>,h,l
@@ -324,7 +350,7 @@ set formatoptions+=rnmMB                                            " Remove the
 set matchpairs+=<:>
 " set autowrite
 if has('cmdline_info')
-  set ruler                                                         " ruler: Show Line and colum number
+  set ruler                                                         " ruler: Show Line and column number
   set showcmd                                                       " Show (partial) command in status line
 endif
 if has('statusline')
@@ -337,18 +363,6 @@ endif
 " set binary
 set exrc
 set secure
-
-" spell
-set spellcapcheck=1
-" set spellcamelcase=1
-" Ignore CamelCase words when spell checking
-fun! IgnoreCamelCaseSpell()
-  syn match CamelCase /\<[A-Z][a-z]\+[A-Z].\{-}\>/ contains=@NoSpell transparent
-  syn match mixedCase /\<[a-z]\+[A-Z].\{-}\>/ contains=@NoSpell transparent
-  syn cluster Spell add=CamelCase
-  syn cluster Spell add=mixedCase
-endfun
-autocmd BufRead,BufNewFile * :call IgnoreCamelCaseSpell()
 
 if has('persistent_undo')
   set noundofile
@@ -419,14 +433,15 @@ nnoremap <leader>zil :g/^/ s//\=line('.').' '/<CR>    " Insert line number
 nnoremap <leader>zcm :%s/<C-v><CR>/\r/g<CR>           " Convert  to new line
 nnoremap <leader>zwl :%s///gn<CR>                     " Show the matches numbers (wc -l)
 nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>            " Delete 
-nnoremap <leader>zdb :%s/\s\+$//<CR>                  " Delete blank tail
+nnoremap <leader>zdb :%s/\s\+$//<CR>                  " Delete trailing space
 nnoremap <leader>zbl :g/^\s*$/d<CR>                   " Delete blank line
 nnoremap <leader>zd2 :%s/​//g<CR>                " Delete <200b>
 nnoremap <leader>zdd :%s/ / /g<CR>                    " Delete   (dot)
 nnoremap <leader>zds :%s/^<span.*span>//g<CR>         " Delete span tag
 nnoremap <leader>zdi :%s/^\s\+//<CR>                  " Delete indent spaces
 nnoremap <leader>zid i•<ESC>                          " Insert •
-nnoremap <leader>cr 0yt=A<C-r>=<C-r>"<CR><Esc>        " Cacular expr
+nnoremap <leader>cr 0yt=a<c-r>=<c-r>"<cr><esc>        " cacular expr
+nnoremap <leader>* *<C-O>:%s///gn<CR>                 " cacular expr
 
 if version > 703
   " autocmd FocusLost * set norelativenumber
@@ -443,11 +458,30 @@ iabbrev <leader>/* /*********************************
 iabbrev <leader>*/ *********************************/
 iabbrev <leader>#- #------------------
 
+" spell
+" set spellcamelcase=1
+" ignore CamelCase words when spell checking
+fun! IgnoreSpells()
+  syntax match Url "\w\+:\/\/[:/?#[\]@!$&'()*+,;=0-9[:lower:][:upper:]_\-.~]\+" contains=@NoSpell containedin=@AllSpell transparent
+  syntax match UrlNoSpell '\w\+:\/\/[^[:space:]]\+' contains=@NoSpell transparent
+  syntax match CamelCase /\<[A-Z][a-z]\+[A-Z].\{-}\>/ contains=@NoSpell transparent
+  " or syn match myExNonWords +\<\p*[^A-Za-z \t]\p*\>+ contains=@NoSpell
+  " or syn match myExCapitalWords +\<\w*[A-Z]\K*\>\|'s+ contains=@NoSpell
+  syntax match mixedCase /\<[a-z]\+[A-Z].\{-}\>/ contains=@NoSpell transparent
+  syntax cluster Spell add=Url
+  syntax cluster Spell add=UrlNoSpell
+  syntax cluster Spell add=CamelCase
+  syntax cluster Spell add=mixedCase
+endfun
+autocmd BufRead,BufNewFile * :call IgnoreSpells()
+" ignore capital check
+set spellcapcheck=
+
 " ====================================== For Plugins =====================================
 let g:auto_save = 0                                                 " enable AutoSave on Vim startup
 
 let g:ctrlp_map = '<c-p>'                                           " CtrlP
-let g:ctrlp_working_path_mode = 'ra'                                " Search parents as well (stop searching sartly)
+let g:ctrlp_working_path_mode = 'ra'                                " Search parents as well (stop searching safety)
 let g:ctrlp_max_height = 8
 let g:ctrlp_max_depth = 100
 let g:ctrl_root_makers = ['.ctrlp']                                 " Stop search if these files present
@@ -581,6 +615,8 @@ let g:vmt_cycle_list_item_markers = 0
 noremap <Leader>tb :TableModeToggle<CR>
 let g:table_mode_corner='|'
 let g:table_mode_header_fillchar='-'
+let g:table_mode_corner = "|"
+let g:table_mode_align_char = ":"
 " let g:table_mode_corner_corner='+'
 function! s:isAtStartOfLine(mapping)
   let text_before_cursor = getline('.')[0 : col('.')-1]
@@ -588,7 +624,6 @@ function! s:isAtStartOfLine(mapping)
   let comment_pattern = '\V' . escape(substitute(&l:commentstring, '%s.*$', '', ''), '\')
   return (text_before_cursor =~? '^' . ('\v(' . comment_pattern . '\v)?') . '\s*\v' . mapping_pattern . '\v$')
 endfunction
-
 inoreabbrev <expr> <bar><bar>
           \ <SID>isAtStartOfLine('\|\|') ?
           \ '<c-o>:TableModeEnable<cr><bar><space><bar><left><left>' : '<bar><bar>'
@@ -596,7 +631,7 @@ inoreabbrev <expr> __
           \ <SID>isAtStartOfLine('__') ?
           \ '<c-o>:silent! TableModeDisable<cr>' : '__'
 
-" let g:tabular_loaded = 0
+" let g:tabular_loaded = 1
 if exists(":Tabularize")
   nmap <Leader>a= :Tabularize /=<CR>
   vmap <Leader>a= :Tabularize /=<CR>
@@ -614,18 +649,34 @@ if exists(":Tabularize")
       call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
     endif
   endfunction
+  " command! -nargs=1 First exec 'Tabularize /^[^' . escape(<q-args>, '\^$.[?*~') . ']*\zs' . escape(<q-args>, '\^$.[?*~')
 endif
 
+"" command! -nargs=1 -range TabFirst exec <line1> . ',' . <line2> . 'Tabularize /^[^' . escape(<q-args>, '\^$.[?*~') . ']*\zs' . escape(<q-args>, '\^$.[?*~')
+"" augroup CustomTabularize
+""   autocmd!
+""   " https://github.com/jwhitley/vimrc/blob/master/.vimrc
+""   " autocmd VimEnter * if exists(":Tabularize") | exe ":AddTabularPattern! bundles /[^ ]\\+\\//l1r0" | endif
+""   " add in  plugin/TabularMaps.vim
+""   autocmd VimEnter * if exists(":Tabularize") | exe ":AddTabularPattern 1,    /^[^,]*\zs,/r1c1l0" | endif
+""   autocmd VimEnter * if exists(":Tabularize") | exe ":AddTabularPattern 1=    /^[^=]*\zs=" | endif
+""   autocmd VimEnter * if exists(":Tabularize") | exe ":AddTabularPattern 1==   /^[^=]*\zs=/r0c0l0" | endif
+"" augroup END
+
+" git
+" nnoremap <leader>mp :silent exec '! git mp'<CR>
+nnoremap <leader>mp :! git mp<CR>
+
 " fugitive
-nnoremap <Leader>ga :Git add %:p<CR><CR>
-nnoremap <Leader>gs :Gstatus<CR>
-nnoremap <leader>gl :silent! Glog<CR>:bot copen<CR>
-nnoremap <leader>gp :Ggrep<Space>
-nnoremap <leader>gb :Git branch<Space>
-nnoremap <leader>go :Git checkout<Space>
-nnoremap <leader>gc :Git commit -am ""<Left>
-command! -bar -nargs=* Gpull execute 'Git pull'
-command! -bar -nargs=* Gpush execute 'Git push'
+" nnoremap <Leader>ga :Git add %:p<CR><CR>
+" nnoremap <Leader>gs :Gstatus<CR>
+" nnoremap <leader>gl :silent! Glog<CR>:bot copen<CR>
+" nnoremap <leader>gp :Ggrep<Space>
+" nnoremap <leader>gb :Git branch<Space>
+" nnoremap <leader>go :Git checkout<Space>
+" nnoremap <leader>gc :Git commit -am ""<Left>
+" command! -bar -nargs=* Gpull execute 'Git pull'
+" command! -bar -nargs=* Gpush execute 'Git push'
 
 " gitgutter
 let g:gitgutter_git_executable = '/usr/local/bin/git'
@@ -648,18 +699,14 @@ let g:signify_vcs_list = [ 'git' ]
 
 " tabnine-vim
 " if index(['vim'], &filetype) == -1
-" let g:loaded_youcompleteme = 1
+  " let g:loaded_youcompleteme = 1
+" endif
 " if !(&filetype == 'vim')
   " let g:loaded_youcompleteme = 1
 " endif
 
 " " let b:ycm_largefile=1
 " " let g:ycm_disable_for_files_larger_than_kb = 1000
-" let g:ycm_filetype_blacklist = {
-"       \ 'vim' : 1 ,
-"       \ 'vimshell': 1 ,
-"       \ 'vimwiki': 1,
-"       \ }
 " let g:ycm_filetype_specific_completion_to_disable = {
 "       \ 'gitcommit': 1
 "       \ }
@@ -677,7 +724,13 @@ let g:signify_vcs_list = [ 'git' ]
 "   " \   'erlang': [':'],
 "   " \ }
 " let g:ycm_python_binary_path = '/usr/local/opt/python/libexec/bin/python'
-" let g:ycm_min_num_of_chars_for_completion = 2
+
+if &filetype ==# 'vim'
+  let g:loaded_youcompleteme = 0
+endif
+let g:ycm_filetype_blacklist = { 'vim':0  }
+let g:ycm_min_num_of_chars_for_completion = 2
+let g:ycm_python_binary_path='/usr/local/opt/python@3.9/libexec/bin/python'
 
 function! TriggerYCM()
   if g:loaded_youcompleteme == 1
@@ -687,6 +740,39 @@ function! TriggerYCM()
   endif
 endfunction
 nmap <C-y> :call TriggerYCM()<CR>
+
+" spell and grammas
+let g:grammarous#languagetool_cmd = 'languagetool'
+set thesaurus+=~/.vim/spell/dictionary/thesaurii.txt
+set thesaurus+=~/.vim/spell/dictionary/mthesaur.txt
+set dictionary=/usr/share/dict/words
+
+" fastFold
+nmap zuz <Plug>(FastFoldUpdate)
+xnoremap <silent> <leader>iz :<c-u>FastFoldUpdate<cr>]z<up>$v[z<down>^
+xnoremap <silent> <leader>az :<c-u>FastFoldUpdate<cr>]zV[z
+
+let g:fastfold_savehook = 1
+let g:fastfold_fold_command_suffixes =  ['x','X','a','A','o','O','c','C']
+let g:fastfold_fold_movement_commands = [']z', '[z', 'zj', 'zk']
+
+let g:markdown_folding = 1
+let g:rst_fold_enabled = 1
+let g:tex_fold_enabled = 1
+let g:vimsyn_folding = 'af'
+let g:xml_syntax_folding = 1
+let g:javaScript_fold = 1
+let g:sh_fold_enabled= 7
+let g:zsh_fold_enable = 1
+let g:ruby_fold = 1
+let g:perl_fold = 1
+let g:perl_fold_blocks = 1
+let g:r_syntax_folding = 1
+let g:rust_fold = 1
+let g:php_folding = 1
+let g:fortran_fold=1
+let g:clojure_fold = 1
+let g:baan_fold=1
 
 " call matchadd('ColorColumn', '\%81v', 100)
 " match OverLength /\%81v.\+/
@@ -712,12 +798,22 @@ if has("autocmd")
   autocmd syntax groovy,Jenkinsfile,python setlocal foldmethod=indent
   autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile normal zM
   autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile let g:indentLine_loaded=1
+  " https://vim.fandom.com/wiki/Syntax_folding_for_Java
+  autocmd FileType java setlocal foldmarker=/**,**/ foldmethod=marker foldcolumn=1
   autocmd FileType make,snippet,robot set tabstop=4 softtabstop=4 shiftwidth=4
   autocmd FileType javascript syntax clear jsFuncBlock                           " rainbow issue #2
+  " https://vim.fandom.com/wiki/Remove_unwanted_spaces
+  autocmd BufWritePre * :%s/\s\+$//e                                             " automatic remove trailing space
 
   augroup devops
     autocmd BufRead,BufNewFile * setfiletype jenkinsfile
-    autocmd FileType groovy,Jenkinsfile,json,sh,markdown  set tabstop=2 softtabstop=2 shiftwidth=2
+    autocmd FileType groovy,Jenkinsfile,json,sh,markdown set tabstop=2 softtabstop=2 shiftwidth=2
+    " git config files
+    autocmd BufNewFile,BufRead
+          \ *.git/config,.gitconfig,.gitmodules,gitconfig
+          \,~/.marslo/.gitalias
+          \ setfiletype gitconfig
+    autocmd FileType vim let g:ycm_confirm_extra_conf = 0
     " autocmd Syntax groovy,Jenkinsfile :IndentLinesEnable
     " autocmd BufReadPost Jenkinsfile set filetype=groovy syntax=groovy
     " autocmd BufNewFile,BufRead Jenkinsfile setf groovy
@@ -754,12 +850,27 @@ if has("autocmd")
     autocmd BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
   augroup END
 
+  " au FileType qf call AdjustWindowHeight(3, 10)
+  " function! AdjustWindowHeight(minheight, maxheight)
+    " exe max([min([line("$"), a:maxheight]), a:minheight]) . "wincmd _"
+  " endfunction
+
   " if $TERM_PROGRAM =~ "iTerm"
-      " let &t_SI = "\<Esc>]50;CursorShape=1\x7" " Vertical bar in insert mode
-      " let &t_EI = "\<Esc>]50;CursorShape=0\x7" " Block in normal mode
+    " let &t_SI = "\<Esc>]50;CursorShape=1\x7" " Vertical bar in insert mode
+    " let &t_EI = "\<Esc>]50;CursorShape=0\x7" " Block in normal mode
   " endif
 endif
 
+
+highlight Cursor         guifg=white      guibg=black
+highlight iCursor        guifg=white      guibg=steelblue
+highlight SpellBad       term=underline   cterm=underline     ctermbg=0
+highlight ExtraWhitespace ctermbg=red guibg=red
+set guicursor=n-v-c:block-Cursor
+set guicursor+=i:ver100-iCursor
+set guicursor+=n-v-c:blinkon0
+set guicursor+=i:blinkwait10
+
 " set list lcs=tab:\|\
 
-" vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab:filetype=vim
+" vim: tabstop=2 softtabstop=2 shiftwidth=2 expandtab filetype=vim
