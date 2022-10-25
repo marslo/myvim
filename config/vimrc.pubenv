@@ -41,7 +41,7 @@ Bundle 'Yggdroot/indentLine'
 Bundle 'kien/ctrlp.vim'
 Bundle 'sjl/gundo.vim'
 Bundle 'majutsushi/tagbar'
-Bundle 'dantezhu/authorinfo'
+Bundle 'marslo/authorinfo'
 Bundle 'Marslo/EnhCommentify.vim'
 " Bundle 'ervandew/supertab'
 Bundle 'Marslo/auto-pairs'
@@ -60,11 +60,13 @@ Bundle 'rhysd/accelerated-jk'
 " Bundle 'yonchu/accelerated-smooth-scroll'
 Bundle 'Marslo/MarsloFunc'
 Bundle 'LargeFile'
+Bundle 'Konfekt/FastFold'
 Bundle 'L9'
 Bundle 'godlygeek/tabular'
+Bundle 'dhruvasagar/vim-table-mode'
 Bundle 'Chiel92/vim-autoformat'
 " Python
-Bundle 'klen/python-mode'
+" Bundle 'python-mode/python-mode'
 Bundle 'python_fold'
 " Bundle 'kevinw/pyflakes-vim'
 Bundle 'pyflakes/pyflakes'
@@ -98,11 +100,13 @@ Bundle 'Marslo/MarsloVimOthers'
 Bundle 'plasticboy/vim-markdown.git'
 Bundle 'mzlogin/vim-markdown-toc'
 Bundle 'altercation/vim-colors-solarized'
+Bundle 'morhetz/gruvbox'
 " Bundle 'cakebaker/scss-syntax.vim'
 " Git
 Bundle 'tpope/vim-fugitive'
 " Groovy
-Bundle 'groovy.vim--Ruley'
+" Bundle 'groovy.vim--Ruley'
+Bundle 'modille/groovy.vim'
 " Bundle 'mwaisgold/groovy-vim-files'
 Bundle 'marslo/Jenkinsfile-vim-syntax'
 " For fun
@@ -136,13 +140,13 @@ endfunction
 command! GetVundle :call GetVundle()
 
 function! ToggleVerbose()
-    if !&verbose
-        set verbosefile=~/.log/vim/verbose.log
-        set verbose=15
-    else
-        set verbose=0
-        set verbosefile=
-    endif
+  if !&verbose
+    set verbosefile=~/.log/vim/verbose.log
+    set verbose=15
+  else
+    set verbose=0
+    set verbosefile=
+  endif
 endfunction
 command! ToggleVerbose :call ToggleVerbose()
 
@@ -231,6 +235,7 @@ endif
 if 'xterm-256color' == $TERM
   set t_Co=256
   colorscheme marslo
+  " colorscheme gruvbox
   let psc_style='cool'
 else
   set t_Co=8
@@ -255,7 +260,7 @@ set nobackup noswapfile nowritebackup noundofile noendofline
 set number                                                          " Number: line number
 set report=0
 set autoread                                                        " Set auto read when a file is changed by outside
-set showmatch                                                       " Show matching bracets (shortly jump to the other bracets)
+set showmatch                                                       " Show matching bracts (shortly jump to the other bracts)
 set matchtime=1                                                     " The shortly time
 set tabstop=2                                                       " Tab width
 set softtabstop=2                                                   " Width for backspace
@@ -263,7 +268,7 @@ set shiftwidth=2                                                    " The tab wi
 set autoindent smartindent expandtab
 set cindent
 set cinoptions=(0,u0,U0
-set smarttab                                                        " Smarttab: the width of <Tab> in first line would refer to 'Shiftwidth' parameter
+set smarttab                                                        " smarttab: the width of <Tab> in first line would refer to 'shiftwidth' parameter
 set linebreak
 set modifiable
 set write
@@ -272,21 +277,23 @@ set magic                                                           " Regular Ex
 set linespace=0
 set wildmenu
 set wildmode=longest,list,full                                      " Completion mode that is used for the character
-set noerrorbells novisualbell                                       " Turn off error beep/flash
-set t_vb=
-set list listchars=tab:\ \ ,trail:·,extends:»,precedes:«,nbsp:·
+set noerrorbells novisualbell                                       " ┐ Turn off
+set t_vb=                                                           " ┘ error beep/flash
+set list
+set listchars=tab:\ \ ,trail:·,extends:»,precedes:«,nbsp:·
 set cursorline                                                      " Highlight the current line
 set virtualedit=onemore                                             " Allow for cursor beyond last character
 set scrolloff=3                                                     " Scroll settings
 set sidescroll=1
 set sidescrolloff=5
 set imcmdline                                                       " Fix context menu messing
+set complete+=kspell
 set completeopt=longest,menuone                                     " Supper Tab
 set foldenable                                                      " Enable Fold
 set foldcolumn=1
 set foldexpr=1                                                      " Shown line number after fold
 set foldlevel=100                                                   " Not fold while VIM set up
-set shortmess+=filmnrxoOtT                                          " Abbrev. of messages (avoids 'hit enter')
+set shortmess+=filmnrxoOtTc                                         " Abbrev. of messages (avoids 'hit enter')
 set viewoptions=folds
 set backspace=indent,eol,start                                      " Make backspace h, l, etc wrap to
 set whichwrap+=<,>,h,l
@@ -298,17 +305,19 @@ set formatoptions+=rnmMB                                            " Remove the
 set matchpairs+=<:>
 " set autowrite
 if has('cmdline_info')
-  set ruler                                                         " ruler: Show Line and colum number
-  set showcmd                                                     " Show (partial) command in status line
+  set ruler                                                         " ruler: Show Line and column number
+  set showcmd                                                       " Show (partial) command in status line
 endif
 if has('statusline')
   set laststatus=2                                                  " Set status bar
   set statusline=%#User2#%m%r%*\ %F\ %y,%{&fileformat}
-  " set statusline+=\ %{fugitive#statusline()}
+  " set statusline+=\ %{FugitiveStatusline()}                       " set statusline+=\ %{fugitive#statusline()}
   set statusline+=%=\ %-{strftime(\"%H:%M\ %d/%m/%Y\")}\ %b[A],0x%B\ %c%V,%l/%L\ %1*--%n%%--%*\ %p%%\ |
 endif
 " set synmaxcol=128
 " set binary
+set exrc
+set secure
 " set cryptmethod=blowfish
 
 if has('persistent_undo')
@@ -328,6 +337,8 @@ nnoremap <leader>bp :bp<CR>
 nnoremap <leader>bn :bn<CR>
 nnoremap <C-k> <C-w>k
 nnoremap <C-j> <C-w>j
+nnoremap <C-l> <C-w>l
+nnoremap <C-h> <C-w>h
 nnoremap <C-a> <ESC>^
 inoremap <C-a> <ESC>I
 cnoremap <C-a> <Home>
@@ -357,6 +368,8 @@ cnoreabbrev QA! qa!
 cnoreabbrev WA wa
 cnoreabbrev WA! wa!
 cnoreabbrev NOH noh
+cnoreabbrev %Y %y
+cnoreabbrev %D %d
 cnoremap sudow!! w !sudo tee > /dev/null %
 cnoremap sw!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
 
@@ -365,19 +378,21 @@ inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
 inoremap <leader>fe <C-R>=expand("%:t")<CR>
 inoremap <leader>w <C-O>:w<CR>
 nnoremap <leader>G :%s///gn<CR>
-
 nnoremap <leader>idl :IndentLineEnable<CR>
-nnoremap <leader>zdb :%s/\s\+$//<CR>
-nnoremap <leader>zhs :%s/^\s\+//<CR>
-nnoremap <leader>zim :g/^/ s//\=line('.').' '/<CR>
-nnoremap <leader>zbl :g/^\s*$/d<CR>
-nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>
-nnoremap <leader>zcm :%s/<C-v><CR>/\r/g<CR>
-nnoremap <leader>zng :%s///gn<CR>
-nnoremap <leader>zbd :%s/​//g<CR>
-nnoremap <leader>zdd :%s/ / /g<CR>
-nnoremap <leader>zds :%s/^<span.*span>//g<CR>
-nnoremap <leader>zid i•<ESC>
+
+nnoremap <leader>zil :g/^/ s//\=line('.').' '/<CR>    " insert line number
+nnoremap <leader>zcm :%s/<C-v><CR>/\r/g<CR>           " convert to new line
+nnoremap <leader>zwl :%s///gn<CR>                     " show the matches numbers (wc -l)
+nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>            " [d]elete m()
+nnoremap <leader>zdb :%s/\s\+$//<CR>                  " [d]elete trailing space
+nnoremap <leader>zbl :g/^\s*$/d<CR>                   " [d]elete blank line
+nnoremap <leader>zd2 :%s/​//g<CR>                " [d]elete <200b>
+nnoremap <leader>zdd :%s/ / /g<CR>                    " [d]elete [d]ot(• )
+nnoremap <leader>zds :%s/^<span.*span>//g<CR>         " [d]elete [s]pan tag
+nnoremap <leader>zdi :%s/^\s\+//<CR>                  " [d]elete [i]ndent spaces
+nnoremap <leader>zid i•<ESC>                          " [i]nsert [d]ot(•)
+nnoremap <leader>cr 0yt=a<c-r>=<c-r>"<cr><esc>        " cacular expr
+nnoremap <leader>* *<C-O>:%s///gn<CR>                 " cacular expr
 
 if version > 703
   " autocmd FocusLost * set norelativenumber
@@ -534,15 +549,15 @@ let g:vim_markdown_frontmatter = 1
 let g:vim_markdown_json_frontmatter = 1
 
 " fugitive
-nnoremap <Leader>ga :Git add %:p<CR><CR>
-nnoremap <Leader>gs :Gstatus<CR>
-nnoremap <leader>gl :silent! Glog<CR>:bot copen<CR>
-nnoremap <leader>gp :Ggrep<Space>
-nnoremap <leader>gb :Git branch<Space>
-nnoremap <leader>go :Git checkout<Space>
-nnoremap <leader>gc :Git commit -am ""<Left>
-command! -bar -nargs=* Gpull execute 'Git pull'
-command! -bar -nargs=* Gpush execute 'Git push'
+" nnoremap <Leader>ga :Git add %:p<CR><CR>
+" nnoremap <Leader>gs :Gstatus<CR>
+" nnoremap <leader>gl :silent! Glog<CR>:bot copen<CR>
+" nnoremap <leader>gp :Ggrep<Space>
+" nnoremap <leader>gb :Git branch<Space>
+" nnoremap <leader>go :Git checkout<Space>
+" nnoremap <leader>gc :Git commit -am ""<Left>
+" command! -bar -nargs=* Gpull execute 'Git pull'
+" command! -bar -nargs=* Gpush execute 'Git push'
 
 " Snippet
 imap <C-J> <Plug>snipMateNextOrTrigger
@@ -551,6 +566,13 @@ imap <Tab> <Plug>snipMateNextOrTrigger
 
 match VendorPrefix /-\(moz\|webkit\|o\|ms\)-[a-zA-Z-]\+/            " For css3
 highlight CollumnLimit        guibg=NONE    guifg=#4e4e4e       ctermfg=240
+" fastFold
+nmap zuz <Plug>(FastFoldUpdate)
+xnoremap <silent> <leader>iz :<c-u>FastFoldUpdate<cr>]z<up>$v[z<down>^
+xnoremap <silent> <leader>az :<c-u>FastFoldUpdate<cr>]zV[z
+let g:fastfold_savehook = 1
+let g:fastfold_fold_command_suffixes =  ['x','X','a','A','o','O','c','C']
+let g:fastfold_fold_movement_commands = [']z', '[z', 'zj', 'zk']
 augroup collumnLimit
   autocmd!
   let collumnLimit = 80
@@ -575,7 +597,8 @@ if has("autocmd")
   autocmd FileType make,json,snippet,robot,markdown set tabstop=4 softtabstop=4 shiftwidth=4
   autocmd FileType javascript syntax clear jsFuncBlock                           " rainbow issue #2
   " https://vim.fandom.com/wiki/Remove_unwanted_spaces
-  autocmd BufWritePre * :%s/\s\+$//e                                             " automatic remove trailing space
+  autocmd BufWritePre * :%s/\s\+$//e | %s/\r$//e                                 " automatic remove trailing space
+  autocmd BufWritePre,BufWritePost,FileWritePre * :redraw!
   " autocmd Syntax groovy,Jenkinsfile :IndentLinesEnable
   " autocmd BufReadPost Jenkinsfile set filetype=groovy syntax=groovy
   " autocmd BufNewFile,BufRead Jenkinsfile setf groovy

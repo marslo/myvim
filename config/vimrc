@@ -5,7 +5,7 @@
 "         Email: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.24
-"    LastChange: 2020-09-04 17:15:02
+"    LastChange: 2022-10-25 17:38:03
 " =============================================================================
 
 set maxmempattern=5000
@@ -73,7 +73,7 @@ Bundle 'Yggdroot/indentLine'
 Bundle 'kien/ctrlp.vim'
 Bundle 'sjl/gundo.vim'
 Bundle 'majutsushi/tagbar'
-Bundle 'dantezhu/authorinfo'
+Bundle 'marslo/authorinfo'
 Bundle 'Marslo/EnhCommentify.vim'
 " Bundle 'ervandew/supertab'
 Bundle 'Marslo/auto-pairs'
@@ -93,6 +93,7 @@ Bundle 'rhysd/accelerated-jk'
 " Loading my function after vim start (reduce vim start time)
 Bundle 'Marslo/MarsloFunc'
 Bundle 'LargeFile'
+Bundle 'Konfekt/FastFold'
 Bundle 'L9'
 Bundle 'godlygeek/tabular'
 Bundle 'dhruvasagar/vim-table-mode'
@@ -102,6 +103,10 @@ Bundle 'rizzatti/dash.vim'
 Bundle 'airblade/vim-gitgutter'
 Bundle 'mbbill/undotree'
 Bundle 'codota/tabnine-vim'
+Bundle 'rhysd/vim-grammarous'
+Bundle 'dpelle/vim-LanguageTool'
+" markdown
+Bundle 'gabrielelana/vim-markdown'
 " Python
 " Bundle 'python-mode/python-mode'
 Bundle 'Vimjas/vim-python-pep8-indent'
@@ -145,9 +150,12 @@ Bundle 'gabrielelana/vim-markdown'
 " Bundle 'tpope/vim-markdown'
 " Bundle 'mzlogin/vim-markdown-toc'
 Bundle 'altercation/vim-colors-solarized'
+Bundle 'morhetz/gruvbox'
 " Bundle 'cakebaker/scss-syntax.vim'
 " Git
 Bundle 'tpope/vim-fugitive'
+Bundle 'zivyangll/git-blame.vim'
+Bundle 'APZelos/blamer.nvim'
 " Groovy
 Bundle 'modille/groovy.vim'
 Bundle 'marslo/Jenkinsfile-vim-syntax'
@@ -364,8 +372,9 @@ endif
 if has('gui_running') || 'xterm-256color' == $TERM
   set background=dark
   " let g:solarized_termcolors=256
-  colorscheme solarized
+  " colorscheme solarized
   " colorscheme marslo
+  colorscheme gruvbox
   let psc_style='cool'
 else
   set t_Co=8
@@ -542,7 +551,7 @@ nnoremap <leader>idl :IndentLineEnable<CR>
 nnoremap <leader>zil :g/^/ s//\=line('.').' '/<CR>    " Insert line number
 nnoremap <leader>zcm :%s/<C-v><CR>/\r/g<CR>           " Convert  to new line
 nnoremap <leader>zwl :%s///gn<CR>                     " Show the matches numbers (wc -l)
-nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>            " Delete 
+nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>            " Delete
 nnoremap <leader>zdb :%s/\s\+$//<CR>                  " Delete trailing space
 nnoremap <leader>zbl :g/^\s*$/d<CR>                   " Delete blank line
 nnoremap <leader>zd2 :%s/​//g<CR>                " Delete <200b>
@@ -647,7 +656,8 @@ let g:EnhCommentifyUseSyntax='Yes'
 map <leader>aid :AuthorInfoDetect<CR>
 let g:vimrc_author='marslo'
 let g:vimrc_email='marslo.jiao@gmail.com'
-au BufWritePre, FileWritePre * :AuthorInfoDetect<CR>
+" autocmd BufWritePre, FileWritePre * :AuthorInfoDetect
+" autocmd BufWritePre * :AuthorInfoDetect
 
 let MRU_Auto_Close = 1                                              " Most Recently Used(MRU)
 let MRU_Max_Entries = 10
@@ -739,18 +749,18 @@ nnoremap <Leader>cc :let &cole=(&cole == 2) ? 0 : 2 <bar> echo 'conceallevel ' .
 let g:markdown_enable_spell_checking = 0
 let g:markdown_enable_input_abbreviations = 0
 let g:markdown_enable_conceal = 0
-hi markdownItalic guifg=gray25 gui=underline
-" hi MarkdownHeadingDelimiter gui=bold guifg=gray25
-" hi htmlSpecialChar guifg=black
-" hi markdownBold gui=bold guifg=gray25
-" hi markdownUrl guifg=#2fb3a6
-" hi markdownAutomaticLink guifg=#2fb3a6
-" hi markdownLinkText guifg=#317849
-" hi markdownUrlTitle guifg=#317849
-" hi markdownBlockquote guifg=#317849 gui=bold
-" hi markdownId guifg=#2fb3a6
-" hi markdownIdDeclaration guifg=#317849 gui=bold
-" hi markdownListMarker guifg=#317849
+hi markdownItalic             guifg=gray25    gui=underline
+" hi MarkdownHeadingDelimiter gui=bold        guifg=gray25
+" hi htmlSpecialChar          guifg=black
+" hi markdownBold             gui=bold        guifg=gray25
+" hi markdownUrl              guifg=#2fb3a6
+" hi markdownAutomaticLink    guifg=#2fb3a6
+" hi markdownLinkText         guifg=#317849
+" hi markdownUrlTitle         guifg=#317849
+" hi markdownBlockquote       guifg=#317849   gui=bold
+" hi markdownId               guifg=#2fb3a6
+" hi markdownIdDeclaration    guifg=#317849   gui=bold
+" hi markdownListMarker       guifg=#317849
 
 " for tpope vim-markdown
 " let g:markdown_fenced_languages = ['html', 'python', 'bash=sh']
@@ -815,6 +825,15 @@ endif
 " git
 " nnoremap <leader>mp :silent exec '! git mp'<CR>
 nnoremap <leader>mp :! git mp<CR>
+nnoremap <Leader>cgb :<C-u>call gitblame#echo()<CR>
+" APZelos/blamer.nvim
+nnoremap <Leader>tgb :BlamerToggle<CR>
+let g:blamer_enabled = 0
+let g:blamer_delay = 100
+let g:blamer_show_in_visual_modes = 0
+let g:blamer_show_in_insert_modes = 0
+let g:blamer_prefix = ' » '
+let g:blamer_relative_time = 1
 
 " fugitive
 " nnoremap <Leader>ga :Git add %:p<CR><CR>
@@ -952,7 +971,8 @@ if has("autocmd")
   autocmd FileType make,snippet,robot set tabstop=4 softtabstop=4 shiftwidth=4
   autocmd FileType javascript syntax clear jsFuncBlock                           " rainbow issue #2
   " https://vim.fandom.com/wiki/Remove_unwanted_spaces
-  autocmd BufWritePre * :%s/\s\+$//e                                             " automatic remove trailing space
+  autocmd BufWritePre * :%s/\s\+$//e | %s/\r$//e                                 " automatic remove trailing space
+  autocmd BufWritePre,BufWritePost,FileWritePre * :redraw!
 
   augroup devops
     autocmd BufRead,BufNewFile * setfiletype jenkinsfile
@@ -1005,16 +1025,15 @@ if has("autocmd")
   " endfunction
 
   " if $TERM_PROGRAM =~ "iTerm"
-      " let &t_SI = "\<Esc>]50;CursorShape=1\x7" " Vertical bar in insert mode
-      " let &t_EI = "\<Esc>]50;CursorShape=0\x7" " Block in normal mode
+    " let &t_SI = "\<Esc>]50;CursorShape=1\x7" " Vertical bar in insert mode
+    " let &t_EI = "\<Esc>]50;CursorShape=0\x7" " Block in normal mode
   " endif
 endif
 
-
-highlight Cursor         guifg=white      guibg=black
-highlight iCursor        guifg=white      guibg=steelblue
-highlight SpellBad       term=underline   cterm=underline     ctermbg=0
-highlight ExtraWhitespace ctermbg=red guibg=red
+highlight Cursor          guifg=white      guibg=black
+highlight iCursor         guifg=white      guibg=steelblue
+highlight SpellBad        term=underline   cterm=underline     ctermbg=0
+highlight ExtraWhitespace ctermbg=red      guibg=red
 set guicursor=n-v-c:block-Cursor
 set guicursor+=i:ver100-iCursor
 set guicursor+=n-v-c:blinkon0
