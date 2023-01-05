@@ -548,17 +548,17 @@ nnoremap <leader>G :%s///gn<CR>
 " vnoremap > >gv
 nnoremap <leader>idl :IndentLineEnable<CR>
 
-nnoremap <leader>zil :g/^/ s//\=line('.').' '/<CR>    " Insert line number
-nnoremap <leader>zcm :%s/<C-v><CR>/\r/g<CR>           " Convert  to new line
-nnoremap <leader>zwl :%s///gn<CR>                     " Show the matches numbers (wc -l)
-nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>            " Delete
-nnoremap <leader>zdb :%s/\s\+$//<CR>                  " Delete trailing space
-nnoremap <leader>zbl :g/^\s*$/d<CR>                   " Delete blank line
-nnoremap <leader>zd2 :%s/​//g<CR>                " Delete <200b>
-nnoremap <leader>zdd :%s/ / /g<CR>                    " Delete   (dot)
-nnoremap <leader>zds :%s/^<span.*span>//g<CR>         " Delete span tag
-nnoremap <leader>zdi :%s/^\s\+//<CR>                  " Delete indent spaces
-nnoremap <leader>zid i•<ESC>                          " Insert •
+nnoremap <leader>zil :g/^/ s//\=line('.').' '/<CR>    " [i]nsert [l]ine number
+nnoremap <leader>zcm :%s/<C-v><CR>/\r/g<CR>           " [c]onvert [m] to new line
+nnoremap <leader>zwl :%s///gn<CR>                     " show the matches numbers ( [w]c -[l] )
+nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>            " [d]elete [m]()
+nnoremap <leader>zdb :%s/\s\+$//<CR>                  " [d]elete trailing space ( [b]lank )
+nnoremap <leader>zbl :g/^\s*$/d<CR>                   " [d]elete [b]lank [l]ine
+nnoremap <leader>zd2 :%s/​//g<CR>                " [d]elete <200b>
+nnoremap <leader>zdd :%s/ / /g<CR>                    " [d]elete [d]ot(• )
+nnoremap <leader>zds :%s/^<span.*span>//g<CR>         " [d]elete [s]pan tag
+nnoremap <leader>zdi :%s/^\s\+//<CR>                  " [d]elete [i]ndent spaces
+nnoremap <leader>zid i•<ESC>                          " [i]nsert [d]ot(•)
 nnoremap <leader>cr 0yt=a<c-r>=<c-r>"<cr><esc>        " cacular expr
 nnoremap <leader>* *<C-O>:%s///gn<CR>                 " cacular expr
 
@@ -873,6 +873,7 @@ let g:signify_vcs_list = [ 'git' ]
 " if !(&filetype == 'vim')
   " let g:loaded_youcompleteme = 1
 " endif
+
 " " let b:ycm_largefile=1
 " " let g:ycm_disable_for_files_larger_than_kb = 1000
 " let g:ycm_filetype_specific_completion_to_disable = {
@@ -966,13 +967,16 @@ if has("autocmd")
   autocmd syntax groovy,Jenkinsfile,python setlocal foldmethod=indent
   autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile normal zM
   autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile let g:indentLine_loaded=1
+  let g:indentLine_loaded=1
   " https://vim.fandom.com/wiki/Syntax_folding_for_Java
   autocmd FileType java setlocal foldmarker=/**,**/ foldmethod=marker foldcolumn=1
   autocmd FileType make,snippet,robot set tabstop=4 softtabstop=4 shiftwidth=4
   autocmd FileType javascript syntax clear jsFuncBlock                           " rainbow issue #2
   " https://vim.fandom.com/wiki/Remove_unwanted_spaces
   autocmd BufWritePre * :%s/\s\+$//e | %s/\r$//e                                 " automatic remove trailing space
+  autocmd BufWritePre * :retab!                                                  " automatic retab
   autocmd BufWritePre,BufWritePost,FileWritePre * :redraw!
+  autocmd BufWritePost *.sh silent :redraw!                                      " automatic redraw for shellcheck
 
   augroup devops
     autocmd BufRead,BufNewFile * setfiletype jenkinsfile

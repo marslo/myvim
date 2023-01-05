@@ -434,12 +434,12 @@ inoremap <leader>w <C-O>:w<CR>
 nnoremap <leader>G :%s///gn<CR>
 nnoremap <leader>idl :IndentLineEnable<CR>
 
-nnoremap <leader>zil :g/^/ s//\=line('.').' '/<CR>    " insert line number
-nnoremap <leader>zcm :%s/<C-v><CR>/\r/g<CR>           " convert  to new line
-nnoremap <leader>zwl :%s///gn<CR>                     " show the matches numbers (wc -l)
-nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>            " [d]elete m()
-nnoremap <leader>zdb :%s/\s\+$//<CR>                  " [d]elete trailing space
-nnoremap <leader>zbl :g/^\s*$/d<CR>                   " [d]elete blank line
+nnoremap <leader>zil :g/^/ s//\=line('.').' '/<CR>    " [i]nsert [l]ine number
+nnoremap <leader>zcm :%s/<C-v><CR>/\r/g<CR>           " [c]onvert [m] to new line
+nnoremap <leader>zwl :%s///gn<CR>                     " show the matches numbers ( [w]c -[l] )
+nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>            " [d]elete [m]()
+nnoremap <leader>zdb :%s/\s\+$//<CR>                  " [d]elete trailing space ( [b]lank )
+nnoremap <leader>zbl :g/^\s*$/d<CR>                   " [d]elete [b]lank [l]ine
 nnoremap <leader>zd2 :%s/​//g<CR>                " [d]elete <200b>
 nnoremap <leader>zdd :%s/ / /g<CR>                    " [d]elete [d]ot(• )
 nnoremap <leader>zds :%s/^<span.*span>//g<CR>         " [d]elete [s]pan tag
@@ -813,13 +813,16 @@ if has("autocmd")
   autocmd syntax groovy,Jenkinsfile,python setlocal foldmethod=indent
   autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile normal zM
   autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile let g:indentLine_loaded=1
+  let g:indentLine_loaded=1
   " https://vim.fandom.com/wiki/Syntax_folding_for_Java
   autocmd FileType java setlocal foldmarker=/**,**/ foldmethod=marker foldcolumn=1
   autocmd FileType make,snippet,robot set tabstop=4 softtabstop=4 shiftwidth=4
   autocmd FileType javascript syntax clear jsFuncBlock                           " rainbow issue #2
   " https://vim.fandom.com/wiki/Remove_unwanted_spaces
   autocmd BufWritePre * :%s/\s\+$//e | %s/\r$//e                                 " automatic remove trailing space
+  autocmd BufWritePre * :retab!                                                  " automatic retab
   autocmd BufWritePre,BufWritePost,FileWritePre * :redraw!
+  autocmd BufWritePost *.sh silent :redraw!                                      " automatic redraw for shellcheck
 
   augroup devops
     autocmd BufRead,BufNewFile * setfiletype jenkinsfile
@@ -885,7 +888,5 @@ set guicursor=n-v-c:block-Cursor
 set guicursor+=i:ver100-iCursor
 set guicursor+=n-v-c:blinkon0
 set guicursor+=i:blinkwait10
-
-" set list lcs=tab:\|\
 
 " vim: tabstop=2 softtabstop=2 shiftwidth=2 expandtab filetype=vim
