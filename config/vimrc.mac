@@ -12,6 +12,7 @@ set history=1000
 set diffopt=filler,context:3
 set spell spelllang=en_us
 set spellfile=~/.vim/spell/en.utf-8.add
+set lazyredraw
 runtime macros/matchit.vim
 
 set fileformat=unix
@@ -142,6 +143,11 @@ function! GetVundle()                                                   " GetVun
 endfunction
 command! GetVundle :call GetVundle()
 
+function! DoRedraw()
+  execute "silent redraw!"
+endfunction
+nnoremap <M-l> :call DoRedraw()<CR>
+map <D-l> :call DoRedraw()<CR>
 if has('unix') || has('macunix')
   if empty(glob('~/.vim/bundle/Vundle.vim')) || empty(glob($VIM . '\bundle\Vundle.vim'))
     execute 'silent exec "GetVundle"'
@@ -173,6 +179,17 @@ function! ToggleWindowHorizontalVerticalSplit()
   endif
 endfunction
 nnoremap <silent> <leader>wt :call ToggleWindowHorizontalVerticalSplit()<cr>
+" Reverse the lines of the whole file or a visually highlighted block.
+    " :Rev is a shorter prefix you can use.
+    " Adapted from http://tech.groups.yahoo.com/group/vim/message/34305
+    " reference : https://superuser.com/a/387869/112396
+command! -nargs=0 -bar -range=% Reverse
+    \       let save_mark_t = getpos("'t")
+    \<bar>      <line2>kt
+    \<bar>      exe "<line1>,<line2>g/^/m't"
+    \<bar>  call setpos("'t", save_mark_t)
+nmap <Leader>r :Reverse<CR>
+xmap <Leader>r :Reverse<CR>
 
 function! GetFiletypes()
   " https://vi.stackexchange.com/a/5782/7389
@@ -426,6 +443,7 @@ cnoremap sudow!! w !sudo tee > /dev/null %
 cnoremap sw!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
 cnoremap ls ls<cr>:b<space>
 cnoremap lsd ls<cr>:bd<space>
+cnoremap rd redraw!
 
 inoremap <leader>tt <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
 inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
@@ -821,8 +839,16 @@ if has("autocmd")
   " https://vim.fandom.com/wiki/Remove_unwanted_spaces
   autocmd BufWritePre * :%s/\s\+$//e | %s/\r$//e                                 " automatic remove trailing space
   autocmd BufWritePre * :retab!                                                  " automatic retab
-  autocmd BufWritePre,BufWritePost,FileWritePre * :redraw!
-  autocmd BufWritePost *.sh silent :redraw!                                      " automatic redraw for shellcheck
+  " autocmd BufWritePre,BufWritePost,FileWritePre,FileWritePost * silent :redraw!
+  autocmd BufWritePre *.html :normal gg=G
+  augroup shellStyle                                                             " automatic redraw for shellcheck
+    autocmd!
+    autocmd Syntax                   bash           set filetype=sh
+    autocmd FileType                 sh,bash,shell  call DoRedraw()
+    autocmd BufWritePre,BufWritePost *.sh           call DoRedraw()
+    autocmd BufWritePre              *.sh           silent :retab!               " automatic retab
+    " autocmd BufWritePost           *.sh           !chmod +x %
+  augroup END
 
   augroup devops
     autocmd BufRead,BufNewFile * setfiletype jenkinsfile
