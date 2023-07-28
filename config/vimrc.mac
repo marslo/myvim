@@ -108,6 +108,10 @@ Bundle 'marslo/Jenkinsfile-vim-syntax'
 " Bundle 'keith/cocoapods.vim'
 " dockerfile
 Bundle 'ekalinin/Dockerfile.vim'
+" yaml
+Bundle 'stephpy/vim-yaml'
+Bundle 'pedrohdz/vim-yaml-folds'
+Bundle 'dense-analysis/ale'
 " github page
 Bundle 'parkr/vim-jekyll'
 
@@ -148,6 +152,7 @@ function! DoRedraw()
 endfunction
 nnoremap <M-l> :call DoRedraw()<CR>
 map <D-l> :call DoRedraw()<CR>
+
 if has('unix') || has('macunix')
   if empty(glob('~/.vim/bundle/Vundle.vim')) || empty(glob($VIM . '\bundle\Vundle.vim'))
     execute 'silent exec "GetVundle"'
@@ -179,6 +184,7 @@ function! ToggleWindowHorizontalVerticalSplit()
   endif
 endfunction
 nnoremap <silent> <leader>wt :call ToggleWindowHorizontalVerticalSplit()<cr>
+
 " Reverse the lines of the whole file or a visually highlighted block.
     " :Rev is a shorter prefix you can use.
     " Adapted from http://tech.groups.yahoo.com/group/vim/message/34305
@@ -203,22 +209,22 @@ function! GetFiletypes()
   for rtp in rtps
     let syntax_dir = rtp . "/syntax"
     " Check to see if there is a syntax directory in this runtimepath.
-    if (isdirectory(syntax_dir))
+    if ( isdirectory(syntax_dir) )
       " Loop through each vimscript file in the syntax directory
-      for syntax_file in split(glob(syntax_dir . "/*.vim"), "\n")
+      for syntax_file in split( glob(syntax_dir . "/*.vim"), "\n" )
         " Add this file to the filetypes list with its everything
         " except its name removed.
-        call add(filetypes, fnamemodify(syntax_file, ":t:r"))
+        call add( filetypes, fnamemodify(syntax_file, ":t:r") )
       endfor
     endif
   endfor
 
   " This removes any duplicates and returns the resulting list.
   " NOTE: This might not be the best way to do this, suggestions are welcome.
-  return uniq(sort(filetypes))
+  return uniq( sort(filetypes) )
 endfunction
 
-if isdirectory(expand(bud . 'MarsloFunc'))
+if isdirectory( expand(bud . 'MarsloFunc') )
   command! GetVim :call marslofunc#GetVim()<CR>
   nmap cmd :call marslofunc#OpenCMD()<CR>
   nmap gf :call marslofunc#GotoFile()<CR>
@@ -249,7 +255,7 @@ endif
 let python_highlight_all = 1                                        " syntax-python
 
 " Python-mode configurations
-if isdirectory(expand(bud . 'python-mode')) || has('python3')
+if isdirectory( expand(bud . 'python-mode') ) || has('python3')
  nnoremap <leader>p :PymodeLint<CR>                                " Trigger PymodeLint by manual
  let g:pymode_python =  '/usr/local/bin/python3'
  let g:pymode = 1                                                  " 1: turn on python-mode plugin
@@ -636,6 +642,9 @@ hi markdownItalic             guifg=gray25    gui=underline
 let g:vmt_auto_update_on_save = 1
 let g:vmt_cycle_list_item_markers = 0
 
+let g:table_mode_verbose = 1
+let g:table_mode_always_active = 0
+let g:loaded_table_mode = 0
 noremap <Leader>tb :TableModeToggle<CR>
 let g:table_mode_corner='|'
 let g:table_mode_header_fillchar='-'
@@ -807,6 +816,15 @@ let g:fortran_fold=1
 let g:clojure_fold = 1
 let g:baan_fold=1
 
+" vim-yaml-folds
+set foldlevelstart=20
+" yamllint
+" brew install yamllint
+let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
+let g:ale_sign_error = '✘'
+let g:ale_sign_warning = '⚠'
+let g:ale_lint_on_text_changed = 'never'
+
 " call matchadd('ColorColumn', '\%81v', 100)
 " match OverLength /\%81v.\+/
 
@@ -831,16 +849,17 @@ if has("autocmd")
   autocmd syntax groovy,Jenkinsfile,python setlocal foldmethod=indent
   autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile normal zM
   autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile let g:indentLine_loaded=1
-  let g:indentLine_loaded=1
   " https://vim.fandom.com/wiki/Syntax_folding_for_Java
   autocmd FileType java setlocal foldmarker=/**,**/ foldmethod=marker foldcolumn=1
   autocmd FileType make,snippet,robot set tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd FileType yaml setlocal tabstop=2 softtabstop=2 shiftwidth=2
   autocmd FileType javascript syntax clear jsFuncBlock                           " rainbow issue #2
   " https://vim.fandom.com/wiki/Remove_unwanted_spaces
   autocmd BufWritePre * :%s/\s\+$//e | %s/\r$//e                                 " automatic remove trailing space
   autocmd BufWritePre * :retab!                                                  " automatic retab
   " autocmd BufWritePre,BufWritePost,FileWritePre,FileWritePost * silent :redraw!
   autocmd BufWritePre *.html :normal gg=G
+
   augroup shellStyle                                                             " automatic redraw for shellcheck
     autocmd!
     autocmd Syntax                   bash           set filetype=sh
