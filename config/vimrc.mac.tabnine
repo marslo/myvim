@@ -1,5 +1,5 @@
 " =============================================================================
-"      FileName: vimrc.mac
+"      FileName: .vimrc
 "        Author: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.24
@@ -73,7 +73,11 @@ Bundle 'codota/tabnine-vim'
 " Bundle 'wsdjeg/vim-fetch'
 Bundle 'rhysd/vim-grammarous'
 Bundle 'dpelle/vim-LanguageTool'
+" markdown
 Bundle 'gabrielelana/vim-markdown'
+" Bundle 'tpope/vim-markdown'
+" Bundle 'mzlogin/vim-markdown-toc'
+" Bundle 'junegunn/vim-easy-align'
 " Python
 " Bundle 'python-mode/python-mode'
 Bundle 'Vimjas/vim-python-pep8-indent'
@@ -114,6 +118,8 @@ Bundle 'pedrohdz/vim-yaml-folds'
 Bundle 'dense-analysis/ale'
 " github page
 Bundle 'parkr/vim-jekyll'
+" others
+" Bundle 'ianva/vim-youdao-translater'
 
 call vundle#end()
 call pathogen#infect()
@@ -708,18 +714,6 @@ let g:blamer_show_in_insert_modes = 0
 let g:blamer_prefix = ' » '
 let g:blamer_relative_time = 1
 
-" nnoremap <leader>mp :silent exec '! git mp'<CR>
-" fugitive
-" nnoremap <Leader>ga :Git add %:p<CR><CR>
-" nnoremap <Leader>gs :Gstatus<CR>
-" nnoremap <leader>gl :silent! Glog<CR>:bot copen<CR>
-" nnoremap <leader>gp :Ggrep<Space>
-" nnoremap <leader>gb :Git branch<Space>
-" nnoremap <leader>go :Git checkout<Space>
-" nnoremap <leader>gc :Git commit -am ""<Left>
-" command! -bar -nargs=* Gpull execute 'Git pull'
-" command! -bar -nargs=* Gpush execute 'Git push'
-
 " gitgutter
 let g:gitgutter_git_executable = '/usr/local/bin/git'
 let g:gitgutter_enabled = 1
@@ -914,15 +908,6 @@ if has("autocmd")
     autocmd BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
   augroup END
 
-  " au FileType qf call AdjustWindowHeight(3, 10)
-  " function! AdjustWindowHeight(minheight, maxheight)
-    " exe max([min([line("$"), a:maxheight]), a:minheight]) . "wincmd _"
-  " endfunction
-
-  " if $TERM_PROGRAM =~ "iTerm"
-    " let &t_SI = "\<Esc>]50;CursorShape=1\x7" " Vertical bar in insert mode
-    " let &t_EI = "\<Esc>]50;CursorShape=0\x7" " Block in normal mode
-  " endif
 endif
 
 highlight Cursor          guifg=white      guibg=black
