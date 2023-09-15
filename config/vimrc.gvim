@@ -1,5 +1,5 @@
 " =============================================================================
-"      FileName: vimrc.wsl
+"      FileName: vimrc
 "        Author: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.25
@@ -10,23 +10,41 @@ set maxmempattern=5000
 set nocompatible
 set history=1000
 set diffopt=filler,context:3
+set spell spelllang=en_us
+set spellfile=~/.vim/spell/en.utf-8.add
 set lazyredraw
 runtime macros/matchit.vim
 
+let vimrplugin_i386 = 1
 set fileformat=unix
-set nowrap                                                          " Wrap lines
-set viminfo=%,<800,'10,/50,:100,h,f0,n~/.vim/cache/.viminfo
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip
-set tags=tags
-
-if empty(glob('~/.vim/cache/'))
-  execute 'silent !mkdir -p ~/.vim/cache'
+set nowrap                                                          " wrap lines
+if has( 'win32' ) || has( 'win64' )
+  let skip_loading_mswin=1
+  source $VIMRUNTIME/vimrc_example.vim
+  source $VIMRUNTIME/mswin.vim
+  language messages utf-8                                           " at console
+  set viminfo=%,<800,'10,/50,:100,h,f0
+  set wildignore+=*\\tmp\\*,*.swp,*.zip,*.exe,*.rar
+  set tags=.\tags
+else
+  set viminfo=%,<800,'10,/50,:100,h,f0,n~/.vim/cache/.viminfo
+  set wildignore+=*/tmp/*,*.so,*.swp,*.zip
+  set tags=tags
 endif
-if empty(glob('~/.vim/undo/'))
-  execute 'silent !mkdir -p ~/.vim/undo'
+if has("multi_byte")
+  digraph oe 339
+elseif &encoding == "iso-8859-15"
+  digraph oe 189
 endif
 
-let bud=expand('~/.vim/bundle') . '/'
+" if empty(glob('~/.vim/cache/'))
+"   execute 'silent !mkdir -p ~/.vim/cache'
+" endif
+" if empty(glob('~/.vim/undo/'))
+"   execute 'silent !mkdir -p ~/.vim/undo'
+" endif
+
+let bud=expand( '~/.vim/bundle' ) . '/'
 let performance_mode = 1
 
 " /**************************************************************
@@ -63,15 +81,29 @@ Bundle 'marslo/snipmate.vim'
 Bundle 'marcWeber/vim-addon-mw-utils'
 " Bundle 'garbas/vim-snipmate'
 Bundle 'yegappan/mru'
+Bundle 'taglist.vim'
 Bundle 'grep.vim'
+Bundle 'bogado/file-line'
 Bundle 'vim-syntastic/syntastic'
+Bundle 'rhysd/accelerated-jk'
 Bundle 'Marslo/MarsloFunc'
 Bundle 'LargeFile'
+Bundle 'L9'
 Bundle 'vim-autoformat/vim-autoformat'
 Bundle 'mhinz/vim-signify'
+Bundle 'airblade/vim-gitgutter'
+Bundle 'mbbill/undotree'
+" Python
+Bundle 'python-mode/python-mode'
+Bundle 'python_fold'
+Bundle 'pyflakes/pyflakes'
+Bundle 'python_match.vim'
+Bundle 'Marslo/python-syntax'
+Bundle 'valloric/MatchTagAlways'
 " Colors and themes and syntax
 Bundle 'luochen1990/rainbow'
 Bundle 'txt.vim'
+Bundle 'hail2u/vim-css3-syntax'
 Bundle 'marslo/vim-coloresque'
 Bundle 'marslo/marslo.vim'
 Bundle 'marslo/MarsloVimOthers'
@@ -81,6 +113,7 @@ Bundle 'mzlogin/vim-markdown-toc'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'morhetz/gruvbox'
 " Groovy
+" Bundle 'groovy.vim--Ruley'
 Bundle 'modille/groovy.vim'
 Bundle 'marslo/Jenkinsfile-vim-syntax'
 " dockerfile
@@ -132,14 +165,8 @@ command! GetVundle :call GetVundle()
 function! DoRedraw()
   execute "silent redraw!"
 endfunction
-nnoremap <C-k> :call DoRedraw()<CR>
-map <C-k>      :call DoRedraw()<CR>
-
-if has( 'unix' ) || has( 'macunix' )
-  if empty( glob('~/.vim/bundle/Vundle.vim') ) || empty( glob($VIM . '\bundle\Vundle.vim') )
-    execute 'silent exec "GetVundle"'
-  endif
-endif
+nnoremap <M-l> :call DoRedraw()<CR>
+map <D-l>      :call DoRedraw()<CR>
 
 function! ToggleVerbose()
   if !&verbose
@@ -173,11 +200,20 @@ if isdirectory( expand(bud . 'MarsloFunc') )
   nmap gf :call marslofunc#GotoFile()<CR>
   xnoremap * :<C-u>call marslofunc#VSetSearch()<CR>/<C-R>=@/<CR><CR>
   xnoremap # :<C-u>call marslofunc#VSetSearch()<CR>?<C-R>=@/<CR><CR>
+  nmap <F12> :call marslofunc#UpdateTags()<CR>
+  nmap <C-F5> :call marslofunc#RunResult()<CR>
+  nmap <leader>ti :call marslofunc#callit()<CR>
+  if has('gui_running')
+    nnoremap <A--> :call marslofunc#FontSize_Reduce()<CR>
+    nnoremap <A-+> :call marslofunc#FontSize_Enlarge()<CR>
+  endif
 
   augroup resCur
     autocmd!
       autocmd BufWinEnter * call marslofunc#ResCur()
   augroup END
+  set foldtext=v:folddashes.substitute(getline(v:foldstart),'/\\*\\\|\\*/\\\|{{{\\d\\=','','g')
+  set foldtext=marslofund#MyFoldText()<CR>
 endif
 
 " twiddle case : https://vim.fandom.com/wiki/Switching_case_of_characters#Twiddle_case
@@ -193,18 +229,25 @@ function! TwiddleCase(str)
 endfunction
 vnoremap ~ y:call setreg('', TwiddleCase(@"), getregtype(''))<CR>gv""Pgv
 
-function LargeFile()
-  set eventignore    += FileType                                         " no syntax highlighting etc
-  setlocal bufhidden  = unload                                         " save memory when other file is viewed
-  setlocal buftype    = nowrite                                          " is read-only (write with :w new_filename)
-  setlocal undolevels = -1                                            " no undo possible
-  " display message
-  autocmd VimEnter *  echo "The file is larger than " . (g:LargeFile / 1024 / 1024) . " MB, so some options are changed (see .vimrc for details)."
+" spell
+" set spellcamelcase=1
+" ignore CamelCase words when spell checking
+function! IgnoreSpells()
+  syntax match Url "\w\+:\/\/[:/?#[\]@!$&'()*+,;=0-9[:lower:][:upper:]_\-.~]\+" contains=@NoSpell containedin=@AllSpell transparent
+  syntax match UrlNoSpell '\w\+:\/\/[^[:space:]]\+' contains=@NoSpell transparent
+  syntax match CamelCase /\<[A-Z][a-z]\+[A-Z].\{-}\>/ contains=@NoSpell transparent
+  " or syn match myExNonWords +\<\p*[^A-Za-z \t]\p*\>+ contains=@NoSpell
+  " or syn match myExCapitalWords +\<\w*[A-Z]\K*\>\|'s+ contains=@NoSpell
+  syntax match mixedCase /\<[a-z]\+[A-Z].\{-}\>/ contains=@NoSpell transparent
+  syntax cluster Spell add=Url
+  syntax cluster Spell add=UrlNoSpell
+  syntax cluster Spell add=CamelCase
+  syntax cluster Spell add=mixedCase
 endfunction
-let g:LargeFile = 1024 * 1024 * 10
-augroup LargeFile
-  autocmd BufReadPre * let f=getfsize(expand("<afile>")) | if f > g:LargeFile || f == -2 | call LargeFile() | endif
-augroup END
+autocmd BufRead,BufNewFile * :call IgnoreSpells()
+" ignore capital check
+set spellcapcheck=
+
 
 " /**************************************************************
 "                                                      _
@@ -219,7 +262,7 @@ augroup END
 " Programming configs for Python
 if has( "autocmd" )
   au FileType python syn keyword pythonDecorator print self
-  au FileType python set tabstop=2 softtabstop=2 shiftwidth=2
+  au FileType python set tabstop=4 softtabstop=4 shiftwidth=4
   au FileTYpe python set isk-=.
   " set textwidth=80
 endif
@@ -227,16 +270,16 @@ let python_highlight_all = 1                                        " syntax-pyt
 
 " Python-mode configurations
 if isdirectory( expand(bud . 'python-mode') ) || has('python3')
-  nnoremap <leader>p :PymodeLint<CR>                                " Trigger PymodeLint by manual
-  let g:pymode                            = 1                                                  " 1: turn on python-mode plugin
+  nnoremap <leader>p :PymodeLint<CR>                                          " trigger pymodelint by manual
+  let g:pymode                            = 1                                                            " 1: turn on python-mode plugin
   let g:pymode_syntax_all                 = 1
-  let g:pymode_warnings                   = 0                                         " turn off plugin's warnings
+  let g:pymode_warnings                   = 0                                 " turn off plugin's warnings
   let g:pymode_folding                    = 1
   let g:pymode_options_colorcolumn        = 1
   let g:pymode_trim_whitespaces           = 1                                 " trim unused white spaces on save
-  let g:pymode_lint                       = 1                                             " turn on code checking
+  let g:pymode_lint                       = 1                                 " turn on code checking
   let g:pymode_lint_checkers              = ['pyflakes', 'pep8', 'mccabe']
-  let g:pymode_lint_ignore                = "E111,E114,E501,W0611,E266"              " E501: long line; E111&E114: 4 spaces indent; E266: too many # for comments
+  let g:pymode_lint_ignore                = "E111,E114,E501,W0611,E266"       " E501: long line; E111&E114: 4 spaces indent; E266: too many # for comments
   let g:pymode_options                    = 0
   let g:pymode_rope                       = 0
   let g:pymode_indent                     = 0
@@ -264,11 +307,19 @@ endif
 if has('gui_running')
   set go=                                                           " hide everything (go = guioptions)
   set cpoptions+=n
-  set guifont=Conmic\ Mono:h26
-  " set guifont=Ubuntu\ Mono:h26
+  set guifont=Ubuntu\ Mono:h22
+  " set guifont=Comic\ Mono:h24:cANSI:qDRAFT
   " set guifontwide=NSimsun:h16
+  if has('win32') || has('win64')
+    set lines=28                                                    " the initialize size
+    set columns=106
+    if !filereadable("$VIM\vim90\vimtweak.dll")
+      au GUIENTER * call libcallnr("vimtweak.dll", "SetAlpha", 243)
+    endif
+  else
   set lines=36                                                      " the initialize size
   set columns=124
+  endif
 endif
 
 if exists('$TMUX')
@@ -304,17 +355,18 @@ nmap <leader>v :e ~/.vimrc<CR>
 "
 " **************************************************************/
 set ttyfast                                                         " enable fast terminal connection.
+set clipboard+=unnamed                                              " copy the content to system clipboard by using y/p
+set clipboard+=unnamedplus
 set iskeyword-=.
 set autochdir
-set fileencodings=utf-8,ucs-bom,gbk,cp936,gb2312,gb18030            " code format
+set fileencodings=utf-8,gbk,gb18030,cp936,gb2312,gb18030,latin1,ucs-bom
 set termencoding=utf-8
 set encoding=utf-8                                                  " input chinese (=cp936)
-set fileencoding=utf-8
 let &termencoding=&encoding
 set selection=exclusive                                             " mouse settings
 set selectmode=mouse,key
 set nobackup noswapfile nowritebackup noundofile noendofline
-set number                                                          " number: line number
+set number                                                          " line number
 set report=0
 set autoread                                                        " set auto read when a file is changed by outside
 set showmatch                                                       " show matching bracets (shortly jump to the other bracets)
@@ -338,7 +390,7 @@ set noerrorbells novisualbell                                       " ┐ turn o
 set t_vb=                                                           " ┘ error beep/flash
 set belloff=all                                                     " ┘ beep/flash
 set list
-set listchars=tab:\⇥\ ,trail:·,extends:»,precedes:«,nbsp:·
+set listchars=tab:\→\ ,trail:·,extends:»,precedes:«,nbsp:·
 set cursorline                                                      " highlight the current line
 set guicursor=a:hor1
 set guicursor+=i-r-ci-cr-o:hor2-blinkon0
@@ -406,7 +458,7 @@ nnoremap N Nzzzv
 nnoremap <leader>bd :bd<CR>
 nnoremap <leader>bp :bp<CR>
 nnoremap <leader>bn :bn<CR>
-" nnoremap <C-k> <C-w>k
+nnoremap <C-k> <C-w>k
 nnoremap <C-j> <C-w>j
 nnoremap <C-l> <C-w>l
 nnoremap <C-h> <C-w>h
@@ -518,6 +570,16 @@ let g:EnhCommentifyPretty          = 'Yes'
 let g:EnhCommentifyMultiPartBlocks = 'Yes'
 let g:EnhCommentifyUseSyntax       = 'Yes'
 
+map <leader>ta :TagbarToggle<CR>
+let g:tagbar_left             = 1
+let g:tagbar_width            = 20
+let g:tagbar_autofocus        = 1
+let g:tagbar_expand           = 1
+let g:tagbar_singleclick      = 1
+let g:tagbar_iconchars        = ['+', '-']
+let g:tagbar_autoshowtag      = 1
+let g:tagbar_show_linenumbers = 0
+
 map <leader>aid :AuthorInfoDetect<CR>
 let g:vimrc_author = 'marslo'
 let g:vimrc_email  = 'marslo.jiao@gmail.com'
@@ -559,7 +621,7 @@ let g:rainbow_conf      = {
 \}
 
 let g:indentLine_enabled              = 1
-let g:indentLine_color_gui            = "#282828"
+let g:indentLine_color_gui            = "#686868"
 let g:indentLine_color_term           = 239
 let g:indentLine_indentLevel          = 20
 let g:indentLine_showFirstIndentLevel = 1
@@ -590,6 +652,7 @@ let g:syntastic_html_tidy_ignore_errors   = [" proprietary attribute \"ng-"]
 let g:syntastic_always_populate_loc_list  = 1
 let g:syntastic_auto_loc_list             = 1
 
+nnoremap <Leader>cc :let &cole=(&cole == 2) ? 0 : 2 <bar> echo 'conceallevel ' . &cole <CR>
 " for vim-markdown
 let g:vim_markdown_folding_style_pythonic = 1
 let g:vim_markdown_override_foldtext      = 0
@@ -679,6 +742,30 @@ let g:ale_lint_on_text_changed = 'never'
 
 " call matchadd('ColorColumn', '\%81v', 100)
 " match OverLength /\%81v.\+/
+function! TriggerYCM()
+  if g:loaded_youcompleteme == 1
+    let g:loaded_youcompleteme = 0
+  else
+    let g:loaded_youcompleteme = 1
+  endif
+endfunction
+nmap <C-y> :call TriggerYCM()<CR>
+
+" https://vim.fandom.com/wiki/Faster_loading_of_large_files
+" file is large from 10mb
+let g:LargeFile = 1024 * 1024 * 10
+augroup LargeFile
+  autocmd BufReadPre * let f=getfsize(expand("<afile>")) | if f > g:LargeFile || f == -2 | call LargeFile() | endif
+augroup END
+
+function LargeFile()
+  set eventignore    += FileType                                         " no syntax highlighting etc
+  setlocal bufhidden  = unload                                         " save memory when other file is viewed
+  setlocal buftype    = nowrite                                          " is read-only (write with :w new_filename)
+  setlocal undolevels = -1                                            " no undo possible
+  " display message
+  autocmd VimEnter *  echo "The file is larger than " . (g:LargeFile / 1024 / 1024) . " MB, so some options are changed (see .vimrc for details)."
+endfunction
 
 augroup collumnLimit
   set colorcolumn=80
@@ -710,7 +797,7 @@ if has( "autocmd" )
   autocmd Syntax groovy,Jenkinsfile,python setlocal foldmethod=indent
   " https://vim.fandom.com/wiki/Syntax_folding_for_Java
   autocmd FileType java                    setlocal foldmarker=/**,**/ foldmethod=marker foldcolumn=1
-  autocmd FileType make,snippet,robot      setlocal tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd FileType make,snippet,robot      set      tabstop=4 softtabstop=4 shiftwidth=4
   autocmd FileType yaml                    setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
   autocmd FileType javascript              syntax   clear jsFuncBlock " rainbow issue #2
   " https://vim.fandom.com/wiki/Remove_unwanted_spaces
@@ -731,13 +818,13 @@ if has( "autocmd" )
 
   augroup devops
     autocmd BufRead,BufNewFile *                                   setfiletype jenkinsfile
-    autocmd Syntax             Groovy                              set filetype=groovy syntax=groovy
     autocmd FileType           groovy,Jenkinsfile,json,sh,markdown set tabstop=2 softtabstop=2 shiftwidth=2
-    autocmd FileType           vim                                 let g:ycm_confirm_extra_conf = 1
     " git config files
     autocmd BufNewFile,BufRead
-          \ *.git/config,.gitconfig,.gitmodules,gitconfig,~/.marslo/.gitalias
+          \ *.git/config,.gitconfig,.gitmodules,gitconfig
+          \,~/.marslo/.gitalias
           \ setfiletype gitconfig
+    autocmd FileType vim let g:ycm_confirm_extra_conf = 1
     " autocmd Syntax                         groovy,Jenkinsfile :IndentLinesEnable
     " autocmd BufReadPost                    Jenkinsfile        set filetype=groovy syntax=groovy
     " autocmd BufNewFile,BufRead             Jenkinsfile        setf groovy
@@ -784,34 +871,9 @@ if has( "autocmd" )
   augroup END
 endif
 
-" /**************************************************************
-"       _ _       _                         _
-"   ___| (_)_ __ | |__   ___   __ _ _ __ __| |
-"  / __| | | '_ \| '_ \ / _ \ / _` | '__/ _` |
-" | (__| | | |_) | |_) | (_) | (_| | | | (_| |
-"  \___|_|_| .__/|_.__/ \___/ \__,_|_|  \__,_|
-"          |_|
-" **************************************************************/
-
-set clipboard=unnamed                                               " copy the content to system clipboard by using y/p
-set clipboard=unnamedplus
-
-" autocmd TextYankPost * call system('/mnt/c/iMarslo/myprograms/win32yank.exe', @")
-" function! DoPaste(mode)
-" " let @" = system('win32yank.exe -o --lf')
-" " return a:mode
-" endfunction
-" " map <expr> p :call DoPaste('p')
-" " map <expr> P :call DoPaste('P')
-
-" WSL yank support
-" let s:clip = '/mnt/c/Windows/System32/clip.exe'                   " change this path according to your mount point
-" if executable(s:clip)
-"   augroup WSLYank
-"     autocmd!
-"     " autocmd TextYankPost * if v:event.operator **# 'y' | call system(s:clip, @0) | endif
-"     autocmd TextYankPost * if v:event.operator **# 'y' | call system('cat |' . s:clip, @0) | endif
-"   augroup END
-" endif
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+    \| exe "normal! g'\"" | endif
+endif
 
 " vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab:filetype=vim:foldmethod=marker:foldmarker="\ **************************************************************/,"\ /**************************************************************

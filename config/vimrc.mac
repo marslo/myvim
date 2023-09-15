@@ -428,7 +428,7 @@ set wildmenu
 set wildmode=longest,list,full                                      " completion mode that is used for the character
 set noerrorbells novisualbell                                       " ┐ turn off
 set t_vb=                                                           " ┘ error beep/flash
-" set list listchars=tab:\ \ ,tab:▸,trail:·,extends:»,precedes:«,nbsp:·,eol:¬
+" set list listchars=tab:▸,trail:·,extends:»,precedes:«,nbsp:·,eol:¬
 set list
 set listchars=tab:\⇥\ ,trail:·,extends:»,precedes:«,nbsp:·
 set cursorline                                                      " highlight the current line
