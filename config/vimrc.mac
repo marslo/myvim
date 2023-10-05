@@ -3,7 +3,7 @@
 "        Author: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.25
-"    LastChange: 2023-09-14 14:35:53
+"    LastChange: 2023-09-15 16:20:32
 " =============================================================================
 
 set maxmempattern=5000
@@ -353,11 +353,11 @@ endif
 if has('gui_running')
   set go=                                                           " hide everything (go = guioptions)
   set cpoptions+=n
-  set guifont=Conmic\ Mono:h26
+  set guifont=Comic\ Mono:h26
   " set guifont=Ubuntu\ Mono:h26
   " set guifontwide=NSimsun:h16
-  set lines=36                                                      " the initialize size
-  set columns=124
+  set lines=34                                                      " the initialize size
+  set columns=118
 endif
 
 if exists('$TMUX')
@@ -375,6 +375,16 @@ if has('gui_running') || 'xterm-256color' == $TERM
   " colorscheme marslo
   colorscheme gruvbox
   let psc_style='cool'
+
+  " :help terminal-info
+  " if $TERM_PROGRAM =~ "iTerm"
+  "   let &t_SI = "\<Esc>]50;CursorShape=1\x7" " Vertical bar in insert mode
+  "   let &t_EI = "\<Esc>]50;CursorShape=0\x7" " Block in normal mode
+  " endif
+  let &t_SI.="\e[4 q"                                                 " SI = INSERT mode
+  let &t_SR.="\e[4 q"                                                 " SR = REPLACE mode
+  let &t_EI.="\e[3 q"                                                 " EI = NORMAL mode (ELSE)
+
 else
   set t_Co=8
   set t_Sb=^[[4%dm
@@ -393,12 +403,14 @@ nmap <leader>v :e ~/.vimrc<CR>
 "                           |___/
 "
 " **************************************************************/
+set ttimeout
+set ttimeoutlen=1
 set ttyfast                                                         " enable fast terminal connection.
 set clipboard+=unnamed                                              " copy the content to system clipboard by using y/p
 set clipboard+=unnamedplus
 set iskeyword-=.
 set autochdir
-set fileencodings=utf-8,ucs-bom,gbk,cp936,gb2312,gb18030            " code format
+set fileencodings=utf-8,latin1,ucs-bom,gbk,cp936,gb2312,gb18030     " code format
 set termencoding=utf-8
 set encoding=utf-8                                                  " input chinese (=cp936)
 set fileencoding=utf-8
@@ -432,8 +444,10 @@ set t_vb=                                                           " ┘ error 
 set list
 set listchars=tab:\⇥\ ,trail:·,extends:»,precedes:«,nbsp:·
 set cursorline                                                      " highlight the current line
-set guicursor=a:hor1
-set guicursor+=i-r-ci-cr-o:hor2-blinkon0
+set guicursor=a:hor10-Cursor-blinkon0
+set guicursor+=i-r-c-ci-cr-o:hor10-iCursor-blinkon0
+set guicursor+=n:hor10-Cursor-blinkwait700-blinkon400-blinkoff250
+set guicursor+=v-ve:block-Cursor
 set virtualedit=onemore                                             " allow for cursor beyond last character
 set scrolloff=3                                                     " scroll settings
 set sidescroll=1
@@ -500,7 +514,7 @@ nnoremap <leader>bp :bp<CR>
 nnoremap <leader>bn :bn<CR>
 nnoremap <C-k> <C-w>k
 nnoremap <C-j> <C-w>j
-nnoremap <C-l> <C-w>l
+" nnoremap <C-l> <C-w>l             " conflict with redraw shortcut : https://vimhelp.org/various.txt.html#CTRL-L
 nnoremap <C-h> <C-w>h
 nnoremap <C-a> <ESC>^
 inoremap <C-a> <ESC>I
@@ -549,8 +563,8 @@ nnoremap <leader>G :%s///gn<CR>
 nnoremap <leader>idl :IndentLineEnable<CR>
 
 nnoremap <leader>zil :g/^/ s//\=line('.').' '/<CR>    " [i]nsert [l]ine number
-nnoremap <leader>zcm :%s/<C-v><CR>/\r/g<CR>           " [c]onvert [m] to new line
 nnoremap <leader>zwl :%s///gn<CR>                     " show the matches numbers ( [w]c -[l] )
+nnoremap <leader>zcm :%s/<C-v><CR>/\r/g<CR>           " [c]onvert [m] to new line
 nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>            " [d]elete [m]()
 nnoremap <leader>zdb :%s/\s\+$//<CR>                  " [d]elete trailing space ( [b]lank )
 nnoremap <leader>zbl :g/^\s*$/d<CR>                   " [d]elete [b]lank [l]ine
@@ -764,7 +778,6 @@ if exists(":Tabularize")
   endfunction
   " command! -nargs=1 First exec 'Tabularize /^[^' . escape(<q-args>, '\^$.[?*~') . ']*\zs' . escape(<q-args>, '\^$.[?*~')
 endif
-command! -nargs=1 -range TabFirst exec <line1> . ',' . <line2> . 'Tabularize /^[^' . escape(<q-args>, '\^$.[?*~') . ']*\zs' . escape(<q-args>, '\^$.[?*~')
 
 " git
 nnoremap <leader>mp :! git mp<CR>
@@ -1007,19 +1020,11 @@ if has( "autocmd" )
     " exe max([min([line("$"), a:maxheight]), a:minheight]) . "wincmd _"
   " endfunction
 
-  " if $TERM_PROGRAM =~ "iTerm"
-    " let &t_SI = "\<Esc>]50;CursorShape=1\x7" " Vertical bar in insert mode
-    " let &t_EI = "\<Esc>]50;CursorShape=0\x7" " Block in normal mode
-  " endif
 endif
 
-highlight Cursor          guifg=white      guibg=black
-highlight iCursor         guifg=white      guibg=steelblue
+" highlight Cursor        guifg=white      guibg=gray          gui=bold
+" highlight iCursor       guifg=white      guibg=steelblue     gui=underline
 highlight SpellBad        term=underline   cterm=underline     ctermbg=0
 highlight ExtraWhitespace ctermbg=red      guibg=red
-set guicursor=n-v-c:block-Cursor
-set guicursor+=i:ver100-iCursor
-set guicursor+=n-v-c:blinkon0
-set guicursor+=i:blinkwait10
 
 " vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab:filetype=vim:foldmethod=marker:foldmarker="\ **************************************************************/,"\ /**************************************************************
