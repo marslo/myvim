@@ -3,7 +3,7 @@
 "        Author: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.25
-"    LastChange: 2023-09-15 16:20:32
+"    LastChange: 2023-10-05 20:51:38
 " =============================================================================
 
 set maxmempattern=5000
@@ -296,6 +296,23 @@ autocmd BufRead,BufNewFile * :call IgnoreSpells()
 " ignore capital check
 set spellcapcheck=
 
+" redir into new tab: https://vim.fandom.com/wiki/Capture_ex_command_outputhttps://vim.fandom.com/wiki/Capture_ex_command_output
+" `gt`, `:tabfirst`, `:tabnext`, `:tablast` ... to switch tabs : https://vim.fandom.com/wiki/Alternative_tab_navigation
+function! TabMessage(cmd)
+  redir => message
+  silent execute a:cmd
+  redir END
+  if empty(message)
+    echoerr "no output"
+  else
+    " use "new" instead of "tabnew" below if you prefer split windows instead of tabs
+    tabnew
+    setlocal buftype=nofile bufhidden=wipe noswapfile nobuflisted nomodified
+    silent put=message
+  endif
+endfunction
+command! -nargs=+ -complete=command TabMessage call TabMessage(<q-args>)
+
 
 " /**************************************************************
 "                                                      _
@@ -563,7 +580,6 @@ nnoremap <leader>G :%s///gn<CR>
 nnoremap <leader>idl :IndentLineEnable<CR>
 
 nnoremap <leader>zil :g/^/ s//\=line('.').' '/<CR>    " [i]nsert [l]ine number
-nnoremap <leader>zwl :%s///gn<CR>                     " show the matches numbers ( [w]c -[l] )
 nnoremap <leader>zcm :%s/<C-v><CR>/\r/g<CR>           " [c]onvert [m] to new line
 nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>            " [d]elete [m]()
 nnoremap <leader>zdb :%s/\s\+$//<CR>                  " [d]elete trailing space ( [b]lank )
@@ -573,8 +589,12 @@ nnoremap <leader>zdd :%s/ / /g<CR>                    " [d]elete [d]ot(• )
 nnoremap <leader>zds :%s/^<span.*span>//g<CR>         " [d]elete [s]pan tag
 nnoremap <leader>zdi :%s/^\s\+//<CR>                  " [d]elete [i]ndent spaces
 nnoremap <leader>zid i•<ESC>                          " [i]nsert [d]ot(•)
-nnoremap <leader>cr 0yt=a<c-r>=<c-r>"<cr><esc>        " cacular expr
-nnoremap <leader>* *<C-O>:%s///gn<CR>                 " cacular expr
+" cacular expr
+nnoremap <leader>cr 0yt=a<c-r>=<c-r>"<cr><esc>
+" cacular expr
+nnoremap <leader>* *<C-O>:%s///gn<CR>
+" cacular the matches numbers ( [w]c -[l] )
+nnoremap <leader>zwl :%s///gn<CR>
 
 if version > 703
   " autocmd FocusLost * set norelativenumber
