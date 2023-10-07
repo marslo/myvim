@@ -314,6 +314,20 @@ function! TabMessage(cmd)
 endfunction
 command! -nargs=+ -complete=command TabMessage call TabMessage(<q-args>)
 
+" switch avoid quickfix : https://vi.stackexchange.com/a/19420/7389
+function! BSkipQuickFix(command)
+  let start_buffer = bufnr('%')
+  execute a:command
+  while &buftype ==# 'quickfix' && bufnr('%') != start_buffer
+    execute a:command
+  endwhile
+endfunction
+
+nnoremap <Tab>      :call BSkipQuickFix("bn")<CR>
+nnoremap <S-Tab>    :call BSkipQuickFix("bp")<CR>
+nnoremap <leader>bp :call BSkipQuickFix("bn")<CR>
+nnoremap <leader>bn :call BSkipQuickFix("bp")<CR>
+
 
 " /**************************************************************
 "                                                      _
@@ -435,7 +449,7 @@ set fileencoding=utf-8
 let &termencoding=&encoding
 set selection=exclusive                                             " mouse settings
 set selectmode=mouse,key
-set nobackup noswapfile nowritebackup noundofile noendofline
+set nobackup noswapfile nowritebackup noundofile noendofline nobuflisted
 set number                                                          " number: line number
 set report=0
 set autoread                                                        " set auto read when a file is changed by outside
@@ -528,8 +542,6 @@ nnoremap gk k
 nnoremap n nzzzv
 nnoremap N Nzzzv
 nnoremap <leader>bd :bd<CR>
-nnoremap <leader>bp :bp<CR>
-nnoremap <leader>bn :bn<CR>
 nnoremap <C-k> <C-w>k
 nnoremap <C-j> <C-w>j
 " nnoremap <C-l> <C-w>l             " conflict with redraw shortcut : https://vimhelp.org/various.txt.html#CTRL-L
@@ -571,7 +583,7 @@ cnoremap sudow!! w !sudo tee > /dev/null %
 cnoremap sw!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
 " cnoremap lss lss<cr>:b<space>
 " cnoremap lsd lss<cr>:bd<space>
-" cnoremap rd redraw!
+" cnoremap redr redraw!
 
 inoremap <leader>tt <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
 inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
@@ -765,6 +777,15 @@ let g:table_mode_corner           = "|"
 let g:table_mode_align_char       = ":"
 " let g:table_mode_corner_corner  = '+'
 command! -nargs=1 -range TabFirst exec <line1> . ',' . <line2> . 'Tabularsze /^[^' . escape(<q-args>, '\^$.[?*~') . ']*\zs' . escape(<q-args>, '\^$.[?*~')
+augroup CustomTabularize
+  autocmd!
+  " https://github.com/jwhitley/vimrc/blob/master/.vimrc
+  " autocmd VimEnter * if exists(":Tabularize") | exe ":AddTabularPattern! bundles /[^ ]\\+\\//l1r0" | endif
+  " add in  plugin/TabularMaps.vim
+  autocmd VimEnter * if exists(":Tabularize")   | exe ":AddTabularPattern 1,    /^[^,]*\zs,/r1c1l0" | endif
+  autocmd VimEnter * if exists(":Tabularize")   | exe ":AddTabularPattern 1=    /^[^=]*\zs="        | endif
+  autocmd VimEnter * if exists(":Tabularize")   | exe ":AddTabularPattern 1==   /^[^=]*\zs=/r0c0l0" | endif
+augroup END
 
 " function! s:isAtStartOfLine(mapping)
 "   let text_before_cursor = getline('.')[0 : col('.')-1]
@@ -1034,6 +1055,12 @@ if has( "autocmd" )
   " function! AdjustWindowHeight(minheight, maxheight)
     " exe max([min([line("$"), a:maxheight]), a:minheight]) . "wincmd _"
   " endfunction
+
+  " skip quickfix : https://vi.stackexchange.com/a/16709/7389
+  augroup termIgnore
+      autocmd!
+      autocmd TerminalOpen * set nobuflisted
+  augroup END
 
 endif
 
