@@ -206,7 +206,7 @@ function! ToggleWindowHorizontalVerticalSplit()
 endfunction
 nnoremap <silent> <leader>wt :call ToggleWindowHorizontalVerticalSplit()<cr>
 
-" Reverse the lines of the whole file or a visually highlighted block.
+" reverse the lines of the whole file or a visually highlighted block.
     " :Rev is a shorter prefix you can use.
     " Adapted from http://tech.groups.yahoo.com/group/vim/message/34305
     " reference : https://superuser.com/a/387869/112396
@@ -571,7 +571,7 @@ cnoremap sudow!! w !sudo tee > /dev/null %
 cnoremap sw!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
 " cnoremap lss lss<cr>:b<space>
 " cnoremap lsd lss<cr>:bd<space>
-cnoremap rd redraw!
+" cnoremap rd redraw!
 
 inoremap <leader>tt <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
 inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
@@ -961,7 +961,7 @@ if has( "autocmd" )
   " https://vim.fandom.com/wiki/Remove_unwanted_spaces
   autocmd BufWritePre *\(.ltsv\|.diffs\)\@<! :retab!                    " automatic retab
   autocmd BufWritePre *                      :%s/\s\+$//e | %s/\r$//e   " automatic remove trailing space
-  " autocmd BufWritePre                                         *.html :normal gg=G
+  " autocmd BufWritePre                                         *.html  :normal gg=G
   " autocmd BufWritePre,BufWritePost,FileWritePre,FileWritePost *       silent :redraw!
 
   augroup shellStyle                                                    " automatic redraw for shellcheck
@@ -989,6 +989,8 @@ if has( "autocmd" )
     " autocmd BufNewFile,BufRead,BufReadPost Jenkinsfile        setlocal foldmethod=indent
     " autocmd FileType                       Jenkinsfile        setlocal filetype=groovy syntax=groovy foldmethod=indent
     " autocmd FileType                       Jenkinsfile        set syntax=groovy filetype=groovy
+
+    " to setup filetype to groovy if first line matches `#!.*[/\\]groovy`
     if did_filetype()
       finish
     endif
