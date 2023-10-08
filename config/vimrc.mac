@@ -48,7 +48,7 @@ let g:mapleader = ","
 filetype off
 set rtp+=~/.vim/bundle/snipmate.vim/snippets/
 set rtp+=~/.vim/bundle/Vundle.vim/
-set rtp+=/usr/local/opt/fzf                " $ brew install fzf
+set rtp+=/usr/local/opt/fzf                                         " $ brew install fzf
 call vundle#begin()
 " call vundle#rc()
 
@@ -197,10 +197,10 @@ function! ToggleWindowHorizontalVerticalSplit()
     let t:splitType = 'vertical'
   endif
 
-  if t:splitType == 'vertical' " is vertical switch to horizontal
+  if t:splitType == 'vertical'                                      " is vertical switch to horizontal
     windo wincmd K
     let t:splitType = 'horizontal'
-  else                         " is horizontal switch to vertical
+  else                                                              " is horizontal switch to vertical
     windo wincmd H
     let t:splitType = 'vertical'
   endif
@@ -341,6 +341,15 @@ endfun
 autocmd BufRead,BufNewFile * :call IgnoreCamelCaseSpell()
 syn match UrlNoSpell '\w\+:\/\/[^[:space:]]\+' contains=@NoSpell
 
+function! TriggerYCM()
+  if g:loaded_youcompleteme == 1
+    let g:loaded_youcompleteme = 0
+  else
+    let g:loaded_youcompleteme = 1
+  endif
+endfunction
+nmap <C-y> :call TriggerYCM()<CR>
+
 
 " /**************************************************************
 "                                                      _
@@ -354,37 +363,37 @@ syn match UrlNoSpell '\w\+:\/\/[^[:space:]]\+' contains=@NoSpell
 
 " Programming configs for Python
 if has( "autocmd" )
-  au FileType python syn keyword pythonDecorator print self
-  au FileType python set tabstop=4 softtabstop=4 shiftwidth=4
-  au FileTYpe python set isk-=.
+  autocmd FileType python syn keyword pythonDecorator print self
+  autocmd FileType python set tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd FileTYpe python set isk-=.
   " set textwidth=80
 endif
 let python_highlight_all = 1                                        " syntax-python
 
 " python-mode configurations
 if isdirectory( expand(bud . 'python-mode') ) || has('python3')
- nnoremap <leader>p :PymodeLint<CR>                                    " trigger pymodelint by manual
- let g:pymode_python                     = '/usr/local/bin/python3'
- let g:pymode                            = 1                           " 1: turn on python-mode plugin
- let g:pymode_syntax_all                 = 1
- let g:pymode_warnings                   = 0                           " turn off plugin's warnings
- let g:pymode_folding                    = 1
- let g:pymode_options_colorcolumn        = 1
- let g:pymode_trim_whitespaces           = 1                           " trim unused white spaces on save
- let g:pymode_lint                       = 1                           " turn on code checking
- let g:pymode_lint_checkers              = ['pyflakes', 'pep8', 'mccabe']
- let g:pymode_lint_ignore                = "E111,E114,E501,W0611,E266" " E501: long line; E111&E114: 4 spaces indent; E266: too many # for comments
- let g:pymode_options                    = 0
- let g:pymode_rope                       = 0
- let g:pymode_indent                     = 0
- let g:pymode_syntax_highlight_self      = g:pymode_syntax_all
- let g:pymode_quickfix_minheight         = 3
- let g:pymode_quickfix_maxheight         = 3
- let g:python_check_syntax               = 0                           " disable Check python script syntax on every save
- let g:pymode_lint_on_write              = 0                           " disable on save checking
- " let g:pymode_rope_regenerate_on_write = 0
- let g:pymode_lint_unmodified            = 1
- let g:pymode_indent                     = 1
+  nnoremap <leader>p :PymodeLint<CR>                                " trigger pymodelint by manual
+  let g:pymode_python                     = '/usr/local/bin/python3'
+  let g:pymode                            = 1                       " 1: turn on python-mode plugin
+  let g:pymode_syntax_all                 = 1
+  let g:pymode_warnings                   = 0                       " turn off plugin's warnings
+  let g:pymode_folding                    = 1
+  let g:pymode_options_colorcolumn        = 1
+  let g:pymode_trim_whitespaces           = 1                       " trim unused white spaces on save
+  let g:pymode_lint                       = 1                       " turn on code checking
+  let g:pymode_lint_checkers              = ['pyflakes', 'pep8', 'mccabe']
+  let g:pymode_lint_ignore                = "E111,E114,E501,W0611,E266" " E501: long line; E111&E114: 4 spaces indent; E266: too many # for comments
+  let g:pymode_options                    = 0
+  let g:pymode_rope                       = 0
+  let g:pymode_indent                     = 0
+  let g:pymode_syntax_highlight_self      = g:pymode_syntax_all
+  let g:pymode_quickfix_minheight         = 3
+  let g:pymode_quickfix_maxheight         = 3
+  let g:python_check_syntax               = 0                       " disable Check python script syntax on every save
+  let g:pymode_lint_on_write              = 0                       " disable on save checking
+  " let g:pymode_rope_regenerate_on_write = 0
+  let g:pymode_lint_unmodified            = 1
+  let g:pymode_indent                     = 1
 endif
 
 " /**************************************************************
@@ -416,6 +425,7 @@ endif
 if has( 'gui_running' ) || 'xterm-256color' == $TERM
   set background=dark
   let psc_style='cool'
+
   " colorscheme marslo                                              " marslo
   colorscheme gruvbox                                               " gruvbox
 
@@ -437,8 +447,17 @@ if has( 'gui_running' ) || 'xterm-256color' == $TERM
   let &t_SR.="\e[4 q"                                               " SR = REPLACE mode
   let &t_EI.="\e[3 q"                                               " EI = NORMAL mode (ELSE)
 
-  " colorscheme solarized                                           " solarized
+  """ solarized
+  " colorscheme solarized
+  " set termguicolors
   " let g:solarized_termcolors=256
+  " let &t_8f = "\<esc>[38;2;%lu;%lu;%lum"
+  " let &t_8b = "\<esc>[48;2;%lu;%lu;%lum"
+  " let g:solarized_termtrans = 1
+  " let g:solarized_extra_hi_groups = 1
+  " let g:solarized_visibility = "high"
+  " let g:solarized_contrast = "high"
+  " let s:base03 = "255"
 else
   set t_Co=8
   set t_Sb=^[[4%dm
@@ -565,7 +584,7 @@ nnoremap N Nzzzv
 nnoremap <leader>bd :bd<CR>
 nnoremap <C-k> <C-w>k
 nnoremap <C-j> <C-w>j
-" nnoremap <C-l> <C-w>l             " conflict with redraw shortcut : https://vimhelp.org/various.txt.html#CTRL-L
+" nnoremap <C-l> <C-w>l                                             " conflict with redraw shortcut : https://vimhelp.org/various.txt.html#CTRL-L
 nnoremap <C-h> <C-w>h
 nnoremap <C-a> <ESC>^
 inoremap <C-a> <ESC>I
@@ -613,16 +632,16 @@ inoremap <leader>w <C-O>:w<CR>
 nnoremap <leader>G :%s///gn<CR>
 nnoremap <leader>idl :IndentLineEnable<CR>
 
-nnoremap <leader>zil :g/^/ s//\=line('.').' '/<CR>    " [i]nsert [l]ine number
-nnoremap <leader>zcm :%s/<C-v><CR>/\r/g<CR>           " [c]onvert [m] to new line
-nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>            " [d]elete [m]()
-nnoremap <leader>zdb :%s/\s\+$//<CR>                  " [d]elete trailing space ( [b]lank )
-nnoremap <leader>zbl :g/^\s*$/d<CR>                   " [d]elete [b]lank [l]ine
-nnoremap <leader>zd2 :%s/​//g<CR>                " [d]elete <200b>
-nnoremap <leader>zdd :%s/ / /g<CR>                    " [d]elete [d]ot(• )
-nnoremap <leader>zds :%s/^<span.*span>//g<CR>         " [d]elete [s]pan tag
-nnoremap <leader>zdi :%s/^\s\+//<CR>                  " [d]elete [i]ndent spaces
-nnoremap <leader>zid i•<ESC>                          " [i]nsert [d]ot(•)
+nnoremap <leader>zil :g/^/ s//\=line('.').' '/<CR>                  " [i]nsert [l]ine number
+nnoremap <leader>zcm :%s/<C-v><CR>/\r/g<CR>                         " [c]onvert [m] to new line
+nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>                          " [d]elete [m]()
+nnoremap <leader>zdb :%s/\s\+$//<CR>                                " [d]elete trailing space ( [b]lank )
+nnoremap <leader>zbl :g/^\s*$/d<CR>                                 " [d]elete [b]lank [l]ine
+nnoremap <leader>zd2 :%s/​//g<CR>                              " [d]elete <200b>
+nnoremap <leader>zdd :%s/ / /g<CR>                                  " [d]elete [d]ot(• )
+nnoremap <leader>zds :%s/^<span.*span>//g<CR>                       " [d]elete [s]pan tag
+nnoremap <leader>zdi :%s/^\s\+//<CR>                                " [d]elete [i]ndent spaces
+nnoremap <leader>zid i•<ESC>                                        " [i]nsert [d]ot(•)
 " cacular expr
 nnoremap <leader>cr 0yt=a<c-r>=<c-r>"<cr><esc>
 " cacular expr
@@ -836,8 +855,7 @@ endif
 " git
 nnoremap <leader>mp :! git mp<CR>
 nnoremap <Leader>cgb :<C-u>call gitblame#echo()<CR>
-" APZelos/blamer.nvim
-nnoremap <Leader>b :BlamerToggle<CR>
+nnoremap <Leader>b :BlamerToggle<CR>                                " APZelos/blamer.nvim
 let g:blamer_enabled              = 1
 let g:blamer_delay                = 100
 let g:blamer_show_in_visual_modes = 0
@@ -914,15 +932,6 @@ let g:ycm_filetype_blacklist              = { 'vim':0  }
 let g:ycm_min_num_of_chars_for_completion = 2
 let g:ycm_python_binary_path              = '/usr/local/bin/vim'
 
-function! TriggerYCM()
-  if g:loaded_youcompleteme == 1
-    let g:loaded_youcompleteme = 0
-  else
-    let g:loaded_youcompleteme = 1
-  endif
-endfunction
-nmap <C-y> :call TriggerYCM()<CR>
-
 " spell and grammars
 let g:grammarous#languagetool_cmd = 'languagetool'
 set thesaurus+=~/.vim/spell/dictionary/thesaurii.txt
@@ -933,7 +942,6 @@ set dictionary=/usr/share/dict/words
 nmap zuz <Plug>(FastFoldUpdate)
 xnoremap <silent> <leader>iz :<c-u>FastFoldUpdate<cr>]z<up>$v[z<down>^
 xnoremap <silent> <leader>az :<c-u>FastFoldUpdate<cr>]zV[z
-
 let g:fastfold_savehook               = 1
 let g:fastfold_fold_command_suffixes  = ['x','X','a','A','o','O','c','C']
 let g:fastfold_fold_movement_commands = [']z', '[z', 'zj', 'zk']
@@ -960,10 +968,16 @@ let g:baan_fold                       = 1
 set foldlevelstart=20
 " yamllint
 " brew install yamllint
-let g:ale_echo_msg_format      = '[%linter%] %s [%severity%]'
-let g:ale_sign_error           = '✘'
-let g:ale_sign_warning         = '⚠'
-let g:ale_lint_on_text_changed = 'never'
+" ale                                                               " :help g:ale_echo_msg_format
+let g:ale_echo_msg_format                 = '[%linter%] %code%: %s [%severity%] '
+let g:ale_sign_error                      = '✘'
+let g:ale_sign_warning                    = '⚠'
+let g:ale_lint_on_text_changed            = 'never'
+let g:ale_fix_on_save                     = 0
+let g:ale_lint_on_save                    = 1
+let g:ale_lint_on_text_changed            = 'never'
+let g:ale_warn_about_trailing_blank_lines = 1
+let g:ale_warn_about_trailing_whitespace  = 1
 
 " call matchadd('ColorColumn', '\%81v', 100)
 " match OverLength /\%81v.\+/
@@ -993,29 +1007,29 @@ if has( "autocmd" )
   " autocmd BufWinLeave      *               silent! mkview
   autocmd BufWinEnter        *               silent! loadview
   autocmd QuickFixCmdPost    *grep*          cwindow
-  autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
-  autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile,yaml normal zM
-  autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile,yaml let g:indentLine_loaded=1
-  autocmd Syntax groovy,Jenkinsfile,python   setlocal foldmethod=indent
+  autocmd Syntax      * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
+  autocmd Syntax      c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile,yaml normal zM
+  autocmd Syntax      c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile,yaml let g:indentLine_loaded=1
+  autocmd Syntax      groovy,Jenkinsfile,python  setlocal foldmethod=indent
   " https://vim.fandom.com/wiki/Syntax_folding_for_Java
-  autocmd FileType java                      setlocal foldmarker=/**,**/ foldmethod=marker foldcolumn=1
-  autocmd FileType make,snippet,robot        setlocal tabstop=4 softtabstop=4 shiftwidth=4
-  autocmd FileType yaml                      setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
-  autocmd FileType javascript                syntax   clear jsFuncBlock " rainbow issue #2
-  autocmd BufEnter *                         if &diff | let g:blamer_enabled=0 | endif
-  " https://vim.fandom.com/wiki/Remove_unwanted_spaces
-  autocmd BufWritePre *\(.ltsv\|.diffs\)\@<! :retab!                    " automatic retab
-  autocmd BufWritePre *                      :%s/\s\+$//e | %s/\r$//e   " automatic remove trailing space
-  " autocmd BufWritePre                                         *.html  :normal gg=G
-  " autocmd BufWritePre,BufWritePost,FileWritePre,FileWritePost *       silent :redraw!
+  autocmd FileType    java                       setlocal foldmarker=/**,**/ foldmethod=marker foldcolumn=1
+  autocmd FileType    make,snippet,robot         setlocal tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd FileType    yaml                       setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
+  autocmd FileType    javascript                 syntax   clear jsFuncBlock  " rainbow issue #2
+  autocmd BufEnter    *                          if &diff         | let g:blamer_enabled=0 | endif    " disable git blame for diff mode
+  autocmd BufEnter    *                          if ! empty(&key) | let g:blamer_enabled=0 | endif    " disable git blame for encrypt mode
+  autocmd BufWritePre *\(.ltsv\|.diffs\)\@<!    :retab!                      " automatic retab: https://vim.fandom.com/wiki/Remove_unwanted_spaces
+  autocmd BufWritePre *                         :%s/\s\+$//e | %s/\r$//e     " automatic remove trailing space
+  " autocmd BufWritePre                                         *.html :normal gg=G
+  " autocmd BufWritePre,BufWritePost,FileWritePre,FileWritePost *      silent :redraw!
 
-  augroup shellStyle                                                    " automatic redraw for shellcheck
+  augroup shellStyle                                                         " automatic redraw for shellcheck
     autocmd!
     autocmd Syntax                   bash           set filetype=sh
     autocmd FileType                 sh,bash,shell  call DoRedraw()
     autocmd BufWritePre,BufWritePost *.sh           call DoRedraw()
-    autocmd BufWritePre              *.sh           silent :retab!      " automatic retab
-    autocmd BufWritePost             *.sh           silent :redraw!     " automatic redraw for shellcheck
+    autocmd BufWritePre              *.sh           silent :retab!           " automatic retab
+    autocmd BufWritePost             *.sh           silent :redraw!          " automatic redraw for shellcheck
     " autocmd BufWritePost           *.sh           !chmod +x %
   augroup END
 
@@ -1076,7 +1090,7 @@ if has( "autocmd" )
     autocmd BufWinEnter  *        if &fdm == 'indent' | setlocal foldmethod=manual | endif
   augroup END
 
-  " au FileType qf call AdjustWindowHeight(3, 10)
+  " autocmd FileType qf call AdjustWindowHeight(3, 10)
   " function! AdjustWindowHeight(minheight, maxheight)
     " exe max([min([line("$"), a:maxheight]), a:minheight]) . "wincmd _"
   " endfunction
