@@ -129,6 +129,8 @@ Bundle 'pedrohdz/vim-yaml-folds'
 Bundle 'dense-analysis/ale'
 " github page
 Bundle 'parkr/vim-jekyll'
+" others
+" Bundle 'ianva/vim-youdao-translater'
 
 call vundle#end()
 call pathogen#infect()
@@ -173,7 +175,7 @@ function! DoRedraw()
   execute "silent redraw!"
 endfunction
 nnoremap <M-l> :call DoRedraw()<CR>
-map <D-l>      :call DoRedraw()<CR>
+noremap <D-l>  :call DoRedraw()<CR>
 
 if has( 'unix' ) || has( 'macunix' )
   if empty( glob('~/.vim/bundle/Vundle.vim') ) || empty( glob($VIM . '\bundle\Vundle.vim') )
@@ -216,8 +218,8 @@ command! -nargs=0 -bar -range=% Reverse
     \<bar>      <line2>kt
     \<bar>      exe "<line1>,<line2>g/^/m't"
     \<bar>  call setpos("'t", save_mark_t)
-nmap <Leader>r :Reverse<CR>
-xmap <Leader>r :Reverse<CR>
+nnoremap <Leader>r :Reverse<CR>
+xnoremap <Leader>r :Reverse<CR>
 
 function! GetFiletypes()
   " https://vi.stackexchange.com/a/5782/7389
@@ -248,14 +250,14 @@ endfunction
 
 if isdirectory( expand(bud . 'MarsloFunc') )
   command! GetVim :call marslofunc#GetVim()<CR>
-  nmap cmd :call marslofunc#OpenCMD()<CR>
-  nmap gf :call marslofunc#GotoFile()<CR>
+  nnoremap cmd :call marslofunc#OpenCMD()<CR>
+  nnoremap gf :call marslofunc#GotoFile()<CR>
   xnoremap * :<C-u>call marslofunc#VSetSearch()<CR>/<C-R>=@/<CR><CR>
   xnoremap # :<C-u>call marslofunc#VSetSearch()<CR>?<C-R>=@/<CR><CR>
-  map <M-o> :call marslofunc#OpenFoler()<CR>
-  nmap <F12> :call marslofunc#UpdateTags()<CR>
-  nmap <C-F5> :call marslofunc#RunResult()<CR>
-  nmap <leader>ti :call marslofunc#callit()<CR>
+  noremap <M-o> :call marslofunc#OpenFoler()<CR>
+  nnoremap <F12> :call marslofunc#UpdateTags()<CR>
+  nnoremap <C-F5> :call marslofunc#RunResult()<CR>
+  nnoremap <leader>ti :call marslofunc#callit()<CR>
 
   augroup resCur
     autocmd!
@@ -349,7 +351,6 @@ function! TriggerYCM()
   endif
 endfunction
 nmap <C-y> :call TriggerYCM()<CR>
-
 
 " /**************************************************************
 "                                                      _
@@ -509,8 +510,8 @@ set magic                                                           " regular ex
 set linespace=0
 set wildmenu
 set wildmode=longest,list,full                                      " completion mode that is used for the character
-set noerrorbells novisualbell visualbell                            " ┐ Turn off
-set t_vb=                                                           " ┘ error beep/flash
+set noerrorbells novisualbell visualbell                            " ╮ Turn off
+set t_vb=                                                           " ╯ error beep/flash
 " set list listchars=tab:\→\ ,tab:▸,trail:·,extends:»,precedes:«,nbsp:·,eol:¬
 set list
 set listchars=tab:\⇥\ ,trail:·,extends:»,precedes:«,nbsp:·
@@ -572,6 +573,7 @@ endif
 " |___/_| |_|\___/|_|   \__\___|\__,_|\__|
 "
 " **************************************************************/
+" :help map-overview : https://vimhelp.org/map.txt.html#map-overview
 noremap <leader>v :e ~/.vimrc<CR>
 noremap <F1> <ESC>
 inoremap <F1> <ESC>a
@@ -598,7 +600,7 @@ xnoremap <Del> "_d
 nnoremap <space> za
 nnoremap & :&&<CR>
 xnoremap & :&&<CR>
-vmap s <Plug>VSurround
+vnoremap s <Plug>VSurround
 vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
 
 cnoreabbrev W w
@@ -649,16 +651,30 @@ nnoremap <leader>* *<C-O>:%s///gn<CR>
 " cacular the matches numbers ( [w]c -[l] )
 nnoremap <leader>zwl :%s///gn<CR>
 
-if version > 703
-  " autocmd FocusLost * set norelativenumber
-  autocmd FocusGained * set relativenumber
-  autocmd InsertEnter * set norelativenumber
-  autocmd InsertLeave * set relativenumber
-  autocmd CmdwinEnter * set norelativenumber
-  autocmd CmdwinLeave * set relativenumber
-  autocmd CmdwinEnter * let b:ei_save = &eventignore | set eventignore=CursorHold,InsertEnter
-  autocmd CmdwinLeave * let &eventignore = b:ei_save
+" https://vim.fandom.com/wiki/Capitalize_words_and_regions_easily
+if ( &tildeop )
+  nnoremap gcw  guw~l
+  nnoremap gcW  guW~l
+  nnoremap gciw guiw~l
+  nnoremap gciW guiW~l
+  nnoremap gcis guis~l
+  nnoremap gc$  gu$~l
+  nnoremap gcgc guu~l
+  nnoremap gcc  guu~l
+  vnoremap gc   gu~l
+else
+  nnoremap gcw  guw~h
+  nnoremap gcW  guW~h
+  nnoremap gciw guiw~h
+  nnoremap gciW guiW~h
+  nnoremap gcis guis~h
+  nnoremap gc$  gu$~h
+  nnoremap gcgc guu~h
+  nnoremap gcc  guu~h
+  vnoremap gc   gu~h
 endif
+nnoremap gcc :s/\v<(.)(\w*)/\u\1\L\2/g<CR>
+nnoremap gcgc gcc
 
 iabbrev <leader>/* /*********************************
 iabbrev <leader>*/ *********************************/
@@ -699,13 +715,13 @@ let g:EnhCommentifyPretty          = 'Yes'
 let g:EnhCommentifyMultiPartBlocks = 'Yes'
 let g:EnhCommentifyUseSyntax       = 'Yes'
 
-map <leader>aid :AuthorInfoDetect<CR>
+noremap <leader>aid :AuthorInfoDetect<CR>
 let g:vimrc_author = 'marslo'
 let g:vimrc_email  = 'marslo.jiao@gmail.com'
 " autocmd BufWritePre, FileWritePre * :AuthorInfoDetect
 " autocmd BufWritePre * :AuthorInfoDetect
 
-map <leader>re :MRU<CR>
+noremap <leader>re :MRU<CR>
 let MRU_Auto_Close    = 1                                           " most recently used(mru)
 let MRU_Max_Entries   = 10
 let MRU_Exclude_Files = '^/tmp/.*\|^/temp/.*\|^/media/.*\|^/mnt/.*'
@@ -855,13 +871,13 @@ endif
 " git
 nnoremap <leader>mp :! git mp<CR>
 nnoremap <Leader>cgb :<C-u>call gitblame#echo()<CR>
-nnoremap <Leader>b :BlamerToggle<CR>                                " APZelos/blamer.nvim
-let g:blamer_enabled              = 1
+nnoremap <Leader>bb :BlamerToggle<CR>                               " APZelos/blamer.nvim
+let g:blamer_enabled              = 0
 let g:blamer_delay                = 100
 let g:blamer_show_in_visual_modes = 0
 let g:blamer_show_in_insert_modes = 0
-let g:blamer_prefix               = ' » '
 let g:blamer_relative_time        = 1
+" let g:blamer_prefix             = ' » '
 
 " nnoremap <leader>mp :silent exec '! git mp'<CR>
 " fugitive
@@ -876,7 +892,7 @@ let g:blamer_relative_time        = 1
 " command! -bar -nargs=* Gpush execute 'Git push'
 
 " gitgutter
-nmap <leader>d :GitGutterFold<CR>
+nnoremap <leader>d :GitGutterFold<CR>
 let g:gitgutter_git_executable = '/usr/local/bin/git'
 let g:gitgutter_enabled        = 1
 let g:gitgutter_realtime       = 0
@@ -939,7 +955,7 @@ set thesaurus+=~/.vim/spell/dictionary/mthesaur.txt
 set dictionary=/usr/share/dict/words
 
 " fastFold
-nmap zuz <Plug>(FastFoldUpdate)
+nnoremap zuz <Plug>(FastFoldUpdate)
 xnoremap <silent> <leader>iz :<c-u>FastFoldUpdate<cr>]z<up>$v[z<down>^
 xnoremap <silent> <leader>az :<c-u>FastFoldUpdate<cr>]zV[z
 let g:fastfold_savehook               = 1
@@ -966,8 +982,7 @@ let g:baan_fold                       = 1
 
 " vim-yaml-folds
 set foldlevelstart=20
-" yamllint
-" brew install yamllint
+" yamllint                                                          " brew install yamllint
 " ale                                                               " :help g:ale_echo_msg_format
 let g:ale_echo_msg_format                 = '[%linter%] %code%: %s [%severity%] '
 let g:ale_sign_error                      = '✘'
@@ -984,11 +999,11 @@ let g:ale_warn_about_trailing_whitespace  = 1
 
 augroup collumnLimit
   set colorcolumn=80
-  highlight CollumnLimit        guibg=NONE    guifg=#4e4e4e       ctermfg=240
+  highlight CollumnLimit    guibg=NONE    guifg=#4e4e4e    ctermfg=240
   autocmd!
   let collumnLimit = 80
-  let pattern = '\%<' . (collumnLimit+1) . 'v.\%>' . collumnLimit . 'v'
-  let w:m1=matchadd('CollumnLimit', pattern, -1)
+  let pattern      = '\%<' . (collumnLimit+1) . 'v.\%>' . collumnLimit . 'v'
+  let w:m1         = matchadd('CollumnLimit', pattern, -1)
 augroup END
 
 " /**************************************************************
@@ -1010,27 +1025,27 @@ if has( "autocmd" )
   autocmd Syntax      * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
   autocmd Syntax      c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile,yaml normal zM
   autocmd Syntax      c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile,yaml let g:indentLine_loaded=1
-  autocmd Syntax      groovy,Jenkinsfile,python  setlocal foldmethod=indent
+  autocmd Syntax      groovy,Jenkinsfile,python                                   setlocal foldmethod=indent
   " https://vim.fandom.com/wiki/Syntax_folding_for_Java
   autocmd FileType    java                       setlocal foldmarker=/**,**/ foldmethod=marker foldcolumn=1
   autocmd FileType    make,snippet,robot         setlocal tabstop=4 softtabstop=4 shiftwidth=4
   autocmd FileType    yaml                       setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
   autocmd FileType    javascript                 syntax   clear jsFuncBlock  " rainbow issue #2
-  autocmd BufEnter    *                          if &diff         | let g:blamer_enabled=0 | endif    " disable git blame for diff mode
-  autocmd BufEnter    *                          if ! empty(&key) | let g:blamer_enabled=0 | endif    " disable git blame for encrypt mode
-  autocmd BufWritePre *\(.ltsv\|.diffs\)\@<!    :retab!                      " automatic retab: https://vim.fandom.com/wiki/Remove_unwanted_spaces
-  autocmd BufWritePre *                         :%s/\s\+$//e | %s/\r$//e     " automatic remove trailing space
+  autocmd BufEnter    *                          if &diff         | let g:blamer_enabled=0 | endif    " ╮ disable diff mode
+  autocmd BufEnter    *                          if ! empty(&key) | let g:blamer_enabled=0 | endif    " ╯ and encrypt mode
+  autocmd BufWritePre *\(.ltsv\|.diffs\)\@<!     silent! retab!              " automatic retab: https://vim.fandom.com/wiki/Remove_unwanted_spaces
+  autocmd BufWritePre *                          %s/\s\+$//e | %s/\r$//e     " automatic remove trailing space
   " autocmd BufWritePre                                         *.html :normal gg=G
   " autocmd BufWritePre,BufWritePost,FileWritePre,FileWritePost *      silent :redraw!
 
   augroup shellStyle                                                         " automatic redraw for shellcheck
     autocmd!
-    autocmd Syntax                   bash           set filetype=sh
-    autocmd FileType                 sh,bash,shell  call DoRedraw()
-    autocmd BufWritePre,BufWritePost *.sh           call DoRedraw()
-    autocmd BufWritePre              *.sh           silent :retab!           " automatic retab
-    autocmd BufWritePost             *.sh           silent :redraw!          " automatic redraw for shellcheck
-    " autocmd BufWritePost           *.sh           !chmod +x %
+    autocmd  Syntax                   bash           set filetype=sh
+    autocmd  FileType                 sh,bash,shell  call DoRedraw()
+    autocmd  BufWritePre,BufWritePost *.sh           call DoRedraw()
+    autocmd  BufWritePre              *.sh           silent :retab!          " automatic retab
+    autocmd! BufWritePost             *.sh           silent :redraw!         " automatic redraw for shellcheck
+    " autocmd BufWritePost            *.sh           !chmod +x %
   augroup END
 
   augroup devops
@@ -1085,9 +1100,9 @@ if has( "autocmd" )
   augroup END
 
   augroup vimrc
-    autocmd! bufwritepost ~/.vimrc silent! source %
-    autocmd BufReadPre   *        setlocal foldmethod=indent
-    autocmd BufWinEnter  *        if &fdm == 'indent' | setlocal foldmethod=manual | endif
+    autocmd! BufWritePost ~/.vimrc silent! source %
+    autocmd BufReadPre    *        setlocal foldmethod=indent
+    autocmd BufWinEnter   *        if &fdm == 'indent' | setlocal foldmethod=manual | endif
   augroup END
 
   " autocmd FileType qf call AdjustWindowHeight(3, 10)
@@ -1100,6 +1115,17 @@ if has( "autocmd" )
       autocmd!
       autocmd TerminalOpen * set nobuflisted
   augroup END
+
+  if version > 703
+    " autocmd FocusLost * set norelativenumber
+    autocmd FocusGained * set relativenumber
+    autocmd InsertEnter * set norelativenumber
+    autocmd InsertLeave * set relativenumber
+    autocmd CmdwinEnter * set norelativenumber
+    autocmd CmdwinLeave * set relativenumber
+    autocmd CmdwinEnter * let b:ei_save = &eventignore | set eventignore=CursorHold,InsertEnter
+    autocmd CmdwinLeave * let &eventignore = b:ei_save
+  endif
 
 endif
 
