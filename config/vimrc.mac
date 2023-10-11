@@ -390,7 +390,7 @@ if isdirectory( expand(bud . 'python-mode') ) || has('python3')
   let g:pymode_syntax_highlight_self      = g:pymode_syntax_all
   let g:pymode_quickfix_minheight         = 3
   let g:pymode_quickfix_maxheight         = 3
-  let g:python_check_syntax               = 0                       " disable Check python script syntax on every save
+  let g:python_check_syntax               = 0                       " disable check python script syntax on every save
   let g:pymode_lint_on_write              = 0                       " disable on save checking
   " let g:pymode_rope_regenerate_on_write = 0
   let g:pymode_lint_unmodified            = 1
@@ -516,6 +516,7 @@ set t_vb=                                                           " ╯ error 
 set list
 set listchars=tab:\⇥\ ,trail:·,extends:»,precedes:«,nbsp:·
 set cursorline                                                      " highlight the current line
+set cursorcolumn
 set guicursor=a:hor10-Cursor-blinkon0
 set guicursor+=i-r-c-ci-cr-o:hor10-iCursor-blinkon0
 set guicursor+=n:hor10-Cursor-blinkwait700-blinkon400-blinkoff250
