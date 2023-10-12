@@ -350,7 +350,10 @@ function! TriggerYCM()
     let g:loaded_youcompleteme = 1
   endif
 endfunction
-nmap <C-y> :call TriggerYCM()<CR>
+nnoremap <C-y> :call TriggerYCM()<CR>
+
+command! -nargs=0 Toc execute 'silent ! /usr/local/bin/doctoc --github --maxlevel 3 %' | execute 'redraw!'
+command! -nargs=1 -range TabFirst exec <line1> . ',' . <line2> . 'Tabularsze /^[^' . escape(<q-args>, '\^$.[?*~') . ']*\zs' . escape(<q-args>, '\^$.[?*~')
 
 " /**************************************************************
 "                                                      _
@@ -833,7 +836,6 @@ let g:table_mode_align_char       = ":"
 let g:table_mode_corner           = "|"
 let g:table_mode_align_char       = ":"
 " let g:table_mode_corner_corner  = '+'
-command! -nargs=1 -range TabFirst exec <line1> . ',' . <line2> . 'Tabularsze /^[^' . escape(<q-args>, '\^$.[?*~') . ']*\zs' . escape(<q-args>, '\^$.[?*~')
 
 " function! s:isAtStartOfLine(mapping)
 "   let text_before_cursor = getline('.')[0 : col('.')-1]
@@ -1023,19 +1025,20 @@ if has( "autocmd" )
   " autocmd BufWinLeave      *               silent! mkview
   autocmd BufWinEnter        *               silent! loadview
   autocmd QuickFixCmdPost    *grep*          cwindow
-  autocmd Syntax      * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
-  autocmd Syntax      c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile,yaml normal zM
-  autocmd Syntax      c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile,yaml let g:indentLine_loaded=1
-  autocmd Syntax      groovy,Jenkinsfile,python                                   setlocal foldmethod=indent
+  autocmd Syntax       * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
+  autocmd Syntax       c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile,yaml normal zM
+  autocmd Syntax       c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile,yaml let g:indentLine_loaded=1
+  autocmd Syntax       groovy,Jenkinsfile,python                                   setlocal foldmethod=indent
   " https://vim.fandom.com/wiki/Syntax_folding_for_Java
-  autocmd FileType    java                       setlocal foldmarker=/**,**/ foldmethod=marker foldcolumn=1
-  autocmd FileType    make,snippet,robot         setlocal tabstop=4 softtabstop=4 shiftwidth=4
-  autocmd FileType    yaml                       setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
-  autocmd FileType    javascript                 syntax   clear jsFuncBlock  " rainbow issue #2
-  autocmd BufEnter    *                          if &diff         | let g:blamer_enabled=0 | endif    " ╮ disable diff mode
-  autocmd BufEnter    *                          if ! empty(&key) | let g:blamer_enabled=0 | endif    " ╯ and encrypt mode
-  autocmd BufWritePre *\(.ltsv\|.diffs\)\@<!     silent! retab!              " automatic retab: https://vim.fandom.com/wiki/Remove_unwanted_spaces
-  autocmd BufWritePre *                          %s/\s\+$//e | %s/\r$//e     " automatic remove trailing space
+  autocmd FileType     java                       setlocal foldmarker=/**,**/ foldmethod=marker foldcolumn=1
+  autocmd FileType     make,snippet,robot         setlocal tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd FileType     yaml                       setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
+  autocmd FileType     javascript                 syntax   clear jsFuncBlock  " rainbow issue #2
+  autocmd BufEnter     *                          if &diff         | let g:blamer_enabled=0 | endif    " ╮ disable git blame in diff mode
+  autocmd BufEnter     *                          if ! empty(&key) | let g:blamer_enabled=0 | endif    " ╯ and encrypt mode
+  autocmd BufWritePre  *\(.ltsv\|.diffs\)\@<!     silent! retab!              " automatic retab: https://vim.fandom.com/wiki/Remove_unwanted_spaces
+  autocmd BufWritePre  *                          %s/\s\+$//e | %s/\r$//e     " automatic remove trailing space
+  autocmd BufWritePost *\(.md\)                   silent :Toc                 " automatic build doctoc when save it
   " autocmd BufWritePre                                         *.html :normal gg=G
   " autocmd BufWritePre,BufWritePost,FileWritePre,FileWritePost *      silent :redraw!
 
@@ -1101,9 +1104,9 @@ if has( "autocmd" )
   augroup END
 
   augroup vimrc
-    autocmd! BufWritePost ~/.vimrc silent! source %
-    autocmd BufReadPre    *        setlocal foldmethod=indent
-    autocmd BufWinEnter   *        if &fdm == 'indent' | setlocal foldmethod=manual | endif
+    autocmd! BufWritePost  ~/.vimrc silent! source %
+    autocmd  BufReadPre    *        setlocal foldmethod=indent
+    autocmd  BufWinEnter   *        if &fdm == 'indent' | setlocal foldmethod=manual | endif
   augroup END
 
   " autocmd FileType qf call AdjustWindowHeight(3, 10)
@@ -1134,5 +1137,21 @@ endif
 " highlight iCursor       guifg=white      guibg=steelblue     gui=underline
 highlight SpellBad        term=underline   cterm=underline     ctermbg=0
 highlight ExtraWhitespace ctermbg=red      guibg=red
+
+let g:fzf_colors =
+\ { 'fg':         ['fg', 'Normal'],
+  \ 'bg':         ['bg', 'Normal'],
+  \ 'preview-bg': ['bg', 'NormalFloat'],
+  \ 'hl':         ['fg', 'Comment'],
+  \ 'fg+':        ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':        ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':        ['fg', 'Statement'],
+  \ 'info':       ['fg', 'PreProc'],
+  \ 'border':     ['fg', 'Ignore'],
+  \ 'prompt':     ['fg', 'Conditional'],
+  \ 'pointer':    ['fg', 'Exception'],
+  \ 'marker':     ['fg', 'Keyword'],
+  \ 'spinner':    ['fg', 'Label'],
+  \ 'header':     ['fg', 'Comment'] }
 
 " vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab:filetype=vim:foldmethod=marker:foldmarker="\ **************************************************************/,"\ /**************************************************************
