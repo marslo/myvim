@@ -1248,6 +1248,7 @@ endif
 " highlight iCursor       guifg=white      guibg=steelblue     gui=underline
 highlight SpellBad        term=underline   cterm=underline     ctermbg=0
 highlight ExtraWhitespace ctermbg=red      guibg=red
+highlight DiffText        term=reverse     cterm=reverse       ctermfg=109      ctermbg=235 gui=reverse guifg=#fabd2f guibg=#458588
 
 let g:fzf_colors =
 \ { 'fg':         ['fg', 'Normal'],
