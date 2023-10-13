@@ -3,7 +3,7 @@
 "        Author: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.25
-"    LastChange: 2023-10-05 20:51:38
+"    LastChange: 2023-10-13 00:52:26
 " =============================================================================
 
 set maxmempattern=5000
@@ -90,7 +90,6 @@ Bundle 'dpelle/vim-LanguageTool'
 Bundle 'preservim/vim-markdown'
 " Bundle 'gabrielelana/vim-markdown'
 " Bundle 'tpope/vim-markdown'
-" Bundle 'junegunn/vim-easy-align'
 " Python
 " Bundle 'python-mode/python-mode'
 Bundle 'Vimjas/vim-python-pep8-indent'
@@ -103,7 +102,7 @@ Bundle 'davidhalter/jedi-vim'
 " Web design
 Bundle 'valloric/MatchTagAlways'
 " Bundle 'jaxbot/browserlink.vim'
-" Colors and themes and syntax
+" colors and themes and syntax
 Bundle '907th/vim-auto-save'
 Bundle 'luochen1990/rainbow'
 Bundle 'txt.vim'
@@ -250,12 +249,12 @@ endfunction
 
 if isdirectory( expand(bud . 'MarsloFunc') )
   command! GetVim :call marslofunc#GetVim()<CR>
-  nnoremap cmd :call marslofunc#OpenCMD()<CR>
-  nnoremap gf :call marslofunc#GotoFile()<CR>
-  xnoremap * :<C-u>call marslofunc#VSetSearch()<CR>/<C-R>=@/<CR><CR>
-  xnoremap # :<C-u>call marslofunc#VSetSearch()<CR>?<C-R>=@/<CR><CR>
-  noremap <M-o> :call marslofunc#OpenFoler()<CR>
-  nnoremap <F12> :call marslofunc#UpdateTags()<CR>
+  nnoremap cmd    :call marslofunc#OpenCMD()<CR>
+  nnoremap gf     :call marslofunc#GotoFile()<CR>
+  xnoremap *      :<C-u>call marslofunc#VSetSearch()<CR>/<C-R>=@/<CR><CR>
+  xnoremap #      :<C-u>call marslofunc#VSetSearch()<CR>?<C-R>=@/<CR><CR>
+  noremap  <M-o>  :call marslofunc#OpenFoler()<CR>
+  nnoremap <F12>  :call marslofunc#UpdateTags()<CR>
   nnoremap <C-F5> :call marslofunc#RunResult()<CR>
   nnoremap <leader>ti :call marslofunc#callit()<CR>
 
@@ -352,7 +351,7 @@ function! TriggerYCM()
 endfunction
 nnoremap <C-y> :call TriggerYCM()<CR>
 
-command! -nargs=0 Toc execute 'silent ! /usr/local/bin/doctoc --github --maxlevel 3 %' | execute 'redraw!'
+command! -nargs=0 DocToc execute 'silent !/usr/local/bin/doctoc --github --maxlevel 3 %' | execute 'redraw!'
 command! -nargs=1 -range TabFirst exec <line1> . ',' . <line2> . 'Tabularsze /^[^' . escape(<q-args>, '\^$.[?*~') . ']*\zs' . escape(<q-args>, '\^$.[?*~')
 
 " /**************************************************************
@@ -722,8 +721,8 @@ let g:EnhCommentifyUseSyntax       = 'Yes'
 noremap <leader>aid :AuthorInfoDetect<CR>
 let g:vimrc_author = 'marslo'
 let g:vimrc_email  = 'marslo.jiao@gmail.com'
-" autocmd BufWritePre, FileWritePre * :AuthorInfoDetect
-" autocmd BufWritePre * :AuthorInfoDetect
+" autocmd BufWritePre, FileWritePre * :AuthorInfoDetect<CR>
+" autocmd BufWritePre               * :AuthorInfoDetect<CR>
 
 noremap <leader>re :MRU<CR>
 let MRU_Auto_Close    = 1                                           " most recently used(mru)
@@ -795,7 +794,6 @@ let g:syntastic_auto_loc_list             = 1
 
 " gabrielelana/vim-markdown
 " nnoremap <Leader>cc :let &cole=(&cole == 2) ? 0 : 2 <bar> echo 'conceallevel ' . &cole <CR>
-" for vim-markdown
 " let g:vim_markdown_folding_style_pythonic = 1
 " let g:vim_markdown_override_foldtext      = 0
 " let g:vim_markdown_autowrite              = 1
@@ -830,16 +828,13 @@ let g:syntastic_auto_loc_list             = 1
 let g:vim_markdown_toc_autofit         = 1
 let g:vim_markdown_conceal             = 0
 let g:vim_markdown_conceal_code_blocks = 0
-let g:vim_markdown_frontmatter         = 1
-let g:vim_markdown_json_frontmatter    = 1
 let g:vim_markdown_strikethrough       = 1
-let g:vim_markdown_autowrite           = 1
-let g:vim_markdown_follow_anchor       = 1
-let g:vim_markdown_anchorexpr          = "'<<'.v:anchor.'>>'"
-
-" for vim-markdown-toc
-" let g:vmt_auto_update_on_save     = 1
-" let g:vmt_cycle_list_item_markers = 0
+let g:vim_markdown_folding_disabled    = 1
+" let g:vim_markdown_frontmatter         = 1
+" let g:vim_markdown_json_frontmatter    = 1
+" let g:vim_markdown_autowrite           = 1
+" let g:vim_markdown_follow_anchor       = 1
+" let g:vim_markdown_anchorexpr          = "'<<'.v:anchor.'>>'"
 
 noremap <Leader>tm :TableModeToggle<CR>
 let g:table_mode_corner          = '|'
@@ -884,9 +879,9 @@ if exists( ":Tabularize" )
 endif
 
 " git
-nnoremap <leader>mp :! git mp<CR>
-nnoremap <Leader>cgb :<C-u>call gitblame#echo()<CR>
-nnoremap <Leader>bb :BlamerToggle<CR>                               " APZelos/blamer.nvim
+nnoremap <leader>mp  :! git mp<CR>
+nnoremap <Leader>ebb :<C-u>call gitblame#echo()<CR>
+nnoremap <Leader>bb  :BlamerToggle<CR>                               " APZelos/blamer.nvim
 let g:blamer_enabled              = 0
 let g:blamer_delay                = 100
 let g:blamer_show_in_visual_modes = 0
@@ -928,39 +923,9 @@ let g:plist_json_filetype        = 'javascript'
 let g:signify_disable_by_default = 0
 let g:signify_vcs_list           = [ 'git' ]
 
-" tabnine-vim
-" Bundle 'codota/tabnine-vim'
-" if index(['vim'], &filetype) == -1
-" " let g:loaded_youcompleteme = 1
-" endif
-" if !( &filetype == 'vim' )
-" " let g:loaded_youcompleteme = 1
-" endif
-" if &filetype ==# 'vim'
-"   let g:loaded_youcompleteme = 0
-" endif
-" let g:ycm_filetype_blacklist              = { 'vim':0  }
-" let g:ycm_min_num_of_chars_for_completion = 2
-" let g:ycm_python_binary_path              = '/usr/local/bin/vim'
-
-" " let b:ycm_largefile=1
-" " let g:ycm_disable_for_files_larger_than_kb = 1000
-" let g:ycm_filetype_specific_completion_to_disable = {
-"       \ 'gitcommit': 1
-"       \ }
-" " let g:ycm_semantic_triggers =  {
-"   " \   'c': ['->', '.'],
-"   " \   'objc': ['->', '.', 're!\[[_a-zA-Z]+\w*\s', 're!^\s*[^\W\d]\w*\s',
-"   " \            're!\[.*\]\s'],
-"   " \   'ocaml': ['.', '#'],
-"   " \   'cpp,cuda,objcpp': ['->', '.', '::'],
-"   " \   'perl': ['->'],
-"   " \   'php': ['->', '::'],
-"   " \   'cs,d,elixir,go,groovy,java,javascript,julia,perl6,python,scala,typescript,vb': ['.'],
-"   " \   'ruby,rust': ['.', '::'],
-"   " \   'lua': ['.', ':'],
-"   " \   'erlang': [':'],
-"   " \ }
+" tabnine-vim                                                        " Bundle 'codota/tabnine-vim'
+" if index(['vim'], &filetype) == -1 | let g:loaded_youcompleteme = 1 | endif
+" if !( &filetype == 'vim' ) | let g:loaded_youcompleteme = 1 | endif
 
 " ycm
 " let g:ycm_key_invoke_completion='<C-S-Space>'
@@ -968,25 +933,24 @@ nnoremap <leader>gc :YcmCompleter GoToDeclaration<CR>
 nnoremap <leader>gf :YcmCompleter GoToDefinition<CR>
 nnoremap <leader>gg :YcmCompleter GoToDefinitionElseDeclaration<CR>
 nnoremap <leader>gd     :YcmDiags<CR>
-set completeopt-=preview
+" set completeopt-=preview
+let g:ycm_server_keep_logfiles                    = 1
+let g:ycm_server_log_level                        = 'debug'
 let b:ycm_largefile                               = 1
 let g:ycm_cache_omnifunc                          = 0
 let g:ycm_confirm_extra_conf                      = 0
 let g:ycm_python_binary_path                      = '/usr/local/opt/python/libexec/bin/python'
-let g:ycm_extra_conf_globlist                     = ['~/dev/*','!~/*']
+let g:ycm_extra_conf_globlist                     = [ '~/dev/*','!~/*' ]
 let g:ycm_complete_in_comments                    = 1
 let g:ycm_server_keep_logfiles                    = 1
 let g:ycm_key_invoke_completion                   = '<C-\>'
-let g:ycm_global_ycm_extra_conf                   = '~/.marslo/.ycm/global_extra_conf.py'
+" let g:ycm_global_ycm_extra_conf                   = '~/.marslo/.ycm/global_extra_conf.py'
 let g:ycm_seed_identifiers_with_syntax            = 1
 let g:ycm_always_populate_location_list           = 1
 let g:ycm_min_num_of_chars_for_completion         = 1
 let g:ycm_disable_for_files_larger_than_kb        = 1000
 let g:ycm_collect_identifiers_from_tags_files     = 1
-let g:ycm_filetype_specific_completion_to_disable = {
-      \ 'gitcommit': 1,
-      \ 'vim': 1
-      \ }
+let g:ycm_filetype_specific_completion_to_disable = { 'gitcommit': 1, 'vim': 1 }
 let g:ycm_semantic_triggers =  {
   \   'c': ['->', '.'],
   \   'objc': ['->', '.', 're!\[[_a-zA-Z]+\w*\s', 're!^\s*[^\W\d]\w*\s',
@@ -1004,44 +968,57 @@ let g:ycm_semantic_triggers =  {
 """" ycm for python
 let g:ycm_python_interpreter_path = ''
 let g:ycm_python_sys_path         = []
-let g:ycm_extra_conf_vim_data     = [
-  \  'g:ycm_python_interpreter_path',
-  \  'g:ycm_python_sys_path'
-  \]
+let g:ycm_extra_conf_vim_data     = [ 'g:ycm_python_interpreter_path', 'g:ycm_python_sys_path' ]
 
 """ ycm lsp
-let g:ycm_lsp_dir = '/Users/marslo/.vim/bundle/lsp-examples'
-let s:pip_os_dir  = 'bin'
-let g:ycm_language_server = [
+let g:ycm_lsp_dir          = '/Users/marslo/.vim/bundle/lsp-examples'
+let s:pip_os_dir           = 'bin'
+if has('win32')
+  let s:pip_os_dir         = 'Scripts'
+end
+let g:ycm_language_server  = []
+let g:ycm_language_server += [
   \   { 'name': 'docker',
   \     'filetypes': [ 'dockerfile' ],
   \     'cmdline': [ expand( g:ycm_lsp_dir . '/docker/node_modules/.bin/docker-langserver' ), '--stdio' ]
   \   },
+  \ ]
+let g:ycm_language_server += [
   \   {
   \     'name': 'cmake',
   \     'cmdline': [ expand( g:ycm_lsp_dir . '/cmake/venv/' . s:pip_os_dir . '/cmake-language-server' )],
   \     'filetypes': [ 'cmake' ],
   \    },
+  \ ]
+let g:ycm_language_server += [
   \   {
   \     'name': 'python',
   \     'cmdline': [ 'node', expand( g:ycm_lsp_dir . '/python/node_modules/.bin/pyright-langserver' ), '--stdio' ],
   \     'filetypes': [ 'python' ],
   \   },
+  \ ]
+let g:ycm_language_server += [
   \   { 'name': 'vim',
   \     'filetypes': [ 'vim' ],
   \     'cmdline': [ expand( g:ycm_lsp_dir . '/viml/node_modules/.bin/vim-language-server' ), '--stdio' ]
   \   },
+  \ ]
+let g:ycm_language_server += [
   \   {
   \     'name': 'bash',
   \     'cmdline': [ 'node', expand( g:ycm_lsp_dir . '/bash/node_modules/.bin/bash-language-server' ), 'start' ],
   \     'filetypes': [ 'sh', 'bash' ],
   \   },
+  \ ]
+let g:ycm_language_server += [
   \   {
   \     'name': 'json',
   \     'cmdline': [ 'node', expand( g:ycm_lsp_dir . '/json/node_modules/.bin/vscode-json-languageserver' ), '--stdio' ],
   \     'filetypes': [ 'json' ],
   \     'capabilities': { 'textDocument': { 'completion': { 'completionItem': { 'snippetSupport': v:true } } } },
   \   },
+  \ ]
+let g:ycm_language_server += [
   \   {
   \     'name': 'yaml',
   \     'cmdline': [ 'node', expand( g:ycm_lsp_dir . '/yaml/node_modules/.bin/yaml-language-server' ), '--stdio' ],
@@ -1055,11 +1032,13 @@ let g:ycm_language_server = [
   \       }
   \     },
   \   },
+  \ ]
+let g:ycm_language_server += [
   \   {
   \     'name': 'groovy',
   \     'cmdline': [ 'java', '-jar', expand( g:ycm_lsp_dir . '/groovy/groovy-language-server/build/libs/groovy-language-server-all.jar' ) ],
   \     'filetypes': [ 'groovy' ]
-  \   }
+  \   },
   \ ]
 
 " spell and grammars
@@ -1149,7 +1128,7 @@ if has( "autocmd" )
   autocmd BufEnter     *                          if ! empty(&key) | let g:blamer_enabled=0 | endif    " ╯ and encrypt mode
   autocmd BufWritePre  *\(.ltsv\|.diffs\)\@<!     silent! retab!              " automatic retab: https://vim.fandom.com/wiki/Remove_unwanted_spaces
   autocmd BufWritePre  *                          %s/\s\+$//e | %s/\r$//e     " automatic remove trailing space
-  autocmd BufWritePost *\(.md\)                   silent :Toc                 " automatic build doctoc when save it
+  autocmd BufWritePost *\(.md\)                   silent :DocToc              " automatic build doctoc when save it
   " autocmd BufWritePre                                         *.html :normal gg=G
   " autocmd BufWritePre,BufWritePost,FileWritePre,FileWritePost *      silent :redraw!
 
