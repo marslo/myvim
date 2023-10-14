@@ -90,6 +90,7 @@ Bundle 'dpelle/vim-LanguageTool'
 Bundle 'preservim/vim-markdown'
 " Bundle 'gabrielelana/vim-markdown'
 " Bundle 'tpope/vim-markdown'
+" Bundle 'junegunn/vim-easy-align'
 " Python
 " Bundle 'python-mode/python-mode'
 Bundle 'Vimjas/vim-python-pep8-indent'
