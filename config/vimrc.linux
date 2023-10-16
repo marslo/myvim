@@ -1008,7 +1008,7 @@ let g:signify_vcs_list           = [ 'git' ]
 
 " tabnine-vim                                                        " Bundle 'codota/tabnine-vim'
 " if index(['vim'], &filetype) == -1 | let g:loaded_youcompleteme = 1 | endif
-" if !( &filetype == 'vim' ) | let g:loaded_youcompleteme = 1 | endif
+" if !( &filetype == 'vim' )         | let g:loaded_youcompleteme = 1 | endif
 
 " ycm
 " let g:ycm_key_invoke_completion='<C-S-Space>'
@@ -1017,6 +1017,7 @@ nnoremap <leader>gf :YcmCompleter GoToDefinition<CR>
 nnoremap <leader>gg :YcmCompleter GoToDefinitionElseDeclaration<CR>
 nnoremap <leader>gd     :YcmDiags<CR>
 set completeopt-=preview
+let g:loaded_youcompleteme                        = 0
 let b:ycm_largefile                               = 1
 let g:ycm_cache_omnifunc                          = 0
 let g:ycm_confirm_extra_conf                      = 0
@@ -1362,6 +1363,5 @@ endif
 highlight SpellBad        term=underline   cterm=underline     ctermbg=0
 highlight ExtraWhitespace ctermbg=red      guibg=red
 highlight DiffText        term=reverse     cterm=reverse       ctermfg=109      ctermbg=235 gui=reverse guifg=#fabd2f guibg=#458588
-
 
 " vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab:filetype=vim:foldmethod=marker:foldmarker="\ **************************************************************/,"\ /**************************************************************
