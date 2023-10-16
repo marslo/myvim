@@ -259,7 +259,7 @@ set foldexpr=1                                                      " Shown line
 set foldlevel=100                                                   " Not fold while VIM set up
 set shortmess+=filmnrxoOtTc                                         " Abbrev. of messages (avoids 'hit enter')
 set viewoptions=folds
-set backspace=indent,eol,start                                      	" Make backspace h, l, etc wrap to
+set backspace=indent,eol,start                                        " Make backspace h, l, etc wrap to
 set whichwrap+=<,>,h,l
 set go+=a                                                           " Visual selection automatically copied to the clipboard
 set hidden                                                          " Switch between buffers with unsaved change
@@ -338,8 +338,7 @@ nnoremap <leader>G :%s///gn<CR>
 nnoremap <leader>idl :IndentLineEnable<CR>
 
 nnoremap <leader>zil :g/^/ s//\=line('.').' '/<CR>    " Insert line number
-nnoremap <leader>zcm :%s/<C-v><CR>/\r/g<CR>           " Convert 
- to new line
+nnoremap <leader>zcm :%s/<C-v><CR>/\r/g<CR>           " Convert to new line
 nnoremap <leader>zwl :%s///gn<CR>                     " Show the matches numbers (wc -l)
 nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>            " Delete
 nnoremap <leader>zdb :%s/\s\+$//<CR>                  " Delete trailing space
