@@ -4,7 +4,7 @@
 "        Author: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.27
-"    LastChange: 2023-10-16 14:47:54
+"    LastChange: 2023-10-16 15:34:12
 " =============================================================================
 
 set nocompatible
@@ -17,7 +17,7 @@ set spellfile=~/.vim/spell/en.utf-8.add
 set lazyredraw
 set shell=/usr/bin/bash
 runtime macros/matchit.vim
-let vimrplugin_i386 = 1
+
 let performance_mode = 1
 set fileformat=unix
 set nowrap                                                          " no wrap lines
@@ -56,7 +56,7 @@ Plugin 'tpope/vim-repeat'
 Plugin 'Yggdroot/indentLine'
 Plugin 'kien/ctrlp.vim'
 Plugin 'sjl/gundo.vim'
-Plugin 'majutsushi/tagbar'
+Plugin 'preservim/tagbar'
 Plugin 'marslo/authorinfo'
 Plugin 'marslo/auto-pairs'
 Plugin 'tomtom/tlib_vim'
@@ -66,8 +66,10 @@ Plugin 'LargeFile'
 Plugin 'Konfekt/FastFold'
 Plugin 'dhruvasagar/vim-table-mode'
 Plugin 'vim-autoformat/vim-autoformat'
-Plugin 'tpope/vim-fugitive'
-Plugin 'airblade/vim-gitgutter'
+Plugin 'tpope/vim-fugitive'                                         " ╮
+Plugin 'airblade/vim-gitgutter'                                     " ├ git
+Plugin 'APZelos/blamer.nvim'                                        " │
+Plugin 'zivyangll/git-blame.vim'                                    " ╯
 Plugin 'mbbill/undotree'
 Plugin 'marslo/MarsloFunc'
 Plugin 'vim-syntastic/syntastic'
@@ -83,12 +85,15 @@ Plugin 'morhetz/gruvbox'                                            " theme
 Plugin 'luochen1990/rainbow'                                        " ╮ color
 Plugin 'marslo/vim-coloresque'                                      " ╯ 'ap/vim-css-color'
 Plugin 'amadeus/vim-css'
-Plugin 'modille/groovy.vim'                                         " groovy
 Plugin 'marslo/Jenkinsfile-vim-syntax'                              " jenkinfile
 Plugin 'ekalinin/Dockerfile.vim'                                    " dockerfile
 Plugin 'stephpy/vim-yaml'                                           " ╮
 Plugin 'pedrohdz/vim-yaml-folds'                                    " ├ yaml
 Plugin 'dense-analysis/ale'                                         " ╯
+Plugin 'modille/groovy.vim'                                         " /usr/local/vim/share/vim/vim90/syntax/groovy.vim
+Plugin 'vim-scripts/vim-gradle'
+" Plugin 'rizzatti/dash.vim'
+" Plugin 'ap/vim-css-color'                                         " cause issue in groovy.vim
 " Plugin 'parkr/vim-jekyll'                                         " github page
 
 call vundle#end()
@@ -216,7 +221,7 @@ function LargeFile()
   autocmd VimEnter *  echo "The file is larger than " . (g:LargeFile / 1024 / 1024) . " MB, so some options are changed (see .vimrc for details)."
 endfunction
 let g:LargeFile = 1024 * 1024 * 10
-augroup LargeFile
+augroup largeFile
   autocmd BufReadPre * let f=getfsize(expand("<afile>")) | if f > g:LargeFile || f == -2 | call LargeFile() | endif
 augroup END
 
@@ -309,7 +314,10 @@ else
   colorscheme marslo16
 endif
 
-"" cursor shape                                                     " https://vim.fandom.com/wiki/Change_cursor_shape_in_different_modes0
+"" cursor settings:                                                 " https://vim.fandom.com/wiki/Change_cursor_shape_in_different_modes0
+"    block        : 1 -> blinking block        |  2 -> solid block
+"    underscore   : 3 -> blinking underscore   |  4 -> solid underscore
+"    vertical bar : 5 -> blinking vertical bar |  6 -> solid vertical bar
 if $TERM_PROGRAM =~ "iTerm"
   let &t_SI = "\<Esc>]50;CursorShape=4\x7"                          " solid underscore for INSERT MODE
   let &t_SR = "\<Esc>]50;CursorShape=2\x7"                          " solid block for REPLACE MODE
@@ -341,6 +349,7 @@ set termencoding=utf-8
 let &termencoding=&encoding
 set fileencoding=utf-8
 set fileencodings=utf-8,latin1,ucs-bom,gbk,cp936,gb2312,gb18030     " code format
+scriptencoding utf-8                                                " set after encoding
 set rop=type:directx,gamma:1.0,contrast:0.5,level:1,geom:1,renmode:4,taamode:1
 set selection=exclusive                                             " mouse settings
 set selectmode=mouse,key
@@ -513,6 +522,8 @@ iabbrev <leader>#-   #------------------
 " **************************************************************/
 let g:auto_save                 = 0                                 " enable AutoSave on Vim startup
 
+nnoremap <leader>tb :TagbarToggle<CR>
+
 let g:ctrlp_map                 = '<c-p>'                           " CtrlP
 let g:ctrlp_working_path_mode   = 'ra'                              " search parents as well (stop searching safety)
 let g:ctrlp_max_height          = 8
@@ -550,11 +561,12 @@ noremap <Leader>u :GundoToggle<CR>
 set undodir=~/.vim/undo/
 set undofile
 
+" for i in '69' '141' '196' '112' '208' '129' '166' '85' '237' ; do echo -e "\e[38;05;${i}m${i}"; done | column -c 250 -s ' '; echo -e "\e[m"
 let g:rainbow_active    = 1
 let g:rainbow_operators = 1
 let g:rainbow_conf      = {
-\   'guifgs' : ['#DC322F', '#268bd2', '#6c71c4', '#B22222', '#C0FF3E', '#6A5ACD', '#EEC900', '#9A32CD', '#EE7600', '#98fb98'],
-\   'ctermfgs' : 'xterm-256color' == $TERM ? ['9', '69', '178', '196', '112', '208', '129', '166', '84', '99'] : ['lightblue', 'lightgreen', 'yellow', 'red', 'magenta'],
+\   'guifgs' : [ '#6A5ACD', '#ff6347', '#b58900', '#9acd32', '#EEC900', '#9A32CD', '#EE7600', '#268bd2', '#183172' ],
+\   'ctermfgs' : 'xterm-256color' == $TERM ? [ '69', '141', '196', '112', '208', '129', '166', '85', '237' ] : [ 'lightblue', 'lightgreen', 'yellow', 'red', 'magenta' ],
 \   'parentheses': [['(',')'], ['\[','\]'], ['{','}']],
 \   'separately': {
 \     '*': {},
@@ -605,17 +617,18 @@ let g:airline_section_z                            = "%3p%% %l/%L:%c [%B]"
 let g:airline_skip_empty_sections                  = 1
 let g:airline_detect_modified                      = 1
 let g:airline_detect_paste                         = 1
-let g:airline#extensions#wordcount#enabled         = 0
+let g:airline#extensions#wordcount#enabled         = 1
+let g:airline#extensions#wordcount#filetypes       = '\vtext|nroff|plaintex'
 let g:airline#extensions#quickfix#enabled          = 0
 let g:airline#extensions#quickfix#quickfix_text    = 'Quickfix'
-let g:airline#extensions#tabline#fnamemod          = ':t'
 let g:airline_stl_path_style                       = 'short'
 let g:airline#extensions#tabline#enabled           = 1              " ╮ enable airline tabline
+let g:airline#extensions#tabline#fnamemod          = ':t'           " │
 let g:airline#extensions#tabline#show_close_button = 0              " │ remove 'X' at the end of the tabline
 let g:airline#extensions#tabline#show_buffers      = 1              " │
 let g:airline#extensions#tabline#show_splits       = 0              " │ disables the buffer name that displays on the right of the tabline
 let g:airline#extensions#tabline#tab_min_count     = 2              " │ minimum of 2 tabs needed to display the tabline
-let g:airline#extensions#tabline#show_tabs         = 1              " │
+let g:airline#extensions#tabline#show_tabs         = 0              " │
 let g:airline#extensions#tabline#tab_nr_type       = 1              " ╯ tab number
 let g:airline#extensions#branch#format             = 2
 let g:airline#extensions#ale#enabled               = 1              " ╮
@@ -730,8 +743,7 @@ let g:ycm_server_log_level                        = 'debug'
 let b:ycm_largefile                               = 1
 let g:ycm_cache_omnifunc                          = 0
 let g:ycm_confirm_extra_conf                      = 0
-let g:ycm_python_binary_path                      = '/usr/local/bin/python3.11'
-let g:ycm_server_python_interpreter               = '/usr/local/bin/python3.11'
+let g:ycm_python_binary_path                      = '/usr/local/opt/python/libexec/bin/python'
 let g:ycm_extra_conf_globlist                     = [ '~/dev/*','!~/*' ]
 let g:ycm_complete_in_comments                    = 1
 let g:ycm_server_keep_logfiles                    = 1
@@ -897,7 +909,6 @@ let g:ale_sign_style_warning              = 'ᓍ'                     " ᓏ
 let g:ale_lint_on_text_changed            = 'never'
 let g:ale_fix_on_save                     = 0
 let g:ale_lint_on_save                    = 1
-let g:ale_lint_on_text_changed            = 'never'
 let g:ale_warn_about_trailing_blank_lines = 1
 let g:ale_warn_about_trailing_whitespace  = 1
 let g:ale_set_balloons                    = 1
@@ -923,41 +934,36 @@ augroup END
 "
 " **************************************************************/
 if has( "autocmd" )
+  autocmd VimLeave           *                      silent clear              " :windo bd
+  autocmd BufReadPre         *                      setlocal foldmethod=indent
+  autocmd BufWinEnter        *                      if &fdm == 'indent' | setlocal foldmethod=manual | endif
+  autocmd BufWinEnter        *                      silent! loadview          " autocmd BufWinLeave * silent! mkview
+  autocmd Syntax             *                      syn match ExtraWhitespace /\s\+$\| \+\ze\t/
+  autocmd BufEnter           *                      if &diff | let g:blamer_enabled=0 | endif            " ╮ disable git blame in diff mode
+  autocmd BufEnter           *                      if ! empty(&key) | let g:blamer_enabled=0 | endif    " ╯ and encrypt mode
+  autocmd BufWritePre        *                      %s/\s\+$//e | %s/\r$//e   " automatic remove trailing space
+  autocmd BufWritePre        *\(.ltsv\|.diffs\)\@<! silent! retab!            " automatic retab: https://vim.fandom.com/wiki/Remove_unwanted_spaces
   autocmd BufRead,BufNewFile *.t                    set filetype=perl
   autocmd BufRead,BufNewFile *.ltsv                 set filetype=ltsv syntax=groovy noexpandtab
-  autocmd BufWinEnter        *                      silent! loadview               " autocmd BufWinLeave * silent! mkview
-  autocmd Syntax             *                      syn match ExtraWhitespace /\s\+$\| \+\ze\t/
-  autocmd BufEnter           *                      if &diff         | let g:blamer_enabled=0 | endif    " ╮ disable git blame in diff mode
-  autocmd BufEnter           *                      if ! empty(&key) | let g:blamer_enabled=0 | endif    " ╯ and encrypt mode
-  autocmd BufWritePre        *                      %s/\s\+$//e | %s/\r$//e        " automatic remove trailing space
-  autocmd BufWritePre        *\(.ltsv\|.diffs\)\@<! silent! retab!                 " automatic retab: https://vim.fandom.com/wiki/Remove_unwanted_spaces
   autocmd QuickFixCmdPost    *grep*                 cwindow
   autocmd FileType           make,snippet,robot     setlocal tabstop=4 softtabstop=4 shiftwidth=4
-  autocmd FileType           yaml                   setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
-  autocmd FileType           javascript             syntax clear jsFuncBlock     " rainbow issue #2
-  autocmd Filetype           vim                    let b:AutoPairs={'(':')', '[':']', '{':'}', '<':'>', '`':'`'}
-  autocmd Syntax             c,cpp,python,vim,xml,html,xhtml,vim,yaml normal zM
-  autocmd Syntax             c,cpp,python,vim,xml,html,xhtml,vim,yaml let g:indentLine_loaded=1
+  autocmd Syntax             c,cpp,xml,html,xhtml   normal zM
+  autocmd Syntax             c,cpp,xml,html,xhtml   let g:indentLine_loaded=1
   " autocmd BufWritePre                                         *.html :normal gg=G
   " autocmd BufWritePre,BufWritePost,FileWritePre,FileWritePost *      silent :redraw!
-
-  augroup CustomTabularize
-    autocmd!
-    " https://github.com/jwhitley/vimrc/blob/master/.vimrc
-    " autocmd VimEnter * if exists(":Tabularize") | exe ":AddTabularPattern! bundles /[^ ]\\+\\//l1r0" | endif
-    " add for plugin/TabularMaps.vim
-    autocmd VimEnter * if exists(":Tabularize") | exe ":AddTabularPattern 1,  /^[^,]*\zs,/r1c1l0" | endif
-    autocmd VimEnter * if exists(":Tabularize") | exe ":AddTabularPattern 1=  /^[^=]*\zs="        | endif
-    autocmd VimEnter * if exists(":Tabularize") | exe ":AddTabularPattern 1== /^[^=]*\zs=/r0c0l0" | endif
-  augroup END
 
   augroup DevOps
     autocmd BufRead,BufNewFile *             setfiletype jenkinsfile
     autocmd FileType           json,markdown set tabstop=2 softtabstop=2 shiftwidth=2
+    autocmd FileType           yaml          setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
     autocmd BufEnter           *.md          exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" %:p "--no-gpu"<CR>'
     autocmd BufEnter           *.markdown    exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome --no-gpu"  %:p<CR>'
-    autocmd Filetype           markdown      let b:AutoPairs={'(':')', '[':']', '{':'}', '"':'"', '`':'`'}
-    autocmd BufWritePost       *\(.md\)      silent :DocToc                 " automatic build doctoc when save it
+    autocmd Filetype           markdown      let b:AutoPairs={ '(':')', '[':']', '{':'}', "'":"'", '`':'`' }
+    autocmd Syntax             yaml          let g:indentLine_loaded=1
+    autocmd Syntax             yaml          normal zM
+    if index( ['README', 'SUMMARY'], expand("%:r") ) == -1
+      autocmd BufWritePost     *\(.md\)      silent :DocToc                   " automatic build doctoc when save it
+    endif
     autocmd BufNewFile,BufRead
           \ *.git/config,.gitconfig,.gitmodules,gitconfig
           \,~/.marslo/.gitalias
@@ -969,9 +975,8 @@ if has( "autocmd" )
     autocmd  Syntax                   bash           set filetype=sh
     autocmd  FileType                 sh,bash,shell  silent :retab!
     autocmd  FileType                 sh,bash,shell  set tabstop=2 softtabstop=2 shiftwidth=2
-    autocmd  BufWritePre,BufWritePost *.sh           silent :retab!
-    autocmd  BufWritePre              *.sh           silent :retab!          " automatic retab
-    autocmd! BufWritePost             *.sh           silent :redraw!         " automatic redraw for shellcheck
+    autocmd  BufWritePre              *.sh           silent :retab!           " automatic retab
+    autocmd! BufWritePost             *.sh           silent :redraw!          " automatic redraw for shellcheck
     " autocmd BufWritePost            *.sh           !chmod +x %
   augroup END
 
@@ -981,13 +986,15 @@ if has( "autocmd" )
     autocmd Syntax        groovy,Jenkinsfile let         g:indentLine_loaded=1
     autocmd Syntax        groovy,Jenkinsfile setlocal    foldmethod=indent
     autocmd Syntax        groovy,Jenkinsfile normal zM
+    autocmd FileType      Jenkinsfile        setlocal    commentstring=//\ %s
     " https://vim.fandom.com/wiki/Syntax_folding_for_Java
-    autocmd FileType      java,groovy        setlocal    foldmarker=/**,**/ foldmethod=marker foldcolumn=1
+    autocmd FileType      java               setlocal    foldmarker=/**,**/ foldmethod=marker foldcolumn=1
+    autocmd FileType      javascript         syntax      clear jsFuncBlock    " rainbow issue #2
     " autocmd FileType    Jenkinsfile        setlocal    filetype=groovy syntax=groovy foldmethod=indent
     " autocmd FileType    Jenkinsfile        set         syntax=groovy filetype=groovy
     " autocmd BufNewFile,BufRead             Jenkinsfile setf groovy
     " autocmd BufNewFile,BufRead,BufReadPost Jenkinsfile setlocal foldmethod=indent
-    if getline(1) =~ '^#!.*[/\\]groovy\>' | setf groovy | endif     " to setup filetype to groovy if first line matches `#!.*[/\\]groovy`
+    if getline(1) =~ '^#!.*[/\\]groovy\>' |  setf groovy | endif              " to setup filetype to groovy if first line matches `#!.*[/\\]groovy`
   augroup END
 
   augroup Python
@@ -1004,19 +1011,22 @@ if has( "autocmd" )
     autocmd FileType python set      tabstop=2 softtabstop=2 shiftwidth=2 autoindent
     autocmd FileTYpe python set      isk-=.
     autocmd Syntax   python setlocal foldmethod=indent
+    autocmd Syntax   python let      g:indentLine_loaded=1
+    autocmd Syntax   python normal zM
   augroup END
 
-  augroup Vimrc
-    autocmd! BufWritePost  ~/.vimrc silent! source %
-    autocmd  BufReadPre    *        setlocal foldmethod=indent
-    autocmd  BufWinEnter   *        if &fdm == 'indent' | setlocal foldmethod=manual | endif
-    autocmd  FileType      vim      let g:ycm_confirm_extra_conf = 1
+  augroup vimrc
+    autocmd! BufWritePost ~/.vimrc silent! source %
+    autocmd  FileType     vim      let g:ycm_confirm_extra_conf = 1
+    autocmd  Filetype     vim      let b:AutoPairs={'(':')', '[':']', '{':'}', '<':'>', '`':'`'}
+    autocmd  Syntax       vim      let g:indentLine_loaded=1
+    autocmd  Syntax       vim      normal zM
   augroup END
 
   " skip quickfix : https://vi.stackexchange.com/a/16709/7389
-  augroup termIgnore
-      autocmd!
-      autocmd TerminalOpen * set nobuflisted
+  augroup termIgnore                                                " skip quickfix : https://vi.stackexchange.com/a/16709/7389
+    autocmd!
+    autocmd TerminalOpen * set nobuflisted
   augroup END
 
   if version > 703
@@ -1030,15 +1040,41 @@ if has( "autocmd" )
     autocmd CmdwinLeave * let &eventignore = b:ei_save
   endif
 
+  augroup CustomTabularize
+    autocmd!
+    " https://github.com/jwhitley/vimrc/blob/master/.vimrc
+    " autocmd VimEnter * if exists(":Tabularize") | exe ":AddTabularPattern! bundles /[^ ]\\+\\//l1r0" | endif
+    " add for plugin/TabularMaps.vim
+    autocmd VimEnter * if exists(":Tabularize") | exe ":AddTabularPattern 1,  /^[^,]*\zs,/r1c1l0" | endif
+    autocmd VimEnter * if exists(":Tabularize") | exe ":AddTabularPattern 1=  /^[^=]*\zs="        | endif
+    autocmd VimEnter * if exists(":Tabularize") | exe ":AddTabularPattern 1== /^[^=]*\zs=/r1c1l0" | endif
+  augroup END
+  " uncomment the following to have vim jump to the last position when reopening a file
+  " autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 endif
 
-" set list lcs=tab:\|\
-" uncomment the following to have vim jump to the last position when
-" reopening a file
-if has("autocmd")
-  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
-    \| exe "normal! g'\"" | endif
-endif
+let g:fzf_colors = {
+  \ 'fg':         ['fg', 'Normal'],
+  \ 'bg':         ['bg', 'Normal'],
+  \ 'preview-bg': ['bg', 'NormalFloat'],
+  \ 'hl':         ['fg', 'Comment'],
+  \ 'fg+':        ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':        ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':        ['fg', 'Statement'],
+  \ 'info':       ['fg', 'PreProc'],
+  \ 'border':     ['fg', 'Ignore'],
+  \ 'prompt':     ['fg', 'Conditional'],
+  \ 'pointer':    ['fg', 'Exception'],
+  \ 'marker':     ['fg', 'Keyword'],
+  \ 'spinner':    ['fg', 'Label'],
+  \ 'header':     ['fg', 'Comment']
+  \ }
+
+highlight SpellBad        term=underline   cterm=underline     ctermbg=0
+highlight ExtraWhitespace ctermbg=red      guibg=red
+highlight DiffText        term=reverse     cterm=reverse       ctermfg=109      ctermbg=235 gui=reverse guifg=#fabd2f guibg=#458588
+" highlight Cursor        guifg=white      guibg=gray          gui=bold
+" highlight iCursor       guifg=white      guibg=steelblue     gui=underline
 
 " " highlight clear SpellBad Conceal PmenuSel SpecialKey Exception Folded TabLineSel Search CorsorLine
 " highlight SpellBad       term=underline   cterm=underline     ctermbg=NONE    ctermfg=160
@@ -1090,10 +1126,6 @@ endif
 " highlight IncSearch      term=standout    cterm=standout      ctermfg=148     ctermbg=238
 " highlight Search         cterm=NONE       ctermfg=64          ctermbg=238     guifg=Black     guibg=Yellow
 
-" highlight Cursor        guifg=white      guibg=gray          gui=bold
-" highlight iCursor       guifg=white      guibg=steelblue     gui=underline
-highlight SpellBad        term=underline   cterm=underline     ctermbg=0
-highlight ExtraWhitespace ctermbg=red      guibg=red
-highlight DiffText        term=reverse     cterm=reverse       ctermfg=109      ctermbg=235 gui=reverse guifg=#fabd2f guibg=#458588
+
 
 " vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab:filetype=vim:foldmethod=marker:foldmarker="\ **************************************************************/,"\ /**************************************************************
