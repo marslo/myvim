@@ -268,7 +268,8 @@ nnoremap <Leader>r :Reverse <bar> nohlsearch<CR>
 xnoremap <Leader>r :Reverse <bar> nohlsearch<CR>
 
 command! -nargs=0 DocToc execute 'silent !/usr/local/bin/doctoc --github --maxlevel 3 %' | execute 'redraw!'
-command! -nargs=1 -range TabFirst exec <line1> . ',' . <line2> . 'Tabularsze /^[^' . escape(<q-args>, '\^$.[?*~') . ']*\zs' . escape(<q-args>, '\^$.[?*~')
+command! -nargs=1 First exec 'Tabularize /^[^' . escape(<q-args>, '\^$.[?*~') . ']*\zs' . escape(<q-args>, '\^$.[?*~')
+command! -nargs=1 -range First exec <line1> . ',' . <line2> . 'Tabularize /^[^' . escape(<q-args>, '\^$.[?*~') . ']*\zs' . escape(<q-args>, '\^$.[?*~')
 
 " /**************************************************************
 "  _       _             __                     __  _   _
@@ -322,10 +323,10 @@ if $TERM_PROGRAM =~ "iTerm"
   let &t_SI = "\<Esc>]50;CursorShape=4\x7"                          " solid underscore for INSERT MODE
   let &t_SR = "\<Esc>]50;CursorShape=2\x7"                          " solid block for REPLACE MODE
   let &t_EI = "\<Esc>]10;CursorShape=3\x7"                          " blinking underscore for NORMAL MODE
-else
-  let &t_SI.="\e[2 q"                                               " SI = INSERT mode
-  let &t_SR.="\e[2 q"                                               " SR = REPLACE mode
-  let &t_EI.="\e[1 q"                                               " EI = NORMAL mode (ELSE)
+" else
+"   let &t_SI.="\e[4 q"                                             " SI = INSERT mode
+"   let &t_SR.="\e[5 q"                                             " SR = REPLACE mode
+"   let &t_EI.="\e[3 q"                                             " EI = NORMAL mode (ELSE)
 endif
 
 " /**************************************************************
@@ -954,6 +955,7 @@ if has( "autocmd" )
 
   augroup DevOps
     autocmd BufRead,BufNewFile *             setfiletype jenkinsfile
+    autocmd BufRead,BufNewFile *.config      set filetype=config syntax=gitconfig noexpandtab
     autocmd FileType           json,markdown set tabstop=2 softtabstop=2 shiftwidth=2
     autocmd FileType           yaml          setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
     autocmd BufEnter           *.md          exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" %:p "--no-gpu"<CR>'
