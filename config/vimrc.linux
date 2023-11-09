@@ -4,7 +4,7 @@
 "        Author: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.27
-"    LastChange: 2023-10-16 15:34:12
+"    LastChange: 2023-11-08 21:16:38
 " =============================================================================
 
 set nocompatible
@@ -20,13 +20,14 @@ runtime macros/matchit.vim
 
 let performance_mode = 1
 set fileformat=unix
+set fileformats=unix
 set nowrap                                                          " no wrap lines
 set viminfo=%,<800,'10,/50,:100,h,f0,n~/.vim/cache/.viminfo
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip
 set tags=tags
 
 if empty( glob('~/.vim/cache/') ) | execute 'silent !mkdir -p ~/.vim/cache' | endif
-if empty( glob('~/.vim/undo/') )  | execute 'silent !mkdir -p ~/.vim/undo'  | endif
+if empty( glob('~/.vim/undo/')  ) | execute 'silent !mkdir -p ~/.vim/undo'  | endif
 
 " /**************************************************************
 "                                  _
@@ -949,51 +950,52 @@ if has( "autocmd" )
   autocmd QuickFixCmdPost    *grep*                 cwindow
   autocmd FileType           make,snippet,robot     setlocal tabstop=4 softtabstop=4 shiftwidth=4
   autocmd Syntax             c,cpp,xml,html,xhtml   normal zM
-  autocmd Syntax             c,cpp,xml,html,xhtml   let g:indentLine_loaded=1
-  " autocmd BufWritePre                                         *.html :normal gg=G
-  " autocmd BufWritePre,BufWritePost,FileWritePre,FileWritePost *      silent :redraw!
+  " autocmd BufWritePre      *.html                 normal gg=G
+  " autocmd BufWritePre,BufWritePost,FileWritePre,FileWritePost * silent :redraw!
 
   augroup DevOps
-    autocmd BufRead,BufNewFile *             setfiletype jenkinsfile
-    autocmd BufRead,BufNewFile *.config      set filetype=config syntax=gitconfig noexpandtab
-    autocmd FileType           json,markdown set tabstop=2 softtabstop=2 shiftwidth=2
-    autocmd FileType           yaml          setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
-    autocmd BufEnter           *.md          exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" %:p "--no-gpu"<CR>'
-    autocmd BufEnter           *.markdown    exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome --no-gpu"  %:p<CR>'
-    autocmd Filetype           markdown      let b:AutoPairs={ '(':')', '[':']', '{':'}', "'":"'", '`':'`' }
-    autocmd Syntax             yaml          let g:indentLine_loaded=1
-    autocmd Syntax             yaml          normal zM
+    autocmd BufRead,BufNewFile *                   setfiletype jenkinsfile
+    autocmd BufRead,BufNewFile *.config            set filetype=config syntax=gitconfig noexpandtab
+    autocmd FileType           json,markdown       set tabstop=2 softtabstop=2 shiftwidth=2
+    autocmd Filetype           markdown            let b:AutoPairs={ '(':')', '[':']', '{':'}', "'":"'", '`':'`' }
+    autocmd FileType           yaml                setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
+    autocmd Syntax             yaml                let g:indentLine_loaded=1
+    autocmd Syntax             yaml                normal zM
+    autocmd BufEnter           *\(.md\|.markdown\) exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" %:p "--no-gpu"<CR>'
     if index( ['README', 'SUMMARY'], expand("%:r") ) == -1
-      autocmd BufWritePost     *\(.md\)      silent :DocToc                   " automatic build doctoc when save it
+      autocmd BufWritePost     *\(.md\)            silent :DocToc             " automatic build doctoc when save it
     endif
-    autocmd BufNewFile,BufRead
+    autocmd BufNewFile,BufRead                                                " git config files
           \ *.git/config,.gitconfig,.gitmodules,gitconfig
           \,~/.marslo/.gitalias
           \ setfiletype gitconfig
+
+    if did_filetype()                     | finish      | endif
+    if getline(1) =~ '^#!.*[/\\]groovy\>' | setf groovy | endif               " to setup filetype to groovy if first line matches `#!.*[/\\]groovy`
   augroup END
 
   augroup ShellScript
     autocmd!
-    autocmd  Syntax                   bash           set filetype=sh
-    autocmd  FileType                 sh,bash,shell  silent :retab!
-    autocmd  FileType                 sh,bash,shell  set tabstop=2 softtabstop=2 shiftwidth=2
-    autocmd  BufWritePre              *.sh           silent :retab!           " automatic retab
-    autocmd! BufWritePost             *.sh           silent :redraw!          " automatic redraw for shellcheck
-    " autocmd BufWritePost            *.sh           !chmod +x %
+    autocmd  Syntax        bash           set filetype=sh
+    autocmd  FileType      sh,bash,shell  silent :retab!
+    autocmd  FileType      sh,bash,shell  set tabstop=2 softtabstop=2 shiftwidth=2
+    autocmd! BufWritePre   *.sh           silent :retab!                      " automatic retab
+    autocmd! BufWritePost  *.sh           silent :redraw!                     " automatic redraw for shellcheck
+    " autocmd BufWritePost *.sh           !chmod +x %
   augroup END
 
   augroup Groovy
-    autocmd Filetype      Groovy             set         filetype=groovy
-    autocmd FileType      groovy,Jenkinsfile set         tabstop=2 softtabstop=2 shiftwidth=2
-    autocmd Syntax        groovy,Jenkinsfile let         g:indentLine_loaded=1
-    autocmd Syntax        groovy,Jenkinsfile setlocal    foldmethod=indent
-    autocmd Syntax        groovy,Jenkinsfile normal zM
-    autocmd FileType      Jenkinsfile        setlocal    commentstring=//\ %s
+    autocmd Filetype   Groovy             set filetype=groovy
+    autocmd FileType   groovy,Jenkinsfile set tabstop=2 softtabstop=2 shiftwidth=2
+    autocmd Syntax     groovy,Jenkinsfile let g:indentLine_loaded=1
+    autocmd Syntax     groovy,Jenkinsfile setlocal foldmethod=indent
+    autocmd Syntax     groovy,Jenkinsfile normal zM
+    autocmd FileType   Jenkinsfile        setlocal commentstring=//\ %s
     " https://vim.fandom.com/wiki/Syntax_folding_for_Java
-    autocmd FileType      java               setlocal    foldmarker=/**,**/ foldmethod=marker foldcolumn=1
-    autocmd FileType      javascript         syntax      clear jsFuncBlock    " rainbow issue #2
-    " autocmd FileType    Jenkinsfile        setlocal    filetype=groovy syntax=groovy foldmethod=indent
-    " autocmd FileType    Jenkinsfile        set         syntax=groovy filetype=groovy
+    autocmd FileType   java               setlocal foldmarker=/**,**/ foldmethod=marker foldcolumn=1
+    autocmd FileType   javascript         syntax clear jsFuncBlock            " rainbow issue #2
+    " autocmd FileType Jenkinsfile        setlocal filetype=groovy syntax=groovy foldmethod=indent
+    " autocmd FileType Jenkinsfile        set syntax=groovy filetype=groovy
     " autocmd BufNewFile,BufRead             Jenkinsfile setf groovy
     " autocmd BufNewFile,BufRead,BufReadPost Jenkinsfile setlocal foldmethod=indent
     if getline(1) =~ '^#!.*[/\\]groovy\>' |  setf groovy | endif              " to setup filetype to groovy if first line matches `#!.*[/\\]groovy`
@@ -1001,19 +1003,13 @@ if has( "autocmd" )
 
   augroup Python
     autocmd BufNewFile,BufRead python
-            \ set tabstop=2
-            \ set softtabstop=2
-            \ set shiftwidth=2
-            \ setlocal shiftwidth=2
-            \ setlocal tabstop=2
-            \ setlocal softtabstop=2
-            \ setlocal autoindent
+            \ set tabstop=2 softtabstop=2 shiftwidth=2
+            \ setlocal shiftwidth=2 tabstop=2 softtabstop=2 autoindent
             \ fileformat=unix
-    autocmd FileType python syntax   keyword pythonDecorator print self
-    autocmd FileType python set      tabstop=2 softtabstop=2 shiftwidth=2 autoindent
-    autocmd FileTYpe python set      isk-=.
+    autocmd FileType python syntax keyword pythonDecorator print self
+    autocmd FileTYpe python set isk-=.
     autocmd Syntax   python setlocal foldmethod=indent
-    autocmd Syntax   python let      g:indentLine_loaded=1
+    autocmd Syntax   python let g:indentLine_loaded=1
     autocmd Syntax   python normal zM
   augroup END
 
@@ -1026,7 +1022,7 @@ if has( "autocmd" )
   augroup END
 
   " skip quickfix : https://vi.stackexchange.com/a/16709/7389
-  augroup termIgnore                                                " skip quickfix : https://vi.stackexchange.com/a/16709/7389
+  augroup TermIgnore                                                " skip quickfix : https://vi.stackexchange.com/a/16709/7389
     autocmd!
     autocmd TerminalOpen * set nobuflisted
   augroup END
