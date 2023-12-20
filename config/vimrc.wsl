@@ -2,32 +2,28 @@
 "      FileName: vimrc.wsl
 "        Author: marslo.jiao@gmail.com
 "       Created: 2010-10
-"       Version: 0.0.25
-"    LastChange: 2023-09-15 16:20:32
+"       Version: 0.0.27
+"    LastChange: 2023-12-19 21:40:40
 " =============================================================================
 
-set maxmempattern=5000
 set nocompatible
+set maxmempattern=5000
 set history=1000
 set diffopt=filler,context:3
 set lazyredraw
+set shell=/usr/bin/bash
 runtime macros/matchit.vim
 
+let performance_mode = 1
 set fileformat=unix
-set nowrap                                                          " Wrap lines
+set fileformats=unix
+set nowrap                                                          " no wrap lines
 set viminfo=%,<800,'10,/50,:100,h,f0,n~/.vim/cache/.viminfo
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip
 set tags=tags
 
-if empty(glob('~/.vim/cache/'))
-  execute 'silent !mkdir -p ~/.vim/cache'
-endif
-if empty(glob('~/.vim/undo/'))
-  execute 'silent !mkdir -p ~/.vim/undo'
-endif
-
-let bud=expand('~/.vim/bundle') . '/'
-let performance_mode = 1
+if empty( glob('~/.vim/cache/') ) | execute 'silent !mkdir -p ~/.vim/cache' | endif
+if empty( glob('~/.vim/undo/')  ) | execute 'silent !mkdir -p ~/.vim/undo'  | endif
 
 " /**************************************************************
 "                                  _
@@ -38,57 +34,61 @@ let performance_mode = 1
 " |_|             |_|                  |___/
 "
 " **************************************************************/
+let bud         = expand( '~/.vim/bundle' ) . '/'
 let mapleader   = ","
 let g:mapleader = ","
 
-" Vim Bundle
+" bundle
 filetype off
 set rtp+=~/.vim/bundle/Vundle.vim/
 call vundle#begin()
 
-Bundle 'VundleVim/Vundle.vim'
-Bundle 'tpope/vim-pathogen'
-Bundle 'tpope/vim-surround'
-Bundle 'godlygeek/tabular'
-Bundle 'tpope/vim-repeat'
-Bundle 'Yggdroot/indentLine'
-Bundle 'kien/ctrlp.vim'
-Bundle 'sjl/gundo.vim'
-Bundle 'majutsushi/tagbar'
-Bundle 'marslo/authorinfo'
-Bundle 'marslo/EnhCommentify.vim'
-Bundle 'marslo/auto-pairs'
-Bundle 'tomtom/tlib_vim'
-Bundle 'marslo/snipmate.vim'
-Bundle 'marcWeber/vim-addon-mw-utils'
-" Bundle 'garbas/vim-snipmate'
-Bundle 'yegappan/mru'
-Bundle 'grep.vim'
-Bundle 'vim-syntastic/syntastic'
-Bundle 'Marslo/MarsloFunc'
-Bundle 'LargeFile'
-Bundle 'vim-autoformat/vim-autoformat'
-Bundle 'mhinz/vim-signify'
-" Colors and themes and syntax
-Bundle 'luochen1990/rainbow'
-Bundle 'txt.vim'
-Bundle 'marslo/vim-coloresque'
-Bundle 'marslo/marslo.vim'
-Bundle 'marslo/MarsloVimOthers'
-" Bundle 'plasticboy/vim-markdown.git'
-Bundle 'gabrielelana/vim-markdown'
-Bundle 'mzlogin/vim-markdown-toc'
-Bundle 'altercation/vim-colors-solarized'
-Bundle 'morhetz/gruvbox'
-" Groovy
-Bundle 'modille/groovy.vim'
-Bundle 'marslo/Jenkinsfile-vim-syntax'
-" dockerfile
-Bundle 'ekalinin/Dockerfile.vim'
+Plugin 'VundleVim/Vundle.vim'
+Plugin 'tpope/vim-pathogen'
+Plugin 'tpope/vim-surround'
+Plugin 'godlygeek/tabular'
+Plugin 'tpope/vim-repeat'
+Plugin 'Yggdroot/indentLine'
+Plugin 'kien/ctrlp.vim'
+Plugin 'sjl/gundo.vim'
+Plugin 'preservim/tagbar'
+Plugin 'marslo/authorinfo'
+Plugin 'marslo/auto-pairs'
+Plugin 'tomtom/tlib_vim'
+Plugin 'marslo/snipmate.vim'
+" Plugin 'garbas/vim-snipmate'
+Plugin 'marcWeber/vim-addon-mw-utils'
+Plugin 'yegappan/mru'
+Plugin 'grep.vim'
+Plugin 'LargeFile'
+Plugin 'vim-autoformat/vim-autoformat'
+Plugin 'mhinz/vim-signify'
+Plugin 'marslo/MarsloFunc'
+Plugin 'vim-syntastic/syntastic'
+Plugin 'marslo/EnhCommentify.vim'
+" colors and themes and syntax
+Plugin 'txt.vim'
+Plugin 'marslo/marslo.vim'
+Plugin 'marslo/MarsloVimOthers'
+" Plugin 'plasticboy/vim-markdown.git'
+" Plugin 'gabrielelana/vim-markdown'
+" Plugin 'mzlogin/vim-markdown-toc'
+Plugin 'preservim/vim-markdown'                                     " markdown
+Plugin 'altercation/vim-colors-solarized'
+Plugin 'morhetz/gruvbox'                                            " theme
+Plugin 'luochen1990/rainbow'                                        " ╮ color
+Plugin 'marslo/vim-coloresque'                                      " ╯ 'ap/vim-css-color'
+Plugin 'amadeus/vim-css'
 " yaml
-Bundle 'stephpy/vim-yaml'
-Bundle 'pedrohdz/vim-yaml-folds'
-Bundle 'dense-analysis/ale'
+Plugin 'stephpy/vim-yaml'                                           " ╮
+Plugin 'pedrohdz/vim-yaml-folds'                                    " ├ yaml
+Plugin 'dense-analysis/ale'                                         " ╯
+" groovy
+Plugin 'modille/groovy.vim'                                         " /usr/local/vim/share/vim/vim90/syntax/groovy.vim
+Plugin 'vim-scripts/vim-gradle'
+Plugin 'marslo/Jenkinsfile-vim-syntax'                              " jenkinfile
+" dockerfile
+Plugin 'ekalinin/Dockerfile.vim'                                    " dockerfile
 
 call vundle#end()
 call pathogen#infect()
@@ -169,35 +169,35 @@ nnoremap <silent> <leader>wt :call ToggleWindowHorizontalVerticalSplit()<cr>
 
 if isdirectory( expand(bud . 'MarsloFunc') )
   command! GetVim :call marslofunc#GetVim()<CR>
-  nmap cmd :call marslofunc#OpenCMD()<CR>
-  nmap gf :call marslofunc#GotoFile()<CR>
-  xnoremap * :<C-u>call marslofunc#VSetSearch()<CR>/<C-R>=@/<CR><CR>
-  xnoremap # :<C-u>call marslofunc#VSetSearch()<CR>?<C-R>=@/<CR><CR>
+  nmap     cmd    :call marslofunc#OpenCMD()<CR>
+  nmap     gf     :call marslofunc#GotoFile()<CR>
+  xnoremap *      :<C-u>call marslofunc#VSetSearch()<CR>/<C-R>=@/<CR><CR>
+  xnoremap #      :<C-u>call marslofunc#VSetSearch()<CR>?<C-R>=@/<CR><CR>
 
   augroup resCur
     autocmd!
-      autocmd BufWinEnter * call marslofunc#ResCur()
+    autocmd BufWinEnter * call marslofunc#ResCur()
   augroup END
 endif
 
 " twiddle case : https://vim.fandom.com/wiki/Switching_case_of_characters#Twiddle_case
 function! TwiddleCase(str)
-  if a:str ==# toupper(a:str)
-    let result = tolower(a:str)
-  elseif a:str ==# tolower(a:str)
-    let result = substitute(a:str,'\(\<\w\+\>\)', '\u\1', 'g')
+  if a:str ==# toupper( a:str )
+    let result = tolower( a:str )
+  elseif a:str ==# tolower( a:str )
+    let result = substitute( a:str,'\(\<\w\+\>\)', '\u\1', 'g' )
   else
-    let result = toupper(a:str)
+    let result = toupper( a:str )
   endif
   return result
 endfunction
 vnoremap ~ y:call setreg('', TwiddleCase(@"), getregtype(''))<CR>gv""Pgv
 
 function LargeFile()
-  set eventignore    += FileType                                         " no syntax highlighting etc
-  setlocal bufhidden  = unload                                         " save memory when other file is viewed
-  setlocal buftype    = nowrite                                          " is read-only (write with :w new_filename)
-  setlocal undolevels = -1                                            " no undo possible
+  set eventignore    += FileType                                    " no syntax highlighting etc
+  setlocal bufhidden  = unload                                      " save memory when other file is viewed
+  setlocal buftype    = nowrite                                     " is read-only (write with :w new_filename)
+  setlocal undolevels = -1                                          " no undo possible
   " display message
   autocmd VimEnter *  echo "The file is larger than " . (g:LargeFile / 1024 / 1024) . " MB, so some options are changed (see .vimrc for details)."
 endfunction
@@ -264,32 +264,45 @@ endif
 if has('gui_running')
   set go=                                                           " hide everything (go = guioptions)
   set cpoptions+=n
-  set guifont=Conmic\ Mono:h26
+  set guifont=Rec\ Mono\ Casual:h20
+  " set guifont=Conmic\ Mono:h26
   " set guifont=Ubuntu\ Mono:h26
   " set guifontwide=NSimsun:h16
+  set renderoptions=type:directx,renmode:5
   set lines=36                                                      " the initialize size
   set columns=124
 endif
 
-if exists('$TMUX')
-  set term=screen-256color
-endif
+if exists( '$TMUX' )         | set term=screen-256color | endif
+if 'xterm-256color' == $TERM | set t_Co=256             | endif
 
-if 'xterm-256color' == $TERM
-  set t_Co=256
-endif
-
-if has('gui_running') || 'xterm-256color' == $TERM
+if has( 'gui_running' ) || 'xterm-256color' == $TERM
   set background=dark
-  " colorscheme solarized
-  " colorscheme marslo
-  colorscheme gruvbox
   let psc_style='cool'
+
+  " colorscheme solarized                                           "
+  " solarized
+  " colorscheme marslo                                              " marslo
+  colorscheme gruvbox                                               " gruvbox
 else
   set t_Co=8
   set t_Sb=^[[4%dm
   set t_Sf=^[[3%dm
   colorscheme marslo16
+endif
+
+"" cursor settings:                                                 " https://vim.fandom.com/wiki/Change_cursor_shape_in_different_modes0
+"    block        : 1 -> blinking block        |  2 -> solid block
+"    underscore   : 3 -> blinking underscore   |  4 -> solid underscore
+"    vertical bar : 5 -> blinking vertical bar |  6 -> solid vertical bar
+if $TERM_PROGRAM =~ "iTerm"
+  let &t_SI = "\<Esc>]50;CursorShape=4\x7"                          " solid underscore for INSERT MODE
+  let &t_SR = "\<Esc>]50;CursorShape=2\x7"                          " solid block for REPLACE MODE
+  let &t_EI = "\<Esc>]10;CursorShape=3\x7"                          " blinking underscore for NORMAL MODE
+" else
+"   let &t_SI.="\e[4 q"                                             " SI = INSERT mode
+"   let &t_SR.="\e[5 q"                                             " SR = REPLACE mode
+"   let &t_EI.="\e[3 q"                                             " EI = NORMAL mode (ELSE)
 endif
 
 nmap <leader>v :e ~/.vimrc<CR>
@@ -303,18 +316,22 @@ nmap <leader>v :e ~/.vimrc<CR>
 "                           |___/
 "
 " **************************************************************/
+set ttimeout
+set ttimeoutlen=1
 set ttyfast                                                         " enable fast terminal connection.
 set iskeyword-=.
 set autochdir
-set fileencodings=utf-8,ucs-bom,gbk,cp936,gb2312,gb18030            " code format
-set termencoding=utf-8
 set encoding=utf-8                                                  " input chinese (=cp936)
-set fileencoding=utf-8
+set termencoding=utf-8
 let &termencoding=&encoding
+set fileencoding=utf-8
+set fileencodings=utf-8,latin1,ucs-bom,gbk,cp936,gb2312,gb18030     " code format
+scriptencoding utf-8                                                " set after encoding
+set rop=type:directx,gamma:1.0,contrast:0.5,level:1,geom:1,renmode:4,taamode:1
 set selection=exclusive                                             " mouse settings
 set selectmode=mouse,key
-set nobackup noswapfile nowritebackup noundofile noendofline
-set number                                                          " number: line number
+set nobackup noswapfile nowritebackup noundofile noendofline nobuflisted
+set number                                                          " line number
 set report=0
 set autoread                                                        " set auto read when a file is changed by outside
 set showmatch                                                       " show matching bracets (shortly jump to the other bracets)
@@ -334,14 +351,18 @@ set magic                                                           " regular ex
 set linespace=0
 set wildmenu
 set wildmode=longest,list,full                                      " completion mode that is used for the character
-set noerrorbells novisualbell                                       " ┐ turn off
-set t_vb=                                                           " ┘ error beep/flash
-set belloff=all                                                     " ┘ beep/flash
+set noerrorbells novisualbell visualbell                            " ╮ Turn off
+set belloff=all                                                     " ├ beep/flash
+set t_vb=                                                           " ╯ error beep/flash
+" set list listchars=tab:\→\ ,tab:▸,trail:·,extends:»,precedes:«,nbsp:·,eol:¬
 set list
-set listchars=tab:\⇥\ ,trail:·,extends:»,precedes:«,nbsp:·
+set listchars=tab:\→\ ,trail:·,extends:»,precedes:«,nbsp:·
 set cursorline                                                      " highlight the current line
-set guicursor=a:hor1
-set guicursor+=i-r-ci-cr-o:hor2-blinkon0
+set cursorcolumn
+set guicursor=a:hor10-Cursor-blinkon0
+set guicursor+=i-r-c-ci-cr-o:hor10-iCursor-blinkon0
+set guicursor+=n:hor10-Cursor-blinkwait700-blinkon400-blinkoff250
+set guicursor+=v-ve:block-Cursor
 set virtualedit=onemore                                             " allow for cursor beyond last character
 set scrolloff=3                                                     " scroll settings
 set sidescroll=1
@@ -379,12 +400,8 @@ endif
 set exrc
 set secure
 
-if has('persistent_undo')
-  set noundofile
-endif
-if version > 74399
-  set cryptmethod=blowfish2
-endif
+if has('persistent_undo') | set noundofile            | endif
+if version > 74399        | set cryptmethod=blowfish2 | endif
 
 
 " /**************************************************************
@@ -395,78 +412,85 @@ endif
 " |___/_| |_|\___/|_|   \__\___|\__,_|\__|
 "
 " **************************************************************/
-noremap <F1> <ESC>
-inoremap <F1> <ESC>a
-nnoremap j gj
-nnoremap gj j
-nnoremap k gk
-nnoremap gk k
-nnoremap n nzzzv
-nnoremap N Nzzzv
-nnoremap <leader>bd :bd<CR>
-nnoremap <leader>bp :bp<CR>
-nnoremap <leader>bn :bn<CR>
-" nnoremap <C-k> <C-w>k
-nnoremap <C-j> <C-w>j
-nnoremap <C-l> <C-w>l
-nnoremap <C-h> <C-w>h
-nnoremap <C-a> <ESC>^
-inoremap <C-a> <ESC>I
-cnoremap <C-a> <Home>
-nnoremap <C-e> <ESC>$
-inoremap <C-e> <ESC>A
-cnoremap <C-e> <End>
-nnoremap Y y$
-nnoremap <Del> "_x
-xnoremap <Del> "_d
-nnoremap <space> za
-nnoremap & :&&<CR>
-xnoremap & :&&<CR>
-vmap s <Plug>VSurround
-vnoremap // y/\V<C-R>=escape(@",'/\')<CR><CR>
+" :help map-overview : https://vimhelp.org/map.txt.html#map-overview
+noremap <leader>v    :e ~/.vimrc<CR>
+noremap <F1>         <ESC>
+inoremap <F1>        <ESC>a
+nnoremap j           gj
+nnoremap gj          j
+nnoremap k           gk
+nnoremap gk          k
+nnoremap n           nzzzv
+nnoremap N           Nzzzv
+nnoremap <leader>bd  :bd<CR>
+" nnoremap <C-k>     <C-w>k                                         " conflict with redraw
+nnoremap <C-j>       <C-w>j
+" nnoremap <C-l>     <C-w>l                                         " conflict with redraw shortcut : https://vimhelp.org/various.txt.html#CTRL-L
+nnoremap <C-h>       <C-w>h
+nnoremap <C-a>       <ESC>^
+inoremap <C-a>       <ESC>I
+cnoremap <C-a>       <Home>
+nnoremap <C-e>       <ESC>$
+inoremap <C-e>       <ESC>A
+cnoremap <C-e>       <End>
+nnoremap Y           y$
+nnoremap <Del>       "_x
+xnoremap <Del>       "_d
+nnoremap <space>     za
+nnoremap &           :&&<CR>
+xnoremap &           :&&<CR>
+vnoremap s           <Plug>VSurround
+vnoremap //          y/\V<C-R>=escape(@",'/\')<CR><CR>
 
-cnoreabbrev W w
-cnoreabbrev W! w!
-cnoreabbrev Q q
-cnoreabbrev Q! q!
-cnoreabbrev X x
-cnoreabbrev X! x!
-cnoreabbrev XA xa
-cnoreabbrev XA! xa!
-cnoreabbrev WQ wq
-cnoreabbrev WQ! wq!
-cnoreabbrev QA qa
-cnoreabbrev QA! qa!
-cnoreabbrev WA wa
-cnoreabbrev WA! wa!
-cnoreabbrev NOH noh
-cnoreabbrev Noh noh
-cnoreabbrev %Y %y
-cnoreabbrev %D %d
-cnoremap sudow!! w !sudo tee > /dev/null %
-cnoremap sw!! execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
-cnoremap rd redraw!
+cnoreabbrev W        w
+cnoreabbrev W!       w!
+cnoreabbrev Q        q
+cnoreabbrev Q!       q!
+cnoreabbrev X        x
+cnoreabbrev X!       x!
+cnoreabbrev XA       xa
+cnoreabbrev XA!      xa!
+cnoreabbrev WQ       wq
+cnoreabbrev WQ!      wq!
+cnoreabbrev QA       qa
+cnoreabbrev QA!      qa!
+cnoreabbrev WA       wa
+cnoreabbrev WA!      wa!
+cnoreabbrev NOH      noh
+cnoreabbrev Noh      noh
+cnoreabbrev %Y       %y
+cnoreabbrev %D       %d
+cnoremap    sudow!!  w !sudo tee > /dev/null %
+cnoremap    sw!!     execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
+" cnoremap  redr     redraw!
 
-inoremap <leader>tt <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
-inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
-inoremap <leader>fe <C-R>=expand("%:t")<CR>
-inoremap <leader>w <C-O>:w<CR>
-nnoremap <leader>G :%s///gn<CR>
+inoremap <leader>tt  <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
+inoremap <leader>fn  <C-R>=expand("%:t:r")<CR>
+inoremap <leader>fe  <C-R>=expand("%:t")<CR>
+inoremap <leader>w   <C-O>:w<CR>
+nnoremap <leader>G   :%s///gn<CR>
 nnoremap <leader>idl :IndentLineEnable<CR>
 
-nnoremap <leader>zil :g/^/ s//\=line('.').' '/<CR>    " [i]nsert [l]ine number
-nnoremap <leader>zcm :%s/<C-v><CR>/\r/g<CR>           " [c]onvert [m] to new line
-nnoremap <leader>zwl :%s///gn<CR>                     " show the matches numbers ( [w]c -[l] )
-nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>            " [d]elete [m]()
-nnoremap <leader>zdb :%s/\s\+$//<CR>                  " [d]elete trailing space ( [b]lank )
-nnoremap <leader>zbl :g/^\s*$/d<CR>                   " [d]elete [b]lank [l]ine
-nnoremap <leader>zd2 :%s/​//g<CR>                " [d]elete <200b>
-nnoremap <leader>zdd :%s/ / /g<CR>                    " [d]elete [d]ot(• )
-nnoremap <leader>zds :%s/^<span.*span>//g<CR>         " [d]elete [s]pan tag
-nnoremap <leader>zdi :%s/^\s\+//<CR>                  " [d]elete [i]ndent spaces
-nnoremap <leader>zid i•<ESC>                          " [i]nsert [d]ot(•)
-nnoremap <leader>cr 0yt=a<c-r>=<c-r>"<cr><esc>        " cacular expr
-nnoremap <leader>* *<C-O>:%s///gn<CR>                 " cacular expr
+nnoremap <leader>zil :g/^/ s//\=line('.').' '/<CR>                  " [i]nsert [l]ine number
+nnoremap <leader>zcm :%s/<C-v><CR>/\r/g<CR>                         " [c]onvert [m] to new line
+nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>                          " [d]elete [m]()
+nnoremap <leader>zdb :%s/\s\+$//<CR>                                " [d]elete trailing space ( [b]lank )
+nnoremap <leader>zbl :g/^\s*$/d<CR>                                 " [d]elete [b]lank [l]ine
+nnoremap <leader>zd2 :%s/​//g<CR>                              " [d]elete <200b>
+nnoremap <leader>zdd :%s/ / /g<CR>                                  " [d]elete [d]ot(• )
+nnoremap <leader>zds :%s/^<span.*span>//g<CR>                       " [d]elete [s]pan tag
+nnoremap <leader>zdi :%s/^\s\+//<CR>                                " [d]elete [i]ndent spaces
+nnoremap <leader>zid i•<ESC>                                        " [i]nsert [d]ot(•)
+" cacular expr
+nnoremap <leader>cr  0yt=a<c-r>=<c-r>"<cr><esc>
+" cacular expr
+nnoremap <leader>*   *<C-O>:%s///gn<CR>
+" cacular the matches numbers ( [w]c -[l] )
+nnoremap <leader>zwl :%s///gn<CR>
+
+iabbrev <leader>/*   /*********************************
+iabbrev <leader>*/   *********************************/
+iabbrev <leader>#-   #------------------
 
 if version > 703
   " autocmd FocusLost * set norelativenumber
@@ -478,10 +502,6 @@ if version > 703
   autocmd CmdwinEnter * let b:ei_save = &eventignore | set eventignore=CursorHold,InsertEnter
   autocmd CmdwinLeave * let &eventignore = b:ei_save
 endif
-
-iabbrev <leader>/* /*********************************
-iabbrev <leader>*/ *********************************/
-iabbrev <leader>#- #------------------
 
 " /**************************************************************
 "        _             _                  _   _   _
@@ -507,7 +527,7 @@ else
   let g:ctrlp_cache_dir = '$HOME/.vim/cache/ctrlp'
 endif
 let g:ctrlp_custom_ignore = {
-    \ 'dir':  '\v[\/]\.(git|hg|svn)$',
+    \ 'dir' : '\v[\/]\.(git|hg|svn)$',
     \ 'file': '\v\.(exe|so|dll|rpm|tar|gz|bz2|zip|ctags|tags)|tags|ctags$',
     \ 'link': 'some_bad_symbolic_links',
     \ }
@@ -518,25 +538,26 @@ let g:EnhCommentifyPretty          = 'Yes'
 let g:EnhCommentifyMultiPartBlocks = 'Yes'
 let g:EnhCommentifyUseSyntax       = 'Yes'
 
-map <leader>aid :AuthorInfoDetect<CR>
+noremap <leader>aid :AuthorInfoDetect<CR>
 let g:vimrc_author = 'marslo'
 let g:vimrc_email  = 'marslo.jiao@gmail.com'
 au BufWritePre, FileWritePre * :AuthorInfoDetect<CR>
 
-let MRU_Auto_Close    = 1                                           " most recently used(mru)
+noremap <leader>re :MRU<CR>                                         " most recently used(mru)
+let MRU_Auto_Close    = 1
 let MRU_Max_Entries   = 10
 let MRU_Exclude_Files = '^/tmp/.*\|^/temp/.*\|^/media/.*\|^/mnt/.*'
-map <leader>re :MRU<CR>
 
+noremap <Leader>u :GundoToggle<CR>
 set undodir=~/.vim/undo/
 set undofile
-noremap <Leader>u :GundoToggle<CR>
 
+" for i in '75' '147' '108' '196' '208' '66' '106' '172' '115' '129'; do echo -e "\e[38;05;${i}m${i}"; done | column -c 250 -s ' '; echo -e "\e[m"
 let g:rainbow_active    = 1
 let g:rainbow_operators = 1
 let g:rainbow_conf      = {
-\   'guifgs' : ['#6A5ACD', '#B22222', '#C0FF3E', '#EEC900', '#9A32CD', '#EE7600', '#98fb98', '#686868'],
-\   'ctermfgs' : 'xterm-256color' == $TERM ? ['141', '196', '112', '208', '129', '166', '85', '237'] : ['lightblue', 'lightgreen', 'yellow', 'red', 'magenta'],
+\   'guifgs' : [ '#6A5ACD', '#ff6347', '#b58900', '#9acd32', '#EEC900', '#9A32CD', '#EE7600', '#268bd2', '#183172' ],
+\   'ctermfgs' : 'xterm-256color' == $TERM ? [ '75', '147', '108', '196', '208', '66', '106', '172', '115', '129' ] : [ 'lightblue', 'lightgreen', 'yellow', 'red', 'magenta' ],
 \   'parentheses': [['(',')'], ['\[','\]'], ['{','}']],
 \   'separately': {
 \     '*': {},
@@ -574,44 +595,28 @@ let g:AutoPairsParens  = {'(':')', '[':']', '{':'}', '<':'>'}
 let g:AutoPairsFlyMode = 0
 let g:AutoPairsShortcutBackInsert = '<M-b>'
 
-" configure syntastic syntax checking to check on open as well as save
-set statusline+=%#warningmsg#
-set statusline+=\ %{SyntasticStatuslineFlag()}
-set statusline+=\ %* |
-let g:syntastic_always_populate_loc_list  = 1
-let g:syntastic_auto_loc_list             = 1
-let g:syntastic_check_on_open             = 1
-let g:syntastic_check_on_wq               = 1
-let g:syntastic_loc_list_height           = 2
-let g:syntastic_ignore_files              = ['\.py$']
-let g:syntastic_check_on_wq               = 0
-let g:syntastic_check_on_open             = 1
-let g:syntastic_html_tidy_ignore_errors   = [" proprietary attribute \"ng-"]
-let g:syntastic_always_populate_loc_list  = 1
-let g:syntastic_auto_loc_list             = 1
-
-" for vim-markdown
+" preservim/vim-markdown
+let g:vim_markdown_toc_autofit            = 1
+let g:vim_markdown_conceal                = 0
 let g:vim_markdown_folding_style_pythonic = 1
 let g:vim_markdown_override_foldtext      = 0
 let g:vim_markdown_autowrite              = 1
 let g:vim_markdown_new_list_item_indent   = 4
-let g:vim_markdown_toc_autofit            = 1
-let g:vim_markdown_conceal                = 0
+let g:vim_markdown_json_frontmatter       = 1
 " set conceallevel                        = 2
 let g:vim_markdown_frontmatter            = 1
-let g:vim_markdown_json_frontmatter       = 1
 
 " for vim-markdown-toc
 let g:vmt_auto_update_on_save     = 1
 let g:vmt_cycle_list_item_markers = 0
 
 noremap <Leader>tm :TableModeToggle<CR>
-let g:table_mode_corner           = '|'
-let g:table_mode_header_fillchar  = '-'
-let g:table_mode_align_char       = ":"
-let g:table_mode_corner           = "|"
-let g:table_mode_align_char       = ":"
-" let g:table_mode_corner_corner  = '+'
+let g:table_mode_corner          = '|'
+let g:table_mode_header_fillchar = '-'
+let g:table_mode_align_char      = ":"
+let g:table_mode_corner          = "|"
+let g:table_mode_align_char      = ":"
+" let g:table_mode_corner_corner = '+'
 function! s:isAtStartOfLine( mapping )
   let text_before_cursor = getline('.')[0 : col('.')-1]
   let mapping_pattern = '\V' . escape(a:mapping, '\')
@@ -625,9 +630,9 @@ inoreabbrev <expr> <bar><bar>
 inoreabbrev <expr> __
           \ <SID>isAtStartOfLine('__') ?
           \ '<c-o>:silent! TableModeDisable<cr>' : '__'
-
 " let g:tabular_loaded = 1
-if exists(":Tabularize")
+
+if exists( ":Tabularize" )
   nmap <Leader>a= :Tabularize /=<CR>
   vmap <Leader>a= :Tabularize /=<CR>
   nmap <leader>a: :Tabularize /:\zs<CR>
@@ -635,15 +640,16 @@ if exists(":Tabularize")
   inoremap <silent> <Bar>   <Bar><Esc>:call <SID>table_auto_align()<CR>
   function! s:table_auto_align()
     let p = '^\s*|\s.*\s|\s*$'
-    if exists(':Tabularize') && getline('.') =~# '^\s*|'
-      \ && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
-      let column   = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
-      let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+    if exists( ':Tabularize' ) && getline('.') =~# '^\s*|'
+      \ && (getline(line('.')-1) =~# p || getline( line('.')+1 ) =~# p)
+      let column   = strlen( substitute(getline('.')[0:col('.')],'[^|]','','g') )
+      let position = strlen( matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*') )
       Tabularize/|/l1
       normal! 0
-      call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+      call search( repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.') )
     endif
   endfunction
+  command! -nargs=1 First exec 'Tabularize /^[^' . escape(<q-args>, '\^$.[?*~') . ']*\zs' . escape(<q-args>, '\^$.[?*~')
 endif
 
 " fugitive
@@ -657,7 +663,7 @@ nnoremap <leader>gc :Git commit -am ""<Left>
 command! -bar -nargs=* Gpull execute 'Git pull'
 command! -bar -nargs=* Gpush execute 'Git push'
 
-" Snippet
+" snippet
 imap <C-J> <Plug>snipMateNextOrTrigger
 smap <C-J> <Plug>snipMateNextOrTrigger
 imap <Tab> <Plug>snipMateNextOrTrigger
@@ -668,25 +674,50 @@ let g:plist_json_filetype        = 'javascript'
 let g:signify_disable_by_default = 0
 let g:signify_vcs_list           = [ 'git' ]
 
-" vim-yaml-folds
-set foldlevelstart=20
-" yamllint
-" brew install yamllint
-let g:ale_echo_msg_format      = '[%linter%] %s [%severity%]'
-let g:ale_sign_error           = '✘'
-let g:ale_sign_warning         = '⚠'
-let g:ale_lint_on_text_changed = 'never'
+" syntastic settings                                                " Plugin 'vim-syntastic/syntastic'
+set statusline+=%#warningmsg#
+set statusline+=\ %{SyntasticStatuslineFlag()}
+set statusline+=\ %* |
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list            = 1
+let g:syntastic_check_on_open            = 1
+let g:syntastic_check_on_wq              = 0
+let g:syntastic_loc_list_height          = 2
+let g:syntastic_ignore_files             = ['\.py$']
+let g:syntastic_check_on_open            = 1
+let g:syntastic_html_tidy_ignore_errors  = [" proprietary attribute \"ng-"]
+let g:syntastic_auto_loc_list            = 1
+let g:syntastic_enable_signs             = 1
+let g:syntastic_info_symbol              = 'ϊ'                      " ࠵ ೲ
+let g:syntastic_error_symbol             = '✗'                      " ஓ ௐ ྾
+let g:syntastic_warning_symbol           = '⍨'                      " ᓆ ᓍ 𐘿
+let g:syntastic_style_error_symbol       = '⍥'
+let g:syntastic_style_warning_symbol     = 'ఠ'                      " ⍤ ൠ
+highlight link SyntasticErrorSign        Error
+highlight link SyntasticWarningSign      GruvboxYellow
+highlight link SyntasticStyleErrorSign   GruvboxRedSign
+highlight link SyntasticStyleWarningSign GruvboxPurpleSign
+
+" yamllint                                                          " brew install yamllint
+set foldlevelstart=20                                               " vim-yaml-folds
+
+" ale                                                               " :help g:ale_echo_msg_format
+let g:ale_echo_msg_format                 = '[%linter%] %code%: %s [%severity%] '
+let g:ale_sign_error                      = '💢'                    " ✘ 👾 💣  🙅 🤦
+let g:ale_sign_warning                    = 'ᑹᑹ'                    " ⚠ ⸮ ⸘ ☹
+let g:ale_sign_info                       = 'ᓆ'                     " ⸚ ϔ 𐘿 𐰦
+let g:ale_lint_on_text_changed            = 'never'
 
 " call matchadd('ColorColumn', '\%81v', 100)
 " match OverLength /\%81v.\+/
 
 augroup collumnLimit
   set colorcolumn=80
-  highlight CollumnLimit        guibg=NONE    guifg=#4e4e4e       ctermfg=240
+  highlight CollumnLimit    guibg=NONE    guifg=#4e4e4e    ctermfg=240
   autocmd!
   let collumnLimit = 80
-  let pattern = '\%<' . (collumnLimit+1) . 'v.\%>' . collumnLimit . 'v'
-  let w:m1=matchadd('CollumnLimit', pattern, -1)
+  let pattern = '\%<' . ( collumnLimit+1 ) . 'v.\%>' . collumnLimit . 'v'
+  let w:m1    = matchadd( 'CollumnLimit', pattern, -1 )
 augroup END
 
 " /**************************************************************
@@ -698,91 +729,124 @@ augroup END
 "
 " **************************************************************/
 if has( "autocmd" )
-  autocmd BufRead,BufNewFile *.t           set filetype=perl
-  autocmd BufEnter           *.md          exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" %:p "--no-gpu"<CR>'
-  autocmd BufEnter           *.markdown    exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome --no-gpu"  %:p<CR>'
-  " autocmd BufWinLeave      *             silent! mkview
-  autocmd BufWinEnter        *             silent! loadview
-  autocmd QuickFixCmdPost    *grep*        cwindow
-  autocmd Syntax * syn match ExtraWhitespace /\s\+$\| \+\ze\t/
+  autocmd BufRead,BufNewFile *.t              set filetype=perl
+  autocmd BufEnter           *.md             exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" %:p "--no-gpu"<CR>'
+  autocmd BufEnter           *.markdown       exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome --no-gpu"  %:p<CR>'
+  " autocmd BufWinLeave      *                silent! mkview
+  autocmd BufWinEnter        *                silent! loadview
+  autocmd QuickFixCmdPost    *grep*           cwindow
+  autocmd Syntax *                            syn match ExtraWhitespace /\s\+$\| \+\ze\t/
   autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile,yaml normal zM
   autocmd Syntax c,cpp,python,vim,xml,html,xhtml,vim,groovy,Jenkinsfile,yaml let g:indentLine_loaded=1
-  autocmd Syntax groovy,Jenkinsfile,python setlocal foldmethod=indent
+  autocmd Syntax groovy,Jenkinsfile,python    setlocal foldmethod=indent
   " https://vim.fandom.com/wiki/Syntax_folding_for_Java
-  autocmd FileType java                    setlocal foldmarker=/**,**/ foldmethod=marker foldcolumn=1
-  autocmd FileType make,snippet,robot      setlocal tabstop=4 softtabstop=4 shiftwidth=4
-  autocmd FileType yaml                    setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
-  autocmd FileType javascript              syntax   clear jsFuncBlock " rainbow issue #2
+  autocmd FileType     java                   setlocal foldmarker=/**,**/ foldmethod=marker foldcolumn=1
+  autocmd FileType     make,snippet,robot     setlocal tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd FileType     yaml                   setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
+  autocmd FileType     javascript             syntax   clear jsFuncBlock  " rainbow issue #2
+  autocmd BufWritePre  *\(.ltsv\|.diffs\)\@<! silent! retab!              " automatic retab: https://vim.fandom.com/wiki/Remove_unwanted_spaces
   " https://vim.fandom.com/wiki/Remove_unwanted_spaces
-  autocmd BufWritePre * :%s/\s\+$//e | %s/\r$//e                    " automatic remove trailing space
-  autocmd BufWritePre * :retab!                                     " automatic retab
+  autocmd BufWritePre  *                      :%s/\s\+$//e | %s/\r$//e                    " automatic remove trailing space
+  autocmd BufWritePre  *                      :retab!                                     " automatic retab
   " autocmd BufWritePre                                         *.html :normal gg=G
   " autocmd BufWritePre,BufWritePost,FileWritePre,FileWritePost *       silent :redraw!
 
-  augroup shellStyle                                                " automatic redraw for shellcheck
-    autocmd!
-    autocmd Syntax                   bash           set filetype=sh
-    autocmd FileType                 sh,bash,shell  call DoRedraw()
-    autocmd BufWritePre,BufWritePost *.sh           call DoRedraw()
-    autocmd BufWritePre              *.sh           silent :retab!  " automatic retab
-    autocmd BufWritePost             *.sh           silent :redraw! " automatic redraw for shellcheck
-    " autocmd BufWritePost           *.sh           !chmod +x %
+  augroup DevOps
+    autocmd BufRead,BufNewFile *                   setfiletype jenkinsfile
+    autocmd FileType           vim                 let g:ycm_confirm_extra_conf = 1
+    autocmd FileType           json,sh,markdown    set tabstop=2 softtabstop=2 shiftwidth=2
+    autocmd BufEnter           *\(.md\|.markdown\) exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" %:p "--no-gpu"<CR>'
+    autocmd FileType           gitconfig           setlocal commentstring=#\ %s
+    if index( ['README', 'SUMMARY'], expand("%:r") ) == -1
+      autocmd BufWritePost     *\(.md\)            silent :DocToc             " automatic build doctoc when save it
+    endif
+    autocmd BufNewFile,BufRead                                                " git config files
+          \ *.git/config,.gitconfig,.gitmodules,gitconfig
+          \,~/.marslo/.gitalias
+          \ setfiletype gitconfig
   augroup END
 
-  augroup devops
-    autocmd BufRead,BufNewFile *                                   setfiletype jenkinsfile
-    autocmd Syntax             Groovy                              set filetype=groovy syntax=groovy
-    autocmd FileType           groovy,Jenkinsfile,json,sh,markdown set tabstop=2 softtabstop=2 shiftwidth=2
-    autocmd FileType           vim                                 let g:ycm_confirm_extra_conf = 1
-    " git config files
-    autocmd BufNewFile,BufRead
-          \ *.git/config,.gitconfig,.gitmodules,gitconfig,~/.marslo/.gitalias
-          \ setfiletype gitconfig
+  augroup ShellScript
+    autocmd!
+    autocmd   Syntax       bash           set filetype=sh
+    autocmd   FileType     sh,bash,shell  silent :retab!
+    autocmd!  BufWritePre  *.sh           silent :retab!                      " automatic retab
+    autocmd!  BufWritePost *.sh           silent :redraw!                     " automatic redraw for shellcheck
+    " autocmd BufWritePost *.sh           !chmod +x %
+    " autocmd BufWritePre,BufWritePost *.sh call DoRedraw()
+  augroup END
+
+  augroup Groovy
+    autocmd Filetype   Groovy             set filetype=groovy
+    autocmd FileType   groovy,Jenkinsfile set tabstop=2 softtabstop=2 shiftwidth=2
+    autocmd Syntax     groovy,Jenkinsfile let g:indentLine_loaded=1
+    autocmd Syntax     groovy,Jenkinsfile setlocal foldmethod=indent
+    autocmd Syntax     groovy,Jenkinsfile normal zM
+    autocmd FileType   Jenkinsfile        setlocal commentstring=//\ %s
+    " https://vim.fandom.com/wiki/Syntax_folding_for_Java
+    autocmd FileType   java               setlocal foldmarker=/**,**/ foldmethod=marker foldcolumn=1
+    autocmd FileType   javascript         syntax clear jsFuncBlock            " rainbow issue #2
+
     " autocmd Syntax                         groovy,Jenkinsfile :IndentLinesEnable
-    " autocmd BufReadPost                    Jenkinsfile        set filetype=groovy syntax=groovy
-    " autocmd BufNewFile,BufRead             Jenkinsfile        setf groovy
-    " autocmd BufNewFile,BufRead,BufReadPost Jenkinsfile        setlocal foldmethod=indent
-    " autocmd FileType                       Jenkinsfile        setlocal filetype=groovy syntax=groovy foldmethod=indent
-    " autocmd FileType                       Jenkinsfile        set syntax=groovy filetype=groovy
-    if did_filetype()
-      finish
-    endif
-    if getline(1) =~ '^#!.*[/\\]groovy\>'
-      setf groovy
-    endif
+    " autocmd BufReadPost                    Jenkinsfile set filetype=groovy syntax=groovy
+    " autocmd BufNewFile,BufRead             Jenkinsfile setf groovy
+    " autocmd BufNewFile,BufRead,BufReadPost Jenkinsfile setlocal foldmethod=indent
+    " autocmd FileType Jenkinsfile setlocal filetype=groovy syntax=groovy foldmethod=indent
+    " autocmd FileType Jenkinsfile set syntax=groovy filetype=groovy
+
+    if did_filetype()                     | finish      | endif
+    if getline(1) =~ '^#!.*[/\\]groovy\>' |  setf groovy | endif              " to setup filetype to groovy if first line matches `#!.*[/\\]groovy`
+  augroup END
+
+  augroup Python
+    autocmd BufNewFile,BufRead python
+            \ set tabstop=2 softtabstop=2 shiftwidth=2
+            \ setlocal shiftwidth=2 tabstop=2 softtabstop=2 autoindent
+            \ fileformat=unix
+    autocmd FileType python syntax keyword pythonDecorator print self
+    autocmd FileTYpe python set isk-=.
+  augroup END
+
+  augroup vimrc
+    autocmd! BufWritePost ~/.vimrc silent! source %
+    autocmd  BufReadPre   *        setlocal foldmethod=indent
+    autocmd  BufWinEnter  *        if &fdm == 'indent' | setlocal foldmethod=manual | endif
   augroup END
 
   augroup CustomTabularize
     autocmd!
     " https://github.com/jwhitley/vimrc/blob/master/.vimrc
     " autocmd VimEnter * if exists(":Tabularize") | exe ":AddTabularPattern! bundles /[^ ]\\+\\//l1r0" | endif
-    " add in  plugin/TabularMaps.vim
-    autocmd VimEnter * if exists(":Tabularize") | exe ":AddTabularPattern 1,    /^[^,]*\zs,/r1c1l0" | endif
-    autocmd VimEnter * if exists(":Tabularize") | exe ":AddTabularPattern 1=    /^[^=]*\zs="        | endif
-    autocmd VimEnter * if exists(":Tabularize") | exe ":AddTabularPattern 1==   /^[^=]*\zs=/r0c0l0" | endif
+    " add for plugin/TabularMaps.vim
+    autocmd VimEnter * if exists(":Tabularize") | exe ":AddTabularPattern 1,  /^[^,]*\zs,/r1c1l0" | endif
+    autocmd VimEnter * if exists(":Tabularize") | exe ":AddTabularPattern 1=  /^[^=]*\zs="        | endif
+    autocmd VimEnter * if exists(":Tabularize") | exe ":AddTabularPattern 1== /^[^=]*\zs=/r1c1l0" | endif
   augroup END
 
-  augroup python
-    autocmd BufNewFile,BufRead python
-            \ set tabstop=4
-            \ set softtabstop=4
-            \ set shiftwidth=4
-            \ setlocal shiftwidth=4
-            \ setlocal tabstop=4
-            \ setlocal softtabstop=4
-            \ setlocal noautoindent
-            \ fileformat=unix
-    autocmd FileType python syntax keyword pythonDecorator print self
-    autocmd FileType python set tabstop=4 softtabstop=4 shiftwidth=4 noautoindent
-    autocmd FileTYpe python set isk-=.
-  augroup END
-
-  augroup vimrc
-    autocmd! bufwritepost ~/.vimrc silent! source %
-    autocmd BufReadPre * setlocal foldmethod=indent
-    autocmd BufWinEnter * if &fdm == 'indent' | setlocal foldmethod=manual | endif
-  augroup END
 endif
+
+let g:fzf_colors = {
+  \ 'fg':         ['fg', 'Normal'],
+  \ 'bg':         ['bg', 'Normal'],
+  \ 'preview-bg': ['bg', 'NormalFloat'],
+  \ 'hl':         ['fg', 'Comment'],
+  \ 'fg+':        ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
+  \ 'bg+':        ['bg', 'CursorLine', 'CursorColumn'],
+  \ 'hl+':        ['fg', 'Statement'],
+  \ 'info':       ['fg', 'PreProc'],
+  \ 'border':     ['fg', 'Ignore'],
+  \ 'prompt':     ['fg', 'Conditional'],
+  \ 'pointer':    ['fg', 'Exception'],
+  \ 'marker':     ['fg', 'Keyword'],
+  \ 'spinner':    ['fg', 'Label'],
+  \ 'header':     ['fg', 'Comment']
+  \ }
+
+highlight SpellBad        term=underline   cterm=underline     ctermbg=0
+highlight ExtraWhitespace ctermbg=red      guibg=red
+highlight DiffText        term=reverse     cterm=reverse       ctermfg=109      ctermbg=235 gui=reverse guifg=#fabd2f guibg=#458588
+" highlight Cursor        guifg=white      guibg=gray          gui=bold
+" highlight iCursor       guifg=white      guibg=steelblue     gui=underline
 
 " /**************************************************************
 "       _ _       _                         _
@@ -814,4 +878,4 @@ set clipboard=unnamedplus
 "   augroup END
 " endif
 
-" vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab:filetype=vim:foldmethod=marker:foldmarker="\ **************************************************************/,"\ /**************************************************************
+" vim:tabstop=2:softtabstop=2:shiftwidth=2:expandtab:filetype=vim:foldmethod=marker:foldmarker="\ **************************************************************/,"\ /**************************************************************

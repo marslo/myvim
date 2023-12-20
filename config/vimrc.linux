@@ -1,10 +1,9 @@
 " =============================================================================
 "      FileName: .vimrc
-"          Desc: Made in Marslo
 "        Author: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.27
-"    LastChange: 2023-11-08 21:16:38
+"    LastChange: 2023-12-19 21:40:40
 " =============================================================================
 
 set nocompatible
@@ -67,10 +66,6 @@ Plugin 'LargeFile'
 Plugin 'Konfekt/FastFold'
 Plugin 'dhruvasagar/vim-table-mode'
 Plugin 'vim-autoformat/vim-autoformat'
-Plugin 'tpope/vim-fugitive'                                         " ╮
-Plugin 'airblade/vim-gitgutter'                                     " ├ git
-Plugin 'APZelos/blamer.nvim'                                        " │
-Plugin 'zivyangll/git-blame.vim'                                    " ╯
 Plugin 'mbbill/undotree'
 Plugin 'marslo/MarsloFunc'
 Plugin 'vim-syntastic/syntastic'
@@ -81,18 +76,23 @@ Plugin 'ycm-core/lsp-examples'
 Plugin 'tpope/vim-commentary'
 Plugin 'preservim/vim-markdown'                                     " markdown
 Plugin 'valloric/MatchTagAlways'                                    " web design
+Plugin 'tpope/vim-fugitive'                                         " ╮
+Plugin 'airblade/vim-gitgutter'                                     " │
+Plugin 'APZelos/blamer.nvim'                                        " ├ git
+Plugin 'tpope/vim-git'                                              " │
+Plugin 'zivyangll/git-blame.vim'                                    " ╯
 Plugin 'pearofducks/ansible-vim'
 Plugin 'morhetz/gruvbox'                                            " theme
 Plugin 'luochen1990/rainbow'                                        " ╮ color
 Plugin 'marslo/vim-coloresque'                                      " ╯ 'ap/vim-css-color'
 Plugin 'amadeus/vim-css'
-Plugin 'marslo/Jenkinsfile-vim-syntax'                              " jenkinfile
-Plugin 'ekalinin/Dockerfile.vim'                                    " dockerfile
 Plugin 'stephpy/vim-yaml'                                           " ╮
 Plugin 'pedrohdz/vim-yaml-folds'                                    " ├ yaml
 Plugin 'dense-analysis/ale'                                         " ╯
 Plugin 'modille/groovy.vim'                                         " /usr/local/vim/share/vim/vim90/syntax/groovy.vim
 Plugin 'vim-scripts/vim-gradle'
+Plugin 'marslo/Jenkinsfile-vim-syntax'                              " jenkinfile
+Plugin 'ekalinin/Dockerfile.vim'                                    " dockerfile
 " Plugin 'rizzatti/dash.vim'
 " Plugin 'ap/vim-css-color'                                         " cause issue in groovy.vim
 " Plugin 'parkr/vim-jekyll'                                         " github page
@@ -326,7 +326,7 @@ if $TERM_PROGRAM =~ "iTerm"
   let &t_EI = "\<Esc>]10;CursorShape=3\x7"                          " blinking underscore for NORMAL MODE
 " else
 "   let &t_SI.="\e[4 q"                                             " SI = INSERT mode
-"   let &t_SR.="\e[5 q"                                             " SR = REPLACE mode
+"   let &t_SR.="\e[4 q"                                             " SR = REPLACE mode
 "   let &t_EI.="\e[3 q"                                             " EI = NORMAL mode (ELSE)
 endif
 
@@ -563,12 +563,12 @@ noremap <Leader>u :GundoToggle<CR>
 set undodir=~/.vim/undo/
 set undofile
 
-" for i in '69' '141' '196' '112' '208' '129' '166' '85' '237' ; do echo -e "\e[38;05;${i}m${i}"; done | column -c 250 -s ' '; echo -e "\e[m"
+" for i in '75' '147' '108' '196' '208' '66' '106' '172' '115' '129'; do echo -e "\e[38;05;${i}m${i}"; done | column -c 250 -s ' '; echo -e "\e[m"
 let g:rainbow_active    = 1
 let g:rainbow_operators = 1
 let g:rainbow_conf      = {
 \   'guifgs' : [ '#6A5ACD', '#ff6347', '#b58900', '#9acd32', '#EEC900', '#9A32CD', '#EE7600', '#268bd2', '#183172' ],
-\   'ctermfgs' : 'xterm-256color' == $TERM ? [ '69', '141', '196', '112', '208', '129', '166', '85', '237' ] : [ 'lightblue', 'lightgreen', 'yellow', 'red', 'magenta' ],
+\   'ctermfgs' : 'xterm-256color' == $TERM ? [ '75', '147', '108', '196', '208', '66', '106', '172', '115', '129' ] : [ 'lightblue', 'lightgreen', 'yellow', 'red', 'magenta' ],
 \   'parentheses': [['(',')'], ['\[','\]'], ['{','}']],
 \   'separately': {
 \     '*': {},
@@ -671,6 +671,7 @@ let g:table_mode_align_char      = ":"
 let g:table_mode_corner          = "|"
 let g:table_mode_align_char      = ":"
 " let g:table_mode_corner_corner = '+'
+
 function! s:isAtStartOfLine(mapping)
   let text_before_cursor = getline('.')[0 : col('.')-1]
   let mapping_pattern = '\V' . escape(a:mapping, '\')
@@ -858,6 +859,7 @@ xnoremap <silent> <leader>az :<c-u>FastFoldUpdate<cr>]zV[z
 let g:fastfold_savehook               = 1
 let g:fastfold_fold_command_suffixes  = ['x','X','a','A','o','O','c','C']
 let g:fastfold_fold_movement_commands = [']z', '[z', 'zj', 'zk']
+
 let g:markdown_folding                = 1
 let g:rst_fold_enabled                = 1
 let g:tex_fold_enabled                = 1
@@ -878,8 +880,8 @@ let g:baan_fold                       = 1
 
 " syntastic settings                                                " Plugin 'vim-syntastic/syntastic'
 set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
+set statusline+=\ %{SyntasticStatuslineFlag()}
+set statusline+=\ %* |
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list            = 1
 let g:syntastic_check_on_open            = 1
@@ -962,6 +964,7 @@ if has( "autocmd" )
     autocmd Syntax             yaml                let g:indentLine_loaded=1
     autocmd Syntax             yaml                normal zM
     autocmd BufEnter           *\(.md\|.markdown\) exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" %:p "--no-gpu"<CR>'
+    autocmd FileType           gitconfig           setlocal commentstring=#\ %s
     if index( ['README', 'SUMMARY'], expand("%:r") ) == -1
       autocmd BufWritePost     *\(.md\)            silent :DocToc             " automatic build doctoc when save it
     endif
@@ -976,11 +979,11 @@ if has( "autocmd" )
 
   augroup ShellScript
     autocmd!
-    autocmd  Syntax        bash           set filetype=sh
-    autocmd  FileType      sh,bash,shell  silent :retab!
-    autocmd  FileType      sh,bash,shell  set tabstop=2 softtabstop=2 shiftwidth=2
-    autocmd! BufWritePre   *.sh           silent :retab!                      " automatic retab
-    autocmd! BufWritePost  *.sh           silent :redraw!                     " automatic redraw for shellcheck
+    autocmd   Syntax       bash           set filetype=sh
+    autocmd   FileType     sh,bash,shell  silent :retab!
+    autocmd   FileType     sh,bash,shell  set tabstop=2 softtabstop=2 shiftwidth=2
+    autocmd!  BufWritePre  *.sh           silent :retab!                      " automatic retab
+    autocmd!  BufWritePost *.sh           silent :redraw!                     " automatic redraw for shellcheck
     " autocmd BufWritePost *.sh           !chmod +x %
   augroup END
 
@@ -1022,7 +1025,7 @@ if has( "autocmd" )
   augroup END
 
   " skip quickfix : https://vi.stackexchange.com/a/16709/7389
-  augroup TermIgnore                                                " skip quickfix : https://vi.stackexchange.com/a/16709/7389
+  augroup TermIgnore                                                          " skip quickfix : https://vi.stackexchange.com/a/16709/7389
     autocmd!
     autocmd TerminalOpen * set nobuflisted
   augroup END
@@ -1124,6 +1127,4 @@ highlight DiffText        term=reverse     cterm=reverse       ctermfg=109      
 " highlight IncSearch      term=standout    cterm=standout      ctermfg=148     ctermbg=238
 " highlight Search         cterm=NONE       ctermfg=64          ctermbg=238     guifg=Black     guibg=Yellow
 
-
-
-" vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab:filetype=vim:foldmethod=marker:foldmarker="\ **************************************************************/,"\ /**************************************************************
+" vim:tabstop=2:softtabstop=2:shiftwidth=2:expandtab:filetype=vim:foldmethod=marker:foldmarker="\ **************************************************************/,"\ /**************************************************************
