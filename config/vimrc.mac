@@ -479,9 +479,9 @@ if $TERM_PROGRAM =~ "iTerm"
   let &t_SR = "\<Esc>]50;CursorShape=2\x7"                          " solid block for REPLACE MODE
   let &t_EI = "\<Esc>]10;CursorShape=3\x7"                          " blinking underscore for NORMAL MODE
 else
-  let &t_SI.="\e[4 q"                                               " SI = INSERT mode
-  let &t_SR.="\e[4 q"                                               " SR = REPLACE mode
-  let &t_EI.="\e[3 q"                                               " EI = NORMAL mode (ELSE)
+  let &t_SI .= "\e[4 q"                                             " SI = INSERT mode
+  let &t_SR .= "\e[4 q"                                             " SR = REPLACE mode
+  let &t_EI .= "\e[3 q"                                             " EI = NORMAL mode (ELSE)
 endif
 
 " /**************************************************************
@@ -889,7 +889,6 @@ let g:blamer_show_in_insert_modes = 0
 let g:blamer_relative_time        = 1
 " let g:blamer_prefix             = ' » '
 
-" nnoremap <leader>mp :silent exec '! git mp'<CR>
 " fugitive
 " nnoremap <Leader>ga :Git add %:p<CR><CR>
 " nnoremap <Leader>gs :Gstatus<CR>
@@ -1052,7 +1051,6 @@ xnoremap <silent> <leader>az :<c-u>FastFoldUpdate<cr>]zV[z
 let g:fastfold_savehook               = 1
 let g:fastfold_fold_command_suffixes  = ['x','X','a','A','o','O','c','C']
 let g:fastfold_fold_movement_commands = [']z', '[z', 'zj', 'zk']
-
 let g:markdown_folding                = 1
 let g:rst_fold_enabled                = 1
 let g:tex_fold_enabled                = 1

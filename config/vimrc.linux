@@ -3,7 +3,7 @@
 "        Author: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 0.0.27
-"    LastChange: 2023-12-19 21:40:40
+"    LastChange: 2023-12-21 00:02:14
 " =============================================================================
 
 set nocompatible
@@ -182,16 +182,16 @@ endfunction
 vnoremap ~ y:call setreg('', TwiddleCase(@"), getregtype(''))<CR>gv""Pgv
 
 function! IgnoreSpells()                                            " ignore CamelCase words when spell checking
-  syntax   match   Url "\w\+:\/\/[:/?#[\]@!$&'()*+,;=0-9[:lower:][:upper:]_\-.~]\+" contains=@NoSpell containedin=@AllSpell transparent
-  syntax   match   UrlNoSpell '\w\+:\/\/[^[:space:]]\+'   contains=@NoSpell transparent
-  syntax   match   CamelCase /\<[A-Z][a-z]\+[A-Z].\{-}\>/ contains=@NoSpell transparent
-  " or syn match   myExNonWords +\<\p*[^A-Za-z \t]\p*\>+  contains=@NoSpell
-  " or syn match   myExCapitalWords +\<\w*[A-Z]\K*\>\|'s+ contains=@NoSpell
-  syntax   match   mixedCase /\<[a-z]\+[A-Z].\{-}\>/      contains=@NoSpell transparent
-  syntax   cluster Spell add=Url
-  syntax   cluster Spell add=UrlNoSpell
-  syntax   cluster Spell add=CamelCase
-  syntax   cluster Spell add=mixedCase
+  syntax      match   CamelCase /\<[A-Z][a-z]\+[A-Z].\{-}\>/ contains=@NoSpell transparent
+  syntax      cluster Spell add=CamelCase
+  syntax      match   mixedCase /\<[a-z]\+[A-Z].\{-}\>/      contains=@NoSpell transparent
+  syntax      cluster Spell add=mixedCase
+  " or syntax match   myExNonWords +\<\p*[^A-Za-z \t]\p*\>+  contains=@NoSpell
+  " or syntax match   myExCapitalWords +\<\w*[A-Z]\K*\>\|'s+ contains=@NoSpell
+  " syntax    match   Url "\w\+:\/\/[:/?#[\]@!$&'()*+,;=0-9[:lower:][:upper:]_\-.~]\+" contains=@NoSpell containedin=@AllSpell transparent
+  " syntax    cluster Spell add=Url
+  " syntax    match   UrlNoSpell '\w\+:\/\/[^[:space:]]\+'   contains=@NoSpell transparent
+  " syntax    cluster Spell add=UrlNoSpell
 endfunction
 autocmd BufRead,BufNewFile * :call IgnoreSpells()
 set spellcapcheck=                                                  " ignore capital check
@@ -247,6 +247,7 @@ fun! IgnoreCamelCaseSpell()                                         " Ignore Cam
 endfun
 autocmd BufRead,BufNewFile * :call IgnoreCamelCaseSpell()
 syn match UrlNoSpell '\w\+:\/\/[^[:space:]]\+' contains=@NoSpell
+
 " /**************************************************************
 "                                                _
 "                                               | |
@@ -302,9 +303,9 @@ if has( 'gui_running' ) || 'xterm-256color' == $TERM
 
   """ terminal : `:help terminal-info`
   set term=xterm
-  let &t_AB="\e[48;5;%dm"
-  let &t_AF="\e[38;5;%dm"
-  let &t_Co=256
+  let &t_AB = "\e[48;5;%dm"
+  let &t_AF = "\e[38;5;%dm"
+  let &t_Co = 256
   set t_Co=256
   "" italic
   let &t_ZH = "\e[3m"
@@ -325,9 +326,9 @@ if $TERM_PROGRAM =~ "iTerm"
   let &t_SR = "\<Esc>]50;CursorShape=2\x7"                          " solid block for REPLACE MODE
   let &t_EI = "\<Esc>]10;CursorShape=3\x7"                          " blinking underscore for NORMAL MODE
 " else
-"   let &t_SI.="\e[4 q"                                             " SI = INSERT mode
-"   let &t_SR.="\e[4 q"                                             " SR = REPLACE mode
-"   let &t_EI.="\e[3 q"                                             " EI = NORMAL mode (ELSE)
+"   let &t_SI .= "\e[4 q"                                           " SI = INSERT mode
+"   let &t_SR .= "\e[4 q"                                           " SR = REPLACE mode
+"   let &t_EI .= "\e[3 q"                                           " EI = NORMAL mode (ELSE)
 endif
 
 " /**************************************************************
@@ -671,7 +672,6 @@ let g:table_mode_align_char      = ":"
 let g:table_mode_corner          = "|"
 let g:table_mode_align_char      = ":"
 " let g:table_mode_corner_corner = '+'
-
 function! s:isAtStartOfLine(mapping)
   let text_before_cursor = getline('.')[0 : col('.')-1]
   let mapping_pattern = '\V' . escape(a:mapping, '\')
@@ -707,7 +707,7 @@ if exists( ":Tabularize" )
 endif
 
 " git
-nnoremap <leader>mp  :! git mp<CR>
+nnoremap <leader>mp  :execute 'silent !git mp' \| redraw!<CR>
 nnoremap <Leader>ebb :<C-u>call gitblame#echo()<CR>
 nnoremap <Leader>bb  :BlamerToggle<CR>                              " APZelos/blamer.nvim
 let g:blamer_enabled              = 0
@@ -859,7 +859,6 @@ xnoremap <silent> <leader>az :<c-u>FastFoldUpdate<cr>]zV[z
 let g:fastfold_savehook               = 1
 let g:fastfold_fold_command_suffixes  = ['x','X','a','A','o','O','c','C']
 let g:fastfold_fold_movement_commands = [']z', '[z', 'zj', 'zk']
-
 let g:markdown_folding                = 1
 let g:rst_fold_enabled                = 1
 let g:tex_fold_enabled                = 1
@@ -900,7 +899,7 @@ highlight link SyntasticWarningSign      GruvboxYellow
 highlight link SyntasticStyleErrorSign   GruvboxRedSign
 highlight link SyntasticStyleWarningSign GruvboxPurpleSign
 
-" yamllint                                                          " brew install yamllint
+" yamllint                                                          " brew install yamllint; pipx install yamllint
 set foldlevelstart=20                                               " vim-yaml-folds
 " ale                                                               " :help g:ale_echo_msg_format
 let g:ale_echo_msg_format                 = '[%linter%] %code%: %s [%severity%] '
