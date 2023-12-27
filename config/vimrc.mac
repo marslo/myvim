@@ -412,6 +412,8 @@ command! -nargs=0 DocToc execute 'silent !/usr/local/bin/doctoc --github --maxle
 command! -nargs=1 First exec 'Tabularize /^[^' . escape(<q-args>, '\^$.[?*~') . ']*\zs' . escape(<q-args>, '\^$.[?*~')
 command! -nargs=1 -range First exec <line1> . ',' . <line2> . 'Tabularize /^[^' . escape(<q-args>, '\^$.[?*~') . ']*\zs' . escape(<q-args>, '\^$.[?*~')
 
+command! -nargs=0 FullPath execute 'echo expand("%:p")'
+
 " /**************************************************************
 "  _       _             __                     __  _   _
 " (_)_ __ | |_ ___ _ __ / _| __ _  ___ ___     / / | |_| |__   ___ _ __ ___   ___
@@ -444,9 +446,9 @@ if has( 'gui_running' ) || 'xterm-256color' == $TERM
 
   """ terminal : `:help terminal-info`
   set term=xterm
-  let &t_AB="\e[48;5;%dm"
-  let &t_AF="\e[38;5;%dm"
-  let &t_Co=256
+  let &t_AB = "\e[48;5;%dm"
+  let &t_AF = "\e[38;5;%dm"
+  let &t_Co = 256
   set t_Co=256
   "" italic
   let &t_ZH = "\e[3m"
@@ -639,11 +641,11 @@ cnoreabbrev NOH      noh
 cnoreabbrev Noh      noh
 cnoreabbrev %Y       %y
 cnoreabbrev %D       %d
-cnoremap sudow!!     w !sudo tee > /dev/null %
-cnoremap sw!!        execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
-" cnoremap lss       lss<cr>:b<space>
-" cnoremap lsd       lss<cr>:bd<space>
-" cnoremap redr      redraw!
+cnoremap    sudow!!  w !sudo tee > /dev/null %
+cnoremap    sw!!     execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
+" cnoremap  lss      lss<cr>:b<space>
+" cnoremap  lsd      lss<cr>:bd<space>
+" cnoremap  redr     redraw!
 
 inoremap <leader>tt  <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
 inoremap <leader>fn  <C-R>=expand("%:t:r")<CR>
@@ -742,7 +744,7 @@ let g:vimrc_email  = 'marslo.jiao@gmail.com'
 noremap <leader>re :MRU<CR>                                         " most recently used(mru)
 let MRU_Auto_Close    = 1
 let MRU_Max_Entries   = 10
-let MRU_Exclude_Files = '^/tmp/.*\|^/temp/.*\|^/media/.*\|^/mnt/.*'
+let MRU_Exclude_Files = '^/tmp/.*\|^/temp/.*\|^/media/.*\|^/mnt/.*\|^/private/.*'
 
 noremap <Leader>u :GundoToggle<CR>
 set undodir=~/.vim/undo/
@@ -843,7 +845,6 @@ let g:table_mode_align_char      = ":"
 let g:table_mode_corner          = "|"
 let g:table_mode_align_char      = ":"
 " let g:table_mode_corner_corner = '+'
-
 " function! s:isAtStartOfLine(mapping)
 "   let text_before_cursor = getline('.')[0 : col('.')-1]
 "   let mapping_pattern = '\V' . escape(a:mapping, '\')
@@ -1069,9 +1070,6 @@ let g:fortran_fold                    = 1
 let g:clojure_fold                    = 1
 let g:baan_fold                       = 1
 
-" vim-yaml-folds
-set foldlevelstart=20
-
 " syntastic settings                                                " Plugin 'vim-syntastic/syntastic'
 set statusline+=%#warningmsg#
 set statusline+=\ %{SyntasticStatuslineFlag()}
@@ -1166,6 +1164,9 @@ if has( "autocmd" )
     autocmd BufRead,BufNewFile *                                   setfiletype jenkinsfile
     autocmd FileType           groovy,Jenkinsfile,json,sh,markdown set tabstop=2 softtabstop=2 shiftwidth=2
     autocmd FileType           vim                                 let g:ycm_confirm_extra_conf = 1
+    autocmd BufRead,BufNewFile .*ignore            set filetype=ignore
+    autocmd FileType           ignore              setlocal commentstring=#\ %s
+    autocmd FileType           gitconfig           setlocal commentstring=#\ %s
     if index( ['README', 'SUMMARY'], expand("%:r") ) == -1
       autocmd BufWritePost     *\(.md\)            silent :DocToc             " automatic build doctoc when save it
     endif

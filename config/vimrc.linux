@@ -222,7 +222,7 @@ function LargeFile()
   autocmd VimEnter *  echo "The file is larger than " . (g:LargeFile / 1024 / 1024) . " MB, so some options are changed (see .vimrc for details)."
 endfunction
 let g:LargeFile = 1024 * 1024 * 10
-augroup largeFile
+augroup LargeFile
   autocmd BufReadPre * let f=getfsize(expand("<afile>")) | if f > g:LargeFile || f == -2 | call LargeFile() | endif
 augroup END
 
@@ -272,6 +272,8 @@ xnoremap <Leader>r :Reverse <bar> nohlsearch<CR>
 command! -nargs=0 DocToc execute 'silent !/usr/local/bin/doctoc --github --maxlevel 3 %' | execute 'redraw!'
 command! -nargs=1 First exec 'Tabularize /^[^' . escape(<q-args>, '\^$.[?*~') . ']*\zs' . escape(<q-args>, '\^$.[?*~')
 command! -nargs=1 -range First exec <line1> . ',' . <line2> . 'Tabularize /^[^' . escape(<q-args>, '\^$.[?*~') . ']*\zs' . escape(<q-args>, '\^$.[?*~')
+
+command! -nargs=0 FullPath execute 'echo expand("%:p")'
 
 " /**************************************************************
 "  _       _             __                     __  _   _
@@ -481,11 +483,11 @@ cnoreabbrev NOH      noh
 cnoreabbrev Noh      noh
 cnoreabbrev %Y       %y
 cnoreabbrev %D       %d
-cnoremap sudow!!     w !sudo tee > /dev/null %
-cnoremap sw!!        execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
-" cnoremap lss       lss<cr>:b<space>
-" cnoremap lsd       lss<cr>:bd<space>
-" cnoremap redr      redraw!
+cnoremap    sudow!!  w !sudo tee > /dev/null %
+cnoremap    sw!!     execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
+" cnoremap  lss      lss<cr>:b<space>
+" cnoremap  lsd      lss<cr>:bd<space>
+" cnoremap  redr     redraw!
 
 inoremap <leader>tt  <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
 inoremap <leader>fn  <C-R>=expand("%:t:r")<CR>
@@ -901,6 +903,7 @@ highlight link SyntasticStyleWarningSign GruvboxPurpleSign
 
 " yamllint                                                          " brew install yamllint; pipx install yamllint
 set foldlevelstart=20                                               " vim-yaml-folds
+
 " ale                                                               " :help g:ale_echo_msg_format
 let g:ale_echo_msg_format                 = '[%linter%] %code%: %s [%severity%] '
 let g:ale_virtualtext_prefix              = '%comment% %type% [%code%]: '
@@ -963,6 +966,8 @@ if has( "autocmd" )
     autocmd Syntax             yaml                let g:indentLine_loaded=1
     autocmd Syntax             yaml                normal zM
     autocmd BufEnter           *\(.md\|.markdown\) exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" %:p "--no-gpu"<CR>'
+    autocmd BufRead,BufNewFile .*ignore            set filetype=ignore
+    autocmd FileType           ignore              setlocal commentstring=#\ %s
     autocmd FileType           gitconfig           setlocal commentstring=#\ %s
     if index( ['README', 'SUMMARY'], expand("%:r") ) == -1
       autocmd BufWritePost     *\(.md\)            silent :DocToc             " automatic build doctoc when save it
@@ -971,7 +976,6 @@ if has( "autocmd" )
           \ *.git/config,.gitconfig,.gitmodules,gitconfig
           \,~/.marslo/.gitalias
           \ setfiletype gitconfig
-
     if did_filetype()                     | finish      | endif
     if getline(1) =~ '^#!.*[/\\]groovy\>' | setf groovy | endif               " to setup filetype to groovy if first line matches `#!.*[/\\]groovy`
   augroup END
