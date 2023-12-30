@@ -1,9 +1,9 @@
-"=============================================================================
+" =============================================================================
 "      FileName: .vimrc
 "        Author: marslo.jiao@gmail.com
 "       Created: 2010-10
-"       Version: 1.0.1
-"    LastChange: 2023-12-29 04:18:57
+"       Version: 1.0.2
+"    LastChange: 2023-12-30 00:01:06
 " =============================================================================
 
 set nocompatible
@@ -61,7 +61,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'sjl/gundo.vim'
 Plug 'preservim/tagbar'
 Plug 'marslo/authorinfo'
-Plug 'marslo/auto-pairs'
+Plug 'LunarWatcher/auto-pairs', {'branch': 'develop'}
 Plug 'tomtom/tlib_vim'
 Plug 'yegappan/mru'
 Plug 'fracpete/vim-large-files'
@@ -237,6 +237,20 @@ endfun
 autocmd BufRead,BufNewFile * :call IgnoreCamelCaseSpell()
 syn match UrlNoSpell '\w\+:\/\/[^[:space:]]\+' contains=@NoSpell
 
+if exists( ":Tabularize" )                                          " 'godlygeek/tabular'
+  function! s:table_auto_align()
+    let p = '^\s*|\s.*\s|\s*$'
+    if exists( ':Tabularize' ) && getline('.') =~# '^\s*|'
+      \ && (getline(line('.')-1) =~# p || getline( line('.')+1 ) =~# p)
+      let column   = strlen( substitute(getline('.')[0:col('.')],'[^|]','','g') )
+      let position = strlen( matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*') )
+      Tabularize/|/l1
+      normal! 0
+      call search( repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.') )
+    endif
+  endfunction
+endif
+
 " /**************************************************************
 "                                                _
 "                                               | |
@@ -259,11 +273,9 @@ nnoremap <Leader>r :Reverse <bar> nohlsearch<CR>
 xnoremap <Leader>r :Reverse <bar> nohlsearch<CR>
 
 command! -nargs=0 DocToc execute 'silent !/usr/local/bin/doctoc --notitle --update-only --github --maxlevel 3 %' | execute 'redraw!'
-command! -nargs=1 First exec 'Tabularize /^[^' . escape(<q-args>, '\^$.[?*~') . ']*\zs' . escape(<q-args>, '\^$.[?*~')
+command! -nargs=1        First exec                           'Tabularize /^[^' . escape(<q-args>, '\^$.[?*~') . ']*\zs' . escape(<q-args>, '\^$.[?*~')
 command! -nargs=1 -range First exec <line1> . ',' . <line2> . 'Tabularize /^[^' . escape(<q-args>, '\^$.[?*~') . ']*\zs' . escape(<q-args>, '\^$.[?*~')
-
 command! -nargs=0 FullPath execute 'echo expand("%:p")'
-
 
 " /**************************************************************
 "  _       _             __                     __  _   _
@@ -309,14 +321,14 @@ else
   colorscheme marslo16
 endif
 
-"" cursor settings:                                                 " https://vim.fandom.com/wiki/Change_cursor_shape_in_different_modes0
+"" cursor settings:                                                 " https://vim.fandom.com/wiki/Change_cursor_shape_in_different_modes
 "    block        : 1 -> blinking block        |  2 -> solid block
 "    underscore   : 3 -> blinking underscore   |  4 -> solid underscore
 "    vertical bar : 5 -> blinking vertical bar |  6 -> solid vertical bar
 if $TERM_PROGRAM =~ "iTerm"
-  let &t_SI = "\<Esc>]50;CursorShape=4\x7"                          " solid underscore for INSERT MODE
-  let &t_SR = "\<Esc>]50;CursorShape=2\x7"                          " solid block for REPLACE MODE
-  let &t_EI = "\<Esc>]10;CursorShape=3\x7"                          " blinking underscore for NORMAL MODE
+  let &t_SI = "\<Esc>]50;CursorShape=4\x7"                          " INSERT MODE  : solid underscore
+  let &t_SR = "\<Esc>]50;CursorShape=2\x7"                          " REPLACE MODE : solid block
+  let &t_EI = "\<Esc>]50;CursorShape=3\x7"                          " NORMAL MODE  : blinking underscore
 else
   let &t_SI .= "\e[4 q"                                             " SI = INSERT mode
   let &t_SR .= "\e[4 q"                                             " SR = REPLACE mode
@@ -369,7 +381,7 @@ set magic                                                           " regular ex
 set linespace=0
 set wildmenu
 set wildmode=longest,list,full                                      " completion mode that is used for the character
-set noerrorbells novisualbell visualbell                            " ╮ Turn off
+set noerrorbells novisualbell visualbell                            " ╮ turn off
 set belloff=all                                                     " ├ beep/flash
 set t_vb=                                                           " ╯ error beep/flash
 " set list listchars=tab:\→\ ,tab:▸,trail:·,extends:»,precedes:«,nbsp:·,eol:¬
@@ -402,6 +414,9 @@ set equalalways
 set formatoptions=tcrqn
 set formatoptions+=rnmMB                                            " remove the backspace for combine lines (only for chinese)
 set matchpairs+=<:>
+set thesaurus+=~/.vim/spell/dictionary/thesaurii.txt                " ╮
+set thesaurus+=~/.vim/spell/dictionary/mthesaur.txt                 " ├ spell and grammars
+set dictionary=/usr/share/dict/words                                " ╯
 " set autowrite
 if has('cmdline_info')
   set ruler                                                         " ruler: show line and column number
@@ -474,9 +489,6 @@ cnoreabbrev %Y       %y
 cnoreabbrev %D       %d
 cnoremap    sudow!!  w !sudo tee > /dev/null %
 cnoremap    sw!!     execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
-" cnoremap  lss      lss<cr>:b<space>
-" cnoremap  lsd      lss<cr>:bd<space>
-" cnoremap  redr     redraw!
 
 inoremap <leader>tt  <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
 inoremap <leader>fn  <C-R>=expand("%:t:r")<CR>
@@ -494,11 +506,11 @@ nnoremap <leader>zdd :%s/ / /g<CR>                                  " [d]elete 
 nnoremap <leader>zds :%s/^<span.*span>//g<CR>                       " [d]elete [s]pan tag
 nnoremap <leader>zdi :%s/^\s\+//<CR>                                " [d]elete [i]ndent spaces
 nnoremap <leader>zid i•<ESC>                                        " [i]nsert [d]ot(•)
-" cacular expr
-nnoremap <leader>cr  0yt=a<c-r>=<c-r>"<cr><esc>
-" cacular expr
+" count expr
+nnoremap <leader>cr  0yt=A<C-r>=<C-r>"<CR><Esc>
+" count expr
 nnoremap <leader>*   *<C-O>:%s///gn<CR>
-" cacular the matches numbers ( [w]c -[l] )
+" count the matches numbers ( [w]c -[l] )
 nnoremap <leader>zwl :%s///gn<CR>
 
 iabbrev <leader>/*   /*********************************
@@ -514,7 +526,6 @@ iabbrev <leader>#-   #------------------
 " |_|            |___/                                    |___/
 "
 " **************************************************************/
-
 nnoremap <leader>tb :TagbarToggle<CR>
 let g:tagbar_width       = 30
 let g:tagbar_type_groovy = {
@@ -541,7 +552,8 @@ noremap <leader>aid :AuthorInfoDetect<CR>
 let g:vimrc_author = 'marslo'
 let g:vimrc_email  = 'marslo.jiao@gmail.com'
 
-noremap <leader>re :MRU<CR>                                         " most recently used(mru)
+" most recently used(mru)
+noremap <leader>re :MRU<CR>
 let MRU_Auto_Close    = 1
 let MRU_Max_Entries   = 10
 let MRU_Exclude_Files = '^/tmp/.*\|^/temp/.*\|^/media/.*\|^/mnt/.*\|^/private/.*'
@@ -550,6 +562,7 @@ noremap <Leader>u :GundoToggle<CR>
 set undodir=~/.vim/undo/
 set undofile
 
+" luochen1990/rainbow
 " for i in '75' '147' '108' '196' '208' '66' '106' '172' '115' '129'; do echo -e "\e[38;05;${i}m${i}"; done | column -c 250 -s ' '; echo -e "\e[m"
 let g:rainbow_active    = 1
 let g:rainbow_operators = 1
@@ -577,6 +590,7 @@ let g:rainbow_conf      = {
 \   }
 \}
 
+" Yggdroot/indentLine
 let g:indentLine_enabled              = 1
 let g:indentLine_color_gui            = "#282828"
 let g:indentLine_color_term           = 239
@@ -588,10 +602,13 @@ let g:indentLine_concealcursor        = 'inc'
 let g:indentLine_conceallevel         = 2
 let g:indentLine_char                 = '¦'
 
-let g:AutoPairs        = {'(':')', '[':']', '{':'}', '<':'>',"'":"'",'"':'"', '`':'`'}
-let g:AutoPairsParens  = {'(':')', '[':']', '{':'}', '<':'>'}
-let g:AutoPairsFlyMode = 0
+" LunarWatcher/auto-pairs
+let g:AutoPairs                   = {'(':')', '[':']', '{':'}', '<':'>',"'":"'",'"':'"', '`':'`'}
+let g:AutoPairsParens             = {'(':')', '[':']', '{':'}', '<':'>'}
+let g:AutoPairsMapBS              = 1
+let g:AutoPairsFlyMode            = 0
 let g:AutoPairsShortcutBackInsert = '<M-b>'
+let g:AutoPairsPrefix             = '<M-p>'
 
 " vim-airline/vim-airline
 let g:airline_powerline_fonts                      = 1
@@ -651,7 +668,8 @@ let g:vim_markdown_new_list_item_indent = 2
 " let g:vim_markdown_follow_anchor      = 1
 " let g:vim_markdown_anchorexpr         = "'<<'.v:anchor.'>>'"
 
-noremap <Leader>tm :TableModeToggle<CR>                             " 'dhruvasagar/vim-table-mode'
+" dhruvasagar/vim-table-mode
+noremap <Leader>tm :TableModeToggle<CR>
 let g:table_mode_corner          = '|'
 let g:table_mode_header_fillchar = '-'
 let g:table_mode_align_char      = ":"
@@ -664,18 +682,6 @@ if exists( ":Tabularize" )                                          " 'godlygeek
   noremap  <leader>a: :Tabularize /:\zs<CR>
   vnoremap <leader>a: :Tabularize /:\zs<CR>
   inoremap <silent> <Bar>   <Bar><Esc>:call <SID>table_auto_align()<CR>
-  function! s:table_auto_align()
-    let p = '^\s*|\s.*\s|\s*$'
-    if exists( ':Tabularize' ) && getline('.') =~# '^\s*|'
-      \ && (getline(line('.')-1) =~# p || getline( line('.')+1 ) =~# p)
-      let column   = strlen( substitute(getline('.')[0:col('.')],'[^|]','','g') )
-      let position = strlen( matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*') )
-      Tabularize/|/l1
-      normal! 0
-      call search( repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.') )
-    endif
-  endfunction
-  command! -nargs=1 First exec 'Tabularize /^[^' . escape(<q-args>, '\^$.[?*~') . ']*\zs' . escape(<q-args>, '\^$.[?*~')
 endif
 
 " git
@@ -689,18 +695,16 @@ let g:blamer_show_in_insert_modes = 0
 let g:blamer_relative_time        = 1
 " let g:blamer_prefix             = ' » '
 
-" gitgutter
-" nnoremap <leader>d :GitGutterFold<CR>
+" airblade/vim-gitgutter
 let g:gitgutter_git_executable = '/usr/local/bin/git'
 let g:gitgutter_enabled        = 1
 let g:gitgutter_realtime       = 0
 let g:gitgutter_eager          = 0
 set updatetime=250
 set signcolumn=yes
-" highlight clear LineNr
 highlight clear SignColumn
 
-" ycm                                                               " ycm-core/YouCompleteMe
+" ycm-core/YouCompleteMe
 nnoremap <leader>gc :YcmCompleter GoToDeclaration<CR>
 nnoremap <leader>gf :YcmCompleter GoToDefinition<CR>
 nnoremap <leader>go :YcmCompleter GoToInclude<cr>
@@ -767,13 +771,7 @@ let s:pip_os_dir  = 'bin'
 if has( 'win32' ) | let s:pip_os_dir = 'Scripts' | end
 source $HOME/.vim/plugged/lsp-examples/vimrc.generated
 
-" spell and grammars
-let g:grammarous#languagetool_cmd = 'languagetool'
-set thesaurus+=~/.vim/spell/dictionary/thesaurii.txt
-set thesaurus+=~/.vim/spell/dictionary/mthesaur.txt
-set dictionary=/usr/share/dict/words
-
-" fastFold
+" Konfekt/FastFold
 nnoremap zuz <Plug>(FastFoldUpdate)
 xnoremap <silent> <leader>iz :<c-u>FastFoldUpdate<cr>]z<up>$v[z<down>^
 xnoremap <silent> <leader>az :<c-u>FastFoldUpdate<cr>]zV[z
@@ -798,7 +796,7 @@ let g:fortran_fold                    = 1
 let g:clojure_fold                    = 1
 let g:baan_fold                       = 1
 
-" syntastic settings                                                " Plugin 'vim-syntastic/syntastic'
+" vim-syntastic/syntastic
 set statusline+=%#warningmsg#
 set statusline+=\ %{SyntasticStatuslineFlag()}
 set statusline+=\ %* |
@@ -820,10 +818,10 @@ highlight link SyntasticWarningSign      GruvboxYellow
 highlight link SyntasticStyleErrorSign   GruvboxRedSign
 highlight link SyntasticStyleWarningSign GruvboxPurpleSign
 
-" yamllint                                                          " brew install yamllint; pipx install yamllint
-set foldlevelstart=20                                               " vim-yaml-folds
+" pedrohdz/vim-yaml-folds                                           " brew install yamllint; pipx install yamllint
+set foldlevelstart=20
 
-" ale                                                               " :help g:ale_echo_msg_format
+" dense-analysis/ale                                                " :help g:ale_echo_msg_format
 let g:ale_echo_msg_format                 = '[%linter%] %code%: %s [%severity%] '
 let g:ale_virtualtext_prefix              = '%comment% %type% [%code%]: '
 let g:ale_sign_error                      = '💢'                    " ✘ 👾 💣  🙅 🤦
@@ -841,15 +839,19 @@ let g:ale_hover_to_preview                = 1
 let g:ale_floating_preview                = 1
 let g:ale_close_preview_on_insert         = 1
 
-" fzf.vim
+" junegunn/fzf.vim
 nnoremap <C-p> :Files<CR>
 nnoremap <C-g> :GFiles<CR>
 nnoremap <C-s> :Ag<CR>
 nnoremap <silent><leader>l  :Buffers<CR>
 nnoremap <silent> <Leader>H :Helptags<CR>
 nnoremap <silent> <Leader>g :Commits<CR>
-let g:fzf_layout                  = { 'window': { 'width': 0.9, 'height': 0.6, 'relative': v:true } }
-let g:fzf_history_dir             = '~/.vim/cache/fzf-history'
+inoremap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
+  \ 'prefix': '^.*$',
+  \ 'source': 'rg -n ^ --color always',
+  \ 'options': '--ansi --delimiter : --nth 3..',
+  \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '') }
+\ }))
 let g:fzf_vim                     = {}
 let g:fzf_vim.preview_window      = [ 'right,50%', 'ctrl-\' ]
 let g:fzf_vim.tags_command        = 'ctags -R'
@@ -858,43 +860,29 @@ command! -bang -nargs=? -complete=dir Files
     \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--info=inline', '--preview', 'bat --color=always {}']}, <bang>0)
 command! -bang -complete=dir -nargs=? LS
     \ call fzf#run(fzf#wrap('ls', {'source': 'ls', 'dir': <q-args>}, <bang>0))
-inoremap <expr> <c-x><c-l> fzf#vim#complete(fzf#wrap({
-  \ 'prefix': '^.*$',
-  \ 'source': 'rg -n ^ --color always',
-  \ 'options': '--ansi --delimiter : --nth 3..',
-  \ 'reducer': { lines -> join(split(lines[0], ':\zs')[2:], '') }}
-  \ )
-\ )
-let g:fzf_action = {
+let g:fzf_layout                  = { 'window': { 'width': 0.9, 'height': 0.6, 'relative': v:true } }
+let g:fzf_history_dir             = '~/.vim/cache/fzf-history'
+let g:fzf_action                  = {
   \ 'ctrl-t': 'tab split',
   \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit'
 \ }
-let g:fzf_colors = {
-  \ 'fg':         ['fg', 'Normal'],
-  \ 'bg':         ['bg', 'Normal'],
-  \ 'preview-bg': ['bg', 'NormalFloat'],
-  \ 'hl':         ['fg', 'Comment'],
-  \ 'fg+':        ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-  \ 'bg+':        ['bg', 'CursorLine', 'CursorColumn'],
-  \ 'hl+':        ['fg', 'Statement'],
-  \ 'info':       ['fg', 'PreProc'],
-  \ 'border':     ['fg', 'Ignore'],
-  \ 'prompt':     ['fg', 'Conditional'],
-  \ 'pointer':    ['fg', 'Exception'],
-  \ 'marker':     ['fg', 'Keyword'],
-  \ 'spinner':    ['fg', 'Label'],
-  \ 'header':     ['fg', 'Comment']
+let g:fzf_colors                  = {
+  \ 'fg':         ['fg', 'Normal'                               ] ,
+  \ 'bg':         ['bg', 'Normal'                               ] ,
+  \ 'preview-bg': ['bg', 'NormalFloat'                          ] ,
+  \ 'hl':         ['fg', 'Comment'                              ] ,
+  \ 'fg+':        ['fg', 'CursorLine', 'CursorColumn', 'Normal' ] ,
+  \ 'bg+':        ['bg', 'CursorLine', 'CursorColumn'           ] ,
+  \ 'hl+':        ['fg', 'Statement'                            ] ,
+  \ 'info':       ['fg', 'PreProc'                              ] ,
+  \ 'border':     ['fg', 'Ignore'                               ] ,
+  \ 'prompt':     ['fg', 'Conditional'                          ] ,
+  \ 'pointer':    ['fg', 'Exception'                            ] ,
+  \ 'marker':     ['fg', 'Keyword'                              ] ,
+  \ 'spinner':    ['fg', 'Label'                                ] ,
+  \ 'header':     ['fg', 'Comment'                              ]
 \ }
-
-augroup collumnLimit
-  set colorcolumn=80
-  highlight CollumnLimit    guibg=NONE    guifg=#4e4e4e    ctermfg=240
-  autocmd!
-  let collumnLimit = 80
-  let pattern      = '\%<' . ( collumnLimit+1 ) . 'v.\%>' . collumnLimit . 'v'
-  let w:m1         = matchadd( 'CollumnLimit', pattern, -1 )
-augroup END
 
 " /**************************************************************
 "              _                           _
@@ -996,6 +984,25 @@ if has( "autocmd" )
     autocmd TerminalOpen * set nobuflisted
   augroup END
 
+  augroup CustomTabularize
+    autocmd!
+    " https://github.com/jwhitley/vimrc/blob/master/.vimrc
+    " autocmd VimEnter * if exists(":Tabularize") | exe ":AddTabularPattern! bundles /[^ ]\\+\\//l1r0" | endif
+    " add for plugin/TabularMaps.vim
+    autocmd VimEnter * if exists(":Tabularize") | exe ":AddTabularPattern 1,  /^[^,]*\zs,/r1c1l0" | endif
+    autocmd VimEnter * if exists(":Tabularize") | exe ":AddTabularPattern 1=  /^[^=]*\zs="        | endif
+    autocmd VimEnter * if exists(":Tabularize") | exe ":AddTabularPattern 1== /^[^=]*\zs=/r1c1l0" | endif
+  augroup END
+
+  augroup CollumnLimit
+    set colorcolumn=80
+    highlight CollumnLimit    guibg=NONE    guifg=#4e4e4e    ctermfg=240
+    autocmd!
+    let collumnLimit = 80
+    let pattern      = '\%<' . ( collumnLimit+1 ) . 'v.\%>' . collumnLimit . 'v'
+    let w:m1         = matchadd( 'CollumnLimit', pattern, -1 )
+  augroup END
+
   if version > 703
     " autocmd FocusLost * set norelativenumber
     autocmd FocusGained * set relativenumber
@@ -1006,18 +1013,6 @@ if has( "autocmd" )
     autocmd CmdwinEnter * let b:ei_save = &eventignore | set eventignore=CursorHold,InsertEnter
     autocmd CmdwinLeave * let &eventignore = b:ei_save
   endif
-
-  augroup CustomTabularize
-    autocmd!
-    " https://github.com/jwhitley/vimrc/blob/master/.vimrc
-    " autocmd VimEnter * if exists(":Tabularize") | exe ":AddTabularPattern! bundles /[^ ]\\+\\//l1r0" | endif
-    " add for plugin/TabularMaps.vim
-    autocmd VimEnter * if exists(":Tabularize") | exe ":AddTabularPattern 1,  /^[^,]*\zs,/r1c1l0" | endif
-    autocmd VimEnter * if exists(":Tabularize") | exe ":AddTabularPattern 1=  /^[^=]*\zs="        | endif
-    autocmd VimEnter * if exists(":Tabularize") | exe ":AddTabularPattern 1== /^[^=]*\zs=/r1c1l0" | endif
-  augroup END
-  " uncomment the following to have vim jump to the last position when reopening a file
-  " autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 endif
 
 highlight SpellBad        term=underline   cterm=underline     ctermbg=0
