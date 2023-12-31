@@ -3,7 +3,7 @@
 "        Author: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 1.0.2
-"    LastChange: 2023-12-30 00:01:06
+"    LastChange: 2023-12-31 01:43:18
 " =============================================================================
 
 set nocompatible
@@ -61,7 +61,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'sjl/gundo.vim'
 Plug 'preservim/tagbar'
 Plug 'marslo/authorinfo'
-Plug 'marslo/auto-pairs'
+Plug 'LunarWatcher/auto-pairs', {'branch': 'develop'}
 Plug 'tomtom/tlib_vim'
 Plug 'yegappan/mru'
 Plug 'fracpete/vim-large-files'
@@ -73,8 +73,8 @@ Plug 'marslo/MarsloFunc'
 Plug 'vim-syntastic/syntastic'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'ycm-core/YouCompleteMe', { 'do': './install.py --all' }
-Plug 'ycm-core/lsp-examples',  { 'do': './install.py --all' }
+Plug 'ycm-core/YouCompleteMe', { 'do': 'python3 install.py --all' }
+Plug 'ycm-core/lsp-examples',  { 'do': 'python3 install.py --all' }
 Plug 'tpope/vim-commentary'
 Plug 'preservim/vim-markdown'                                       " markdown
 Plug 'valloric/MatchTagAlways'                                      " web design
@@ -148,7 +148,7 @@ endfunction
 nnoremap <C-k> :call DoRedraw()<CR>
 map <C-k>      :call DoRedraw()<CR>
 
-if isdirectory( expand(bud . 'MarsloFunc') )
+if isdirectory( expand(pluginHome . 'MarsloFunc') )
   command! GetVim :call marslofunc#GetVim()<CR>
   xnoremap *      :<C-u>call marslofunc#VSetSearch()<CR>/<C-R>=@/<CR><CR>
   xnoremap #      :<C-u>call marslofunc#VSetSearch()<CR>?<C-R>=@/<CR><CR>
@@ -248,7 +248,7 @@ endfun
 autocmd BufRead,BufNewFile * :call IgnoreCamelCaseSpell()
 syn match UrlNoSpell '\w\+:\/\/[^[:space:]]\+' contains=@NoSpell
 
-if exists( ":Tabularize" )                                          " godlygeek/tabular
+if exists( ":Tabularize" )                                          " 'godlygeek/tabular'
   function! s:table_auto_align()
     let p = '^\s*|\s.*\s|\s*$'
     if exists( ':Tabularize' ) && getline('.') =~# '^\s*|'
@@ -523,13 +523,13 @@ nnoremap <leader>G   :%s///gn<CR>
 nnoremap <leader>zil :g/^/ s//\=line('.').' '/<CR>                  " [i]nsert [l]ine number
 nnoremap <leader>zcm :%s/<C-v><CR>/\r/g<CR>                         " [c]onvert [m] to new line
 nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>                          " [d]elete [m]()
-nnoremap <leader>zdb :%s/\s\+$//<CR>                                " [d]elete trailing space ( [b]lank )
+nnoremap <leader>zdb :%s/\s\+$//<CR>                                " [d]elete [b]lank ( trailing ) space
 nnoremap <leader>zbl :g/^\s*$/d<CR>                                 " [d]elete [b]lank [l]ine
 nnoremap <leader>zd2 :%s/​//g<CR>                              " [d]elete <200b>
-nnoremap <leader>zdd :%s/ / /g<CR>                                  " [d]elete [d]ot(• )
+nnoremap <leader>zdd :%s/ / /g<CR>                                  " [d]elete [d]ot( ) 0xAO
 nnoremap <leader>zds :%s/^<span.*span>//g<CR>                       " [d]elete [s]pan tag
 nnoremap <leader>zdi :%s/^\s\+//<CR>                                " [d]elete [i]ndent spaces
-nnoremap <leader>zid i•<ESC>                                        " [i]nsert [d]ot(•)
+nnoremap <leader>zid i•<ESC>                                        " [i]nsert [d]ot(•) 0x2022
 " count expr
 nnoremap <leader>cr  0yt=A<C-r>=<C-r>"<CR><Esc>
 " count expr
@@ -593,23 +593,23 @@ let g:rainbow_operators = 1
 let g:rainbow_conf      = {
 \   'guifgs' : [ '#6A5ACD', '#ff6347', '#b58900', '#9acd32', '#EEC900', '#9A32CD', '#EE7600', '#268bd2', '#183172' ],
 \   'ctermfgs' : 'xterm-256color' == $TERM ? [ '75', '147', '108', '196', '208', '66', '106', '172', '115', '129' ] : [ 'lightblue', 'lightgreen', 'yellow', 'red', 'magenta' ],
-\   'parentheses': [['(',')'], ['\[','\]'], ['{','}']],
+\   'parentheses': [ ['(',')'], ['\[','\]'], ['{','}'] ],
 \   'separately': {
 \     '*': {},
 \     'markdown': {
 \       'parentheses_options': 'containedin=markdownCode contained',
 \     },
 \     'css': {
-\       'parentheses': [['(',')'], ['\[','\]']],
+\       'parentheses': [ ['(',')'], ['\[','\]'] ],
 \     },
 \     'scss': {
-\       'parentheses': [['(',')'], ['\[','\]']],
+\       'parentheses': [ ['(',')'], ['\[','\]'] ],
 \     },
 \     'html': {
-\       'parentheses': [['(',')'], ['\[','\]'], ['{','}']],
+\       'parentheses': [ ['(',')'], ['\[','\]'], ['{','}'] ],
 \     },
 \     'stylus': {
-\       'parentheses': ['start=/{/ end=/}/ fold contains=@colorableGroup'],
+\       'parentheses': [ 'start=/{/ end=/}/ fold contains=@colorableGroup' ],
 \     }
 \   }
 \}
@@ -627,12 +627,19 @@ let g:indentLine_conceallevel         = 2
 let g:indentLine_char                 = '¦'
 
 " LunarWatcher/auto-pairs
-let g:AutoPairs                   = {'(':')', '[':']', '{':'}', '<':'>',"'":"'",'"':'"', '`':'`'}
-let g:AutoPairsParens             = {'(':')', '[':']', '{':'}', '<':'>'}
-let g:AutoPairsMapBS              = 1
-let g:AutoPairsFlyMode            = 0
-let g:AutoPairsShortcutBackInsert = '<M-b>'
-let g:AutoPairsPrefix             = '<M-p>'
+let g:AutoPairs                             = autopairs#AutoPairsDefine({ '<': '>' })
+let g:AutoPairsMapBS                        = 1
+let g:AutoPairsFlyMode                      = 0
+let g:AutoPairsCompleteOnlyOnSpace          = 1
+let g:AutoPairsNoJump                       = 0
+let g:AutoPairsSpaceCompletionRegex         = '\w'
+" let g:AutoPairsJumpBlacklist              = [ '<', '>' ]
+" to avoid impact with ctrl-p ( :Files )
+let g:AutoPairsShortcutToggleMultilineClose = 0
+let g:AutoPairsShortcutBackInsert           = '<M-b>'
+let g:AutoPairsPrefix                       = '<M-j>'
+let g:AutoPairsShortcutJump                 = '<M-n>'
+let g:AutoPairsShortcutToggle               = '<M-j>'
 
 " vim-airline/vim-airline
 let g:airline_powerline_fonts                      = 1
@@ -686,11 +693,6 @@ let g:vim_markdown_conceal_code_blocks  = 0
 let g:vim_markdown_strikethrough        = 1
 let g:vim_markdown_folding_disabled     = 1                         " =1 to disable folding
 let g:vim_markdown_new_list_item_indent = 2
-" let g:vim_markdown_frontmatter        = 1
-" let g:vim_markdown_json_frontmatter   = 1
-" let g:vim_markdown_autowrite          = 1
-" let g:vim_markdown_follow_anchor      = 1
-" let g:vim_markdown_anchorexpr         = "'<<'.v:anchor.'>>'"
 
 " dhruvasagar/vim-table-mode
 noremap <Leader>tm :TableModeToggle<CR>
@@ -700,7 +702,8 @@ let g:table_mode_align_char      = ":"
 let g:table_mode_corner          = "|"
 let g:table_mode_align_char      = ":"
 
-if exists( ":Tabularize" )                                          " 'godlygeek/tabular'
+" godlygeek/tabular
+if exists( ":Tabularize" )
   noremap  <Leader>a= :Tabularize /=<CR>
   vnoremap <Leader>a= :Tabularize /=<CR>
   noremap  <leader>a: :Tabularize /:\zs<CR>
@@ -710,8 +713,10 @@ endif
 
 " git
 nnoremap <leader>mp  :execute 'silent !git mp' \| redraw!<CR>
+" zivyangll/git-blame.vim
 nnoremap <Leader>ebb :<C-u>call gitblame#echo()<CR>
-nnoremap <Leader>bb  :BlamerToggle<CR>                              " APZelos/blamer.nvim
+" APZelos/blamer.nvim
+nnoremap <Leader>bb  :BlamerToggle<CR>
 let g:blamer_enabled              = 0
 let g:blamer_delay                = 100
 let g:blamer_show_in_visual_modes = 0
@@ -720,12 +725,12 @@ let g:blamer_relative_time        = 1
 " let g:blamer_prefix             = ' » '
 
 " airblade/vim-gitgutter
+set updatetime=250
+set signcolumn=yes
 let g:gitgutter_git_executable = '/usr/local/bin/git'
 let g:gitgutter_enabled        = 1
 let g:gitgutter_realtime       = 0
 let g:gitgutter_eager          = 0
-set updatetime=250
-set signcolumn=yes
 highlight clear SignColumn
 
 " ycm-core/YouCompleteMe
@@ -750,8 +755,8 @@ let g:ycm_filepath_completion_use_working_dir      = 1
 let g:ycm_min_num_of_chars_for_completion          = 1
 let g:ycm_complete_in_comments                     = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
-let g:ycm_filetype_specific_completion_to_disable  = { 'gitcommit': 1, 'vim': 1 }
 let g:ycm_filetype_whitelist                       = { '*': 1, 'ycm_nofiletype': 1 }
+let g:ycm_filetype_specific_completion_to_disable  = { 'gitcommit': 1, 'vim': 1 }
 let g:ycm_filetype_blacklist                       = {
   \   'tagbar'  : 1,
   \   'notes'   : 1,
@@ -936,15 +941,17 @@ if has( "autocmd" )
   augroup DevOps
     autocmd BufRead,BufNewFile *                   setfiletype jenkinsfile
     autocmd BufRead,BufNewFile *.config            set filetype=config syntax=gitconfig noexpandtab
-    autocmd FileType           json,markdown       set tabstop=2 softtabstop=2 shiftwidth=2
-    autocmd Filetype           markdown            let b:AutoPairs={ '(':')', '[':']', '{':'}', "'":"'", '`':'`' }
-    autocmd FileType           yaml                setlocal tabstop=2 softtabstop=2 shiftwidth=2 expandtab
-    autocmd Syntax             yaml                let g:indentLine_loaded=1
+    autocmd FileType           json,markdown,yaml  set tabstop=2 softtabstop=2 shiftwidth=2
     autocmd Syntax             yaml                normal zM
     autocmd BufEnter           *\(.md\|.markdown\) exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" %:p "--no-gpu"<CR>'
     autocmd BufRead,BufNewFile .*ignore            set filetype=ignore
-    autocmd FileType           ignore              setlocal commentstring=#\ %s
-    autocmd FileType           gitconfig           setlocal commentstring=#\ %s
+    autocmd FileType           ignore,gitconfig    setlocal commentstring=#\ %s
+    autocmd FileType           markdown,html       let g:AutoPairsCompleteOnlyOnSpace = 0
+    autocmd FileType           markdown,html       let b:AutoPairs = autopairs#AutoPairsDefine({
+          \ '<div>':'</div>', '<font>':'</font>', '<a>':'</a>', '<p>':'</p>',
+          \ '<table>':'</table>', '<tbody>':'</tbody>',
+          \ '<thread>':'</thread>', '<th>':'</th>', '<td>':'</td>'
+          \ })
     if index( ['README', 'SUMMARY'], expand("%:r") ) == -1
       autocmd BufWritePost     *\(.md\)            silent :DocToc             " automatic build doctoc when save it
     endif
@@ -967,17 +974,16 @@ if has( "autocmd" )
   augroup END
 
   augroup Groovy
-    autocmd Filetype   Groovy             set filetype=groovy
-    autocmd FileType   groovy,Jenkinsfile set tabstop=2 softtabstop=2 shiftwidth=2
-    autocmd Syntax     groovy,Jenkinsfile let g:indentLine_loaded=1
-    autocmd Syntax     groovy,Jenkinsfile setlocal foldmethod=indent
-    autocmd Syntax     groovy,Jenkinsfile normal zM
-    autocmd FileType   Jenkinsfile        setlocal commentstring=//\ %s
+    autocmd Filetype   Groovy                set filetype=groovy
+    autocmd FileType   groovy,Jenkinsfile    set tabstop=2 softtabstop=2 shiftwidth=2
+    autocmd Syntax     groovy,Jenkinsfile    setlocal foldmethod=indent
+    autocmd Syntax     groovy,Jenkinsfile    normal zM
+    autocmd FileType   Jenkinsfile           setlocal commentstring=//\ %s
     " https://vim.fandom.com/wiki/Syntax_folding_for_Java
-    autocmd FileType   java               setlocal foldmarker=/**,**/ foldmethod=marker foldcolumn=1
-    autocmd FileType   javascript         syntax clear jsFuncBlock            " rainbow issue #2
-    " autocmd FileType Jenkinsfile        setlocal filetype=groovy syntax=groovy foldmethod=indent
-    " autocmd FileType Jenkinsfile        set syntax=groovy filetype=groovy
+    autocmd FileType   java                  setlocal foldmarker=/**,**/ foldmethod=marker foldcolumn=1
+    autocmd FileType   javascript            syntax clear jsFuncBlock            " rainbow issue #2
+    " autocmd FileType Jenkinsfile           setlocal filetype=groovy syntax=groovy foldmethod=indent
+    " autocmd FileType Jenkinsfile           set syntax=groovy filetype=groovy
     " autocmd BufNewFile,BufRead             Jenkinsfile setf groovy
     " autocmd BufNewFile,BufRead,BufReadPost Jenkinsfile setlocal foldmethod=indent
     if getline(1) =~ '^#!.*[/\\]groovy\>' |  setf groovy | endif              " to setup filetype to groovy if first line matches `#!.*[/\\]groovy`
@@ -991,18 +997,15 @@ if has( "autocmd" )
     autocmd FileType python syntax keyword pythonDecorator print self
     autocmd FileTYpe python set isk-=.
     autocmd Syntax   python setlocal foldmethod=indent
-    autocmd Syntax   python let g:indentLine_loaded=1
     autocmd Syntax   python normal zM
   augroup END
 
   augroup vimrc
     autocmd! BufWritePost ~/.vimrc silent! source %
-    autocmd  Filetype     vim      let b:AutoPairs={'(':')', '[':']', '{':'}', '<':'>', '`':'`'}
-    autocmd  Syntax       vim      let g:indentLine_loaded=1
+    autocmd  Filetype     vim      let g:ycm_complete_in_strings = 3
     autocmd  Syntax       vim      normal zM
   augroup END
 
-  " skip quickfix : https://vi.stackexchange.com/a/16709/7389
   augroup TermIgnore                                                          " skip quickfix : https://vi.stackexchange.com/a/16709/7389
     autocmd!
     autocmd TerminalOpen * set nobuflisted
