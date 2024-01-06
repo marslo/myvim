@@ -16,8 +16,10 @@ set spellfile=~/.vim/spell/en.utf-8.add
 set lazyredraw
 set shell=/usr/local/bin/bash
 runtime macros/matchit.vim
+runtime defaults.vim
 
 let performance_mode = 1
+set mouse=c
 set fileformat=unix
 set fileformats=unix
 set nowrap                                                          " no wrap lines
