@@ -1,9 +1,9 @@
 " =============================================================================
-"      FileName: vimrc.mac.current
+"      FileName: .vimrc
 "        Author: marslo.jiao@gmail.com
 "       Created: 2010-10
 "       Version: 1.0.2
-"    LastChange: 2023-12-31 01:43:18
+"    LastChange: 2024-01-09 23:40:38
 " =============================================================================
 
 set nocompatible
@@ -20,6 +20,7 @@ runtime defaults.vim
 
 let performance_mode = 1
 set mouse=c
+set mousemodel=popup_setpos
 set fileformat=unix
 set fileformats=unix
 set nowrap                                                          " no wrap lines
@@ -61,8 +62,9 @@ Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'sjl/gundo.vim'
 Plug 'preservim/tagbar'
+Plug 'marslo/vim-devicons', { 'branch': 'sandbox/marslo' }
 Plug 'marslo/authorinfo'
-Plug 'LunarWatcher/auto-pairs', {'branch': 'develop'}
+Plug 'LunarWatcher/auto-pairs', { 'branch': 'develop' }
 Plug 'tomtom/tlib_vim'
 Plug 'yegappan/mru'
 Plug 'fracpete/vim-large-files'
@@ -216,7 +218,7 @@ augroup LargeFile
   autocmd BufReadPre * let f=getfsize(expand("<afile>")) | if f > g:LargeFile || f == -2 | call LargeFile() | endif
 augroup END
 
-function! BSkipQuickFix(command)                                    " switch avoid quickfix : https://vi.stackexchange.com/a/19420/7389
+function! BSkipQuickFix( command )                                  " switch avoid quickfix : https://vi.stackexchange.com/a/19420/7389
   let start_buffer = bufnr('%')
   execute a:command
   while &buftype ==# 'quickfix' && bufnr('%') != start_buffer
@@ -273,10 +275,11 @@ command! -nargs=0 -bar -range=% Reverse
 nnoremap <Leader>r :Reverse <bar> nohlsearch<CR>
 xnoremap <Leader>r :Reverse <bar> nohlsearch<CR>
 
-command! -nargs=0 DocToc execute 'silent !/usr/local/bin/doctoc --notitle --update-only --github --maxlevel 3 %' | execute 'redraw!'
-command! -nargs=1        First exec                           'Tabularize /^[^' . escape(<q-args>, '\^$.[?*~') . ']*\zs' . escape(<q-args>, '\^$.[?*~')
-command! -nargs=1 -range First exec <line1> . ',' . <line2> . 'Tabularize /^[^' . escape(<q-args>, '\^$.[?*~') . ']*\zs' . escape(<q-args>, '\^$.[?*~')
-command! -nargs=0 FullPath execute 'echo expand("%:p")'
+command! -nargs=0 DocTocUpdate execute 'silent !/usr/local/bin/doctoc --notitle --update-only --github --maxlevel 3 %' | execute 'redraw!'
+command! -nargs=0 DocTocCreate execute 'silent !/usr/local/bin/doctoc --notitle --github --maxlevel 3 %' | execute 'redraw!'
+command! -nargs=1        First execute                           'Tabularize /^[^' . escape(<q-args>, '\^$.[?*~') . ']*\zs' . escape(<q-args>, '\^$.[?*~')
+command! -nargs=1 -range First execute <line1> . ',' . <line2> . 'Tabularize /^[^' . escape(<q-args>, '\^$.[?*~') . ']*\zs' . escape(<q-args>, '\^$.[?*~')
+command! -nargs=0        Iname execute 'echo expand("%:p")'
 
 " /**************************************************************
 "  _       _             __                     __  _   _
@@ -289,7 +292,9 @@ command! -nargs=0 FullPath execute 'echo expand("%:p")'
 if has('gui_running')
   set go=                                                           " hide everything (go = guioptions)
   set cpoptions+=n
-  set guifont=Rec\ Mono\ Casual:h24
+  set guifont=Agave\ Nerd\ Font\ Mono:h32
+  " set guifont=JetBrainsMono\ Nerd\ Font\ Mono:h26
+  " set guifont=Rec\ Mono\ Casual:h24
   " set guifontwide=NSimsun:h16
   set renderoptions=type:directx,renmode:5
   set lines=30                                                      " the initialize size
@@ -716,11 +721,12 @@ nnoremap <leader>gf :YcmCompleter GoToDefinition<CR>
 nnoremap <leader>go :YcmCompleter GoToInclude<cr>
 nnoremap <leader>gg :YcmCompleter GoToDefinitionElseDeclaration<CR>
 nnoremap <leader>gd :YcmDiags<CR>
-let g:ycm_extra_conf_globlist                      = ['~/.marslo/ycm/*', '~/.vim/plugged/YouCompleteMe/*']
+let g:ycm_extra_conf_globlist                      = [ '~/.marslo/ycm/*', '~/.vim/plugged/YouCompleteMe/*' ]
 let g:ycm_key_invoke_completion                    = '<C-\>'
 let g:ycm_echo_current_diagnostic                  = 'virtual-text'
 let g:ycm_error_symbol                             = '✗'
 let g:ycm_warning_symbol                           = '✹'
+let g:ycm_update_diagnostics_in_insert_mode        = 0
 let g:ycm_seed_identifiers_with_syntax             = 1
 let g:ycm_complete_in_comments                     = 1
 let g:ycm_complete_in_strings                      = 1
@@ -747,16 +753,16 @@ let g:ycm_filetype_blacklist                       = {
   \   'undo'    : 1
   \ }
 let g:ycm_semantic_triggers                        =  {
-  \   'c'         : [ '->', '.'],
-  \   'objc'      : [ '->', '.', 're!\[[_a-zA-Z]+\w*\s', 're!^\s*[^\W\d]\w*\s', 're!\[.*\]\s'],
-  \   'ocaml'     : [ '.', '#'],
-  \   'cpp,cuda,objcpp' : [ '->', '.', '::'],
-  \   'perl'      : [ '->'],
-  \   'php'       : [ '->', '::'],
-  \   'cs,d,elixir,go,groovy,java,javascript,julia,perl6,python,scala,typescript,vb': ['.'],
-  \   'ruby,rust' : [ '.', '::'],
-  \   'lua'       : [ '.', ':'],
-  \   'erlang'    : [ ':'],
+  \   'c'         : [ '->', '.' ],
+  \   'objc'      : [ '->', '.', 're!\[[_a-zA-Z]+\w*\s', 're!^\s*[^\W\d]\w*\s', 're!\[.*\]\s' ],
+  \   'ocaml'     : [ '.', '#' ],
+  \   'cpp,cuda,objcpp' : [ '->', '.', '::' ],
+  \   'perl'      : [ '->' ],
+  \   'php'       : [ '->', '::' ],
+  \   'cs,d,elixir,go,groovy,java,javascript,julia,perl6,python,scala,typescript,vb': [ '.' ],
+  \   'ruby,rust' : [ '.', '::' ],
+  \   'lua'       : [ '.', ':' ],
+  \   'erlang'    : [ ':' ],
   \ }
 augroup YCMCustomized
   autocmd!
@@ -828,8 +834,10 @@ highlight link SyntasticStyleWarningSign GruvboxPurpleSign
 set foldlevelstart=20
 
 " dense-analysis/ale                                                " :help g:ale_echo_msg_format
+let g:ale_virtualtext_prefix              = '%comment% %severity% [%code%]: '
 let g:ale_echo_msg_format                 = '[%linter%] %code%: %s [%severity%] '
-let g:ale_virtualtext_prefix              = '%comment% %type% [%code%]: '
+let g:ale_echo_msg_error_str              = '✘'
+let g:ale_echo_msg_warning_str            = '⚠'
 let g:ale_sign_error                      = '💢'                    " ✘ 👾 💣  🙅 🤦
 let g:ale_sign_warning                    = 'ᑹᑹ'                    " ⚠ ⸮ ⸘ ☹
 let g:ale_sign_info                       = 'ᓆ'                     " ⸚ ϔ 𐘿 𐰦
@@ -837,6 +845,7 @@ let g:ale_sign_style_error                = '⍥'                     " ᑹ
 let g:ale_sign_style_warning              = 'ᓍ'                     " ᓏ
 let g:ale_lint_on_text_changed            = 'never'
 let g:ale_fix_on_save                     = 0
+let g:ale_popup_menu_enabled              = 1
 let g:ale_lint_on_save                    = 1
 let g:ale_warn_about_trailing_blank_lines = 1
 let g:ale_warn_about_trailing_whitespace  = 1
@@ -844,6 +853,7 @@ let g:ale_set_balloons                    = 1
 let g:ale_hover_to_preview                = 1
 let g:ale_floating_preview                = 1
 let g:ale_close_preview_on_insert         = 1
+let g:ale_floating_window_border          = [ '│', '─', '╭', '╮', '╯', '╰', '│', '─' ]
 
 " junegunn/fzf.vim
 nnoremap <C-p> :Files<CR>
@@ -916,9 +926,10 @@ if has( "autocmd" )
   autocmd Syntax             c,cpp,xml,html,xhtml   normal zM
 
   augroup DevOps
-    autocmd BufRead,BufNewFile *                   setfiletype jenkinsfile
+    autocmd BufRead,BufNewFile *                   setfiletype Jenkinsfile
     autocmd BufRead,BufNewFile *.config            set filetype=config syntax=gitconfig noexpandtab
     autocmd FileType           json,markdown,yaml  set tabstop=2 softtabstop=2 shiftwidth=2
+    autocmd FileType           json,markdown,yaml  setlocal foldmethod=indent
     autocmd Syntax             yaml                normal zM
     autocmd BufEnter           *\(.md\|.markdown\) exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" %:p "--no-gpu"<CR>'
     autocmd BufRead,BufNewFile .*ignore            set filetype=ignore
@@ -930,7 +941,7 @@ if has( "autocmd" )
           \ '<thread>':'</thread>', '<th>':'</th>', '<td>':'</td>'
           \ })
     if index( ['README', 'SUMMARY'], expand("%:r") ) == -1
-      autocmd BufWritePost     *\(.md\)            silent :DocToc             " automatic build doctoc when save it
+      autocmd BufWritePost     *\(.md\)            silent :DocTocUpdate       " automatic build doctoc when save it
     endif
     autocmd BufNewFile,BufRead                                                " git config files
           \ *.git/config,.gitconfig,.gitmodules,gitconfig
@@ -958,7 +969,7 @@ if has( "autocmd" )
     autocmd FileType   Jenkinsfile           setlocal commentstring=//\ %s
     " https://vim.fandom.com/wiki/Syntax_folding_for_Java
     autocmd FileType   java                  setlocal foldmarker=/**,**/ foldmethod=marker foldcolumn=1
-    autocmd FileType   javascript            syntax clear jsFuncBlock            " rainbow issue #2
+    autocmd FileType   javascript            syntax clear jsFuncBlock         " rainbow issue #2
     " autocmd FileType Jenkinsfile           setlocal filetype=groovy syntax=groovy foldmethod=indent
     " autocmd FileType Jenkinsfile           set syntax=groovy filetype=groovy
     " autocmd BufNewFile,BufRead             Jenkinsfile setf groovy
