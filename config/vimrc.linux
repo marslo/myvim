@@ -747,7 +747,7 @@ nnoremap <leader>gg :YcmCompleter GoToDefinitionElseDeclaration<CR>
 nnoremap <leader>gd :YcmDiags<CR>
 let g:ycm_extra_conf_globlist                      = [ '~/.marslo/ycm/*', '~/.vim/plugged/YouCompleteMe/*' ]
 let g:ycm_key_invoke_completion                    = '<C-\>'
-let g:ycm_echo_current_diagnostic                  = 'virtual-text'
+let g:ycm_echo_current_diagnostic                  = 0
 let g:ycm_error_symbol                             = '✗'
 let g:ycm_warning_symbol                           = '✹'
 let g:ycm_update_diagnostics_in_insert_mode        = 0
