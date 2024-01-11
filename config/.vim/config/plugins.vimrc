@@ -2,7 +2,8 @@
 "      FileName : vimrc.plugins
 "        Author : marslo.jiao@gmail.com
 "       Created : 2010-10
-"    LastChange : 2024-01-10 21:53:41
+"       Version : 2.0.1
+"    LastChange : 2024-01-10 22:58:58
 " =============================================================================
 
 " /**************************************************************
@@ -21,9 +22,6 @@ let maplocalleader = '\\'
 let g:plug_shallow = 0
 
 filetype off
-set runtimepath+=~/.vim/plugged
-set runtimepath+=~/.vim/plugged/YouCompleteMe
-set runtimepath+=/usr/local/opt/fzf                                         " $ brew install fzf
 call plug#begin( '~/.vim/plugged' )
 
 Plug 'junegunn/vim-plug'

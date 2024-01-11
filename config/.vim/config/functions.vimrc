@@ -2,7 +2,8 @@
 "      FileName : vimrc.functions
 "        Author : marslo.jiao@gmail.com
 "       Created : 2010-10
-"    LastChange : 2024-01-10 21:53:41
+"       Version : 2.0.1
+"    LastChange : 2024-01-10 22:58:58
 " =============================================================================
 
 " /**************************************************************
@@ -135,5 +136,16 @@ if exists( ":Tabularize" )                                          " 'godlygeek
     endif
   endfunction
 endif
+
+function! IsWSL()
+  let uname = substitute(system('uname'),'\n','','')
+  if uname == 'Linux'
+      let lines = readfile("/proc/version")
+      if lines[0] =~ "Microsoft"
+          return 1
+      endif
+  endif
+  return 0
+endfunction
 
 " vim:tabstop=2:softtabstop=2:shiftwidth=2:expandtab:filetype=vim:foldmethod=marker:foldmarker="\ **************************************************************/,"\ /**************************************************************

@@ -2,7 +2,8 @@
 "      FileName : vimrc.settings
 "        Author : marslo.jiao@gmail.com
 "       Created : 2010-10
-"    LastChange : 2024-01-10 21:53:41
+"       Version : 2.0.1
+"    LastChange : 2024-01-10 22:58:58
 " =============================================================================
 
 " /**************************************************************
@@ -25,14 +26,11 @@ set maxmempattern=5000
 set history=1000
 set diffopt=filler,context:3
 set spell spelllang=en_us
-set spellcapcheck=1
 set spellfile=~/.vim/spell/en.utf-8.add
 set lazyredraw
 set ttimeout
 set ttimeoutlen=1
 set ttyfast                                                         " enable fast terminal connection.
-set clipboard+=unnamed                                              " copy the content to system clipboard by using y/p
-set clipboard+=unnamedplus
 set iskeyword-=.
 set autochdir
 set encoding=utf-8                                                  " input chinese (=cp936)
@@ -111,6 +109,5 @@ set exrc
 set secure
 
 if has('persistent_undo') | set noundofile            | endif
-if version > 74399        | set cryptmethod=blowfish2 | endif
 
 " vim:tabstop=2:softtabstop=2:shiftwidth=2:expandtab:filetype=vim:foldmethod=marker:foldmarker="\ **************************************************************/,"\ /**************************************************************

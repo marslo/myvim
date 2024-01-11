@@ -2,7 +2,8 @@
 "      FileName : vimrc.cmds
 "        Author : marslo.jiao@gmail.com
 "       Created : 2010-10
-"    LastChange : 2024-01-10 21:53:41
+"       Version : 2.0.1
+"    LastChange : 2024-01-10 22:58:58
 " =============================================================================
 
 " /**************************************************************
@@ -47,7 +48,7 @@ let MRU_Max_Entries   = 10
 let MRU_Exclude_Files = '^/tmp/.*\|^/temp/.*\|^/media/.*\|^/mnt/.*\|^/private/.*'
 
 noremap <Leader>u :GundoToggle<CR>
-set undodir=~/.vim/undo/
+if has('nvim') | set undodir=~/.vim/nundo/ | else | set undodir=~/.vim/undo/ | endif
 set undofile
 
 " luochen1990/rainbow
@@ -316,10 +317,11 @@ highlight link SyntasticStyleWarningSign GruvboxPurpleSign
 set foldlevelstart=20
 
 " dense-analysis/ale                                                " :help g:ale_echo_msg_format
-let g:ale_virtualtext_prefix              = '%comment% %type% [%code%]: '
+set omnifunc=ale#completion#OmniFunc
+let g:ale_virtualtext_prefix              = '%comment% %severity% [%code%]: '
 let g:ale_echo_msg_format                 = '[%linter%] %code%: %s [%severity%] '
-let g:ale_echo_msg_error_str              = 'Error'
-let g:ale_echo_msg_warning_str            = 'Warning'
+let g:ale_echo_msg_error_str              = '✘'
+let g:ale_echo_msg_warning_str            = '⚠'
 let g:ale_sign_error                      = '💢'                    " ✘ 👾 💣  🙅 🤦
 let g:ale_sign_warning                    = 'ᑹ'                     " ⚠ ⸮ ⸘ ☹
 let g:ale_sign_info                       = 'ᓆ'                     " ⸚ ϔ 𐘿 𐰦
@@ -335,12 +337,16 @@ let g:ale_set_balloons                    = 1
 let g:ale_hover_to_preview                = 1
 let g:ale_floating_preview                = 1
 let g:ale_close_preview_on_insert         = 1
-let g:ale_completion_enabled              = 1
-let g:ale_linters_explicit                = 1
+let g:ale_set_quickfix                    = 1
+let g:ale_completion_autoimport           = 1
+let g:ale_sign_column_always              = 1
 let g:ale_floating_window_border          = [ '│', '─', '╭', '╮', '╯', '╰', '│', '─' ]
 let g:ale_fixers                          = {
-  \   '*' : [ 'remove_trailing_lines', 'trim_whitespace' ]
+  \   '*' : [ 'remove_trailing_lines', 'trim_whitespace' ] ,
+  \   'css': [ 'stylelint' ] ,
+  \   'groovy' : [ 'checkstyle' ]
   \}
+" let b:ale_fixers = [ 'prettier', 'stylelint' ]
 
 " junegunn/fzf.vim
 nnoremap <C-p> :Files<CR>
