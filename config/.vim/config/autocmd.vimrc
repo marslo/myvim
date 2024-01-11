@@ -1,0 +1,139 @@
+" =============================================================================
+"      FileName : vimrc.autocmd
+"        Author : marslo.jiao@gmail.com
+"       Created : 2010-10
+"    LastChange : 2024-01-10 21:53:41
+" =============================================================================
+
+" /**************************************************************
+"              _                           _
+"   __ _ _   _| |_ ___   ___ _ __ ___   __| |
+"  / _` | | | | __/ _ \ / __| '_ ` _ \ / _` |
+" | (_| | |_| | || (_) | (__| | | | | | (_| |
+"  \__,_|\__,_|\__\___/ \___|_| |_| |_|\__,_|
+"
+" **************************************************************/
+if has( "autocmd" )
+  autocmd VimLeave           *                      silent clear              " :windo bd
+  autocmd BufReadPre         *                      setlocal foldmethod=indent
+  autocmd BufWinEnter        *                      if &fdm == 'indent' | setlocal foldmethod=manual | endif
+  autocmd BufWinEnter        *                      silent! loadview          " autocmd BufWinLeave * silent! mkview
+  autocmd Syntax             *                      syn match ExtraWhitespace /\s\+$\| \+\ze\t/
+  autocmd BufEnter           *                      if &diff | let g:blamer_enabled=0 | endif            " ╮ disable git blame in diff mode
+  " autocmd BufEnter         *                      if ! empty(&key) | let g:blamer_enabled=0 | endif    " ╯ and encrypt mode
+  autocmd BufWritePre        *                      %s/\s\+$//e | %s/\r$//e   " automatic remove trailing space
+  autocmd BufWritePre        *\(.ltsv\|.diffs\)\@<! silent! retab!            " automatic retab: https://vim.fandom.com/wiki/Remove_unwanted_spaces
+  autocmd BufRead,BufNewFile *.t                    set filetype=perl
+  autocmd BufRead,BufNewFile *.ltsv                 set filetype=ltsv syntax=groovy noexpandtab
+  autocmd QuickFixCmdPost    *grep*                 cwindow
+  autocmd FileType           make,snippet,robot     setlocal tabstop=4 softtabstop=4 shiftwidth=4
+  autocmd FileType           help                   set nofoldenable
+  autocmd Syntax             c,cpp,xml,html,xhtml   normal zM
+
+  augroup DevOps
+    autocmd BufRead,BufNewFile *                   setfiletype Jenkinsfile
+    autocmd BufRead,BufNewFile *.config            set filetype=config syntax=gitconfig noexpandtab
+    autocmd FileType           json,markdown,yaml  set tabstop=2 softtabstop=2 shiftwidth=2
+    autocmd FileType           json,markdown,yaml  setlocal foldmethod=indent
+    autocmd Syntax             yaml                normal zM
+    autocmd BufEnter           *\(.md\|.markdown\) exe 'noremap <F5> :!"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome" %:p "--no-gpu"<CR>'
+    autocmd BufRead,BufNewFile .*ignore            set filetype=ignore
+    autocmd FileType           ignore,gitconfig    setlocal commentstring=#\ %s
+    autocmd FileType           markdown,html       let g:AutoPairsCompleteOnlyOnSpace = 0
+    autocmd FileType           markdown,html       let b:AutoPairs = autopairs#AutoPairsDefine({
+          \ '<div>':'</div>', '<font>':'</font>', '<a>':'</a>', '<p>':'</p>',
+          \ '<table>':'</table>', '<tbody>':'</tbody>',
+          \ '<thread>':'</thread>', '<th>':'</th>', '<td>':'</td>'
+          \ })
+    if index( ['README', 'SUMMARY'], expand("%:r") ) == -1
+      autocmd BufWritePost     *\(.md\)            silent :DocTocUpdate       " automatic build doctoc when save it
+    endif
+    autocmd BufNewFile,BufRead                                                " git config files
+          \ *.git/config,.gitconfig,.gitmodules,gitconfig
+          \,~/.marslo/.gitalias
+          \ setfiletype gitconfig
+    if did_filetype()                     | finish      | endif
+    if getline(1) =~ '^#!.*[/\\]groovy\>' | setf groovy | endif               " to setup filetype to groovy if first line matches `#!.*[/\\]groovy`
+  augroup END
+
+  augroup ShellScript
+    autocmd!
+    autocmd   Syntax       bash           set filetype=sh
+    autocmd   FileType     sh,bash,shell  silent :retab!
+    autocmd   FileType     sh,bash,shell  set tabstop=2 softtabstop=2 shiftwidth=2
+    autocmd!  BufWritePre  *.sh           silent :retab!                      " automatic retab
+    autocmd!  BufWritePost *.sh           silent :redraw!                     " automatic redraw for shellcheck
+    " autocmd BufWritePost *.sh           !chmod +x %
+  augroup END
+
+  augroup Groovy
+    autocmd Filetype   Groovy                set filetype=groovy
+    autocmd FileType   groovy,Jenkinsfile    set tabstop=2 softtabstop=2 shiftwidth=2
+    autocmd Syntax     groovy,Jenkinsfile    setlocal foldmethod=indent
+    autocmd Syntax     groovy,Jenkinsfile    normal zM
+    autocmd FileType   Jenkinsfile           setlocal commentstring=//\ %s
+    " https://vim.fandom.com/wiki/Syntax_folding_for_Java
+    autocmd FileType   java                  setlocal foldmarker=/**,**/ foldmethod=marker foldcolumn=1
+    autocmd FileType   javascript            syntax clear jsFuncBlock         " rainbow issue #2
+    " autocmd FileType Jenkinsfile           setlocal filetype=groovy syntax=groovy foldmethod=indent
+    " autocmd FileType Jenkinsfile           set syntax=groovy filetype=groovy
+    " autocmd BufNewFile,BufRead             Jenkinsfile setf groovy
+    " autocmd BufNewFile,BufRead,BufReadPost Jenkinsfile setlocal foldmethod=indent
+    if getline(1) =~ '^#!.*[/\\]groovy\>' |  setf groovy | endif              " to setup filetype to groovy if first line matches `#!.*[/\\]groovy`
+  augroup END
+
+  augroup Python
+    autocmd BufNewFile,BufRead python
+            \ set tabstop=2 softtabstop=2 shiftwidth=2
+            \ setlocal shiftwidth=2 tabstop=2 softtabstop=2 autoindent
+            \ fileformat=unix
+    autocmd FileType python syntax keyword pythonDecorator print self
+    autocmd FileTYpe python set isk-=.
+    autocmd Syntax   python setlocal foldmethod=indent
+    autocmd Syntax   python normal zM
+  augroup END
+
+  augroup vimrc
+    autocmd! BufWritePost ~/.vimrc silent! source %
+    autocmd  Filetype     vim      let g:ycm_complete_in_strings = 3
+    autocmd  Syntax       vim      normal zM
+  augroup END
+
+  augroup CustomTabularize
+    autocmd!
+    " https://github.com/jwhitley/vimrc/blob/master/.vimrc
+    " autocmd VimEnter * if exists(":Tabularize") | exe ":AddTabularPattern! bundles /[^ ]\\+\\//l1r0" | endif
+    " add for plugin/TabularMaps.vim
+    autocmd VimEnter * if exists(":Tabularize") | exe ":AddTabularPattern 1,  /^[^,]*\zs,/r1c1l0" | endif
+    autocmd VimEnter * if exists(":Tabularize") | exe ":AddTabularPattern 1=  /^[^=]*\zs="        | endif
+    autocmd VimEnter * if exists(":Tabularize") | exe ":AddTabularPattern 1== /^[^=]*\zs=/r1c1l0" | endif
+  augroup END
+
+  augroup CollumnLimit
+    set colorcolumn=80
+    highlight CollumnLimit    guibg=NONE    guifg=#4e4e4e    ctermfg=240
+    autocmd!
+    let collumnLimit = 80
+    let pattern      = '\%<' . ( collumnLimit+1 ) . 'v.\%>' . collumnLimit . 'v'
+    let w:m1         = matchadd( 'CollumnLimit', pattern, -1 )
+  augroup END
+
+  if version > 703
+    " autocmd FocusLost * set norelativenumber
+    autocmd FocusGained * set relativenumber
+    autocmd InsertEnter * set norelativenumber
+    autocmd InsertLeave * set relativenumber
+    autocmd CmdwinEnter * set norelativenumber
+    autocmd CmdwinLeave * set relativenumber
+    autocmd CmdwinEnter * let b:ei_save = &eventignore | set eventignore=CursorHold,InsertEnter
+    autocmd CmdwinLeave * let &eventignore = b:ei_save
+  endif
+endif
+
+highlight SpellBad        term=underline   cterm=underline     ctermbg=0
+highlight ExtraWhitespace ctermbg=red      guibg=red
+highlight DiffText        term=reverse     cterm=reverse       ctermfg=109      ctermbg=235 gui=reverse guifg=#fabd2f guibg=#458588
+" highlight Cursor        guifg=white      guibg=gray          gui=bold
+" highlight iCursor       guifg=white      guibg=steelblue     gui=underline
+
+" vim:tabstop=2:softtabstop=2:shiftwidth=2:expandtab:filetype=vim:foldmethod=marker:foldmarker="\ **************************************************************/,"\ /**************************************************************

@@ -1,0 +1,94 @@
+" =============================================================================
+"      FileName : vimrc.cmds
+"        Author : marslo.jiao@gmail.com
+"       Created : 2010-10
+"    LastChange : 2024-01-10 21:53:41
+" =============================================================================
+
+" /**************************************************************
+"      _                _             _
+"  ___| |__   ___  _ __| |_ ___ _   _| |_
+" / __| '_ \ / _ \| '__| __/ __| | | | __|
+" \__ \ | | | (_) | |  | || (__| |_| | |_
+" |___/_| |_|\___/|_|   \__\___|\__,_|\__|
+"
+" **************************************************************/
+" :help map-overview : https://vimhelp.org/map.txt.html#map-overview
+noremap <leader>v    :e ~/.vimrc<CR>
+noremap <F1>         <ESC>
+inoremap <F1>        <ESC>a
+nnoremap j           gj
+nnoremap gj          j
+nnoremap k           gk
+nnoremap gk          k
+nnoremap n           nzzzv
+nnoremap N           Nzzzv
+nnoremap <leader>bd  :bd<CR>
+nnoremap <C-k>       <C-w>k
+nnoremap <C-j>       <C-w>j
+" nnoremap <C-l>     <C-w>l                                         " conflict with redraw shortcut : https://vimhelp.org/various.txt.html#CTRL-L
+nnoremap <C-h>       <C-w>h
+nnoremap <C-a>       <ESC>^
+inoremap <C-a>       <ESC>I
+cnoremap <C-a>       <Home>
+nnoremap <C-e>       <ESC>$
+inoremap <C-e>       <ESC>A
+cnoremap <C-e>       <End>
+nnoremap Y           y$
+nnoremap <Del>       "_x
+xnoremap <Del>       "_d
+nnoremap <space>     za
+nnoremap &           :&&<CR>
+xnoremap &           :&&<CR>
+vnoremap s           <Plug>VSurround
+vnoremap //          y/\V<C-R>=escape(@",'/\')<CR><CR>
+
+cnoreabbrev W        w
+cnoreabbrev W!       w!
+cnoreabbrev Q        q
+cnoreabbrev Q!       q!
+cnoreabbrev X        x
+cnoreabbrev X!       x!
+cnoreabbrev XA       xa
+cnoreabbrev XA!      xa!
+cnoreabbrev WQ       wq
+cnoreabbrev WQ!      wq!
+cnoreabbrev QA       qa
+cnoreabbrev QA!      qa!
+cnoreabbrev WA       wa
+cnoreabbrev WA!      wa!
+cnoreabbrev NOH      noh
+cnoreabbrev Noh      noh
+cnoreabbrev %Y       %y
+cnoreabbrev %D       %d
+cnoremap    sudow!!  w !sudo tee > /dev/null %
+cnoremap    sw!!     execute 'silent! write !sudo tee % >/dev/null' <bar> edit!
+
+inoremap <leader>tt  <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
+inoremap <leader>fn  <C-R>=expand("%:t:r")<CR>
+inoremap <leader>fe  <C-R>=expand("%:t")<CR>
+inoremap <leader>w   <C-O>:w<CR>
+nnoremap <leader>G   :%s///gn<CR>
+
+nnoremap <leader>zil :g/^/ s//\=line('.').' '/<CR>                  " [i]nsert [l]ine number
+nnoremap <leader>zcm :%s/<C-v><CR>/\r/g<CR>                         " [c]onvert [m] to new line
+nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>                          " [d]elete [m]()
+nnoremap <leader>zdb :%s/\s\+$//<CR>                                " [d]elete [b]lank ( trailing ) space
+nnoremap <leader>zbl :g/^\s*$/d<CR>                                 " [d]elete [b]lank [l]ine
+nnoremap <leader>zd2 :%s/​//g<CR>                              " [d]elete <200b>
+nnoremap <leader>zdd :%s/ / /g<CR>                                  " [d]elete [d]ot( ) 0xAO
+nnoremap <leader>zds :%s/^<span.*span>//g<CR>                       " [d]elete [s]pan tag
+nnoremap <leader>zdi :%s/^\s\+//<CR>                                " [d]elete [i]ndent spaces
+nnoremap <leader>zid i•<ESC>                                        " [i]nsert [d]ot(•) 0x2022
+" count expr
+nnoremap <leader>cr  0yt=A<C-r>=<C-r>"<CR><Esc>
+" count expr
+nnoremap <leader>*   *<C-O>:%s///gn<CR>
+" count the matches numbers ( [w]c -[l] )
+nnoremap <leader>zwl :%s///gn<CR>
+
+iabbrev <leader>/*   /*********************************
+iabbrev <leader>*/   *********************************/
+iabbrev <leader>#-   #------------------
+
+" vim:tabstop=2:softtabstop=2:shiftwidth=2:expandtab:filetype=vim:foldmethod=marker:foldmarker="\ **************************************************************/,"\ /**************************************************************
