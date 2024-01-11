@@ -1,9 +1,9 @@
 " =============================================================================
-"      FileName : vimrc.cmds
+"      FileName : plugins.settings.vimrc
 "        Author : marslo.jiao@gmail.com
 "       Created : 2010-10
 "       Version : 2.0.1
-"    LastChange : 2024-01-10 22:58:58
+"    LastChange : 2024-01-11 03:29:19
 " =============================================================================
 
 " /**************************************************************
@@ -344,9 +344,18 @@ let g:ale_floating_window_border          = [ '│', '─', '╭', '╮', '╯',
 let g:ale_fixers                          = {
   \   '*' : [ 'remove_trailing_lines', 'trim_whitespace' ] ,
   \   'css': [ 'stylelint' ] ,
-  \   'groovy' : [ 'checkstyle' ]
+  \   'groovy' : [ 'npm-groovy-lint' ] ,
+  \   'Jenkinsfile' : [ 'npm-groovy-lint' ]
   \}
-" let b:ale_fixers = [ 'prettier', 'stylelint' ]
+let g:ale_linter_aliases = { 'Jenkinsfile': ['groovy'] }
+let g:ale_linters                         = {
+  \   'groovy' : [ 'npm-groovy-lint' ],
+  \   'Jenkinsfile' : [ 'npm-groovy-lint' ]
+\}
+" sh
+let g:ale_sh_bashate_executable           = ''
+" groovy
+let g:ale_groovy_npmgroovylint_options    = '--javaexecutable /usr/local/bin/java --loglevel info'
 
 " junegunn/fzf.vim
 nnoremap <C-p> :Files<CR>
