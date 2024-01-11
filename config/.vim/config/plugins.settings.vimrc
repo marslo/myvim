@@ -192,7 +192,6 @@ let g:blamer_relative_time        = 1
 " airblade/vim-gitgutter
 set updatetime=250
 set signcolumn=yes
-let g:gitgutter_git_executable = '/usr/local/bin/git'
 let g:gitgutter_enabled        = 1
 let g:gitgutter_realtime       = 0
 let g:gitgutter_eager          = 0
@@ -206,7 +205,7 @@ nnoremap <leader>gg :YcmCompleter GoToDefinitionElseDeclaration<CR>
 nnoremap <leader>gd :YcmDiags<CR>
 let g:ycm_extra_conf_globlist                      = [ '~/.marslo/ycm/*', '~/.vim/plugged/YouCompleteMe/*' ]
 let g:ycm_key_invoke_completion                    = '<C-\>'
-let g:ycm_echo_current_diagnostic                  = 0
+let g:ycm_echo_current_diagnostic                  = 'virtual-text'
 let g:ycm_error_symbol                             = '✗'
 let g:ycm_warning_symbol                           = '✹'
 let g:ycm_update_diagnostics_in_insert_mode        = 0
@@ -327,6 +326,7 @@ let g:ale_sign_warning                    = 'ᑹ'                     " ⚠ ⸮ 
 let g:ale_sign_info                       = 'ᓆ'                     " ⸚ ϔ 𐘿 𐰦
 let g:ale_sign_style_error                = '⍥'                     " ᑹ
 let g:ale_sign_style_warning              = 'ᓍ'                     " ᓏ
+let g:ale_sign_column_always              = 1
 let g:ale_lint_on_text_changed            = 'never'
 let g:ale_fix_on_save                     = 0
 let g:ale_popup_menu_enabled              = 1
@@ -339,7 +339,6 @@ let g:ale_floating_preview                = 1
 let g:ale_close_preview_on_insert         = 1
 let g:ale_set_quickfix                    = 1
 let g:ale_completion_autoimport           = 1
-let g:ale_sign_column_always              = 1
 let g:ale_floating_window_border          = [ '│', '─', '╭', '╮', '╯', '╰', '│', '─' ]
 let g:ale_fixers                          = {
   \   '*' : [ 'remove_trailing_lines', 'trim_whitespace' ] ,
