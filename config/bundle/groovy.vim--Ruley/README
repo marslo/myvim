@@ -1,0 +1,3 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=2217
+
+Runs or compiles Groovy scripts.  Indents code blocks.  Continues comments on adjacent lines.  Provides insert-mode abbreviations.  F2 for plugin help.

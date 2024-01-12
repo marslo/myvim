@@ -1,0 +1,226 @@
+set nocompatible
+set diffopt=filler,context:3
+
+filetype plugin indent on
+syntax enable on
+let mapleader=","
+
+if exists('$TMUX')
+  set term=screen-256color
+endif
+
+if 'xterm-256color' == $TERM
+  set t_Co=256
+endif
+
+nmap <leader>v :e ~/.cygwin/.vimrc<CR>
+autocmd! bufwritepost ~/.cygwin/.vimrc source %
+
+set iskeyword-=.
+set autochdir
+set fileencodings=utf-8,ucs-bom,gbk,cp936,gb2312,gb18030
+set encoding=utf-8
+set fileencoding=utf-8
+let &termencoding=&encoding
+set nobackup noswapfile nowritebackup noundofile noendofline
+set number
+set report=0
+set autoread
+set showmatch
+set matchtime=1
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
+set autoindent smartindent
+set smarttab expandtab
+set linebreak
+set textwidth=0
+set modifiable
+set write
+set incsearch hlsearch ignorecase smartcase
+set magic
+set linespace=0
+set wildmenu
+set wildmode=longest,list,full
+set noerrorbells novisualbell
+set wildignore+=*.swp,*.zip,*.exe
+set t_vb=
+set list listchars=tab:\ \ ,trail:·,extends:»,precedes:«,nbsp:·
+set cursorline
+set scrolloff=3
+set sidescroll=1
+set sidescrolloff=5
+set imcmdline
+set completeopt=longest,menuone
+set foldenable
+set foldcolumn=1
+set foldexpr=1
+set foldlevel=100
+set viewoptions=folds
+set backspace=indent,eol,start
+set whichwrap+=<,>,h,l
+set go+=a
+set hidden
+set equalalways
+set formatoptions+=rnmMB
+set matchpairs+=<:>
+" set autowrite
+if has('cmdline_info')
+  set ruler
+  set showcmd
+endif
+if has('statusline')
+  set laststatus=2
+  set statusline=%#User2#%m%r%*\ %F\ %y,%{&fileformat}
+  set statusline+=%=\ %-{strftime(\"%H:%M\ %d/%m/%Y\")}\ %b[A],0x%B\ %c%V,%l/%L\ %1*--%n%%--%*\ %p%%\ |
+endif
+
+noremap <F1> <ESC>
+inoremap <F1> <ESC>a
+nnoremap j gj
+nnoremap gj j
+nnoremap k gk
+nnoremap gk k
+nnoremap n nzzzv
+nnoremap N Nzzzv
+map <leader>bd :bd<CR>
+map <leader>bp :bp<CR>
+map <leader>bn :bn<CR>
+map <C-k> <C-w>k
+map <C-j> <C-w>j
+map <C-a> <ESC>^
+inoremap <C-a> <ESC>I
+cnoremap <C-a> <Home>
+map <C-e> <ESC>$
+inoremap <C-e> <ESC>A
+cnoremap <C-e> <End>
+inoremap <C-d> <Del>
+nnoremap Y y$
+nnoremap <Del> "_x
+xnoremap <Del> "_d
+
+cnoreabbrev W! w!
+cnoreabbrev Q! q!
+cnoreabbrev Qall! qall!
+cnoreabbrev Wq wq
+cnoreabbrev Wa wa
+cnoreabbrev wQ wq
+cnoreabbrev WQ wq
+cnoreabbrev W w
+cnoreabbrev Q q
+cnoreabbrev X x
+cnoreabbrev X! x!
+cnoreabbrev QA qa
+cnoreabbrev Qall qall
+
+inoremap <leader>tt <C-R>=strftime("%d/%m/%y %H:%M:%S")<cr>
+inoremap <leader>fn <C-R>=expand("%:t:r")<CR>
+inoremap <leader>fe <C-R>=expand("%:t")<CR>
+inoremap <leader>w <C-O>:w<CR>
+
+nnoremap <leader>g :%s///gn<CR>
+nnoremap <leader>zdb :%s/\s\+$//<CR>
+nnoremap <leader>zhs :%s/^\s\+//<CR>
+nnoremap <leader>zim :g/^/ s//\=line('.').' '/<CR>
+nnoremap <leader>zbl :g/^\s*$/d<CR>
+nnoremap <leader>zdm :%s/<C-v><CR>//ge<CR>
+nnoremap <leader>zng :%s///gn<CR>
+nnoremap <leader>zbd :%s/​//g<CR>
+nnoremap <leader>zdd :%s/ / /g<CR>
+nnoremap <leader>zds :%s/^<span.*span>//g<CR>
+nnoremap <leader>zid i•<ESC>
+
+if version > 703
+  " autocmd FocusLost * set norelativenumber
+  autocmd FocusGained * set relativenumber
+  autocmd InsertEnter * set norelativenumber
+  autocmd InsertLeave * set relativenumber
+  autocmd CmdwinEnter * set norelativenumber
+  autocmd CmdwinLeave * set relativenumber
+  autocmd CmdwinEnter * let b:ei_save = &eventignore | set eventignore=CursorHold,InsertEnter
+  autocmd CmdwinLeave * let &eventignore = b:ei_save
+endif
+
+iabbrev <leader>/* /*********************************
+iabbrev <leader>*/ *********************************/
+iabbrev <leader>#- #------------------
+
+let syntax_cmd = "enable"
+" let g:syntax_cmd = "skip"
+
+
+" marslo256.vim: https://github.com/Marslo/marslo.vim
+highlight SpecialKey           ctermfg=darkgreen    ctermbg=NONE
+highlight NonText              cterm=NONE           ctermfg=239        ctermbg=NONE
+highlight Directory            ctermfg=63           ctermbg=NONE
+highlight ErrorMsg             cterm=NONE           ctermfg=red         ctermbg=0
+highlight IncSearch            cterm=NONE           ctermfg=yellow      ctermbg=green
+highlight Search               cterm=NONE           ctermfg=grey        ctermbg=blue
+highlight MoreMsg              ctermfg=darkgreen    ctermbg=NONE
+highlight ModeMsg              cterm=NONE           ctermfg=brown           ctermbg=NONE
+highlight Question             ctermfg=green        ctermbg=NONE
+highlight StatusLine           cterm=NONE           ctermfg=darkgray    ctermbg=black
+highlight StatusLineNC         cterm=NONE           ctermbg=NONE
+highlight VertSplit            cterm=NONE           ctermbg=NONE
+highlight Title                ctermfg=5            ctermbg=NONE
+highlight Visual               cterm=underline      ctermbg=NONE
+highlight VisualNOS            cterm=underline      ctermbg=NONE
+highlight WarningMsg           ctermfg=yellow       ctermbg=black
+highlight WildMenu             ctermfg=0            ctermbg=3
+highlight Folded               ctermfg=darkgrey     ctermbg=NONE
+highlight FoldColumn           ctermfg=darkgrey     ctermbg=NONE
+highlight DiffAdd              cterm=NONE           ctermbg=56          ctermfg=255
+highlight DiffDelete           cterm=NONE           ctermbg=239
+highlight DiffAdded            ctermbg=93
+highlight DiffRemoved          ctermbg=129
+highlight DiffChange           cterm=bold           ctermbg=99          ctermfg=255
+highlight DiffText             cterm=NONE           ctermbg=196
+highlight Pmenu                ctermfg=208          ctermbg=NONE
+highlight PmenuSel             ctermfg=154          ctermbg=NONE
+highlight Identifier           ctermfg=149          ctermbg=NONE
+highlight Cursor               cterm=underline      term=underline      ctermbg=NONE
+highlight MatchParen           cterm=inverse        term=inverse        ctermbg=NONE
+highlight LineNr               ctermfg=239          ctermbg=NONE
+highlight CursorLine           cterm=NONE           ctermbg=NONE
+highlight String               ctermfg=82           ctermbg=NONE
+highlight Entity               ctermfg=166          ctermbg=NONE
+highlight Support              ctermfg=202          ctermbg=NONE
+highlight CursorLineNr         ctermfg=118          ctermbg=NONE         term=bold
+highlight Comment              ctermfg=239          ctermbg=NONE
+highlight Constant             ctermfg=113          ctermbg=NONE
+"""" Key words (while, if, else, for, in)
+highlight Statement            ctermfg=red          ctermbg=NONE
+"""" #! color
+highlight PreProc              ctermfg=red          ctermbg=NONE
+"""" classname, <key>, <Groupname> color
+highlight Type                 ctermfg=106          ctermbg=NONE
+highlight Special              ctermfg=221          ctermbg=NONE
+highlight Underlined           cterm=underline      ctermfg=5       ctermbg=NONE
+highlight Ignore               cterm=NONE           ctermfg=7       ctermfg=darkgrey      ctermbg=NONE
+highlight Error                cterm=NONE           ctermfg=7       ctermbg=1
+" HTML
+highlight htmlTag              ctermfg=244          ctermbg=NONE
+highlight htmlEndTag           ctermfg=244          ctermbg=NONE
+highlight htmlArg              ctermfg=203          ctermbg=NONE
+highlight htmlValue            ctermfg=187          ctermbg=NONE
+highlight htmlTitle            ctermfg=184          ctermbg=NONE
+highlight htmlTagName          ctermfg=69           ctermbg=NONE
+highlight htmlString           ctermfg=113          ctermbg=NONE
+" NERDTree
+highlight treeCWD              ctermfg=180          ctermbg=NONE
+highlight treeClosable         ctermfg=174          ctermbg=NONE
+highlight treeOpenable         ctermfg=150          ctermbg=NONE
+highlight treePart             ctermfg=244          ctermbg=NONE
+highlight treeDirSlash         ctermfg=244          ctermbg=NONE
+highlight treeLink             ctermfg=182          ctermbg=NONE
+
+highlight Boolean              ctermfg=196          ctermbg=NONE
+highlight Function             ctermfg=105          ctermbg=NONE
+highlight Structure            ctermfg=202          ctermbg=NONE
+highlight Define               ctermfg=179          ctermbg=NONE
+highlight Conditional          ctermfg=190          ctermbg=NONE
+highlight Operator             ctermfg=208          ctermbg=NONE
+
+highlight rubyIdentifier       ctermfg=9            ctermbg=NONE
+
+" vim: tabstop=2:softtabstop=2:shiftwidth=2:expandtab

@@ -1,0 +1,6 @@
+-e .
+
+ipdb
+pytest
+eradicate   >= 0.2
+radon       >= 1.4.2

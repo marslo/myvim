@@ -1,0 +1,86 @@
+
+0. About
+--------------------------------------------------------------------------------
+
+    txt Vim syntax file v 1.2 (3.01.2007)
+    Copyright (C) 2006-2007 by Tomasz 'SpOOnman' Kalkosiński <spoonman@op.pl>
+
+    Universal syntax script for all text documents, logs, changelogs, readmes
+    and all other strange and undetected filetypes.
+
+    The goal is to keep it very simple. It colors numbers, operators, signs,
+    cites, brackets, delimiters, comments, TODOs, errors, debug, changelog tags
+    and basic smileys ;]
+
+1. Legal notice
+--------------------------------------------------------------------------------
+
+    Author  : Tomasz 'SpOOnman' Kalkosiński <spoonman@op.pl>
+    URL     : http://www.haze.ehost.pl/spoonman/
+    IRC     : #clan.ppp @ QuakeNet
+    Licence : GPL2
+
+    Your opinions are very welcome. If you find it useful and want to comment,
+    please send me an email <spoonman@op.pl>.
+
+
+2. Requirements
+--------------------------------------------------------------------------------
+
+    1. Vim/gVim text editor - http://www.vim.org
+
+3. Installation
+--------------------------------------------------------------------------------
+
+    1. Unzip all files into your $HOME/syntax/ directory.
+
+4. Usage
+--------------------------------------------------------------------------------
+
+    1. Execute while in Vim/gVim:
+       :set syntax=txt
+
+5. Changelog
+--------------------------------------------------------------------------------
+
+    1.2 Release (03.01.2007)
+    - add: Changelog tags: add, chg, fix, rem, del linked with Keyword
+    - add: note to txtTodo group
+
+    1.1 Release (30.06.2006)
+    - add: International cites
+    - chg: txtString color to Normal
+    - chg: Simplified number coloring working better now
+
+    1.0 Release (28.04.2006)
+    - first public release
+ 
+6. Notes and Known issues
+--------------------------------------------------------------------------------
+
+    I'd also suggest to add a file into your $HOME/ftdetect called txt.vim that
+    contains a line: 
+      au BufRead,BufNewFile *  setfiletype txt
+
+    It sets your syntax to txt if no syntax was found before.
+
+7. History and credits
+--------------------------------------------------------------------------------
+
+    I created this file when I lacked any syntax coloring. Colored numbers,
+    operators increased readibility a lot so I started to experiment. Then I've
+    added other common things like parenthisis, xxx, TODO, or smileys :)
+
+    Cheers for Madzia <3, moja piękna ;)
+
+8. Files 
+--------------------------------------------------------------------------------
+
+    Files included in txt-vim-syntax-1.2.zip:
+
+    - txt.vim
+    - txt.txt
+    - README
+    - COPYING
+
+--------------------------------------------------------------------------------
