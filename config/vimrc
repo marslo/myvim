@@ -3,7 +3,7 @@
 "        Author : marslo.jiao@gmail.com
 "       Created : 2010-10
 "       Version : 2.0.1
-"    LastChange : 2024-01-10 22:58:58
+"    LastChange : 2024-01-12 00:17:52
 " =============================================================================
 
 runtime macros/matchit.vim
@@ -42,16 +42,17 @@ else
 endif
 if empty( glob('~/.vim/cache/') )   | execute 'silent !mkdir -p ~/.vim/cache' | endif
 
-source ~/.vim/config/plugins.vimrc
-source ~/.vim/config/functions.vimrc
-source ~/.vim/config/cmds.vimrc
-source ~/.vim/config/interface.vimrc
-source ~/.vim/config/settings.vimrc
-source ~/.vim/config/shortcuts.vimrc
-source ~/.vim/config/plugins.settings.vimrc
-source ~/.vim/config/autocmd.vimrc
+source ~/.marslo/.vim/plugins.vimrc
+source ~/.marslo/.vim/functions.vimrc
+source ~/.marslo/.vim/cmds.vimrc
+source ~/.marslo/.vim/interface.vimrc
+source ~/.marslo/.vim/settings.vimrc
+source ~/.marslo/.vim/shortcuts.vimrc
+source ~/.marslo/.vim/plugins.settings.vimrc
+source ~/.marslo/.vim/autocmd.vimrc
+source ~/.marslo/.vim/highlight.vimrc
 
-if IsWSL() != 1 || ! has('macunix') | source ~/.vim/config/unix.vimrc | endif
+if IsWSL() != 1 || ! has('macunix') | source ~/.marslo/.vim/unix.vimrc | endif
 if IsWSL() == 1
   set clipboard^=unnamed                                            " copy the content to system clipboard by using y/p
   set clipboard^=unnamedplus

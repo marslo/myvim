@@ -61,8 +61,10 @@ Plug 'junegunn/gv.vim'                                              " │
 Plug 'zivyangll/git-blame.vim'                                      " ╯
 Plug 'pearofducks/ansible-vim'
 Plug 'morhetz/gruvbox'                                              " theme
+Plug 'marslo/marslo.vim'                                            " them for t_Co=16
 Plug 'luochen1990/rainbow'                                          " ╮ color
-Plug 'marslo/vim-coloresque'                                        " ╯ 'ap/vim-css-color'
+" Plug 'marslo/vim-coloresque'                                      " ╯ 'ap/vim-css-color'
+Plug 'ap/vim-css-color'                                             " cause issue in groovy.vim
 Plug 'amadeus/vim-css'
 Plug 'stephpy/vim-yaml'                                             " ╮
 Plug 'pedrohdz/vim-yaml-folds'                                      " ├ yaml
@@ -72,7 +74,6 @@ Plug 'vim-scripts/vim-gradle'
 Plug 'marslo/Jenkinsfile-vim-syntax'                                " jenkinfile
 Plug 'ekalinin/Dockerfile.vim'                                      " dockerfile
 Plug 'rizzatti/dash.vim'
-" Plug 'ap/vim-css-color'                                           " cause issue in groovy.vim
 " Plug 'parkr/vim-jekyll'                                           " github page
 
 call plug#end()

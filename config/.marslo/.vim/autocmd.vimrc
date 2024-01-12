@@ -68,7 +68,7 @@ if has( "autocmd" )
   augroup END
 
   augroup Groovy
-    autocmd Filetype   Groovy                set filetype=groovy
+    autocmd Filetype   Groovy                set filetype=groovy syntax=groovy
     autocmd FileType   groovy,Jenkinsfile    set tabstop=2 softtabstop=2 shiftwidth=2
     autocmd Syntax     groovy,Jenkinsfile    setlocal foldmethod=indent
     autocmd Syntax     groovy,Jenkinsfile    normal zM
