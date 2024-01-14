@@ -95,7 +95,9 @@ if has( "autocmd" )
   augroup END
 
   augroup vimrc
-    autocmd! BufWritePost ~/.vimrc silent! source %
+    if index( ['.vimrc', 'init.lua', 'cmds', 'extention', 'extra-extention', 'functions', 'highlight', 'interface', 'settings', 'shortcuts', 'unix'], expand("%:r") ) == 0
+      autocmd! BufWritePost * if &filetype == "vim" | silent! source ~/.vimrc | endif
+    endif
     autocmd  Filetype     vim      let g:ycm_complete_in_strings = 3
     autocmd  Syntax       vim      normal zM
   augroup END

@@ -3,7 +3,7 @@
 "        Author : marslo.jiao@gmail.com
 "       Created : 2010-10
 "       Version : 2.0.1
-"    LastChange : 2024-01-12 00:17:52
+"    LastChange : 2024-01-14 03:38:18
 " =============================================================================
 
 runtime macros/matchit.vim
@@ -12,7 +12,6 @@ let performance_mode = 1
 set nocompatible
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip
 set runtimepath+=~/.vim/plugged
-set runtimepath+=~/.vim/plugged/YouCompleteMe
 
 if has('macunix') || has( 'win32' ) || has( 'win64' )
   set spellcapcheck=1
@@ -42,22 +41,22 @@ else
 endif
 if empty( glob('~/.vim/cache/') )   | execute 'silent !mkdir -p ~/.vim/cache' | endif
 
-source ~/.marslo/.vim/plugins.vimrc
-source ~/.marslo/.vim/functions.vimrc
-source ~/.marslo/.vim/cmds.vimrc
-source ~/.marslo/.vim/interface.vimrc
-source ~/.marslo/.vim/settings.vimrc
-source ~/.marslo/.vim/shortcuts.vimrc
-source ~/.marslo/.vim/plugins.settings.vimrc
-source ~/.marslo/.vim/autocmd.vimrc
-source ~/.marslo/.vim/highlight.vimrc
+source ~/.marslo/vimrc.d/extention
+source ~/.marslo/vimrc.d/functions
+source ~/.marslo/vimrc.d/cmds
+source ~/.marslo/vimrc.d/theme
+source ~/.marslo/vimrc.d/settings
+source ~/.marslo/vimrc.d/shortcuts
+source ~/.marslo/vimrc.d/autocmd
+source ~/.marslo/vimrc.d/highlight
 
-if IsWSL() != 1 || ! has('macunix') | source ~/.marslo/.vim/unix.vimrc | endif
+if has( 'vim' )                     | source ~/.marslo/vimrc.d/extra-extention | endif
+if IsWSL() != 1 && ! has('macunix') | source ~/.marslo/vimrc.d/unix            | endif
 if IsWSL() == 1
-  set clipboard^=unnamed                                            " copy the content to system clipboard by using y/p
+  set clipboard^=unnamed
   set clipboard^=unnamedplus
 else
-  set clipboard+=unnamed                                            " copy the content to system clipboard by using y/p
+  set clipboard+=unnamed
   set clipboard+=unnamedplus
 endif
 

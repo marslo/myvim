@@ -27,7 +27,6 @@ nnoremap N           Nzzzv
 nnoremap <leader>bd  :bd<CR>
 nnoremap <C-k>       <C-w>k
 nnoremap <C-j>       <C-w>j
-" nnoremap <C-l>     <C-w>l                                         " conflict with redraw shortcut : https://vimhelp.org/various.txt.html#CTRL-L
 nnoremap <C-h>       <C-w>h
 nnoremap <C-a>       <ESC>^
 inoremap <C-a>       <ESC>I
