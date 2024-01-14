@@ -1,3 +1,10 @@
 {
-    "diagnostic.displayByAle": true
+  "diagnostic.displayByAle": false,
+  "codeLens.enable": true,
+  "java.referencesCodeLens.enabled": true,
+  "python.jediEnabled": false,
+  "diagnostic.errorSign": "✗",
+  "diagnostic.infoSign": "i",
+  "diagnostic.warningSign": "⚠",
+  "diagnostic.hintSign": "➤"
 }
