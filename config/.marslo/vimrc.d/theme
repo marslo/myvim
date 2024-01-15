@@ -28,6 +28,7 @@ endif
 
 if exists( '$TMUX' )         | set term=screen-256color | endif
 if 'xterm-256color' == $TERM | set t_Co=256             | endif
+set termguicolors
 
 if has( 'gui_running' ) || 'xterm-256color' == $TERM
   set background=dark

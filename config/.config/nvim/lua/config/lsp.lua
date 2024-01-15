@@ -16,8 +16,10 @@ require'lspconfig'.ansiblels.setup{}
 require'lspconfig'.bashls.setup{}
 require'lspconfig'.cmake.setup{}
 require'lspconfig'.dockerls.setup{}
-require'lspconfig'.gradle_ls.setup{}
-require'lspconfig'.groovyls.setup{
-  filetypes = { 'groovy', 'Jenkinsfile' },
-  cmd = { "java", "-jar", "~/.vim/plugged/lsp-examples/groovy/groovy-language-server/build/libs/groovy-language-server-all.jar" },
+require'lspconfig'.gradle_ls.setup{
+  filetypes = { 'groovy', 'Jenkinsfile' }
 }
+-- require'lspconfig'.groovyls.setup{
+--   filetypes = { 'groovy', 'Jenkinsfile' },
+--   cmd = { "java", "-jar", "/Users/marslo/.vim/lsp/lsp-examples/groovy/groovy-language-server/build/libs/groovy-language-server-all.jar" }
+-- }
