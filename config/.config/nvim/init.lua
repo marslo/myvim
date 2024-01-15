@@ -11,5 +11,6 @@ function _G.check_back_space()
     return col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') ~= nil
 end
 
+-- require('config/theme')
 require('config/nvim-treesitter')
 require('config/lsp')

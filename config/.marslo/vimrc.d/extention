@@ -302,8 +302,9 @@ highlight clear SignColumn
 
 " scrooloose/nerdtree
 map <C-S-n> :NERDTreeToggle<CR>
-let g:NERDTreeWinPos = 'left'
-let g:NERDTreeIgnore = [ '^node_modules$' ]
+let g:NERDTreeWinPos   = 'left'
+let g:NERDTreeIgnore   = [ '^node_modules$' ]
+let NERDTreeShowHidden = 1
 
 " RRethy/vim-hexokinase
 let g:Hexokinase_highlighters  = [ 'backgroundfull' ]
@@ -406,6 +407,7 @@ let g:fzf_vim                     = {}
 let g:fzf_vim.preview_window      = [ 'right,50%', 'ctrl-\' ]
 let g:fzf_vim.tags_command        = 'ctags -R'
 let g:fzf_vim.commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
+let $FZF_DEFAULT_COMMAND          = 'ag --hidden --ignore .git -l -g ""'
 command! -bang -nargs=? -complete=dir Files
     \ call fzf#vim#files(<q-args>, {'options': ['--layout=reverse', '--info=inline', '--preview', 'bat --color=always {}']}, <bang>0)
 command! -bang -complete=dir -nargs=? LS
