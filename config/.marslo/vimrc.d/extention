@@ -182,7 +182,6 @@ let g:indentLine_conceallevel         = 2
 let g:indentLine_char                 = '¦'
 
 " LunarWatcher/auto-pairs
-let g:AutoPairs                             = autopairs#AutoPairsDefine({ '<': '>' })
 let g:AutoPairsMapBS                        = 1
 let g:AutoPairsFlyMode                      = 0
 let g:AutoPairsCompleteOnlyOnSpace          = 1
@@ -195,6 +194,7 @@ let g:AutoPairsShortcutBackInsert           = '<M-b>'
 let g:AutoPairsPrefix                       = '<M-j>'
 let g:AutoPairsShortcutJump                 = '<M-n>'
 let g:AutoPairsShortcutToggle               = '<M-j>'
+let g:AutoPairs                             = autopairs#AutoPairsDefine({ '<': '>' })
 
 " vim-airline/vim-airline
 let g:airline_powerline_fonts                      = 1
@@ -325,9 +325,10 @@ let g:coc_global_extensions = [
   \   'coc-sh',
   \   'coc-groovy', 'coc-java',
   \   'coc-json',
-  \   'coc-css',
+  \   'coc-css', 'coc-htmlhint', 'coc-html-css-support',
   \   'coc-pyright',
-  \   'coc-snippets'
+  \   'coc-snippets',
+  \   'coc-emoji'
   \ ]
 function! CheckBackspace() abort
   let col = col('.') - 1
@@ -340,7 +341,6 @@ function! ShowDocumentation()
     call feedkeys('K', 'in')
   endif
 endfunction
-autocmd CursorHold *    silent call CocActionAsync('highlight')
 autocmd FileType   json syntax match Comment +\/\/.\+$+
 autocmd FileType   html let b:coc_root_patterns = ['.git', '.env', 'tailwind.config.js', 'tailwind.config.cjs']
 inoremap <silent><expr> <S-C-space> coc#refresh()
@@ -360,7 +360,7 @@ nmap     <silent> gi  <Plug>(coc-implementation)
 nmap     <silent> gr  <Plug>(coc-references)
 nnoremap <silent> K   :call ShowDocumentation()<CR>
 nmap     <leader>cl   <Plug>(coc-codelens-action)
-
+imap     <C-l>        <Plug>(coc-snippets-expand)
 
 " Konfekt/FastFold
 nnoremap zuz <Plug>(FastFoldUpdate)
@@ -392,7 +392,7 @@ set foldlevelstart=20
 
 " junegunn/fzf.vim
 nnoremap <C-S-p>            :Files<CR>
-nnoremap <C-g>              :GFiles<CR>
+nnoremap <C-S-g>            :GFiles<CR>
 nnoremap <C-s>              :Ag<CR>
 nnoremap <silent> <leader>l :Buffers<CR>
 nnoremap <silent> <Leader>H :Helptags<CR>

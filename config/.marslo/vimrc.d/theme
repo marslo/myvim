@@ -1,9 +1,9 @@
 " =============================================================================
-"      FileName : vimrc.interface
+"      FileName : theme
 "        Author : marslo.jiao@gmail.com
 "       Created : 2010-10
 "       Version : 2.0.1
-"    LastChange : 2024-01-10 22:58:58
+"    LastChange : 2024-01-15 16:41:12
 " =============================================================================
 
 " /**************************************************************
@@ -19,8 +19,6 @@ if has('gui_running')
   set cpoptions+=n
   set guifont=Agave\ Nerd\ Font\ Mono:h32
   " set guifont=JetBrainsMono\ Nerd\ Font\ Mono:h26
-  " set guifont=Rec\ Mono\ Casual:h24
-  " set guifontwide=NSimsun:h16
   set renderoptions=type:directx,renmode:5
   set lines=30                                                      " the initialize size
   set columns=106
@@ -28,14 +26,14 @@ endif
 
 if exists( '$TMUX' )         | set term=screen-256color | endif
 if 'xterm-256color' == $TERM | set t_Co=256             | endif
-set termguicolors
+" set termguicolors
 
 if has( 'gui_running' ) || 'xterm-256color' == $TERM
   set background=dark
-  let psc_style='cool'
+  " let psc_style='cool'
 
-  " colorscheme marslo                                              " marslo
   colorscheme gruvbox                                               " gruvbox
+  " colorscheme habamax
 
   """ terminal : `:help terminal-info`
   let &t_AB = "\e[48;5;%dm"
