@@ -21,12 +21,16 @@ endif
 
 if has('macunix')
   set shell=/usr/local/bin/bash
-  set runtimepath+=/usr/local/opt/fzf                               " $ brew install fzf
   let g:gitgutter_git_executable = '/usr/local/bin/git'
 else                                                                " linux/wsl
   set shell=/usr/bin/bash
-  set runtimepath+=~/.marslo/bin/fzf
   let g:gitgutter_git_executable = '/usr/bin/git'
+endif
+
+if filereadable( '/usr/local/opt/fzf' )
+  set runtimepath+=/usr/local/opt/fzf
+elseif filereadable( '~/.marslo/bin/fzf' )
+  set runtimepath+=~/.marslo/bin/fzf
 endif
 
 if has( 'nvim' )

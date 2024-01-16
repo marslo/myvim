@@ -79,6 +79,10 @@ Plug 'rizzatti/dash.vim'
 Plug 'vim-syntastic/syntastic'
 " Plug 'parkr/vim-jekyll'                                           " github page
 
+if !has('macunix')
+  Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+endif
+
 if has('vim')
   Plug 'ycm-core/YouCompleteMe', { 'do': 'python3 install.py --all' }
   Plug 'ycm-core/lsp-examples',  { 'do': 'python3 install.py --all' }
@@ -91,7 +95,6 @@ call pathogen#infect( '~/.vim/plugged/{}' )
 call pathogen#helptags()
 filetype plugin indent on
 syntax enable on
-
 
 " /**************************************************************
 "
@@ -301,7 +304,11 @@ let g:gitgutter_eager          = 0
 highlight clear SignColumn
 
 " scrooloose/nerdtree
-map <C-S-n> :NERDTreeToggle<CR>
+if has('macunix')
+  map <C-S-n> :NERDTreeToggle<CR>
+else
+  map <C-M-n> : NERDTreeToggle<CR>
+endif
 let g:NERDTreeWinPos   = 'left'
 let g:NERDTreeIgnore   = [ '^node_modules$' ]
 let NERDTreeShowHidden = 1
@@ -392,7 +399,11 @@ set foldlevelstart=20
 
 " junegunn/fzf.vim
 nnoremap <C-S-p>            :Files<CR>
-nnoremap <C-S-g>            :GFiles<CR>
+if has('macunix')
+  nnoremap <C-S-g>          :GFiles<CR>
+else
+  nnoremap <C-g>            :GFiles<CR>
+endif
 nnoremap <C-s>              :Ag<CR>
 nnoremap <silent> <leader>l :Buffers<CR>
 nnoremap <silent> <Leader>H :Helptags<CR>
