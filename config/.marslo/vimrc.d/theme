@@ -17,7 +17,8 @@
 if has('gui_running')
   set go=                                                           " hide everything (go = guioptions)
   set cpoptions+=n
-  set guifont=Agave\ Nerd\ Font\ Mono:h32
+  set guifont=OperatorMono\ Nerd\ Font:h29
+  " set guifont=Agave\ Nerd\ Font\ Mono:h32
   " set guifont=JetBrainsMono\ Nerd\ Font\ Mono:h26
   set renderoptions=type:directx,renmode:5
   set lines=30                                                      " the initialize size
@@ -26,13 +27,17 @@ endif
 
 if exists( '$TMUX' )         | set term=screen-256color | endif
 if 'xterm-256color' == $TERM | set t_Co=256             | endif
-" set termguicolors
+set termguicolors
 
 if has( 'gui_running' ) || 'xterm-256color' == $TERM
   set background=dark
-  " let psc_style='cool'
 
-  colorscheme gruvbox                                               " gruvbox
+  if has('macunix')
+    colorscheme gruvbox-material                                    " sainnhe/gruvbox-material
+  else
+    colorscheme gruvbox                                             " morhetz/gruvbox
+  endif
+
   " colorscheme habamax
 
   """ terminal : `:help terminal-info`
