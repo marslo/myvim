@@ -65,6 +65,8 @@ Plug 'junegunn/gv.vim'                                              " │
 Plug 'zivyangll/git-blame.vim'                                      " ╯
 Plug 'pearofducks/ansible-vim'
 Plug 'morhetz/gruvbox'                                              " theme
+Plug 'sainnhe/gruvbox-material'
+Plug 'luisiacc/gruvbox-baby', { 'branch': 'main' }
 Plug 'marslo/marslo.vim'                                            " them for t_Co=16
 Plug 'luochen1990/rainbow'
 Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }           " color show
@@ -253,6 +255,9 @@ function! AirlineInit()
 endfunction
 autocmd User AirlineAfterInit call AirlineInit()
 
+" ryanoasis/vim-devicons
+" let g:WebDevIconsUnicodeDecorateFileNodesExtensionSymbols['cr'] = ''
+
 " preservim/vim-markdown
 let g:vim_markdown_toc_autofit          = 1
 let g:vim_markdown_conceal              = 0
@@ -294,6 +299,7 @@ let g:blamer_show_in_visual_modes = 0
 let g:blamer_show_in_insert_modes = 0
 let g:blamer_relative_time        = 1
 let g:blamer_prefix               = '  '
+let g:blamer_template             = '<committer> • <commit-short> • <summary>'
 
 " airblade/vim-gitgutter
 set updatetime=250
@@ -312,6 +318,7 @@ endif
 let g:NERDTreeWinPos   = 'left'
 let g:NERDTreeIgnore   = [ '^node_modules$' ]
 let NERDTreeShowHidden = 1
+let g:NERDTreeWinSize  = 25
 
 " RRethy/vim-hexokinase
 let g:Hexokinase_highlighters  = [ 'backgroundfull' ]

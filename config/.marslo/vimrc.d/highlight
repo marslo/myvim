@@ -15,10 +15,28 @@ highlight! ALEVirtualTextStyleError    ctermfg=245 guifg=#928374
 highlight! ALEVirtualTextWarning       ctermfg=245 guifg=#928374
 highlight! ALEVirtualTextStyleWarning  ctermfg=245 guifg=#928374
 highlight! ALEVirtualTextInfo          ctermfg=245 guifg=#928374
-" highlight link ALEVirtualTextError         Comment
-" highlight link ALEVirtualTextStyleError    ALEVirtualTextError
-" highlight link ALEVirtualTextWarning       Comment
-" highlight link ALEVirtualTextStyleWarning  ALEVirtualTextWarning
-" highlight link ALEVirtualTextInfo          ALEVirtualTextWarning
+highlight! link ALEVirtualTextError         Comment
+highlight! link ALEVirtualTextStyleError    ALEVirtualTextError
+highlight! link ALEVirtualTextWarning       Comment
+highlight! link ALEVirtualTextStyleWarning  ALEVirtualTextWarning
+highlight! link ALEVirtualTextInfo          ALEVirtualTextWarning
+
+" vim diff
+highlight! DiffAdd     term=bold    cterm=reverse ctermfg=142 ctermbg=235 gui=reverse guifg=#b8bb26 guibg=#282828
+highlight! DiffChange  term=bold    cterm=reverse ctermfg=108 ctermbg=235 gui=reverse guifg=#8ec07c guibg=#282828
+highlight! DiffDelete  term=bold    cterm=reverse ctermfg=167 ctermbg=235 gui=reverse guifg=#fb4934 guibg=#282828
+highlight! DiffText    term=reverse cterm=reverse ctermfg=214 ctermbg=235 gui=reverse guifg=#fabd2f guibg=#282828
+
+" markdown
+" highlight! htmlLink cterm=italic,underline ctermfg=245 gui=italic,underline guifg=#928374
+highlight! htmlLink cterm=underline ctermfg=245 gui=underline guifg=#928374
+highlight! link mkdLink htmlLink
+highlight! link mkdURL  htmlString
+
+" APZelos/blamer.nvim
+highlight! Blamer cterm=italic ctermfg=245 gui=italic guifg=#928374
+
+" vim-syntastic/syntastic
+highlight! link SyntasticStyleWarningSign GruvboxPurpleSign
 
 " vim:tabstop=2:softtabstop=2:shiftwidth=2:expandtab:filetype=vim:foldmethod=marker:foldmarker="\ **************************************************************/,"\ /**************************************************************
